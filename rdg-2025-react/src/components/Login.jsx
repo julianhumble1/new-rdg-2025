@@ -32,19 +32,18 @@ const Login = ({ loggedIn, setLoggedIn}) => {
     }
 
     return (<>
-    
-        <div>
-        <Link to="/home">
-            Home
-        </Link>
-        </div>
 
         {!loggedIn &&
             <form onSubmit={handleLogin}>
-                <div className="flex flex-col gap-3">
-
-                    <input type="text" placeholder="username@username.com" className="my-3 p-2 border border-black" value={username} onChange={(e) => setUsername(e.target.value)} />
-                    <input type="password" placeholder="Password" className="my-3 p-2 border border-black" value={password} onChange={(e) => setPassword(e.target.value)}/>
+                <div className="flex flex-col gap-3 m-3">
+                    <div className="flex flex-col">
+                        <div>Username</div>
+                        <input type="text" placeholder="Username" className="p-2 border border-black" value={username} onChange={(e) => setUsername(e.target.value)} />
+                    </div>
+                    <div className="flex flex-col">
+                        <div>Password</div>
+                        <input type="password" placeholder="Password" className="p-2 border border-black" value={password} onChange={(e) => setPassword(e.target.value)}/>
+                    </div>
 
                 </div>
                 {failedLoginAttempt &&

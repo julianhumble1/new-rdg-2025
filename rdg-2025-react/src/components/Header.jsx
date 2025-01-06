@@ -23,13 +23,17 @@ const Header = ({ loggedIn, setLoggedIn }) => {
     
     return (<>
         <div className="w-full h-10 bg-yellow-300 flex flex-row gap-3">
+            <div className="my-auto">
+                <Link to="/" className="text-blue-500 underline hover:text-blue-800">Home</Link>
+            </div>
             {loggedIn && <>
                 <div className="my-auto">Logged in as {role} </div>
+                <Link className="my-auto text-blue-500 underline hover:text-blue-800" to ="/dashboard">Dashboard</Link>
                 <button onClick={handleLogout} className="text-blue-500 underline hover:text-blue-800">Logout</button>
             </>}
             {!loggedIn &&
-                <div>
-                    <Link to="/login" className="text-blue-500 underline hover:text-blue-800">Login</Link>
+                <div className="my-auto">
+                    <Link to="/login" className=" text-blue-500 underline hover:text-blue-800">Login</Link>
                 </div>
             }
         </div>
