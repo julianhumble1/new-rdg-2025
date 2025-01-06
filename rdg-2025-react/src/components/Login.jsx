@@ -9,6 +9,8 @@ const Login = ({ loggedIn, setLoggedIn}) => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
 
+    const [failedLoginAttempt, setFailedLoginAttempt] = useState(false)
+
     const navigate = useNavigate()
 
     const handleLogin = async (event) => {
@@ -25,6 +27,7 @@ const Login = ({ loggedIn, setLoggedIn}) => {
 
         } catch (error) {
             console.log(error)
+            setFailedLoginAttempt(true)
         }
     }
 
@@ -44,6 +47,11 @@ const Login = ({ loggedIn, setLoggedIn}) => {
                     <input type="password" placeholder="Password" className="my-3 p-2 border border-black" value={password} onChange={(e) => setPassword(e.target.value)}/>
 
                 </div>
+                {failedLoginAttempt &&
+                    <div className="text-red-600">
+                        Username or password incorrect. Please try again.
+                    </div>
+                }
                 <button type="submit" className="bg-green-300 px-3 py-1">
                     Login
                 </button>
@@ -52,7 +60,7 @@ const Login = ({ loggedIn, setLoggedIn}) => {
         {loggedIn &&
             <div>
                 <div>You are already logged in</div>
-                <button>Logout</button>
+                <button className="text-blue-500 underline hover:text-blue-800">Logout</button>
             </div>
         }
 

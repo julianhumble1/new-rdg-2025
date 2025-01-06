@@ -14,6 +14,8 @@ function App() {
 
   const [loggedIn, setLoggedIn] = useState(false)
 
+  
+
   useEffect(() => {
     const token = Cookies.get("token")
     if (token) setLoggedIn(true)

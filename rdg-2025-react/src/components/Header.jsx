@@ -22,14 +22,14 @@ const Header = ({ loggedIn, setLoggedIn }) => {
     
     
     return (<>
-        <div className="w-full h-10 bg-blue-700 flex flex-row">
+        <div className="w-full h-10 bg-yellow-300 flex flex-row gap-3">
             {loggedIn && <>
-                <div>Logged in as {role} </div>
-                <button onClick={handleLogout}>Logout</button>
+                <div className="my-auto">Logged in as {role} </div>
+                <button onClick={handleLogout} className="text-blue-500 underline hover:text-blue-800">Logout</button>
             </>}
             {!loggedIn &&
                 <div>
-                    <Link to="/login" className="text-blue-500 underline">Login</Link>
+                    <Link to="/login" className="text-blue-500 underline hover:text-blue-800">Login</Link>
                 </div>
             }
         </div>
