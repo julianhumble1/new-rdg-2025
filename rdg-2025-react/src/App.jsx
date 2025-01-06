@@ -7,8 +7,8 @@ import './App.css'
 import Header from "./components/Header.jsx"
 import Dashboard from "./components/dashboards/Dashboard.jsx"
 import UserDashboard from "./components/dashboards/UserDashboard.jsx"
-import ModDashboard from "./components/dashboards/ModDashboard.jsx"
 import AdminDashboard from "./components/dashboards/AdminDashboard.jsx"
+
 
 function App() {
 
@@ -40,7 +40,6 @@ function App() {
         </Route>
         <Route path="/dashboard" element={<Dashboard  />} />
         <Route path="/user-dashboard" element={<UserDashboard  />} />
-        <Route path="/mod-dashboard" element={<ModDashboard />} />
         <Route path="/admin-dashboard" element={<AdminDashboard />} />
       </Routes>
     </Router>

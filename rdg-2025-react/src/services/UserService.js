@@ -5,25 +5,9 @@ export default class UserService {
 
     static login = async (username, password) => {
         try {
-            const response = await axios.post("http://localhost:8080/api/auth/signin", { "username": username, "password": password })
+            const response = await axios.post("http://localhost:8080/auth/signin", { "username": username, "password": password })
             return response.data
         } catch (error) {
-            throw new Error(error.message)
-        }
-    }
-
-    static checkMod = async () => {
-        try {
-            const token = Cookies.get("token")
-            const response = await axios.get("http://localhost:8080/api/test/mod", {
-                headers: {
-                    "Authorization": `Bearer ${token}`
-                }
-            })
-            console.log(response)
-            return true;
-        } catch (error) {
-            console.log(error)
             throw new Error(error.message)
         }
     }
@@ -31,32 +15,28 @@ export default class UserService {
     static checkUser = async () => {
         try {
             const token = Cookies.get("token")
-            const response = await axios.get("http://localhost:8080/api/test/user", {
+            const response = await axios.get("http://localhost:8080/checkAuth/user", {
                 headers: {
                     "Authorization": `Bearer ${token}`
                 }
             })
-            console.log(response)
             return true;
         } catch (error) {
-            console.log(error)
-            throw new Error(error.message)
+            throw new Error(error)
         }
     }
 
     static checkAdmin = async () => {
         try {
             const token = Cookies.get("token")
-            const response = await axios.get("http://localhost:8080/api/test/admin", {
+            const response = await axios.get("http://localhost:8080/checkAuth/admin", {
                 headers: {
                     "Authorization": `Bearer ${token}`
                 }
             })
-            console.log(response)
             return true;
         } catch (error) {
-            console.log(error)
-            throw new Error(error.message)
+            throw new Error(error)
         }
     }
 
