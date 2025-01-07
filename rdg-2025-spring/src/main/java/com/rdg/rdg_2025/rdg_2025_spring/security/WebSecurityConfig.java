@@ -60,6 +60,7 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests(auth ->
                         auth.requestMatchers("/auth/**").permitAll()
                                 .requestMatchers("/checkAuth/**").permitAll()
+                                .requestMatchers("/venues/**").permitAll()
                                 .anyRequest().authenticated()
                 );
 
