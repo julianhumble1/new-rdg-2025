@@ -1,12 +1,19 @@
 package com.rdg.rdg_2025.rdg_2025_spring.controllers;
 
+import com.rdg.rdg_2025.rdg_2025_spring.models.Venue;
 import com.rdg.rdg_2025.rdg_2025_spring.payload.request.NewVenueRequest;
+import com.rdg.rdg_2025.rdg_2025_spring.payload.response.VenueResponse;
 import com.rdg.rdg_2025.rdg_2025_spring.services.VenueService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -18,10 +25,26 @@ public class VenueController {
 
     @PostMapping("/new")
     @PreAuthorize("hasRole('ADMIN')")
-    public void addNewVenue(@Valid @RequestBody NewVenueRequest newVenueRequest) {
-        System.out.println("received a request");
-        System.out.println(newVenueRequest);
-        venueService.addNewVenue(newVenueRequest);
+    public ResponseEntity<?> addNewVenue(@Valid @RequestBody NewVenueRequest newVenueRequest) {
+
+        System.out.println("received request");
+
+        Venue venue = venueService.addNewVenue(newVenueRequest);
+
+        return ResponseEntity.ok(
+                new VenueResponse(venue)
+        );
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<?> handleValidationExceptions(MethodArgumentNotValidException ex) {
+        Map<String, String> errors = new HashMap<>();
+        ex.getBindingResult().getAllErrors().forEach(error -> {
+            String fieldName = ((FieldError) error).getField();
+            String errorMessage = error.getDefaultMessage();
+            errors.put(fieldName, errorMessage);
+        });
+        return ResponseEntity.badRequest().body(errors);
     }
 
 }

@@ -12,7 +12,7 @@ public class VenueService {
     @Autowired
     VenueRepository venueRepository;
 
-    public void addNewVenue(NewVenueRequest newVenueRequest) {
+    public Venue addNewVenue(NewVenueRequest newVenueRequest) {
 
         Venue venue = new Venue(
                 newVenueRequest.getName(),
@@ -23,9 +23,13 @@ public class VenueService {
                 newVenueRequest.getUrl()
         );
 
-        System.out.println(venue);
+        try {
+            venueRepository.save(venue);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
 
-        venueRepository.save(venue);
+        return venue;
 
     }
 }
