@@ -1,5 +1,6 @@
 package com.rdg.rdg_2025.rdg_2025_spring.services;
 
+import com.rdg.rdg_2025.rdg_2025_spring.exception.DatabaseException;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Venue;
 import com.rdg.rdg_2025.rdg_2025_spring.payload.request.NewVenueRequest;
 import com.rdg.rdg_2025.rdg_2025_spring.repository.VenueRepository;
@@ -8,6 +9,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -62,6 +64,19 @@ public class VenueServiceTest {
 
         // Act & Assert
         DataIntegrityViolationException ex = assertThrows(DataIntegrityViolationException.class, () -> {
+            venueService.addNewVenue(new NewVenueRequest(
+                    "Test Venue", "Test Notes", "Test Postcode", "Test Address", "Test Town", "www.test.com")
+            );
+        });
+    }
+
+    @Test
+    void testDataAccessExceptionThrowsDatabaseException() {
+        // Arrange
+        when(venueRepository.save(any(Venue.class))).thenThrow(new DataAccessException("Data access failed"){});
+
+        // Act & Assert
+        DatabaseException ex = assertThrows(DatabaseException.class, () -> {
             venueService.addNewVenue(new NewVenueRequest(
                     "Test Venue", "Test Notes", "Test Postcode", "Test Address", "Test Town", "www.test.com")
             );
