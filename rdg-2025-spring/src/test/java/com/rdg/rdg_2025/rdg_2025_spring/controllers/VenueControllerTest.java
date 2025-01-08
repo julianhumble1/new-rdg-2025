@@ -159,7 +159,7 @@ public class VenueControllerTest {
 
     @Test
     @WithMockUser(roles="ADMIN")
-    void testNameWithEmptyOtherValuesReturnsOkRequest() throws Exception{
+    void testNameWithMissingOtherValuesReturnsOkRequest() throws Exception{
         // Arrange
         Venue testVenue = new Venue("Test Venue", null, null, null, null, null);
         when(venueService.addNewVenue(any(NewVenueRequest.class))).thenReturn(testVenue);
@@ -169,6 +169,24 @@ public class VenueControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(
                                 "{ \"name\": \"Test Venue\" }"
+                        ))
+                .andExpect(status().isOk()
+                );
+    }
+
+    @Test
+    @WithMockUser(roles="ADMIN")
+    void testNameWithEmptyOtherValuesReturnsOkRequest() throws Exception{
+        // Arrange
+        Venue testVenue = new Venue("Test Venue", null, null, null, null, null);
+        when(venueService.addNewVenue(any(NewVenueRequest.class))).thenReturn(testVenue);
+
+        // Act & Assert
+        mockMvc.perform(post("/venues/new")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(
+                                "{ \"name\": \"Test Venue\", \"notes\": \"\", \"postcode\": \"\", \"address\": \"\", " +
+                                        "\"town\": \"\", \"url\": \"\" }"
                         ))
                 .andExpect(status().isOk()
                 );
