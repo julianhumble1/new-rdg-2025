@@ -17,9 +17,12 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.time.LocalDateTime;
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(VenueController.class)
@@ -57,6 +60,34 @@ public class VenueControllerTest {
                                 "\"town\": \"Test Town\", \"url\": \"www.test.com\" }"
                 ))
                 .andExpect(status().isOk()
+                );
+    }
+
+    @Test
+    @WithMockUser(roles="ADMIN")
+    void testReturnedVenueWhenServiceSuccessfullySavesVenue() throws Exception{
+        // Arrange
+        Venue testVenue = new Venue("Test Venue", "Test Notes", "Test Postcode", "Test Address", "Test Town", "www.test.com");
+        when(venueService.addNewVenue(any(NewVenueRequest.class))).thenReturn(testVenue);
+
+        // Act & Assert
+        mockMvc.perform(post("/venues/new")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(
+                                "{ \"name\": \"Test Venue\", \"notes\": \"Test Notes\", \"postcode\": \"Test Postcode\", \"address\": \"Test Address\", " +
+                                        "\"town\": \"Test Town\", \"url\": \"www.test.com\" }"
+                        ))
+                        .andExpect(jsonPath("$.venue.id").isNotEmpty())
+                        .andExpect(jsonPath("$.venue.name").value(testVenue.getName()))
+                        .andExpect(jsonPath("$.venue.notes").value(testVenue.getNotes()))
+                        .andExpect(jsonPath("$.venue.postcode").value(testVenue.getPostcode()))
+                        .andExpect(jsonPath("$.venue.address").value(testVenue.getAddress()))
+                        .andExpect(jsonPath("$.venue.town").value(testVenue.getTown()))
+                        .andExpect(jsonPath("$.venue.url").value(testVenue.getUrl()))
+                        .andExpect(jsonPath("$.venue.createdAt").isNotEmpty())
+                        .andExpect(jsonPath("$.venue.updatedAt").isNotEmpty())
+                        .andExpect(jsonPath("$.venue.slug").isNotEmpty()
+
                 );
     }
 
