@@ -32,9 +32,7 @@ public class VenueController {
 
         try {
             Venue venue = venueService.addNewVenue(newVenueRequest);
-            return ResponseEntity.ok(
-                    new VenueResponse(venue)
-            );
+            return ResponseEntity.ok(new VenueResponse(venue));
         } catch (DataIntegrityViolationException ex) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
         } catch (DatabaseException ex) {

@@ -18,7 +18,6 @@ public class VenueService {
 
     public Venue addNewVenue(NewVenueRequest newVenueRequest) {
 
-
         Venue venue = new Venue(
                 newVenueRequest.getName(),
                 newVenueRequest.getNotes(),
@@ -29,14 +28,13 @@ public class VenueService {
         );
 
         try {
-            venueRepository.save(venue);
+            Venue savedVenue = venueRepository.save(venue);
+            return savedVenue;
         } catch (DataIntegrityViolationException ex) {
             throw new DataIntegrityViolationException(ex.getMessage());
         } catch (DataAccessException | PersistenceException ex) {
             throw new DatabaseException(ex.getMessage());
         }
-
-        return venue;
 
     }
 }

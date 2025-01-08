@@ -13,6 +13,18 @@ public class NewVenueRequest {
     private String town;
     private String url;
 
+    public NewVenueRequest() {
+    }
+
+    public NewVenueRequest(String name, String notes, String postcode, String address, String town, String url) {
+        this.name = name;
+        this.notes = notes;
+        this.postcode = postcode;
+        this.address = address;
+        this.town = town;
+        this.url = url;
+    }
+
     public String getName() {
         return name;
     }
