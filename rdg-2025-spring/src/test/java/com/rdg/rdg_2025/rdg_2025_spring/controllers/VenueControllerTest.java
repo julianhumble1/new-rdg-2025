@@ -127,4 +127,19 @@ public class VenueControllerTest {
                 );
     }
 
+    @Test
+    @WithMockUser(roles="ADMIN")
+    void testEmptyNameReturns400BadRequest() throws Exception{
+
+        // Act & Assert
+        mockMvc.perform(post("/venues/new")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(
+                                "{ \"name\": \"\", \"notes\": \"Test Notes\", \"postcode\": \"Test Postcode\", \"address\": \"Test Address\", " +
+                                        "\"town\": \"Test Town\", \"url\": \"www.test.com\" }"
+                        ))
+                .andExpect(status().isBadRequest()
+                );
+    }
+
 }
