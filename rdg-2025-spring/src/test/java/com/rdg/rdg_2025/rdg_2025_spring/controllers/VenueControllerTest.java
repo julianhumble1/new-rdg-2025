@@ -1,5 +1,6 @@
 package com.rdg.rdg_2025.rdg_2025_spring.controllers;
 
+import com.rdg.rdg_2025.rdg_2025_spring.exception.DatabaseException;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Venue;
 import com.rdg.rdg_2025.rdg_2025_spring.payload.request.NewVenueRequest;
 import com.rdg.rdg_2025.rdg_2025_spring.services.VenueService;
@@ -17,8 +18,6 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
-
-import java.time.LocalDateTime;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -107,6 +106,24 @@ public class VenueControllerTest {
                                         "\"town\": \"Test Town\", \"url\": \"www.test.com\" }"
                         ))
                 .andExpect(status().isConflict()
+                );
+    }
+
+    @Test
+    @WithMockUser(roles="ADMIN")
+    void testDataBaseExceptionReturns500Error() throws Exception{
+        // Arrange
+        Venue testVenue = new Venue("Test Venue", "Test Notes", "Test Postcode", "Test Address", "Test Town", "www.test.com");
+        when(venueService.addNewVenue(any(NewVenueRequest.class))).thenThrow(new DatabaseException("Database Error"));
+
+        // Act & Assert
+        mockMvc.perform(post("/venues/new")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(
+                                "{ \"name\": \"Test Venue\", \"notes\": \"Test Notes\", \"postcode\": \"Test Postcode\", \"address\": \"Test Address\", " +
+                                        "\"town\": \"Test Town\", \"url\": \"www.test.com\" }"
+                        ))
+                .andExpect(status().isInternalServerError()
                 );
     }
 
