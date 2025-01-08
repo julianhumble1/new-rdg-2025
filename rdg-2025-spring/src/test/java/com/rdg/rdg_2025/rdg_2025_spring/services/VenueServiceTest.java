@@ -37,4 +37,19 @@ public class VenueServiceTest {
         assertEquals(testVenue, result);
     }
 
+    @Test
+    void testAddNewVenueWithNoFieldsExceptNameSuccessReturnsExpectedVenueObject() {
+        // Arrange
+        Venue testVenue = new Venue("Test Venue", null, null, null, null, null);
+        when(venueRepository.save(any(Venue.class))).thenReturn(testVenue);
+
+        // Act
+        Venue result = venueService.addNewVenue(
+                new NewVenueRequest("Test Venue", null, null, null, null, null)
+        );
+
+        // Assert
+        assertEquals(testVenue, result);
+    }
+
 }
