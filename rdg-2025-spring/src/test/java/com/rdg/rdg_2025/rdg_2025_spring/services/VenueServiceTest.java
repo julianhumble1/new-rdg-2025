@@ -8,8 +8,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.dao.DataIntegrityViolationException;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -50,6 +53,19 @@ public class VenueServiceTest {
 
         // Assert
         assertEquals(testVenue, result);
+    }
+
+    @Test
+    void testDuplicateVenueNameThrowsDataIntegrityException() {
+        // Arrange
+        when(venueRepository.save(any(Venue.class))).thenThrow(new DataIntegrityViolationException("Duplicate venue name"));
+
+        // Act & Assert
+        DataIntegrityViolationException ex = assertThrows(DataIntegrityViolationException.class, () -> {
+            venueService.addNewVenue(new NewVenueRequest(
+                    "Test Venue", "Test Notes", "Test Postcode", "Test Address", "Test Town", "www.test.com")
+            );
+        });
     }
 
 }
