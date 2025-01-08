@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.MediaType;
 
 import org.springframework.security.test.context.support.WithMockUser;
@@ -88,6 +89,24 @@ public class VenueControllerTest {
                         .andExpect(jsonPath("$.venue.updatedAt").isNotEmpty())
                         .andExpect(jsonPath("$.venue.slug").isNotEmpty()
 
+                );
+    }
+
+    @Test
+    @WithMockUser(roles="ADMIN")
+    void testDataIntegrityViolationExceptionReturns409Error() throws Exception{
+        // Arrange
+        Venue testVenue = new Venue("Test Venue", "Test Notes", "Test Postcode", "Test Address", "Test Town", "www.test.com");
+        when(venueService.addNewVenue(any(NewVenueRequest.class))).thenThrow(new DataIntegrityViolationException("Data integrity violation"));
+
+        // Act & Assert
+        mockMvc.perform(post("/venues/new")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(
+                                "{ \"name\": \"Test Venue\", \"notes\": \"Test Notes\", \"postcode\": \"Test Postcode\", \"address\": \"Test Address\", " +
+                                        "\"town\": \"Test Town\", \"url\": \"www.test.com\" }"
+                        ))
+                .andExpect(status().isConflict()
                 );
     }
 
