@@ -1,6 +1,6 @@
 package com.rdg.rdg_2025.rdg_2025_spring.services;
 
-import com.rdg.rdg_2025.rdg_2025_spring.excpetion.DatabaseException;
+import com.rdg.rdg_2025.rdg_2025_spring.exception.DatabaseException;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Venue;
 import com.rdg.rdg_2025.rdg_2025_spring.payload.request.NewVenueRequest;
 import com.rdg.rdg_2025.rdg_2025_spring.repository.VenueRepository;
@@ -17,6 +17,7 @@ public class VenueService {
     VenueRepository venueRepository;
 
     public Venue addNewVenue(NewVenueRequest newVenueRequest) {
+
 
         Venue venue = new Venue(
                 newVenueRequest.getName(),
