@@ -45,15 +45,16 @@ const Login = ({ loggedIn, setLoggedIn}) => {
                         <input type="password" placeholder="Password" className="p-2 border border-black" value={password} onChange={(e) => setPassword(e.target.value)}/>
                     </div>
 
+                    {failedLoginAttempt &&
+                        <div className="text-red-600">
+                            Username or password incorrect. Please try again.
+                        </div>
+                    }
+                    <button type="submit" className="bg-green-300 px-3 py-1 w-fit rounded hover:bg-green-600">
+                        Login
+                    </button>
+
                 </div>
-                {failedLoginAttempt &&
-                    <div className="text-red-600">
-                        Username or password incorrect. Please try again.
-                    </div>
-                }
-                <button type="submit" className="bg-green-300 px-3 py-1">
-                    Login
-                </button>
             </form>
         }
         {loggedIn &&

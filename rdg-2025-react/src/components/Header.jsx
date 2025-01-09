@@ -22,7 +22,7 @@ const Header = ({ loggedIn, setLoggedIn }) => {
     
     
     return (<>
-        <div className="w-full h-10 bg-yellow-300 flex flex-row gap-3">
+        <div className="w-full h-10 bg-yellow-300 flex flex-row gap-3 px-3">
             <div className="my-auto">
                 <Link to="/" className="text-blue-500 underline hover:text-blue-800">Home</Link>
             </div>
