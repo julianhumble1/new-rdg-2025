@@ -147,4 +147,16 @@ public class PostVenueIntegrationTest {
                         ))
                 .andExpect(status().isBadRequest());
     }
+
+    @Test
+    void testEmptyVenueNameWithAdminTokenReturns400() throws Exception {
+        mockMvc.perform(post("/venues/new")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header("Authorization", adminToken)
+                        .content(
+                                "{ \"name\": \"\", \"notes\": \"Test Notes\", \"postcode\": \"Test Postcode\", \"address\": \"Test Address\", " +
+                                        "\"town\": \"Test Town\", \"url\": \"www.test.com\" }"
+                        ))
+                .andExpect(status().isBadRequest());
+    }
 }
