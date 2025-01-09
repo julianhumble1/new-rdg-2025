@@ -7,15 +7,15 @@ import com.rdg.rdg_2025.rdg_2025_spring.repository.RoleRepository;
 import com.rdg.rdg_2025.rdg_2025_spring.repository.UserRepository;
 import com.rdg.rdg_2025.rdg_2025_spring.repository.VenueRepository;
 import com.rdg.rdg_2025.rdg_2025_spring.security.jwt.JwtUtils;
+import com.rdg.rdg_2025.rdg_2025_spring.utils.AuthTestUtils;
 import jakarta.transaction.Transactional;
 
+import org.junit.jupiter.api.*;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -56,45 +56,48 @@ public class PostVenueIntegrationTest {
     @Autowired
     private JwtUtils jwtUtils;
 
-    private User testAdmin;
-    private String adminToken;
+    private static User testAdmin;
+    private static String adminToken;
 
-    private User testUser;
-    private String userToken;
+    private static User testUser;
+    private static String userToken;
 
-    @BeforeEach
-    public void setup() {
+    @BeforeAll
+    public static void setupUsersAndTokens(@Autowired UserRepository userRepository,
+                                           @Autowired RoleRepository roleRepository,
+                                           @Autowired PasswordEncoder passwordEncoder,
+                                           @Autowired AuthenticationManager authenticationManager,
+                                           @Autowired JwtUtils jwtUtils) {
+
         userRepository.deleteAll();
-        venueRepository.deleteAll();
 
-        testAdmin = new User();
-        testAdmin.setUsername("test_admin");
-        testAdmin.setEmail("admin@test.com");
-        testAdmin.setPassword(passwordEncoder.encode("password123"));
-        Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN) .orElseThrow(() -> new RuntimeException("Error: Role is not found"));
-        Set<Role> testAdminRoles = new HashSet<>();
-        testAdminRoles.add(adminRole);
-        testAdmin.setRoles(testAdminRoles);
-        userRepository.save(testAdmin);
+        testAdmin = AuthTestUtils.createTestAdmin(userRepository, roleRepository, passwordEncoder);
         Authentication adminAuthentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken("test_admin", "password123")
         );
         adminToken = "Bearer " + jwtUtils.generateJwtToken(adminAuthentication);
 
-        testUser = new User();
-        testUser.setUsername("test_user");
-        testUser.setEmail("user@test.com");
-        testUser.setPassword(passwordEncoder.encode("password123"));
-        Role userRole = roleRepository.findByName(ERole.ROLE_USER) .orElseThrow(() -> new RuntimeException("Error: Role is not found"));
-        Set<Role> testUserRoles = new HashSet<>();
-        testUserRoles.add(userRole);
-        testUser.setRoles(testUserRoles);
-        userRepository.save(testUser);
+        testUser = AuthTestUtils.createTestUser(userRepository, roleRepository, passwordEncoder)
         Authentication userAuthentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken("test_user", "password123")
         );
         userToken = "Bearer " + jwtUtils.generateJwtToken(userAuthentication);
+    }
 
+    @AfterAll
+    public static void destroyUsers(@Autowired UserRepository userRepository) {
+        userRepository.deleteAll();
+    }
+
+
+    @BeforeEach
+    public void setup() {
+        venueRepository.deleteAll();
+    }
+
+    @AfterEach
+    public void cleanup() {
+        venueRepository.deleteAll();
     }
 
 
