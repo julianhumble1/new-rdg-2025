@@ -77,7 +77,7 @@ public class PostVenueIntegrationTest {
         );
         adminToken = "Bearer " + jwtUtils.generateJwtToken(adminAuthentication);
 
-        testUser = AuthTestUtils.createTestUser(userRepository, roleRepository, passwordEncoder)
+        testUser = AuthTestUtils.createTestUser(userRepository, roleRepository, passwordEncoder);
         Authentication userAuthentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken("test_user", "password123")
         );
@@ -110,6 +110,18 @@ public class PostVenueIntegrationTest {
                         "{ \"name\": \"Test Venue\", \"notes\": \"Test Notes\", \"postcode\": \"Test Postcode\", \"address\": \"Test Address\", " +
                                 "\"town\": \"Test Town\", \"url\": \"www.test.com\" }"
                 ))
-                .andExpect(status().isOk());
+                .andExpect(status().isCreated());
+    }
+
+    @Test
+    void testVenueNameWithAdminTokenReturns200() throws Exception {
+        mockMvc.perform(post("/venues/new")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header("Authorization", adminToken)
+                        .content(
+                                "{ \"name\": \"Test Venue\", \"notes\": \"Test Notes\", \"postcode\": \"Test Postcode\", \"address\": \"Test Address\", " +
+                                        "\"town\": \"Test Town\", \"url\": \"www.test.com\" }"
+                        ))
+                .andExpect(status().isCreated());
     }
 }

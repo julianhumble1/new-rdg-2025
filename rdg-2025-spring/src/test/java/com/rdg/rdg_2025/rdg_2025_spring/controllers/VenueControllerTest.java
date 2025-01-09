@@ -59,7 +59,7 @@ public class VenueControllerTest {
                         "{ \"name\": \"Test Venue\", \"notes\": \"Test Notes\", \"postcode\": \"Test Postcode\", \"address\": \"Test Address\", " +
                                 "\"town\": \"Test Town\", \"url\": \"www.test.com\" }"
                 ))
-                .andExpect(status().isOk()
+                .andExpect(status().isCreated()
                 );
     }
 
@@ -170,7 +170,7 @@ public class VenueControllerTest {
                         .content(
                                 "{ \"name\": \"Test Venue\" }"
                         ))
-                .andExpect(status().isOk()
+                .andExpect(status().isCreated()
                 );
     }
 
@@ -188,7 +188,7 @@ public class VenueControllerTest {
                                 "{ \"name\": \"Test Venue\", \"notes\": \"\", \"postcode\": \"\", \"address\": \"\", " +
                                         "\"town\": \"\", \"url\": \"\" }"
                         ))
-                .andExpect(status().isOk()
+                .andExpect(status().isCreated()
                 );
     }
 

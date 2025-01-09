@@ -15,6 +15,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,7 +33,8 @@ public class VenueController {
 
         try {
             Venue venue = venueService.addNewVenue(newVenueRequest);
-            return ResponseEntity.ok(new VenueResponse(venue));
+            URI location = URI.create("/venues/" + venue.getId());
+            return ResponseEntity.created(location).body(new VenueResponse(venue));
         } catch (DataIntegrityViolationException ex) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
         } catch (DatabaseException ex) {
