@@ -1,7 +1,6 @@
 package com.rdg.rdg_2025.rdg_2025_spring.integration;
 
-import com.rdg.rdg_2025.rdg_2025_spring.models.ERole;
-import com.rdg.rdg_2025.rdg_2025_spring.models.Role;
+
 import com.rdg.rdg_2025.rdg_2025_spring.models.User;
 import com.rdg.rdg_2025.rdg_2025_spring.repository.RoleRepository;
 import com.rdg.rdg_2025.rdg_2025_spring.repository.UserRepository;
@@ -23,8 +22,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 
-import java.util.HashSet;
-import java.util.Set;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -40,21 +37,6 @@ public class PostVenueIntegrationTest {
 
     @Autowired
     private VenueRepository venueRepository;
-
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private RoleRepository roleRepository;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    @Autowired
-    AuthenticationManager authenticationManager;
-
-    @Autowired
-    private JwtUtils jwtUtils;
 
     private static User testAdmin;
     private static String adminToken;
@@ -181,5 +163,17 @@ public class PostVenueIntegrationTest {
                                         "\"town\": \"Test Town\", \"url\": \"www.test.com\" }"
                         ))
                 .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    void testUserTokenReturns403() throws Exception {
+        mockMvc.perform(post("/venues/new")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header("Authorization", userToken)
+                        .content(
+                                "{ \"name\": \"Test Venue\", \"notes\": \"Test Notes\", \"postcode\": \"Test Postcode\", \"address\": \"Test Address\", " +
+                                        "\"town\": \"Test Town\", \"url\": \"www.test.com\" }"
+                        ))
+                .andExpect(status().isForbidden());
     }
 }
