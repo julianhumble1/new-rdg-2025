@@ -102,7 +102,7 @@ public class PostVenueIntegrationTest {
 
 
     @Test
-    void testFullVenueDetailsWithAdminTokenReturns200() throws Exception {
+    void testFullVenueDetailsWithAdminTokenReturns201() throws Exception {
         mockMvc.perform(post("/venues/new")
                 .contentType(MediaType.APPLICATION_JSON)
                 .header("Authorization", adminToken)
@@ -114,13 +114,24 @@ public class PostVenueIntegrationTest {
     }
 
     @Test
-    void testVenueNameWithAdminTokenReturns200() throws Exception {
+    void testVenueNameOthersEmptyWithAdminTokenReturns201() throws Exception {
         mockMvc.perform(post("/venues/new")
                         .contentType(MediaType.APPLICATION_JSON)
                         .header("Authorization", adminToken)
                         .content(
-                                "{ \"name\": \"Test Venue\", \"notes\": \"Test Notes\", \"postcode\": \"Test Postcode\", \"address\": \"Test Address\", " +
-                                        "\"town\": \"Test Town\", \"url\": \"www.test.com\" }"
+                                "{ \"name\": \"Test Venue\", \"notes\": \"\", \"postcode\": \"\", \"address\": \"\", " +
+                                        "\"town\": \"\", \"url\": \"\" }"
+                        ))
+                .andExpect(status().isCreated());
+    }
+
+    @Test
+    void testVenueNameOthersMissingWithAdminTokenReturns201() throws Exception {
+        mockMvc.perform(post("/venues/new")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header("Authorization", adminToken)
+                        .content(
+                                "{ \"name\": \"Test Venue\" }"
                         ))
                 .andExpect(status().isCreated());
     }

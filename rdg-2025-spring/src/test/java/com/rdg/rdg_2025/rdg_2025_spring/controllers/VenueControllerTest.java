@@ -46,7 +46,7 @@ public class VenueControllerTest {
 
     @Test
     @WithMockUser(roles="ADMIN")
-    void testOkStatusWhenServiceSuccessfullySavesVenue() throws Exception{
+    void test201StatusWhenServiceSuccessfullySavesVenue() throws Exception{
         // Arrange
         Venue testVenue = new Venue("Test Venue", "Test Notes", "Test Postcode", "Test Address", "Test Town", "www.test.com");
         when(venueService.addNewVenue(any(NewVenueRequest.class))).thenReturn(testVenue);
@@ -177,7 +177,7 @@ public class VenueControllerTest {
 
     @Test
     @WithMockUser(roles="ADMIN")
-    void testNameWithMissingOtherValuesReturnsOkRequest() throws Exception{
+    void testNameWithMissingOtherValuesReturns201() throws Exception{
         // Arrange
         Venue testVenue = new Venue("Test Venue", null, null, null, null, null);
         when(venueService.addNewVenue(any(NewVenueRequest.class))).thenReturn(testVenue);
@@ -194,7 +194,7 @@ public class VenueControllerTest {
 
     @Test
     @WithMockUser(roles="ADMIN")
-    void testNameWithEmptyOtherValuesReturnsOkRequest() throws Exception{
+    void testNameWithEmptyOtherValuesReturns201() throws Exception{
         // Arrange
         Venue testVenue = new Venue("Test Venue", null, null, null, null, null);
         when(venueService.addNewVenue(any(NewVenueRequest.class))).thenReturn(testVenue);
