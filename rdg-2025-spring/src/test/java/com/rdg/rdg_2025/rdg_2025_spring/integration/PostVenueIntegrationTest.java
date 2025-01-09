@@ -135,4 +135,16 @@ public class PostVenueIntegrationTest {
                         ))
                 .andExpect(status().isCreated());
     }
+
+    @Test
+    void testMissingVenueNameWithAdminTokenReturns400() throws Exception {
+        mockMvc.perform(post("/venues/new")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header("Authorization", adminToken)
+                        .content(
+                                "{ \"notes\": \"Test Notes\", \"postcode\": \"Test Postcode\", \"address\": \"Test Address\", " +
+                                        "\"town\": \"Test Town\", \"url\": \"www.test.com\" }"
+                        ))
+                .andExpect(status().isBadRequest());
+    }
 }
