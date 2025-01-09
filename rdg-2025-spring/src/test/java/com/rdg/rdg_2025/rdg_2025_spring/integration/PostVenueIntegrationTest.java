@@ -159,4 +159,27 @@ public class PostVenueIntegrationTest {
                         ))
                 .andExpect(status().isBadRequest());
     }
+
+    @Test
+    void testMissingTokenReturns401() throws Exception {
+        mockMvc.perform(post("/venues/new")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(
+                                "{ \"name\": \"Test Venue\", \"notes\": \"Test Notes\", \"postcode\": \"Test Postcode\", \"address\": \"Test Address\", " +
+                                        "\"town\": \"Test Town\", \"url\": \"www.test.com\" }"
+                        ))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    void testBadTokenReturns401() throws Exception {
+        mockMvc.perform(post("/venues/new")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header("Authorization", "fake token")
+                        .content(
+                                "{ \"name\": \"Test Venue\", \"notes\": \"Test Notes\", \"postcode\": \"Test Postcode\", \"address\": \"Test Address\", " +
+                                        "\"town\": \"Test Town\", \"url\": \"www.test.com\" }"
+                        ))
+                .andExpect(status().isUnauthorized());
+    }
 }
