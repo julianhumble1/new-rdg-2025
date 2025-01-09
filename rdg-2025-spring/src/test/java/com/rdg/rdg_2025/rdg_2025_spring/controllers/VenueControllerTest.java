@@ -22,8 +22,7 @@ import org.springframework.web.context.WebApplicationContext;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(VenueController.class)
 public class VenueControllerTest {
@@ -60,6 +59,25 @@ public class VenueControllerTest {
                                 "\"town\": \"Test Town\", \"url\": \"www.test.com\" }"
                 ))
                 .andExpect(status().isCreated()
+                );
+    }
+
+    @Test
+    @WithMockUser(roles="ADMIN")
+    void testExpectedUriWhenSuccessfullySavesVenue() throws Exception{
+        // Arrange
+        Venue testVenue = new Venue("Test Venue", "Test Notes", "Test Postcode", "Test Address", "Test Town", "www.test.com");
+        int testVenueId = testVenue.getId();
+        when(venueService.addNewVenue(any(NewVenueRequest.class))).thenReturn(testVenue);
+
+        // Act & Assert
+        mockMvc.perform(post("/venues/new")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(
+                                "{ \"name\": \"Test Venue\", \"notes\": \"Test Notes\", \"postcode\": \"Test Postcode\", \"address\": \"Test Address\", " +
+                                        "\"town\": \"Test Town\", \"url\": \"www.test.com\" }"
+                        ))
+                .andExpect(header().string("Location", "/venues/" + testVenueId)
                 );
     }
 
