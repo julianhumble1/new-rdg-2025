@@ -19,6 +19,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -78,134 +79,156 @@ public class VenueIntegrationTest {
         venueRepository.deleteAll();
     }
 
+    @Nested
+    @DisplayName("POST addNewVenue integration tests")
+    class postAddNewVenueIntegrationTests {
 
-    @Test
-    void testFullVenueDetailsWithAdminTokenReturns201() throws Exception {
-        mockMvc.perform(post("/venues/new")
-                .contentType(MediaType.APPLICATION_JSON)
-                .header("Authorization", adminToken)
-                .content(
-                        "{ \"name\": \"Test Venue\", \"notes\": \"Test Notes\", \"postcode\": \"Test Postcode\", \"address\": \"Test Address\", " +
-                                "\"town\": \"Test Town\", \"url\": \"www.test.com\" }"
-                ))
-                .andExpect(status().isCreated());
+        @Test
+        void testFullVenueDetailsWithAdminTokenReturns201() throws Exception {
+            mockMvc.perform(post("/venues/new")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .header("Authorization", adminToken)
+                    .content(
+                            "{ \"name\": \"Test Venue\", \"notes\": \"Test Notes\", \"postcode\": \"Test Postcode\", \"address\": \"Test Address\", " +
+                                    "\"town\": \"Test Town\", \"url\": \"www.test.com\" }"
+                    ))
+                    .andExpect(status().isCreated());
+        }
+
+        @Test
+        void testVenueNameOthersEmptyWithAdminTokenReturns201() throws Exception {
+            mockMvc.perform(post("/venues/new")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", adminToken)
+                            .content(
+                                    "{ \"name\": \"Test Venue\", \"notes\": \"\", \"postcode\": \"\", \"address\": \"\", " +
+                                            "\"town\": \"\", \"url\": \"\" }"
+                            ))
+                    .andExpect(status().isCreated());
+        }
+
+        @Test
+        void testMultipleVenuesWithDifferentNamesCanBeAdded() throws Exception {
+            mockMvc.perform(post("/venues/new")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", adminToken)
+                            .content(
+                                    "{ \"name\": \"Test Venue\", \"notes\": \"\", \"postcode\": \"\", \"address\": \"\", " +
+                                            "\"town\": \"\", \"url\": \"\" }"
+                            ));
+
+            mockMvc.perform(post("/venues/new")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", adminToken)
+                            .content(
+                                    "{ \"name\": \"Another Test Venue\", \"notes\": \"\", \"postcode\": \"\", \"address\": \"\", " +
+                                            "\"town\": \"\", \"url\": \"\" }"
+                            ))
+                            .andExpect(status().isCreated());
+        }
+
+        @Test
+        void testVenueNameOthersMissingWithAdminTokenReturns201() throws Exception {
+            mockMvc.perform(post("/venues/new")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", adminToken)
+                            .content(
+                                    "{ \"name\": \"Test Venue\" }"
+                            ))
+                    .andExpect(status().isCreated());
+        }
+
+        @Test
+        void testMissingVenueNameWithAdminTokenReturns400() throws Exception {
+            mockMvc.perform(post("/venues/new")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", adminToken)
+                            .content(
+                                    "{ \"notes\": \"Test Notes\", \"postcode\": \"Test Postcode\", \"address\": \"Test Address\", " +
+                                            "\"town\": \"Test Town\", \"url\": \"www.test.com\" }"
+                            ))
+                    .andExpect(status().isBadRequest());
+        }
+
+        @Test
+        void testEmptyVenueNameWithAdminTokenReturns400() throws Exception {
+            mockMvc.perform(post("/venues/new")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", adminToken)
+                            .content(
+                                    "{ \"name\": \"\", \"notes\": \"Test Notes\", \"postcode\": \"Test Postcode\", \"address\": \"Test Address\", " +
+                                            "\"town\": \"Test Town\", \"url\": \"www.test.com\" }"
+                            ))
+                    .andExpect(status().isBadRequest());
+        }
+
+        // Commenting out as getting strange results and unable to make it pass although functions as expected in reality
+    //    @Test
+    //    void testDuplicateNameVenueReturns409() throws Exception {
+    //        Venue venue = new Venue("Test Venue", null, null, null, null, null);
+    //        venueRepository.save(venue);
+    //
+    //        mockMvc.perform(post("/venues/new")
+    //                .contentType(MediaType.APPLICATION_JSON)
+    //                .header("Authorization", adminToken)
+    //                .content(
+    //                        "{ \"name\": \"Test Venue\", \"notes\": \"Test Notes\", \"postcode\": \"Test Postcode\", \"address\": \"Test Address\", " +
+    //                                "\"town\": \"Test Town\", \"url\": \"www.test.com\" }"
+    //                ))
+    //                .andExpect(status().isConflict());
+    //    }
+
+        @Test
+        void testMissingTokenReturns401() throws Exception {
+            mockMvc.perform(post("/venues/new")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(
+                                    "{ \"name\": \"Test Venue\", \"notes\": \"Test Notes\", \"postcode\": \"Test Postcode\", \"address\": \"Test Address\", " +
+                                            "\"town\": \"Test Town\", \"url\": \"www.test.com\" }"
+                            ))
+                    .andExpect(status().isUnauthorized());
+        }
+
+        @Test
+        void testBadTokenReturns401() throws Exception {
+            mockMvc.perform(post("/venues/new")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", "fake token")
+                            .content(
+                                    "{ \"name\": \"Test Venue\", \"notes\": \"Test Notes\", \"postcode\": \"Test Postcode\", \"address\": \"Test Address\", " +
+                                            "\"town\": \"Test Town\", \"url\": \"www.test.com\" }"
+                            ))
+                    .andExpect(status().isUnauthorized());
+        }
+
+        @Test
+        void testUserTokenReturns403() throws Exception {
+            mockMvc.perform(post("/venues/new")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", userToken)
+                            .content(
+                                    "{ \"name\": \"Test Venue\", \"notes\": \"Test Notes\", \"postcode\": \"Test Postcode\", \"address\": \"Test Address\", " +
+                                            "\"town\": \"Test Town\", \"url\": \"www.test.com\" }"
+                            ))
+                    .andExpect(status().isForbidden());
+        }
+
+
     }
 
-    @Test
-    void testVenueNameOthersEmptyWithAdminTokenReturns201() throws Exception {
-        mockMvc.perform(post("/venues/new")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .header("Authorization", adminToken)
-                        .content(
-                                "{ \"name\": \"Test Venue\", \"notes\": \"\", \"postcode\": \"\", \"address\": \"\", " +
-                                        "\"town\": \"\", \"url\": \"\" }"
-                        ))
-                .andExpect(status().isCreated());
+    @Nested
+    @DisplayName("GET getAllVenues integration tests")
+    class getGetAllVenuesIntegrationTests {
+
+        @Test
+        void testSuccessfulGetWithAdminTokenReturns200() throws Exception {
+            mockMvc.perform(get("/venues/")
+                    .header("Authorization", adminToken))
+                    .andExpect(status().isOk());
+        }
+
+
     }
 
-    @Test
-    void testMultipleVenuesWithDifferentNamesCanBeAdded() throws Exception {
-        mockMvc.perform(post("/venues/new")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .header("Authorization", adminToken)
-                        .content(
-                                "{ \"name\": \"Test Venue\", \"notes\": \"\", \"postcode\": \"\", \"address\": \"\", " +
-                                        "\"town\": \"\", \"url\": \"\" }"
-                        ));
 
-        mockMvc.perform(post("/venues/new")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .header("Authorization", adminToken)
-                        .content(
-                                "{ \"name\": \"Another Test Venue\", \"notes\": \"\", \"postcode\": \"\", \"address\": \"\", " +
-                                        "\"town\": \"\", \"url\": \"\" }"
-                        ))
-                        .andExpect(status().isCreated());
-    }
-
-    @Test
-    void testVenueNameOthersMissingWithAdminTokenReturns201() throws Exception {
-        mockMvc.perform(post("/venues/new")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .header("Authorization", adminToken)
-                        .content(
-                                "{ \"name\": \"Test Venue\" }"
-                        ))
-                .andExpect(status().isCreated());
-    }
-
-    @Test
-    void testMissingVenueNameWithAdminTokenReturns400() throws Exception {
-        mockMvc.perform(post("/venues/new")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .header("Authorization", adminToken)
-                        .content(
-                                "{ \"notes\": \"Test Notes\", \"postcode\": \"Test Postcode\", \"address\": \"Test Address\", " +
-                                        "\"town\": \"Test Town\", \"url\": \"www.test.com\" }"
-                        ))
-                .andExpect(status().isBadRequest());
-    }
-
-    @Test
-    void testEmptyVenueNameWithAdminTokenReturns400() throws Exception {
-        mockMvc.perform(post("/venues/new")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .header("Authorization", adminToken)
-                        .content(
-                                "{ \"name\": \"\", \"notes\": \"Test Notes\", \"postcode\": \"Test Postcode\", \"address\": \"Test Address\", " +
-                                        "\"town\": \"Test Town\", \"url\": \"www.test.com\" }"
-                        ))
-                .andExpect(status().isBadRequest());
-    }
-
-    // Commenting out as getting strange results and unable to make it pass although functions as expected in reality
-//    @Test
-//    void testDuplicateNameVenueReturns409() throws Exception {
-//        Venue venue = new Venue("Test Venue", null, null, null, null, null);
-//        venueRepository.save(venue);
-//
-//        mockMvc.perform(post("/venues/new")
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .header("Authorization", adminToken)
-//                .content(
-//                        "{ \"name\": \"Test Venue\", \"notes\": \"Test Notes\", \"postcode\": \"Test Postcode\", \"address\": \"Test Address\", " +
-//                                "\"town\": \"Test Town\", \"url\": \"www.test.com\" }"
-//                ))
-//                .andExpect(status().isConflict());
-//    }
-
-    @Test
-    void testMissingTokenReturns401() throws Exception {
-        mockMvc.perform(post("/venues/new")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(
-                                "{ \"name\": \"Test Venue\", \"notes\": \"Test Notes\", \"postcode\": \"Test Postcode\", \"address\": \"Test Address\", " +
-                                        "\"town\": \"Test Town\", \"url\": \"www.test.com\" }"
-                        ))
-                .andExpect(status().isUnauthorized());
-    }
-
-    @Test
-    void testBadTokenReturns401() throws Exception {
-        mockMvc.perform(post("/venues/new")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .header("Authorization", "fake token")
-                        .content(
-                                "{ \"name\": \"Test Venue\", \"notes\": \"Test Notes\", \"postcode\": \"Test Postcode\", \"address\": \"Test Address\", " +
-                                        "\"town\": \"Test Town\", \"url\": \"www.test.com\" }"
-                        ))
-                .andExpect(status().isUnauthorized());
-    }
-
-    @Test
-    void testUserTokenReturns403() throws Exception {
-        mockMvc.perform(post("/venues/new")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .header("Authorization", userToken)
-                        .content(
-                                "{ \"name\": \"Test Venue\", \"notes\": \"Test Notes\", \"postcode\": \"Test Postcode\", \"address\": \"Test Address\", " +
-                                        "\"town\": \"Test Town\", \"url\": \"www.test.com\" }"
-                        ))
-                .andExpect(status().isForbidden());
-    }
 }

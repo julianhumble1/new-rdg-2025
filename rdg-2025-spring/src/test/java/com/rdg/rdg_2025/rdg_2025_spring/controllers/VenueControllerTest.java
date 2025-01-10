@@ -234,8 +234,7 @@ public class VenueControllerTest {
             when(venueService.getAllVenues()).thenReturn(venues);
             // Act & Assert
             mockMvc.perform(get("/venues/"))
-                            .andExpect(status().isOk()
-                    );
+                            .andExpect(status().isOk());
 
         }
 
@@ -250,8 +249,7 @@ public class VenueControllerTest {
             when(venueService.getAllVenues()).thenReturn(venues);
             // Act & Assert
             mockMvc.perform(get("/venues/"))
-                    .andExpect(jsonPath("$.venues[0].name").value("Test Venue")
-                    );
+                    .andExpect(jsonPath("$.venues[0].name").value("Test Venue"));
 
         }
 
@@ -263,11 +261,8 @@ public class VenueControllerTest {
 
             // Act & Assert
             mockMvc.perform(get("/venues/"))
-                    .andExpect(status().isInternalServerError()
-                    );
+                    .andExpect(status().isInternalServerError());
         }
-
-
 
     }
 
