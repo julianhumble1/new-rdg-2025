@@ -239,6 +239,24 @@ public class VenueControllerTest {
 
         }
 
+        @Test
+        @WithMockUser(roles="ADMIN")
+        void testSuccessfulGetResponseContainsVenue() throws Exception {
+            // Arrange
+            Venue testVenue = new Venue("Test Venue", null, null, null, null, null);
+            ArrayList<Venue> venues = new ArrayList<>();
+            venues.add(testVenue);
+
+            when(venueService.getAllVenues()).thenReturn(venues);
+            // Act & Assert
+            mockMvc.perform(get("/venues/"))
+                    .andExpect(jsonPath("$.venues[0].name").value("Test Venue")
+                    );
+
+        }
+
+
+
     }
 
 }
