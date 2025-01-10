@@ -5,6 +5,8 @@ import com.rdg.rdg_2025.rdg_2025_spring.models.Venue;
 import com.rdg.rdg_2025.rdg_2025_spring.payload.request.NewVenueRequest;
 import com.rdg.rdg_2025.rdg_2025_spring.repository.VenueRepository;
 import jakarta.persistence.PersistenceException;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -12,6 +14,10 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -28,73 +34,99 @@ public class VenueServiceTest {
     @Mock
     private VenueRepository venueRepository;
 
-    @Test
-    void testAddNewVenueWithAllFieldsSuccessReturnsExpectedVenueObject() {
-        // Arrange
-        Venue testVenue = new Venue("Test Venue", "Test Notes", "Test Postcode", "Test Address", "Test Town", "www.test.com");
-        when(venueRepository.save(any(Venue.class))).thenReturn(testVenue);
 
-        // Act
-        Venue result = venueService.addNewVenue(
-                new NewVenueRequest("Test Venue", "Test Notes", "Test Postcode", "Test Address", "Test Town", "www.test.com")
-        );
+    @Nested
+    @DisplayName("addNewVenue service tests")
+    class addNewVenueServiceTests {
 
-        // Assert
-        assertEquals(testVenue, result);
-    }
+        @Test
+        void testAddNewVenueWithAllFieldsSuccessReturnsExpectedVenueObject() {
+            // Arrange
+            Venue testVenue = new Venue("Test Venue", "Test Notes", "Test Postcode", "Test Address", "Test Town", "www.test.com");
+            when(venueRepository.save(any(Venue.class))).thenReturn(testVenue);
 
-    @Test
-    void testAddNewVenueWithNoFieldsExceptNameSuccessReturnsExpectedVenueObject() {
-        // Arrange
-        Venue testVenue = new Venue("Test Venue", null, null, null, null, null);
-        when(venueRepository.save(any(Venue.class))).thenReturn(testVenue);
-
-        // Act
-        Venue result = venueService.addNewVenue(
-                new NewVenueRequest("Test Venue", null, null, null, null, null)
-        );
-
-        // Assert
-        assertEquals(testVenue, result);
-    }
-
-    @Test
-    void testDuplicateVenueNameThrowsDataIntegrityException() {
-        // Arrange
-        when(venueRepository.save(any(Venue.class))).thenThrow(new DataIntegrityViolationException("Duplicate venue name"));
-
-        // Act & Assert
-        DataIntegrityViolationException ex = assertThrows(DataIntegrityViolationException.class, () -> {
-            venueService.addNewVenue(new NewVenueRequest(
-                    "Test Venue", "Test Notes", "Test Postcode", "Test Address", "Test Town", "www.test.com")
+            // Act
+            Venue result = venueService.addNewVenue(
+                    new NewVenueRequest("Test Venue", "Test Notes", "Test Postcode", "Test Address", "Test Town", "www.test.com")
             );
-        });
-    }
 
-    @Test
-    void testDataAccessExceptionThrowsDatabaseException() {
-        // Arrange
-        when(venueRepository.save(any(Venue.class))).thenThrow(new DataAccessException("Data access failed"){});
+            // Assert
+            assertEquals(testVenue, result);
+        }
 
-        // Act & Assert
-        DatabaseException ex = assertThrows(DatabaseException.class, () -> {
-            venueService.addNewVenue(new NewVenueRequest(
-                    "Test Venue", "Test Notes", "Test Postcode", "Test Address", "Test Town", "www.test.com")
+        @Test
+        void testAddNewVenueWithNoFieldsExceptNameSuccessReturnsExpectedVenueObject() {
+            // Arrange
+            Venue testVenue = new Venue("Test Venue", null, null, null, null, null);
+            when(venueRepository.save(any(Venue.class))).thenReturn(testVenue);
+
+            // Act
+            Venue result = venueService.addNewVenue(
+                    new NewVenueRequest("Test Venue", null, null, null, null, null)
             );
-        });
+
+            // Assert
+            assertEquals(testVenue, result);
+        }
+
+        @Test
+        void testDuplicateVenueNameThrowsDataIntegrityException() {
+            // Arrange
+            when(venueRepository.save(any(Venue.class))).thenThrow(new DataIntegrityViolationException("Duplicate venue name"));
+
+            // Act & Assert
+            DataIntegrityViolationException ex = assertThrows(DataIntegrityViolationException.class, () -> {
+                venueService.addNewVenue(new NewVenueRequest(
+                        "Test Venue", "Test Notes", "Test Postcode", "Test Address", "Test Town", "www.test.com")
+                );
+            });
+        }
+
+        @Test
+        void testDataAccessExceptionThrowsDatabaseException() {
+            // Arrange
+            when(venueRepository.save(any(Venue.class))).thenThrow(new DataAccessException("Data access failed"){});
+
+            // Act & Assert
+            DatabaseException ex = assertThrows(DatabaseException.class, () -> {
+                venueService.addNewVenue(new NewVenueRequest(
+                        "Test Venue", "Test Notes", "Test Postcode", "Test Address", "Test Town", "www.test.com")
+                );
+            });
+        }
+
+        @Test
+        void testPersistenceExceptionThrowsDatabaseException() {
+            // Arrange
+            when(venueRepository.save(any(Venue.class))).thenThrow(new PersistenceException("Persistence exception"));
+
+            // Act & Assert
+            DatabaseException ex = assertThrows(DatabaseException.class, () -> {
+                venueService.addNewVenue(new NewVenueRequest(
+                        "Test Venue", "Test Notes", "Test Postcode", "Test Address", "Test Town", "www.test.com")
+                );
+            });
+        }
+
     }
 
-    @Test
-    void testPersistenceExceptionThrowsDatabaseException() {
-        // Arrange
-        when(venueRepository.save(any(Venue.class))).thenThrow(new PersistenceException("Persistence exception"));
+    @Nested
+    @DisplayName("getAllVenues service tests")
+    class getAllVenuesServiceTests {
 
-        // Act & Assert
-        DatabaseException ex = assertThrows(DatabaseException.class, () -> {
-            venueService.addNewVenue(new NewVenueRequest(
-                    "Test Venue", "Test Notes", "Test Postcode", "Test Address", "Test Town", "www.test.com")
-            );
-        });
+        @Test
+        void testGetAllVenuesWithEmptyDatabaseReturnsEmptyList() {
+            // Arrange
+            when(venueRepository.findAll()).thenReturn(Collections.EMPTY_LIST);
+
+            // Act
+            List<Venue> venues = venueService.getAllVenues();
+            // Assert
+            assertEquals(Collections.EMPTY_LIST, venues);
+        }
+
+
     }
+
 
 }
