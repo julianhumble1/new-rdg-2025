@@ -171,6 +171,28 @@ public class VenueServiceTest {
             assertEquals(venueList.size(), 2);
         }
 
+        @Test
+        void testDataAccessExceptionThrowsDatabaseException() {
+            // Arrange
+            when(venueRepository.findAll()).thenThrow(new DataAccessException("Data access failed"){});
+
+            // Act & Assert
+            DatabaseException ex = assertThrows(DatabaseException.class, () -> {
+                venueService.getAllVenues();
+            });
+        }
+
+        @Test
+        void testPersistenceExceptionThrowsDatabaseException() {
+            // Arrange
+            when(venueRepository.findAll()).thenThrow(new PersistenceException("Data access failed"){});
+
+            // Act & Assert
+            DatabaseException ex = assertThrows(DatabaseException.class, () -> {
+                venueService.getAllVenues();
+            });
+        }
+
 
     }
 

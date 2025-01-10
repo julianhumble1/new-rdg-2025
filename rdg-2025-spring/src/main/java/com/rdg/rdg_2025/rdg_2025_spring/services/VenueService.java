@@ -45,10 +45,9 @@ public class VenueService {
         try {
             List<Venue> venues = venueRepository.findAll();
             return venues;
-        } catch (Exception ex) {
-            System.out.println(ex.getMessage());
+        } catch (DataAccessException | PersistenceException ex) {
+            throw new DatabaseException(ex.getMessage());
         }
 
-        return null;
     }
 }
