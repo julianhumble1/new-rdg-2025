@@ -250,6 +250,14 @@ public class VenueIntegrationTest {
                     .andExpect(status().isUnauthorized());
         }
 
+        @Test
+        void testBadAdminTokenReturns401() throws Exception {
+            // Act & Assert
+            mockMvc.perform(get("/venues/")
+                            .header("Authorization", "Fake token"))
+                    .andExpect(status().isUnauthorized());
+        }
+
 
     }
 
