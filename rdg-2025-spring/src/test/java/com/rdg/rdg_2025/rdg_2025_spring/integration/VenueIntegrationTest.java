@@ -1,7 +1,6 @@
 package com.rdg.rdg_2025.rdg_2025_spring.integration;
 
 import com.rdg.rdg_2025.rdg_2025_spring.models.User;
-import com.rdg.rdg_2025.rdg_2025_spring.models.Venue;
 import com.rdg.rdg_2025.rdg_2025_spring.repository.RoleRepository;
 import com.rdg.rdg_2025.rdg_2025_spring.repository.UserRepository;
 import com.rdg.rdg_2025.rdg_2025_spring.repository.VenueRepository;
@@ -27,7 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @Transactional
 @ActiveProfiles("test")
-public class PostVenueIntegrationTest {
+public class VenueIntegrationTest {
 
     @Autowired
     private MockMvc mockMvc;

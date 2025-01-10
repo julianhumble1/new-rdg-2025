@@ -2,10 +2,9 @@ package com.rdg.rdg_2025.rdg_2025_spring.services;
 
 import com.rdg.rdg_2025.rdg_2025_spring.exception.DatabaseException;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Venue;
-import com.rdg.rdg_2025.rdg_2025_spring.payload.request.NewVenueRequest;
+import com.rdg.rdg_2025.rdg_2025_spring.payload.request.venue.NewVenueRequest;
 import com.rdg.rdg_2025.rdg_2025_spring.repository.VenueRepository;
 import jakarta.persistence.PersistenceException;
-import org.assertj.core.util.Arrays;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;

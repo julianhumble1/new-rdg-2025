@@ -2,8 +2,9 @@ package com.rdg.rdg_2025.rdg_2025_spring.controllers;
 
 import com.rdg.rdg_2025.rdg_2025_spring.exception.DatabaseException;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Venue;
-import com.rdg.rdg_2025.rdg_2025_spring.payload.request.NewVenueRequest;
-import com.rdg.rdg_2025.rdg_2025_spring.payload.response.VenueResponse;
+import com.rdg.rdg_2025.rdg_2025_spring.payload.request.venue.NewVenueRequest;
+import com.rdg.rdg_2025.rdg_2025_spring.payload.response.venue.VenueResponse;
+import com.rdg.rdg_2025.rdg_2025_spring.payload.response.venue.VenuesResponse;
 import com.rdg.rdg_2025.rdg_2025_spring.services.VenueService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,9 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -42,6 +45,20 @@ public class VenueController {
         }
 
     }
+
+    @GetMapping("/")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> getAllVenues() {
+        try {
+            List<Venue> venues = venueService.getAllVenues();
+            return ResponseEntity.ok().body(new VenuesResponse((ArrayList<Venue>) venues));
+        } catch (DatabaseException ex) {
+            System.out.println(ex);
+        }
+
+        return null;
+    }
+
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<?> handleValidationExceptions(MethodArgumentNotValidException ex) {
