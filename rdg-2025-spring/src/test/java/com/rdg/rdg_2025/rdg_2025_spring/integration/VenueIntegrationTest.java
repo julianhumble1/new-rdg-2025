@@ -258,6 +258,14 @@ public class VenueIntegrationTest {
                     .andExpect(status().isUnauthorized());
         }
 
+        @Test
+        void testUserTokenReturns403() throws Exception {
+            // Act & Assert
+            mockMvc.perform(get("/venues/")
+                            .header("Authorization", userToken))
+                    .andExpect(status().isForbidden());
+        }
+
 
     }
 
