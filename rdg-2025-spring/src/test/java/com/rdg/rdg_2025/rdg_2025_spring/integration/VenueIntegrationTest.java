@@ -1,6 +1,7 @@
 package com.rdg.rdg_2025.rdg_2025_spring.integration;
 
 import com.rdg.rdg_2025.rdg_2025_spring.models.User;
+import com.rdg.rdg_2025.rdg_2025_spring.models.Venue;
 import com.rdg.rdg_2025.rdg_2025_spring.repository.RoleRepository;
 import com.rdg.rdg_2025.rdg_2025_spring.repository.UserRepository;
 import com.rdg.rdg_2025.rdg_2025_spring.repository.VenueRepository;
@@ -21,6 +22,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -222,9 +224,30 @@ public class VenueIntegrationTest {
 
         @Test
         void testSuccessfulGetWithAdminTokenReturns200() throws Exception {
+            // Act & Assert
             mockMvc.perform(get("/venues/")
                     .header("Authorization", adminToken))
                     .andExpect(status().isOk());
+        }
+
+        @Test
+        void testSuccessfulGetWithVenuesInDatabaseReturnsVenues() throws Exception {
+            // Arrange
+            Venue venue = new Venue("Test Venue", null, null, null, null, null);
+            venueRepository.save(venue);
+
+            // Act & Assert
+            mockMvc.perform(get("/venues/")
+                    .header("Authorization", adminToken))
+                    .andExpect(jsonPath("$.venues").isArray());
+
+        }
+
+        @Test
+        void testMissingAdminTokenReturns401() throws Exception {
+            // Act & Assert
+            mockMvc.perform(get("/venues/"))
+                    .andExpect(status().isUnauthorized());
         }
 
 
