@@ -53,10 +53,8 @@ public class VenueController {
             List<Venue> venues = venueService.getAllVenues();
             return ResponseEntity.ok().body(new VenuesResponse((ArrayList<Venue>) venues));
         } catch (DatabaseException ex) {
-            System.out.println(ex);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
         }
-
-        return null;
     }
 
 

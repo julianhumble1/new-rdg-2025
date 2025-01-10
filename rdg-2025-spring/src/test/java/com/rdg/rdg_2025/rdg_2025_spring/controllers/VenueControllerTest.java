@@ -255,6 +255,18 @@ public class VenueControllerTest {
 
         }
 
+        @Test
+        @WithMockUser(roles="ADMIN")
+        void testDataBaseExceptionReturns500Error() throws Exception{
+            // Arrange
+            when(venueService.getAllVenues()).thenThrow(new DatabaseException("Database Error"));
+
+            // Act & Assert
+            mockMvc.perform(get("/venues/"))
+                    .andExpect(status().isInternalServerError()
+                    );
+        }
+
 
 
     }
