@@ -20,7 +20,7 @@ export default class UserService {
                     "Authorization": `Bearer ${token}`
                 }
             })
-            return true;
+            return response;
         } catch (error) {
             throw new Error(error)
         }
@@ -34,7 +34,7 @@ export default class UserService {
                     "Authorization": `Bearer ${token}`
                 }
             })
-            return true;
+            return response;
         } catch (error) {
             throw new Error(error)
         }

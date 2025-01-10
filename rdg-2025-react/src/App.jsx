@@ -8,6 +8,8 @@ import Header from "./components/Header.jsx"
 import Dashboard from "./components/dashboards/Dashboard.jsx"
 import UserDashboard from "./components/dashboards/UserDashboard.jsx"
 import AdminDashboard from "./components/dashboards/AdminDashboard.jsx"
+import NewVenueForm from "./components/venues/NewVenueForm.jsx"
+import AllVenuesList from "./components/venues/AllVenuesList.jsx"
 
 
 function App() {
@@ -43,6 +45,9 @@ function App() {
         <Route path="/dashboard" element={<Dashboard  />} />
         <Route path="/user-dashboard" element={<UserDashboard  />} />
         <Route path="/admin-dashboard" element={<AdminDashboard />} />
+
+        <Route path="/venues/new" element={<NewVenueForm />} />
+        <Route path="/venues/" element={<AllVenuesList />} />
       </Routes>
     </Router>
   )
