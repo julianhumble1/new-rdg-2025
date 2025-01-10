@@ -5,6 +5,7 @@ import com.rdg.rdg_2025.rdg_2025_spring.models.Venue;
 import com.rdg.rdg_2025.rdg_2025_spring.payload.request.NewVenueRequest;
 import com.rdg.rdg_2025.rdg_2025_spring.repository.VenueRepository;
 import jakarta.persistence.PersistenceException;
+import org.assertj.core.util.Arrays;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -123,6 +124,51 @@ public class VenueServiceTest {
             List<Venue> venues = venueService.getAllVenues();
             // Assert
             assertEquals(Collections.EMPTY_LIST, venues);
+        }
+
+        @Test
+        void testGetAllVenuesWithOneVenueInDatabaseReturnsListLengthOne() {
+            // Arrange
+            Venue testVenue1 = new Venue("Test Venue", "Test Notes", "Test Postcode", "Test Address", "Test Town", "www.test.com");
+            ArrayList<Venue> venueList = new ArrayList<>();
+            venueList.add(testVenue1);
+            when(venueRepository.findAll()).thenReturn(venueList);
+
+            // Act
+            List<Venue> result = venueService.getAllVenues();
+            // Assert
+            assertEquals(1, result.size());
+        }
+
+        @Test
+        void testGetAllVenuesWithOneVenueInDatabaseReturnsExpectedVenue() {
+            // Arrange
+            Venue testVenue1 = new Venue("Test Venue", "Test Notes", "Test Postcode", "Test Address", "Test Town", "www.test.com");
+            ArrayList<Venue> venueList = new ArrayList<>();
+            venueList.add(testVenue1);
+            when(venueRepository.findAll()).thenReturn(venueList);
+
+            // Act
+            List<Venue> result = venueService.getAllVenues();
+            // Assert
+            assertEquals(testVenue1.getId(), result.get(0).getId());
+        }
+
+        @Test
+        void testGetAllVenuesWithMultipleVenuesInDatabaseReturnsExpectedLength() {
+            // Arrange
+            Venue testVenue1 = new Venue("Test Venue", "Test Notes", "Test Postcode", "Test Address", "Test Town", "www.test.com");
+            Venue testVenue2 = new Venue("Another Test Venue", "Test Notes", "Test Postcode", "Test Address", "Test Town", "www.test.com");
+
+            ArrayList<Venue> venueList = new ArrayList<>();
+            venueList.add(testVenue1);
+            venueList.add(testVenue2);
+            when(venueRepository.findAll()).thenReturn(venueList);
+
+            // Act
+            List<Venue> result = venueService.getAllVenues();
+            // Assert
+            assertEquals(venueList.size(), 2);
         }
 
 
