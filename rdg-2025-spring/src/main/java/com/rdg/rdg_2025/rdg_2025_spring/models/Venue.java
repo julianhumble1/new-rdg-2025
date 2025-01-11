@@ -3,6 +3,8 @@ package com.rdg.rdg_2025.rdg_2025_spring.models;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name="venues")
@@ -28,6 +30,9 @@ public class Venue {
 
     @Column(nullable = false, unique = true)
     private String slug;
+
+    @OneToMany(mappedBy = "venue", cascade = CascadeType.ALL)
+    private List<Production> productions = new ArrayList<>();
 
     public Venue(String name, String notes, String postcode, String address, String town, String url) {
         this.name = name;
@@ -145,5 +150,13 @@ public class Venue {
 
     public void setSlug(String slug) {
         this.slug = slug;
+    }
+
+    public List<Production> getProductions() {
+        return productions;
+    }
+
+    public void setProductions(List<Production> productions) {
+        this.productions = productions;
     }
 }

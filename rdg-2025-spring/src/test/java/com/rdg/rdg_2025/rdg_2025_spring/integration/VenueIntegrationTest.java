@@ -165,20 +165,21 @@ public class VenueIntegrationTest {
         }
 
         // Commenting out as getting strange results and unable to make it pass although functions as expected in reality
-    //    @Test
-    //    void testDuplicateNameVenueReturns409() throws Exception {
-    //        Venue venue = new Venue("Test Venue", null, null, null, null, null);
-    //        venueRepository.save(venue);
-    //
-    //        mockMvc.perform(post("/venues/new")
-    //                .contentType(MediaType.APPLICATION_JSON)
-    //                .header("Authorization", adminToken)
-    //                .content(
-    //                        "{ \"name\": \"Test Venue\", \"notes\": \"Test Notes\", \"postcode\": \"Test Postcode\", \"address\": \"Test Address\", " +
-    //                                "\"town\": \"Test Town\", \"url\": \"www.test.com\" }"
-    //                ))
-    //                .andExpect(status().isConflict());
-    //    }
+        @Test
+        @Disabled
+        void testDuplicateNameVenueReturns409() throws Exception {
+            Venue venue = new Venue("Test Venue", null, null, null, null, null);
+            venueRepository.save(venue);
+
+            mockMvc.perform(post("/venues/new")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .header("Authorization", adminToken)
+                    .content(
+                            "{ \"name\": \"Test Venue\", \"notes\": \"Test Notes\", \"postcode\": \"Test Postcode\", \"address\": \"Test Address\", " +
+                                    "\"town\": \"Test Town\", \"url\": \"www.test.com\" }"
+                    ))
+                    .andExpect(status().isConflict());
+        }
 
         @Test
         void testMissingTokenReturns401() throws Exception {
@@ -231,7 +232,7 @@ public class VenueIntegrationTest {
         }
 
         @Test
-        void testSuccessfulGetWithVenuesInDatabaseReturnsVenues() throws Exception {
+        void testSuccessfulGetWithVenuesInDatabaseReturnsVenuesArray() throws Exception {
             // Arrange
             Venue venue = new Venue("Test Venue", null, null, null, null, null);
             venueRepository.save(venue);
