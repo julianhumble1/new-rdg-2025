@@ -1,5 +1,6 @@
 package com.rdg.rdg_2025.rdg_2025_spring.models;
 
+import com.rdg.rdg_2025.rdg_2025_spring.helpers.SlugUtils;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -45,12 +46,7 @@ public class Venue {
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
 
-        this.slug = generateSlug(name);
-    }
-
-    private String generateSlug(String name) {
-        return name.toLowerCase().replaceAll("[^a-z0-9]", "-").replaceAll("-{2,}", "-");
-
+        this.slug = SlugUtils.generateSlug(name);
     }
 
     public Venue() {

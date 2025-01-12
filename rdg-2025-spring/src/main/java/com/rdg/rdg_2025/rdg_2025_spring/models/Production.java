@@ -32,6 +32,20 @@ public class Production {
     @Column(nullable = false)
     private String slug;
 
+    public Production() {
+    }
+
+    public Production(String name, Venue venue, String author, String description, LocalDateTime auditionDate, boolean sundowners, boolean notConfirmed, String flyerFile) {
+        this.name = name;
+        this.venue = venue;
+        this.author = author;
+        this.description = description;
+        this.auditionDate = auditionDate;
+        this.sundowners = sundowners;
+        this.notConfirmed = notConfirmed;
+        this.flyerFile = flyerFile;
+    }
+
     public int getId() {
         return id;
     }
