@@ -1,5 +1,6 @@
 package com.rdg.rdg_2025.rdg_2025_spring.integration;
 
+import com.rdg.rdg_2025.rdg_2025_spring.models.Production;
 import com.rdg.rdg_2025.rdg_2025_spring.models.User;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Venue;
 import com.rdg.rdg_2025.rdg_2025_spring.repository.ProductionRepository;
@@ -140,6 +141,52 @@ public class ProductionIntegrationTest {
                                 "{ \"name\": \"Test Production\"}"
                         ))
                 .andExpect(status().isCreated()
+                );
+    }
+
+    @Test
+    void testDuplicateVenueNameReturnsNameWithNumberOnEnd() throws Exception {
+
+        // Arrange
+        Production existingProduction = new Production(
+                "Test Production",
+                null, null, null, null, false, false, null
+        );
+
+        productionRepository.save(existingProduction);
+
+        // Act & Assert
+        mockMvc.perform(post("/productions/new")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header("Authorization", adminToken)
+                        .content(
+                                "{ \"name\": \"Test Production\", \"author\": \"Test Author\", \"description\": \"Test Description\", " +
+                                        "\"auditionDate\": \"2025-10-10T10:00:00\", \"sundowners\": false, \"notConfirmed\": false, \"flyerFile\": \"Test Flyer File\" }"
+                        ))
+                .andExpect(jsonPath("$.production.name").value("Test Production (2)")
+                );
+    }
+
+    @Test
+    void testDuplicateVenueNameReturnsSlugWithNumberOnEnd() throws Exception {
+
+        // Arrange
+        Production existingProduction = new Production(
+                "Test Production",
+                null, null, null, null, false, false, null
+        );
+
+        productionRepository.save(existingProduction);
+
+        // Act & Assert
+        mockMvc.perform(post("/productions/new")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header("Authorization", adminToken)
+                        .content(
+                                "{ \"name\": \"Test Production\", \"author\": \"Test Author\", \"description\": \"Test Description\", " +
+                                        "\"auditionDate\": \"2025-10-10T10:00:00\", \"sundowners\": false, \"notConfirmed\": false, \"flyerFile\": \"Test Flyer File\" }"
+                        ))
+                .andExpect(jsonPath("$.production.slug").value("test-production-2")
                 );
     }
 
