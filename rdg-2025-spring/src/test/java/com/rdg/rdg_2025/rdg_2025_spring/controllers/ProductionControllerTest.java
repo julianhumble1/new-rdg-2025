@@ -285,6 +285,20 @@ public class ProductionControllerTest {
                     );
         }
 
+        @Test
+        @WithMockUser(roles="ADMIN")
+        void testSundownersNotBooleanReturns400BadRequest() throws Exception{
+            // Act & Assert
+            mockMvc.perform(post("/productions/new")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(
+                                    "{\"name\":\"Test Production\", \"venueId\": \"1\", \"author\": \"Test Author\", \"description\": \"Test Description\", " +
+                                            "\"auditionDate\": \"2025-10-10T10:00:00\", \"sundowners\": \"Bad Boolean\", \"notConfirmed\": false, \"flyerFile\": \"Test Flyer File\" }"
+                            ))
+                    .andExpect(status().isBadRequest()
+                    );
+        }
+
 
 
     }
