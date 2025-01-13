@@ -1,7 +1,6 @@
 package com.rdg.rdg_2025.rdg_2025_spring.services;
 
 import com.rdg.rdg_2025.rdg_2025_spring.exception.DatabaseException;
-import com.rdg.rdg_2025.rdg_2025_spring.helpers.SlugUtils;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Production;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Venue;
 import com.rdg.rdg_2025.rdg_2025_spring.payload.request.production.NewProductionRequest;
@@ -60,7 +59,7 @@ public class ProductionService {
 
     private Production updateNameAndSlugIfRepeatPerformance(Production production) {
         // check if production name has already been used
-        int timesPerformed = productionRepository.countByFieldNameStartingWith(production.getName());
+        int timesPerformed = productionRepository.countByNameStartingWith(production.getName());
 
         if (timesPerformed > 0) {
             production.setName(production.getName() + " (" + (timesPerformed + 1) + ")");

@@ -41,43 +41,43 @@ Current scope:     <a href="../../index.html">all classes</a>
   <td class="name">Production</td>
 <td class="coverageStat">
   <span class="percent">
-    3.8%
+    61.5%
   </span>
   <span class="absValue">
-    (1/26)
+    (16/26)
   </span>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    2.9%
+    73%
   </span>
   <span class="absValue">
-    (1/34)
+    (27/37)
   </span>
 </td>
 </tr>
   <tr>
-    <td class="name">Production$HibernateInstantiator$dBoG2jiB</td>
+    <td class="name">Production$HibernateInstantiator$QVy8JH7i</td>
   </tr>
   <tr>
-    <td class="name">Production$HibernateProxy$zXqXNnR9</td>
+    <td class="name">Production$HibernateProxy$TMRsbNNS</td>
   </tr>
 <tr>
   <td class="name"><strong>Total</strong></td>
 <td class="coverageStat">
   <span class="percent">
-    3.8%
+    61.5%
   </span>
   <span class="absValue">
-    (1/26)
+    (16/26)
   </span>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    2.9%
+    73%
   </span>
   <span class="absValue">
-    (1/34)
+    (27/37)
   </span>
 </td>
 </tr>
@@ -90,6 +90,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 <pre>
 <code class="sourceCode" id="sourceCode">&nbsp;package com.rdg.rdg_2025.rdg_2025_spring.models;
 &nbsp;
+&nbsp;import com.rdg.rdg_2025.rdg_2025_spring.helpers.SlugUtils;
 &nbsp;import jakarta.persistence.*;
 &nbsp;
 &nbsp;import java.time.LocalDateTime;
@@ -125,19 +126,24 @@ Current scope:     <a href="../../index.html">all classes</a>
 <b class="fc">&nbsp;    public Production() {</b>
 &nbsp;    }
 &nbsp;
-<b class="nc">&nbsp;    public Production(String name, Venue venue, String author, String description, LocalDateTime auditionDate, boolean sundowners, boolean notConfirmed, String flyerFile) {</b>
-<b class="nc">&nbsp;        this.name = name;</b>
-<b class="nc">&nbsp;        this.venue = venue;</b>
-<b class="nc">&nbsp;        this.author = author;</b>
-<b class="nc">&nbsp;        this.description = description;</b>
-<b class="nc">&nbsp;        this.auditionDate = auditionDate;</b>
-<b class="nc">&nbsp;        this.sundowners = sundowners;</b>
-<b class="nc">&nbsp;        this.notConfirmed = notConfirmed;</b>
-<b class="nc">&nbsp;        this.flyerFile = flyerFile;</b>
+<b class="fc">&nbsp;    public Production(String name, Venue venue, String author, String description, LocalDateTime auditionDate, boolean sundowners, boolean notConfirmed, String flyerFile) {</b>
+<b class="fc">&nbsp;        this.name = name;</b>
+<b class="fc">&nbsp;        this.venue = venue;</b>
+<b class="fc">&nbsp;        this.author = author;</b>
+<b class="fc">&nbsp;        this.description = description;</b>
+<b class="fc">&nbsp;        this.auditionDate = auditionDate;</b>
+<b class="fc">&nbsp;        this.sundowners = sundowners;</b>
+<b class="fc">&nbsp;        this.notConfirmed = notConfirmed;</b>
+<b class="fc">&nbsp;        this.flyerFile = flyerFile;</b>
+&nbsp;
+<b class="fc">&nbsp;        this.createdAt = LocalDateTime.now();</b>
+<b class="fc">&nbsp;        this.updatedAt = LocalDateTime.now();</b>
+&nbsp;
+<b class="fc">&nbsp;        this.slug = SlugUtils.generateSlug(name);</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    public int getId() {
-<b class="nc">&nbsp;        return id;</b>
+<b class="fc">&nbsp;        return id;</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    public void setId(int id) {
@@ -145,15 +151,15 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;    }
 &nbsp;
 &nbsp;    public String getName() {
-<b class="nc">&nbsp;        return name;</b>
+<b class="fc">&nbsp;        return name;</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    public void setName(String name) {
-<b class="nc">&nbsp;        this.name = name;</b>
+<b class="fc">&nbsp;        this.name = name;</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    public Venue getVenue() {
-<b class="nc">&nbsp;        return venue;</b>
+<b class="fc">&nbsp;        return venue;</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    public void setVenue(Venue venue) {
@@ -161,7 +167,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;    }
 &nbsp;
 &nbsp;    public String getAuthor() {
-<b class="nc">&nbsp;        return author;</b>
+<b class="fc">&nbsp;        return author;</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    public void setAuthor(String author) {
@@ -169,7 +175,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;    }
 &nbsp;
 &nbsp;    public String getDescription() {
-<b class="nc">&nbsp;        return description;</b>
+<b class="fc">&nbsp;        return description;</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    public void setDescription(String description) {
@@ -177,7 +183,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;    }
 &nbsp;
 &nbsp;    public LocalDateTime getAuditionDate() {
-<b class="nc">&nbsp;        return auditionDate;</b>
+<b class="fc">&nbsp;        return auditionDate;</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    public void setAuditionDate(LocalDateTime auditionDate) {
@@ -185,7 +191,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;    }
 &nbsp;
 &nbsp;    public boolean isSundowners() {
-<b class="nc">&nbsp;        return sundowners;</b>
+<b class="fc">&nbsp;        return sundowners;</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    public void setSundowners(boolean sundowners) {
@@ -193,7 +199,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;    }
 &nbsp;
 &nbsp;    public boolean isNotConfirmed() {
-<b class="nc">&nbsp;        return notConfirmed;</b>
+<b class="fc">&nbsp;        return notConfirmed;</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    public void setNotConfirmed(boolean notConfirmed) {
@@ -201,7 +207,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;    }
 &nbsp;
 &nbsp;    public String getFlyerFile() {
-<b class="nc">&nbsp;        return flyerFile;</b>
+<b class="fc">&nbsp;        return flyerFile;</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    public void setFlyerFile(String flyerFile) {
@@ -209,7 +215,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;    }
 &nbsp;
 &nbsp;    public LocalDateTime getCreatedAt() {
-<b class="nc">&nbsp;        return createdAt;</b>
+<b class="fc">&nbsp;        return createdAt;</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    public void setCreatedAt(LocalDateTime createdAt) {
@@ -217,7 +223,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;    }
 &nbsp;
 &nbsp;    public LocalDateTime getUpdatedAt() {
-<b class="nc">&nbsp;        return updatedAt;</b>
+<b class="fc">&nbsp;        return updatedAt;</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    public void setUpdatedAt(LocalDateTime updatedAt) {
@@ -225,11 +231,11 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;    }
 &nbsp;
 &nbsp;    public String getSlug() {
-<b class="nc">&nbsp;        return slug;</b>
+<b class="fc">&nbsp;        return slug;</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    public void setSlug(String slug) {
-<b class="nc">&nbsp;        this.slug = slug;</b>
+<b class="fc">&nbsp;        this.slug = slug;</b>
 &nbsp;    }
 &nbsp;}
 </code>
@@ -255,7 +261,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2025-01-13 10:00</div>
+    <div style="float:right;">generated on 2025-01-13 17:08</div>
 </div>
 </body>
 </html>

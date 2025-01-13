@@ -5,7 +5,7 @@
 <html id="htmlId">
 <head>
   <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
-  <title>Coverage Report > VenueService</title>
+  <title>Coverage Report > AuthEntryPointJwt</title>
   <style type="text/css">
     @import "../../css/coverage.css";
     @import "../../css/idea.min.css";
@@ -19,10 +19,10 @@
 <div class="breadCrumbs">
 Current scope:     <a href="../../index.html">all classes</a>
     <span class="separator">|</span>
-    <a href="../index.html">com.rdg.rdg_2025.rdg_2025_spring.services</a>
+    <a href="../index.html">com.rdg.rdg_2025.rdg_2025_spring.security.jwt</a>
 </div>
 
-<h1>Coverage Summary for Class: VenueService (com.rdg.rdg_2025.rdg_2025_spring.services)</h1>
+<h1>Coverage Summary for Class: AuthEntryPointJwt (com.rdg.rdg_2025.rdg_2025_spring.security.jwt)</h1>
 
 <table class="coverageStats">
 <tr>
@@ -41,7 +41,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 </th>
 </tr>
 <tr>
-  <td class="name">VenueService</td>
+  <td class="name">AuthEntryPointJwt</td>
 <td class="coverageStat">
   <span class="percent">
     100%
@@ -63,7 +63,7 @@ Current scope:     <a href="../../index.html">all classes</a>
     100%
   </span>
   <span class="absValue">
-    (18/18)
+    (4/4)
   </span>
 </td>
 </tr>
@@ -75,56 +75,28 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 
 <pre>
-<code class="sourceCode" id="sourceCode">&nbsp;package com.rdg.rdg_2025.rdg_2025_spring.services;
+<code class="sourceCode" id="sourceCode">&nbsp;package com.rdg.rdg_2025.rdg_2025_spring.security.jwt;
 &nbsp;
-&nbsp;import com.rdg.rdg_2025.rdg_2025_spring.exception.DatabaseException;
-&nbsp;import com.rdg.rdg_2025.rdg_2025_spring.models.Venue;
-&nbsp;import com.rdg.rdg_2025.rdg_2025_spring.payload.request.venue.NewVenueRequest;
-&nbsp;import com.rdg.rdg_2025.rdg_2025_spring.repository.VenueRepository;
-&nbsp;import jakarta.persistence.PersistenceException;
-&nbsp;import org.springframework.beans.factory.annotation.Autowired;
-&nbsp;import org.springframework.dao.DataAccessException;
-&nbsp;import org.springframework.dao.DataIntegrityViolationException;
-&nbsp;import org.springframework.stereotype.Service;
+&nbsp;import jakarta.servlet.ServletException;
+&nbsp;import jakarta.servlet.http.HttpServletRequest;
+&nbsp;import jakarta.servlet.http.HttpServletResponse;
+&nbsp;import org.slf4j.Logger;
+&nbsp;import org.slf4j.LoggerFactory;
+&nbsp;import org.springframework.security.core.AuthenticationException;
+&nbsp;import org.springframework.security.web.AuthenticationEntryPoint;
+&nbsp;import org.springframework.stereotype.Component;
 &nbsp;
-&nbsp;import java.util.List;
+&nbsp;import java.io.IOException;
 &nbsp;
-&nbsp;@Service
-<b class="fc">&nbsp;public class VenueService {</b>
+&nbsp;@Component
+<b class="fc">&nbsp;public class AuthEntryPointJwt implements AuthenticationEntryPoint {</b>
 &nbsp;
-&nbsp;    @Autowired
-&nbsp;    VenueRepository venueRepository;
+<b class="fc">&nbsp;    private static final Logger logger = LoggerFactory.getLogger(AuthEntryPointJwt.class);</b>
 &nbsp;
-&nbsp;    public Venue addNewVenue(NewVenueRequest newVenueRequest) {
-&nbsp;
-<b class="fc">&nbsp;        Venue venue = new Venue(</b>
-<b class="fc">&nbsp;                newVenueRequest.getName(),</b>
-<b class="fc">&nbsp;                newVenueRequest.getNotes(),</b>
-<b class="fc">&nbsp;                newVenueRequest.getPostcode(),</b>
-<b class="fc">&nbsp;                newVenueRequest.getAddress(),</b>
-<b class="fc">&nbsp;                newVenueRequest.getTown(),</b>
-<b class="fc">&nbsp;                newVenueRequest.getUrl()</b>
-&nbsp;        );
-&nbsp;
-&nbsp;        try {
-<b class="fc">&nbsp;            Venue savedVenue = venueRepository.save(venue);</b>
-<b class="fc">&nbsp;            return savedVenue;</b>
-<b class="fc">&nbsp;        } catch (DataIntegrityViolationException ex) {</b>
-<b class="fc">&nbsp;            throw new DataIntegrityViolationException(ex.getMessage());</b>
-<b class="fc">&nbsp;        } catch (DataAccessException | PersistenceException ex) {</b>
-<b class="fc">&nbsp;            throw new DatabaseException(ex.getMessage());</b>
-&nbsp;        }
-&nbsp;
-&nbsp;    }
-&nbsp;
-&nbsp;    public List&lt;Venue&gt; getAllVenues() {
-&nbsp;        try {
-<b class="fc">&nbsp;            List&lt;Venue&gt; venues = venueRepository.findAll();</b>
-<b class="fc">&nbsp;            return venues;</b>
-<b class="fc">&nbsp;        } catch (DataAccessException | PersistenceException ex) {</b>
-<b class="fc">&nbsp;            throw new DatabaseException(ex.getMessage());</b>
-&nbsp;        }
-&nbsp;
+&nbsp;    @Override
+&nbsp;    public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
+<b class="fc">&nbsp;        logger.error(&quot;Unauthorized error: {}&quot;, authException.getMessage());</b>
+<b class="fc">&nbsp;        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, &quot;Error: Unauthorized&quot;);</b>
 &nbsp;    }
 &nbsp;}
 </code>
@@ -150,7 +122,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2025-01-13 10:00</div>
+    <div style="float:right;">generated on 2025-01-13 17:08</div>
 </div>
 </body>
 </html>

@@ -5,7 +5,7 @@
 <html id="htmlId">
 <head>
   <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
-  <title>Coverage Report > UserRepository</title>
+  <title>Coverage Report > UserDetailsServiceImpl</title>
   <style type="text/css">
     @import "../../css/coverage.css";
     @import "../../css/idea.min.css";
@@ -19,19 +19,65 @@
 <div class="breadCrumbs">
 Current scope:     <a href="../../index.html">all classes</a>
     <span class="separator">|</span>
-    <a href="../index.html">com.rdg.rdg_2025.rdg_2025_spring.repository</a>
+    <a href="../index.html">com.rdg.rdg_2025.rdg_2025_spring.security.services</a>
 </div>
 
-<h1>Coverage Summary for Class: UserRepository (com.rdg.rdg_2025.rdg_2025_spring.repository)</h1>
+<h1>Coverage Summary for Class: UserDetailsServiceImpl (com.rdg.rdg_2025.rdg_2025_spring.security.services)</h1>
 
 <table class="coverageStats">
+
 <tr>
   <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
 </tr>
 <tr>
-  <td class="name">UserRepository</td>
+  <td class="name">UserDetailsServiceImpl</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (4/4)
+  </span>
+</td>
 </tr>
-
+  <tr>
+    <td class="name">UserDetailsServiceImpl$$SpringCGLIB$$0</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (4/4)
+  </span>
+</td>
+</tr>
 </table>
 
 <br/>
@@ -39,22 +85,32 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 
 <pre>
-<code class="sourceCode" id="sourceCode">&nbsp;package com.rdg.rdg_2025.rdg_2025_spring.repository;
+<code class="sourceCode" id="sourceCode">&nbsp;package com.rdg.rdg_2025.rdg_2025_spring.security.services;
 &nbsp;
 &nbsp;import com.rdg.rdg_2025.rdg_2025_spring.models.User;
-&nbsp;import org.springframework.data.jpa.repository.JpaRepository;
-&nbsp;import org.springframework.stereotype.Repository;
+&nbsp;import com.rdg.rdg_2025.rdg_2025_spring.repository.UserRepository;
+&nbsp;import jakarta.transaction.Transactional;
+&nbsp;import org.springframework.beans.factory.annotation.Autowired;
+&nbsp;import org.springframework.security.core.userdetails.UserDetails;
+&nbsp;import org.springframework.security.core.userdetails.UserDetailsService;
+&nbsp;import org.springframework.security.core.userdetails.UsernameNotFoundException;
+&nbsp;import org.springframework.stereotype.Service;
 &nbsp;
-&nbsp;import java.util.Optional;
+&nbsp;@Service
+<b class="fc">&nbsp;public class UserDetailsServiceImpl implements UserDetailsService {</b>
 &nbsp;
-&nbsp;@Repository
-&nbsp;public interface UserRepository extends JpaRepository&lt;User, Long&gt; {
+&nbsp;    @Autowired
+&nbsp;    UserRepository userRepository;
 &nbsp;
-&nbsp;    Optional&lt;User&gt; findByUsername(String username);
+&nbsp;    @Override
+&nbsp;    @Transactional
+&nbsp;    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+<b class="fc">&nbsp;        User user = userRepository.findByUsername(username)</b>
+<b class="fc">&nbsp;                .orElseThrow(() -&gt; new UsernameNotFoundException(&quot;User not found with username: &quot; + username));</b>
 &nbsp;
-&nbsp;    Boolean existsByUsername(String username);
+<b class="fc">&nbsp;        return UserDetailsImpl.build(user);</b>
+&nbsp;    }
 &nbsp;
-&nbsp;    Boolean existsByEmail(String email);
 &nbsp;
 &nbsp;}
 </code>
@@ -80,7 +136,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2025-01-13 10:00</div>
+    <div style="float:right;">generated on 2025-01-13 17:08</div>
 </div>
 </body>
 </html>

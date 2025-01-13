@@ -80,7 +80,7 @@ public class ProductionServiceTest {
             Venue testVenue = new Venue();
             when(venueRepository.findById(1)).thenReturn(Optional.of(testVenue));
 
-            when(productionRepository.countByFieldNameStartingWith(any(String.class))).thenReturn(0);
+            when(productionRepository.countByNameStartingWith(any(String.class))).thenReturn(0);
             when(productionRepository.save(any(Production.class))).thenReturn(testProduction);
             // Act
             Production result = productionService.addNewProduction(testNewProductionRequest);
@@ -100,7 +100,7 @@ public class ProductionServiceTest {
                     null, null, null, null, false, false, null
             );
 
-            when(productionRepository.countByFieldNameStartingWith(any(String.class))).thenReturn(0);
+            when(productionRepository.countByNameStartingWith(any(String.class))).thenReturn(0);
             when(productionRepository.save(any(Production.class))).thenReturn(onlyNameProduction);
 
             // Act
@@ -117,7 +117,7 @@ public class ProductionServiceTest {
             Venue testVenue = new Venue();
             when(venueRepository.findById(1)).thenReturn(Optional.of(testVenue));
 
-            when(productionRepository.countByFieldNameStartingWith(any(String.class))).thenReturn(0);
+            when(productionRepository.countByNameStartingWith(any(String.class))).thenReturn(0);
             when(productionRepository.save(any(Production.class))).thenThrow(new DataAccessException("Data access failed"){});
             // Act & Assert
             DatabaseException ex = assertThrows(DatabaseException.class, () -> productionService.addNewProduction(testNewProductionRequest));
@@ -129,7 +129,7 @@ public class ProductionServiceTest {
             Venue testVenue = new Venue();
             when(venueRepository.findById(1)).thenReturn(Optional.of(testVenue));
 
-            when(productionRepository.countByFieldNameStartingWith(any(String.class))).thenReturn(0);
+            when(productionRepository.countByNameStartingWith(any(String.class))).thenReturn(0);
             when(productionRepository.save(any(Production.class))).thenThrow(new PersistenceException("Data persistence failed"){});
             // Act & Assert
             DatabaseException ex = assertThrows(DatabaseException.class, () -> productionService.addNewProduction(testNewProductionRequest));
@@ -141,7 +141,7 @@ public class ProductionServiceTest {
             Venue testVenue = new Venue();
             when(venueRepository.findById(1)).thenReturn(Optional.of(testVenue));
 
-            when(productionRepository.countByFieldNameStartingWith(any(String.class))).thenReturn(0);
+            when(productionRepository.countByNameStartingWith(any(String.class))).thenReturn(0);
             when(productionRepository.save(any(Production.class))).thenThrow(new DataIntegrityViolationException("Duplicate name"){});
 
             // Act & Assert
@@ -163,7 +163,7 @@ public class ProductionServiceTest {
             @Test
             void returnsOriginalProductionNameIfNeverPerformedBefore() throws Exception  {
                 // Arrange
-                when(productionRepository.countByFieldNameStartingWith(any())).thenReturn(0);
+                when(productionRepository.countByNameStartingWith(any())).thenReturn(0);
 
                 // Act
                 String result = ((Production) updateNameAndSlugIfRepeatPerformance.invoke(productionService, testProduction)).getName();
@@ -175,7 +175,7 @@ public class ProductionServiceTest {
             @Test
             void returnsOriginalSlugIfNeverPerformedBefore() throws Exception {
                 // Arrange
-                when(productionRepository.countByFieldNameStartingWith(any())).thenReturn(0);
+                when(productionRepository.countByNameStartingWith(any())).thenReturn(0);
 
                 String expected = "test-production";
                 // Act
@@ -188,7 +188,7 @@ public class ProductionServiceTest {
             @Test
             void returnsNameWithTwoInBracketsIfPerformedOnceBefore() throws Exception {
                 // Arrange
-                when(productionRepository.countByFieldNameStartingWith(any())).thenReturn(1);
+                when(productionRepository.countByNameStartingWith(any())).thenReturn(1);
 
                 String expected = testProduction.getName() + " (2)";
                 // Act
@@ -201,7 +201,7 @@ public class ProductionServiceTest {
             @Test
             void returnSlugWithTwoOnEndIfPerformedOnceBefore() throws Exception {
                 // Arrange
-                when(productionRepository.countByFieldNameStartingWith(any())).thenReturn(1);
+                when(productionRepository.countByNameStartingWith(any())).thenReturn(1);
 
                 String expected = "test-production-2";
                 // Act

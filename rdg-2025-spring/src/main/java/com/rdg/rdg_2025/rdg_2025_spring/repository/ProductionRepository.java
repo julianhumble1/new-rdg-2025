@@ -5,6 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ProductionRepository extends JpaRepository<Production, Integer> {
 
-    int countByFieldNameStartingWith(String prefix);
+    int countByNameStartingWith(String prefix);
 
 }

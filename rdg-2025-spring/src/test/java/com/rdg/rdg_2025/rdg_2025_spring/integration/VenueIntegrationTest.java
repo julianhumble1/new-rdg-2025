@@ -70,7 +70,6 @@ public class VenueIntegrationTest {
         userRepository.deleteAll();
     }
 
-
     @BeforeEach
     public void setup() {
         venueRepository.deleteAll();

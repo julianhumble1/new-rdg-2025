@@ -5,7 +5,7 @@
 <html id="htmlId">
 <head>
   <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
-  <title>Coverage Report > JwtResponse</title>
+  <title>Coverage Report > MessageResponse</title>
   <style type="text/css">
     @import "../../css/coverage.css";
     @import "../../css/idea.min.css";
@@ -19,10 +19,10 @@
 <div class="breadCrumbs">
 Current scope:     <a href="../../index.html">all classes</a>
     <span class="separator">|</span>
-    <a href="../index.html">com.rdg.rdg_2025.rdg_2025_spring.payload.response.auth</a>
+    <a href="../index.html">com.rdg.rdg_2025.rdg_2025_spring.payload.response</a>
 </div>
 
-<h1>Coverage Summary for Class: JwtResponse (com.rdg.rdg_2025.rdg_2025_spring.payload.response.auth)</h1>
+<h1>Coverage Summary for Class: MessageResponse (com.rdg.rdg_2025.rdg_2025_spring.payload.response)</h1>
 
 <table class="coverageStats">
 <tr>
@@ -41,7 +41,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 </th>
 </tr>
 <tr>
-  <td class="name">JwtResponse</td>
+  <td class="name">MessageResponse</td>
 <td class="coverageStat">
   <span class="percent">
     0%
@@ -55,7 +55,7 @@ Current scope:     <a href="../../index.html">all classes</a>
     0%
   </span>
   <span class="absValue">
-    (0/13)
+    (0/3)
   </span>
 </td>
 <td class="coverageStat">
@@ -63,7 +63,7 @@ Current scope:     <a href="../../index.html">all classes</a>
     0%
   </span>
   <span class="absValue">
-    (0/19)
+    (0/4)
   </span>
 </td>
 </tr>
@@ -75,73 +75,22 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 
 <pre>
-<code class="sourceCode" id="sourceCode">&nbsp;package com.rdg.rdg_2025.rdg_2025_spring.payload.response.auth;
+<code class="sourceCode" id="sourceCode">&nbsp;package com.rdg.rdg_2025.rdg_2025_spring.payload.response;
 &nbsp;
-&nbsp;import java.util.List;
+&nbsp;public class MessageResponse {
 &nbsp;
-&nbsp;public class JwtResponse {
+&nbsp;    private String message;
 &nbsp;
-&nbsp;    private String token;
-<b class="nc">&nbsp;    private String type = &quot;Bearer&quot;;</b>
-&nbsp;    private Long id;
-&nbsp;    private String username;
-&nbsp;    private String email;
-&nbsp;    private List&lt;String&gt; roles;
-&nbsp;
-<b class="nc">&nbsp;    public JwtResponse(String accessToken, Long id, String username, String email, List&lt;String&gt; roles) {</b>
-<b class="nc">&nbsp;        this.token = accessToken;</b>
-<b class="nc">&nbsp;        this.id = id;</b>
-<b class="nc">&nbsp;        this.username = username;</b>
-<b class="nc">&nbsp;        this.email = email;</b>
-<b class="nc">&nbsp;        this.roles = roles;</b>
+<b class="nc">&nbsp;    public MessageResponse(String message) {</b>
+<b class="nc">&nbsp;        this.message = message;</b>
 &nbsp;    }
 &nbsp;
-&nbsp;    public String getToken() {
-<b class="nc">&nbsp;        return token;</b>
+&nbsp;    public String getMessage() {
+<b class="nc">&nbsp;        return message;</b>
 &nbsp;    }
 &nbsp;
-&nbsp;    public void setToken(String token) {
-<b class="nc">&nbsp;        this.token = token;</b>
-&nbsp;    }
-&nbsp;
-&nbsp;    public String getTokenType() {
-<b class="nc">&nbsp;        return type;</b>
-&nbsp;    }
-&nbsp;
-&nbsp;    public void setTokenType(String tokenType) {
-<b class="nc">&nbsp;        this.type = tokenType;</b>
-&nbsp;    }
-&nbsp;
-&nbsp;    public Long getId() {
-<b class="nc">&nbsp;        return id;</b>
-&nbsp;    }
-&nbsp;
-&nbsp;    public void setId(Long id) {
-<b class="nc">&nbsp;        this.id = id;</b>
-&nbsp;    }
-&nbsp;
-&nbsp;    public String getUsername() {
-<b class="nc">&nbsp;        return username;</b>
-&nbsp;    }
-&nbsp;
-&nbsp;    public void setUsername(String username) {
-<b class="nc">&nbsp;        this.username = username;</b>
-&nbsp;    }
-&nbsp;
-&nbsp;    public String getEmail() {
-<b class="nc">&nbsp;        return email;</b>
-&nbsp;    }
-&nbsp;
-&nbsp;    public void setEmail(String email) {
-<b class="nc">&nbsp;        this.email = email;</b>
-&nbsp;    }
-&nbsp;
-&nbsp;    public List&lt;String&gt; getRoles() {
-<b class="nc">&nbsp;        return roles;</b>
-&nbsp;    }
-&nbsp;
-&nbsp;    public void setRoles(List&lt;String&gt; roles) {
-<b class="nc">&nbsp;        this.roles = roles;</b>
+&nbsp;    public void setMessage(String message) {
+<b class="nc">&nbsp;        this.message = message;</b>
 &nbsp;    }
 &nbsp;}
 </code>
@@ -167,7 +116,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2025-01-13 10:00</div>
+    <div style="float:right;">generated on 2025-01-13 17:08</div>
 </div>
 </body>
 </html>
