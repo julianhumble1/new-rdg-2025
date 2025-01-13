@@ -1,5 +1,6 @@
 package com.rdg.rdg_2025.rdg_2025_spring.controllers;
 
+import com.rdg.rdg_2025.rdg_2025_spring.exception.DatabaseException;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Production;
 import com.rdg.rdg_2025.rdg_2025_spring.payload.request.production.NewProductionRequest;
 import com.rdg.rdg_2025.rdg_2025_spring.payload.response.production.ProductionResponse;
@@ -31,6 +32,8 @@ public class ProductionController {
             return ResponseEntity.created(location).body(new ProductionResponse(production));
         } catch (DataIntegrityViolationException ex) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
+        } catch (DatabaseException ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
             return null;

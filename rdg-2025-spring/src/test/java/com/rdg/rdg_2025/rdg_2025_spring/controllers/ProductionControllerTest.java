@@ -1,5 +1,6 @@
 package com.rdg.rdg_2025.rdg_2025_spring.controllers;
 
+import com.rdg.rdg_2025.rdg_2025_spring.exception.DatabaseException;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Production;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Venue;
 import com.rdg.rdg_2025.rdg_2025_spring.payload.request.production.NewProductionRequest;
@@ -148,7 +149,22 @@ public class ProductionControllerTest {
                     );
         }
 
+        @Test
+        @WithMockUser(roles="ADMIN")
+        void testDataBaseExceptionReturns500Error() throws Exception{
+            // Arrange
+            when(productionService.addNewProduction(any(NewProductionRequest.class))).thenThrow(new DatabaseException("Database Exception"));
 
+            // Act & Assert
+            mockMvc.perform(post("/productions/new")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(
+                                    "{ \"name\": \"Test Production\", \"venueId\": \"1\", \"author\": \"Test Author\", \"description\": \"Test Description\", " +
+                                            "\"auditionDate\": \"2025-10-10T10:00:00\", \"sundowners\": false, \"notConfirmed\": false, \"flyerFile\": \"Test Flyer File\" }"
+                            ))
+                    .andExpect(status().isInternalServerError()
+                    );
+        }
 
     }
 
