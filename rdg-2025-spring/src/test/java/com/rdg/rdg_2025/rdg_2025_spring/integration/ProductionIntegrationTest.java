@@ -216,5 +216,18 @@ public class ProductionIntegrationTest {
                 );
     }
 
+    @Test
+    void testAuditionDateNotDateResponds400BadRequest() throws Exception {
+        mockMvc.perform(post("/productions/new")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header("Authorization", adminToken)
+                        .content(
+                                "{ \"name\": \"Test Production\", \"venueId\": " + testVenue1.getId() + ", \"author\": \"Test Author\", \"description\": \"Test Description\", " +
+                                        "\"auditionDate\": \"Bad Date\", \"sundowners\": false, \"notConfirmed\": false, \"flyerFile\": \"Test Flyer File\" }"
+                        ))
+                .andExpect(status().isBadRequest()
+                );
+    }
+
 
 }
