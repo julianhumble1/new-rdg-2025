@@ -199,6 +199,21 @@ public class ProductionControllerTest {
                     );
         }
 
+        @Test
+        void testNameWithMissingOtherValuesReturns201() throws Exception{
+            // Arrange
+            when(productionService.addNewProduction(any(NewProductionRequest.class))).thenReturn(testProduction);
+
+            // Act & Assert
+            mockMvc.perform(post("/productions/new")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(
+                                    "{ \"name\": \"Test Production\"}"
+                            ))
+                    .andExpect(status().isCreated()
+                    );
+        }
+
     }
 
 }
