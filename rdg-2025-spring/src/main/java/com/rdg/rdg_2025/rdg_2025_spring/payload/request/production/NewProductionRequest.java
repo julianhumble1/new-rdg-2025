@@ -12,7 +12,7 @@ public class NewProductionRequest {
     private int venueId;
     private String author;
     private String description;
-    private LocalDateTime date;
+    private LocalDateTime auditionDate;
     private boolean sundowners;
     private boolean notConfirmed;
     private String flyerFile;
@@ -25,7 +25,7 @@ public class NewProductionRequest {
         this.venueId = venueId;
         this.author = author;
         this.description = description;
-        this.date = date;
+        this.auditionDate = date;
         this.sundowners = sundowners;
         this.notConfirmed = notConfirmed;
         this.flyerFile = flyerFile;
@@ -63,12 +63,12 @@ public class NewProductionRequest {
         this.description = description;
     }
 
-    public LocalDateTime getDate() {
-        return date;
+    public LocalDateTime getAuditionDate() {
+        return auditionDate;
     }
 
-    public void setDate(LocalDateTime date) {
-        this.date = date;
+    public void setAuditionDate(LocalDateTime auditionDate) {
+        this.auditionDate = auditionDate;
     }
 
     public boolean isSundowners() {

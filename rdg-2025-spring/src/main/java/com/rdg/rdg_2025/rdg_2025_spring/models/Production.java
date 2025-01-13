@@ -1,5 +1,6 @@
 package com.rdg.rdg_2025.rdg_2025_spring.models;
 
+import com.rdg.rdg_2025.rdg_2025_spring.helpers.SlugUtils;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -44,6 +45,11 @@ public class Production {
         this.sundowners = sundowners;
         this.notConfirmed = notConfirmed;
         this.flyerFile = flyerFile;
+
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
+
+        this.slug = SlugUtils.generateSlug(name);
     }
 
     public int getId() {
