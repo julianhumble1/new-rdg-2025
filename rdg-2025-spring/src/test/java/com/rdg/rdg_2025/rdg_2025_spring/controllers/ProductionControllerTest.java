@@ -183,6 +183,22 @@ public class ProductionControllerTest {
                     );
         }
 
+        @Test
+        void testNameWithEmptyOtherValuesReturns201() throws Exception{
+            // Arrange
+            when(productionService.addNewProduction(any(NewProductionRequest.class))).thenReturn(testProduction);
+
+            // Act & Assert
+            mockMvc.perform(post("/productions/new")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(
+                                    "{ \"name\": \"Test Production\", \"venueId\": \"\", \"author\": \"\", \"description\": \"\", " +
+                                            "\"auditionDate\": \"\", \"sundowners\": \"\", \"notConfirmed\": \"\", \"flyerFile\": \"\"}"
+                            ))
+                    .andExpect(status().isCreated()
+                    );
+        }
+
     }
 
 }
