@@ -271,6 +271,20 @@ public class ProductionControllerTest {
                     );
         }
 
+        @Test
+        @WithMockUser(roles="ADMIN")
+        void testAuditionDateNotDateReturns400BadRequest() throws Exception{
+            // Act & Assert
+            mockMvc.perform(post("/productions/new")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(
+                                    "{\"name\":\"Test Production\", \"venueId\": \"1\", \"author\": \"Test Author\", \"description\": \"Test Description\", " +
+                                            "\"auditionDate\": \"Bad Date\", \"sundowners\": false, \"notConfirmed\": false, \"flyerFile\": \"Test Flyer File\" }"
+                            ))
+                    .andExpect(status().isBadRequest()
+                    );
+        }
+
 
 
     }
