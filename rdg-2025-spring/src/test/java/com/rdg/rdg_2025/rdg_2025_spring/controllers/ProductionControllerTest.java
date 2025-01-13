@@ -6,6 +6,7 @@ import com.rdg.rdg_2025.rdg_2025_spring.models.Venue;
 import com.rdg.rdg_2025.rdg_2025_spring.payload.request.production.NewProductionRequest;
 import com.rdg.rdg_2025.rdg_2025_spring.payload.request.venue.NewVenueRequest;
 import com.rdg.rdg_2025.rdg_2025_spring.services.ProductionService;
+import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -163,6 +164,22 @@ public class ProductionControllerTest {
                                             "\"auditionDate\": \"2025-10-10T10:00:00\", \"sundowners\": false, \"notConfirmed\": false, \"flyerFile\": \"Test Flyer File\" }"
                             ))
                     .andExpect(status().isInternalServerError()
+                    );
+        }
+
+        @Test
+        void testInvalidVenueIdReturns400BadRequest() throws Exception{
+            // Arrange
+            when(productionService.addNewProduction(any(NewProductionRequest.class))).thenThrow(new EntityNotFoundException("Invalid Venue Id"));
+
+            // Act & Assert
+            mockMvc.perform(post("/productions/new")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(
+                                    "{ \"name\": \"Test Production\", \"venueId\": \"1\", \"author\": \"Test Author\", \"description\": \"Test Description\", " +
+                                            "\"auditionDate\": \"2025-10-10T10:00:00\", \"sundowners\": false, \"notConfirmed\": false, \"flyerFile\": \"Test Flyer File\" }"
+                            ))
+                    .andExpect(status().isBadRequest()
                     );
         }
 

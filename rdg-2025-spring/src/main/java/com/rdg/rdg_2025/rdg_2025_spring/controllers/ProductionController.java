@@ -5,6 +5,7 @@ import com.rdg.rdg_2025.rdg_2025_spring.models.Production;
 import com.rdg.rdg_2025.rdg_2025_spring.payload.request.production.NewProductionRequest;
 import com.rdg.rdg_2025.rdg_2025_spring.payload.response.production.ProductionResponse;
 import com.rdg.rdg_2025.rdg_2025_spring.services.ProductionService;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -34,9 +35,8 @@ public class ProductionController {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
         } catch (DatabaseException ex) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
-        } catch (Exception ex) {
-            System.out.println(ex.getMessage());
-            return null;
+        } catch (EntityNotFoundException ex) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
         }
     }
 
