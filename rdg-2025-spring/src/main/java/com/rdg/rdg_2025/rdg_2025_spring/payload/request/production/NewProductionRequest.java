@@ -20,12 +20,12 @@ public class NewProductionRequest {
     public NewProductionRequest() {
     }
 
-    public NewProductionRequest(String name, int venueId, String author, String description, LocalDateTime date, boolean sundowners, boolean notConfirmed, String flyerFile) {
+    public NewProductionRequest(String name, int venueId, String author, String description, LocalDateTime auditionDate, boolean sundowners, boolean notConfirmed, String flyerFile) {
         this.name = name;
         this.venueId = venueId;
         this.author = author;
         this.description = description;
-        this.auditionDate = date;
+        this.auditionDate = auditionDate;
         this.sundowners = sundowners;
         this.notConfirmed = notConfirmed;
         this.flyerFile = flyerFile;
