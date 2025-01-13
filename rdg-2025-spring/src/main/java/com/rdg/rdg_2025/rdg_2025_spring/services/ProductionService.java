@@ -1,5 +1,6 @@
 package com.rdg.rdg_2025.rdg_2025_spring.services;
 
+import com.rdg.rdg_2025.rdg_2025_spring.exception.DatabaseException;
 import com.rdg.rdg_2025.rdg_2025_spring.helpers.SlugUtils;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Production;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Venue;
@@ -8,6 +9,7 @@ import com.rdg.rdg_2025.rdg_2025_spring.repository.ProductionRepository;
 import com.rdg.rdg_2025.rdg_2025_spring.repository.VenueRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -41,10 +43,14 @@ public class ProductionService {
         );
 
         Production updatedProduction = updateNameAndSlugIfRepeatPerformance(production);
+        try {
+            Production savedProduction = productionRepository.save(updatedProduction);
 
-        Production savedProduction = productionRepository.save(updatedProduction);
+            return savedProduction;
+        } catch (DataAccessException ex) {
+            throw new DatabaseException(ex.getMessage());
+        }
 
-        return savedProduction;
 
     }
 
