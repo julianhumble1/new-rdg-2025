@@ -3,6 +3,7 @@ package com.rdg.rdg_2025.rdg_2025_spring.controllers;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Production;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Venue;
 import com.rdg.rdg_2025.rdg_2025_spring.payload.request.production.NewProductionRequest;
+import com.rdg.rdg_2025.rdg_2025_spring.payload.request.venue.NewVenueRequest;
 import com.rdg.rdg_2025.rdg_2025_spring.services.ProductionService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -19,6 +20,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -56,6 +58,8 @@ public class ProductionControllerTest {
             "Test File String"
     );
 
+    private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSSS");
+
     @Nested
     @DisplayName("addNewProduction controller tests")
     class addNewProductionControllerTests {
@@ -92,6 +96,37 @@ public class ProductionControllerTest {
                                             "\"auditionDate\": \"2025-10-10T10:00:00\", \"sundowners\": false, \"notConfirmed\": false, \"flyerFile\": \"Test Flyer File\" }"
                             ))
                     .andExpect(header().string("Location", "/productions/" + testProductionId)
+                    );
+        }
+
+        @Test
+        @WithMockUser(roles="ADMIN")
+        void testReturnedVenueWhenServiceSuccessfullySavesVenue() throws Exception{
+            // Arrange
+            when(productionService.addNewProduction(any(NewProductionRequest.class))).thenReturn(testProduction);
+
+            String formattedAuditionDate = testProduction.getAuditionDate().format(formatter);
+
+            // Act & Assert
+            mockMvc.perform(post("/productions/new")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(
+                                    "{ \"name\": \"Test Production\", \"venueId\": \"1\", \"author\": \"Test Author\", \"description\": \"Test Description\", " +
+                                            "\"auditionDate\": \"2025-10-10T10:00:00\", \"sundowners\": false, \"notConfirmed\": false, \"flyerFile\": \"Test Flyer File\" }"
+                            ))
+                    .andExpect(jsonPath("$.production.id").isNotEmpty())
+                    .andExpect(jsonPath("$.production.name").value(testProduction.getName()))
+                    .andExpect(jsonPath("$.production.venue").isNotEmpty())
+                    .andExpect(jsonPath("$.production.author").value(testProduction.getAuthor()))
+                    .andExpect(jsonPath("$.production.description").value(testProduction.getDescription()))
+                    .andExpect(jsonPath("$.production.auditionDate").value(formattedAuditionDate))
+                    .andExpect(jsonPath("$.production.sundowners").value(testProduction.isSundowners()))
+                    .andExpect(jsonPath("$.production.notConfirmed").value(testProduction.isNotConfirmed()))
+                    .andExpect(jsonPath("$.production.flyerFile").value(testProduction.getFlyerFile()))
+                    .andExpect(jsonPath("$.production.createdAt").isNotEmpty())
+                    .andExpect(jsonPath("$.production.updatedAt").isNotEmpty())
+                    .andExpect(jsonPath("$.production.slug").isNotEmpty()
+
                     );
         }
 
