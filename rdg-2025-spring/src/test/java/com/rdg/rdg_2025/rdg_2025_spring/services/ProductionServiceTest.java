@@ -7,6 +7,7 @@ import com.rdg.rdg_2025.rdg_2025_spring.payload.request.production.NewProduction
 import com.rdg.rdg_2025.rdg_2025_spring.repository.ProductionRepository;
 import com.rdg.rdg_2025.rdg_2025_spring.repository.VenueRepository;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.persistence.PersistenceException;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -117,6 +118,18 @@ public class ProductionServiceTest {
 
             when(productionRepository.countByFieldNameStartingWith(any(String.class))).thenReturn(0);
             when(productionRepository.save(any(Production.class))).thenThrow(new DataAccessException("Data access failed"){});
+            // Act & Assert
+            DatabaseException ex = assertThrows(DatabaseException.class, () -> productionService.addNewProduction(testNewProductionRequest));
+        }
+
+        @Test
+        void testPersistenceExceptionThrowsDatabaseException () {
+            // Arrange
+            Venue testVenue = new Venue();
+            when(venueRepository.findById(1)).thenReturn(Optional.of(testVenue));
+
+            when(productionRepository.countByFieldNameStartingWith(any(String.class))).thenReturn(0);
+            when(productionRepository.save(any(Production.class))).thenThrow(new PersistenceException("Data persistence failed"){});
             // Act & Assert
             DatabaseException ex = assertThrows(DatabaseException.class, () -> productionService.addNewProduction(testNewProductionRequest));
         }

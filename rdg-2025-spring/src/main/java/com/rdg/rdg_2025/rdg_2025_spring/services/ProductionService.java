@@ -8,6 +8,7 @@ import com.rdg.rdg_2025.rdg_2025_spring.payload.request.production.NewProduction
 import com.rdg.rdg_2025.rdg_2025_spring.repository.ProductionRepository;
 import com.rdg.rdg_2025.rdg_2025_spring.repository.VenueRepository;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.persistence.PersistenceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
@@ -47,7 +48,7 @@ public class ProductionService {
             Production savedProduction = productionRepository.save(updatedProduction);
 
             return savedProduction;
-        } catch (DataAccessException ex) {
+        } catch (DataAccessException | PersistenceException ex) {
             throw new DatabaseException(ex.getMessage());
         }
 
