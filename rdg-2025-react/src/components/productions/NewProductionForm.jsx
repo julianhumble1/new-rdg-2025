@@ -1,11 +1,15 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import DatePicker from "react-datepicker"
+import Select from "react-select";
+import { format } from 'date-fns';
 import "react-datepicker/dist/react-datepicker.css";
+import VenueService from "../../services/VenueService.js";
+import ProductionService from "../../services/ProductionService.js";
 
 const NewProductionForm = () => {
 
     const [name, setName] = useState("")
-    const [venue, setVenue] = useState("")
+    const [venue, setVenue] = useState({label: "None", value: 0})
     const [author, setAuthor] = useState("")
     const [description, setDescription] = useState("")
     const [auditionDate, setAuditionDate] = useState(new Date())
@@ -16,9 +20,45 @@ const NewProductionForm = () => {
     const [successMessage, setSuccessMessage] = useState("")
     const [failMessage, setFailMessage] = useState("")
 
+    const [venueOptions, setVenueOptions] = useState([])
+
+
     const handleSubmit = async (event) => {
         event.preventDefault()
+
+        try {
+            const response = await ProductionService.createNewProduction(
+                name,
+                venue.value,
+                author,
+                description,
+                format(auditionDate, "yyyy-MM-dd'T'HH:mm:ss.SSSSSSS"),
+                sundowners, 
+                notConfirmed,
+                flyerFile
+            )
+            setSuccessMessage(`Successfully created '${response.data.production.name}!'`)
+            setFailMessage("")
+        } catch (e) {
+            setSuccessMessage("")
+            setFailMessage(e.message)
+        }
+
     }
+
+    useEffect(() => {
+        const getVenues = async () => {
+            try {
+                const response = await VenueService.getAllVenues()
+                const venueList = response.data.venues
+                const formattedVenueList = venueList.map((venue) => ({ "value": venue.id, "label": venue.name }))
+                setVenueOptions(formattedVenueList)
+            } catch (e) {
+                setFailMessage(e.message)
+            }
+        }
+        getVenues()
+    }, [])
 
   return (<>
         <div>Add a New Production</div>
@@ -33,7 +73,7 @@ const NewProductionForm = () => {
                 <div className="italic">
                     Venue
                 </div>
-                <input placeholder="The Globe" className="border p-1" value={venue} onChange={(e) => setVenue(e.target.value)}  />
+              <Select options={venueOptions} onChange={setVenue} className="w-fit" isClearable/>
             </div>
             <div>
                 <div className="italic">

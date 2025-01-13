@@ -17,7 +17,7 @@ const NewVenueForm = () => {
         event.preventDefault()
         try {
             const response = await VenueService.createNewVenue(name, address, town, postcode, notes, url)
-            setSuccessMessage(`Successfully created ${response.data.venue.name}!`)
+            setSuccessMessage(`Successfully created '${response.data.venue.name}!'`)
             setFailMessage("")
         } catch (e) {
             setSuccessMessage("")

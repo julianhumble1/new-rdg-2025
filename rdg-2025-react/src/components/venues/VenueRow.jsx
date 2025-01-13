@@ -8,7 +8,7 @@ const VenueRow = ({ venueData }) => {
             <div className="col-span-2 p-1"> {venueData.address} </div>
             <div className="col-span-2 p-1"> {venueData.town} </div>
             <div className="col-span-2 p-1"> {venueData.postcode} </div>
-            <div className="col-span-2 p-1"> {DateHelper.formatDate(venueData.createdAt)} </div>
+            <div className="col-span-2 p-1"> {DateHelper.formatDatabaseDateForDisplay(venueData.createdAt)} </div>
             <div className="col-span-2 p-1"> {venueData.notes} </div>
         </div>
   )
