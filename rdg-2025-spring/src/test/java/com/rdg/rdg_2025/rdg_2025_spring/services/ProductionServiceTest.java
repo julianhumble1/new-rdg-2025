@@ -133,7 +133,18 @@ public class ProductionServiceTest {
                 assertEquals(expected, result);
             }
 
+            @Test
+            void returnSlugWithTwoOnEndIfPerformedOnceBefore() throws Exception {
+                // Arrange
+                when(productionRepository.countByFieldNameStartingWith(any())).thenReturn(1);
 
+                String expected = "test-production-2";
+                // Act
+                String result = ((Production) updateNameAndSlugIfRepeatPerformance.invoke(productionService, testProduction)).getSlug();
+
+                // Assert
+                assertEquals(expected, result);
+            }
 
         }
 

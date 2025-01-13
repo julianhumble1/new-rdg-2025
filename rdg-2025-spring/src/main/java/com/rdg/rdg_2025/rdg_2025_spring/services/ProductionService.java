@@ -54,7 +54,7 @@ public class ProductionService {
 
         if (timesPerformed > 0) {
             production.setName(production.getName() + " (" + (timesPerformed + 1) + ")");
-            production.setSlug(SlugUtils.generateSlug(production.getName()));
+            production.setSlug(production.getSlug() + "-" + (timesPerformed + 1));
         }
 
         return production;
