@@ -1,5 +1,7 @@
 package com.rdg.rdg_2025.rdg_2025_spring.services;
 
+import com.rdg.rdg_2025.rdg_2025_spring.models.Production;
+import com.rdg.rdg_2025.rdg_2025_spring.models.Venue;
 import com.rdg.rdg_2025.rdg_2025_spring.payload.request.production.NewProductionRequest;
 import com.rdg.rdg_2025.rdg_2025_spring.repository.ProductionRepository;
 import com.rdg.rdg_2025.rdg_2025_spring.repository.VenueRepository;
@@ -15,6 +17,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -55,6 +58,39 @@ public class ProductionServiceTest {
                 productionService.addNewProduction(productionRequest);
             });
 
+        }
+
+        @Test
+        void testNewProductionWithFullDetailsIncludingVenueReturnsProductionObject() {
+            // Arrange
+            LocalDateTime timeNow = LocalDateTime.now();
+            NewProductionRequest newProductionRequest = new NewProductionRequest(
+                    "Test Request",
+                    1,
+                    "Test Author",
+                    "Test Description",
+                    timeNow,
+                    false,
+                    false,
+                    "Test File String"
+            );
+            Venue testVenue = new Venue();
+            when(venueRepository.findById(1)).thenReturn(Optional.of(testVenue));
+            Production testProduction = new Production(
+                    "Test Request",
+                    testVenue,
+                    "Test Author",
+                    "Test Description",
+                    timeNow,
+                    false,
+                    false,
+                    "Test File String"
+            );
+            when(productionRepository.save(any(Production.class))).thenReturn(testProduction);
+            // Act
+            Production result = productionService.addNewProduction(newProductionRequest);
+            // Assert
+            assertEquals(testProduction, result);
         }
 
     }

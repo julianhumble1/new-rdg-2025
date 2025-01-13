@@ -18,7 +18,7 @@ public class ProductionService {
     @Autowired
     private VenueRepository venueRepository;
 
-    public void addNewProduction(NewProductionRequest newProductionRequest) {
+    public Production addNewProduction(NewProductionRequest newProductionRequest) {
 
         Venue venue = null;
 
@@ -27,6 +27,21 @@ public class ProductionService {
             venue = venueRepository.findById(newProductionRequest.getVenueId())
                     .orElseThrow(() -> new EntityNotFoundException("Venue not found with id: " + newProductionRequest.getVenueId()));
         }
+
+        Production production = new Production(
+                newProductionRequest.getName(),
+                venue,
+                newProductionRequest.getAuthor(),
+                newProductionRequest.getDescription(),
+                newProductionRequest.getAuditionDate(),
+                newProductionRequest.isSundowners(),
+                newProductionRequest.isNotConfirmed(),
+                newProductionRequest.getFlyerFile()
+        );
+
+        Production savedProduction = productionRepository.save(production);
+
+        return savedProduction;
 
     }
 
