@@ -22,6 +22,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -101,6 +102,19 @@ public class ProductionIntegrationTest {
                                         "\"auditionDate\": \"2025-10-10T10:00:00\", \"sundowners\": false, \"notConfirmed\": false, \"flyerFile\": \"Test Flyer File\" }"
                         ))
                 .andExpect(status().isCreated()
+                );
+    }
+
+    @Test
+    void testFullProductionDetailsWithNoVenueReturnsExpectedProductionObject() throws Exception {
+        mockMvc.perform(post("/productions/new")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header("Authorization", adminToken)
+                        .content(
+                                "{ \"name\": \"Test Production\", \"author\": \"Test Author\", \"description\": \"Test Description\", " +
+                                        "\"auditionDate\": \"2025-10-10T10:00:00\", \"sundowners\": false, \"notConfirmed\": false, \"flyerFile\": \"Test Flyer File\" }"
+                        ))
+                .andExpect(jsonPath("$.production.name").value("Test Production")
                 );
     }
 
