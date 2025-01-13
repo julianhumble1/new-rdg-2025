@@ -6,10 +6,7 @@ import com.rdg.rdg_2025.rdg_2025_spring.payload.request.production.NewProduction
 import com.rdg.rdg_2025.rdg_2025_spring.repository.ProductionRepository;
 import com.rdg.rdg_2025.rdg_2025_spring.repository.VenueRepository;
 import jakarta.persistence.EntityNotFoundException;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -90,19 +87,37 @@ public class ProductionServiceTest {
         @DisplayName("updateNameAndSlug tests")
         class updateNameAndSlugTests {
 
+            static Method updateNameAndSlugIfRepeatPerformance;
+
+            @BeforeAll
+            static void getPrivateMethod() throws Exception {
+                updateNameAndSlugIfRepeatPerformance = ProductionService.class.getDeclaredMethod("updateNameAndSlugIfRepeatPerformance", Production.class);
+                updateNameAndSlugIfRepeatPerformance.setAccessible(true);
+            }
+
             @Test
-            void returnsOriginalProductionNameIfNeverPerformedBefore() throws Exception {
+            void returnsOriginalProductionNameIfNeverPerformedBefore() throws Exception  {
                 // Arrange
                 when(productionRepository.countByFieldNameStartingWith(any())).thenReturn(0);
-
-                Method updateNameAndSlugIfRepeatPerformance = ProductionService.class.getDeclaredMethod("updateNameAndSlugIfRepeatPerformance", Production.class);
-                updateNameAndSlugIfRepeatPerformance.setAccessible(true);
 
                 // Act
                 String result = ((Production) updateNameAndSlugIfRepeatPerformance.invoke(productionService, testProduction)).getName();
 
                 // Assert
                 assertEquals(testProduction.getName(), result);
+            }
+
+            @Test
+            void returnsNameWithTwoInBracketsIfPerformedOnceBefore() throws Exception {
+                // Arrange
+                when(productionRepository.countByFieldNameStartingWith(any())).thenReturn(1);
+
+                String expected = testProduction.getName() + " (2)";
+                // Act
+                String result = ((Production) updateNameAndSlugIfRepeatPerformance.invoke(productionService, testProduction)).getName();
+
+                // Assert
+                assertEquals(expected, result);
             }
 
         }
