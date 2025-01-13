@@ -7,10 +7,7 @@ import com.rdg.rdg_2025.rdg_2025_spring.payload.request.production.NewProduction
 import com.rdg.rdg_2025.rdg_2025_spring.payload.request.venue.NewVenueRequest;
 import com.rdg.rdg_2025.rdg_2025_spring.services.ProductionService;
 import jakarta.persistence.EntityNotFoundException;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -186,7 +183,13 @@ public class ProductionControllerTest {
         @Test
         void testNameWithEmptyOtherValuesReturns201() throws Exception{
             // Arrange
-            when(productionService.addNewProduction(any(NewProductionRequest.class))).thenReturn(testProduction);
+
+            Production emptyNonNameValuesProduction = new Production(
+                    "Test Production",
+                    null, null, null, null, false, false, null
+            );
+
+            when(productionService.addNewProduction(any(NewProductionRequest.class))).thenReturn(emptyNonNameValuesProduction);
 
             // Act & Assert
             mockMvc.perform(post("/productions/new")
@@ -204,6 +207,13 @@ public class ProductionControllerTest {
             // Arrange
             when(productionService.addNewProduction(any(NewProductionRequest.class))).thenReturn(testProduction);
 
+            Production emptyNonNameValuesProduction = new Production(
+                    "Test Production",
+                    null, null, null, null, false, false, null
+            );
+
+            when(productionService.addNewProduction(any(NewProductionRequest.class))).thenReturn(emptyNonNameValuesProduction);
+
             // Act & Assert
             mockMvc.perform(post("/productions/new")
                             .contentType(MediaType.APPLICATION_JSON)
@@ -211,6 +221,38 @@ public class ProductionControllerTest {
                                     "{ \"name\": \"Test Production\"}"
                             ))
                     .andExpect(status().isCreated()
+                    );
+        }
+
+        @Test
+        void testEmptyNameReturns400BadRequest() throws Exception{
+            // Arrange
+
+
+            // Act & Assert
+            mockMvc.perform(post("/productions/new")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(
+                                    "{\"venueId\": \"1\", \"author\": \"Test Author\", \"description\": \"Test Description\", " +
+                                            "\"auditionDate\": \"2025-10-10T10:00:00\", \"sundowners\": false, \"notConfirmed\": false, \"flyerFile\": \"Test Flyer File\" }"
+                            ))
+                    .andExpect(status().isBadRequest()
+                    );
+        }
+
+        @Test
+        void testMissingNameReturns400BadRequest() throws Exception{
+            // Arrange
+
+
+            // Act & Assert
+            mockMvc.perform(post("/productions/new")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(
+                                    "{\"name\":\"\", \"venueId\": \"1\", \"author\": \"Test Author\", \"description\": \"Test Description\", " +
+                                            "\"auditionDate\": \"2025-10-10T10:00:00\", \"sundowners\": false, \"notConfirmed\": false, \"flyerFile\": \"Test Flyer File\" }"
+                            ))
+                    .andExpect(status().isBadRequest()
                     );
         }
 
