@@ -47,6 +47,8 @@ public class ProductionControllerTest {
         mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
     }
 
+    private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSSS");
+
     private Production testProduction = new Production(
             "Test Production",
             new Venue(),
@@ -58,7 +60,7 @@ public class ProductionControllerTest {
             "Test File String"
     );
 
-    private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSSS");
+
 
     @Nested
     @DisplayName("addNewProduction controller tests")
@@ -165,6 +167,7 @@ public class ProductionControllerTest {
         }
 
         @Test
+        @WithMockUser(roles="ADMIN")
         void testInvalidVenueIdReturns400BadRequest() throws Exception{
             // Arrange
             when(productionService.addNewProduction(any(NewProductionRequest.class))).thenThrow(new EntityNotFoundException("Invalid Venue Id"));
@@ -181,6 +184,7 @@ public class ProductionControllerTest {
         }
 
         @Test
+        @WithMockUser(roles="ADMIN")
         void testNameWithEmptyOtherValuesReturns201() throws Exception{
             // Arrange
 
@@ -203,6 +207,7 @@ public class ProductionControllerTest {
         }
 
         @Test
+        @WithMockUser(roles="ADMIN")
         void testNameWithMissingOtherValuesReturns201() throws Exception{
             // Arrange
             when(productionService.addNewProduction(any(NewProductionRequest.class))).thenReturn(testProduction);
@@ -225,10 +230,8 @@ public class ProductionControllerTest {
         }
 
         @Test
+        @WithMockUser(roles="ADMIN")
         void testEmptyNameReturns400BadRequest() throws Exception{
-            // Arrange
-
-
             // Act & Assert
             mockMvc.perform(post("/productions/new")
                             .contentType(MediaType.APPLICATION_JSON)
@@ -241,10 +244,8 @@ public class ProductionControllerTest {
         }
 
         @Test
+        @WithMockUser(roles="ADMIN")
         void testMissingNameReturns400BadRequest() throws Exception{
-            // Arrange
-
-
             // Act & Assert
             mockMvc.perform(post("/productions/new")
                             .contentType(MediaType.APPLICATION_JSON)
@@ -255,6 +256,22 @@ public class ProductionControllerTest {
                     .andExpect(status().isBadRequest()
                     );
         }
+
+        @Test
+        @WithMockUser(roles="ADMIN")
+        void testVenueIdNotIntReturns400BadRequest() throws Exception{
+            // Act & Assert
+            mockMvc.perform(post("/productions/new")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(
+                                    "{\"name\":\"Test Production\", \"venueId\": \"Bad Venue Id\", \"author\": \"Test Author\", \"description\": \"Test Description\", " +
+                                            "\"auditionDate\": \"2025-10-10T10:00:00\", \"sundowners\": false, \"notConfirmed\": false, \"flyerFile\": \"Test Flyer File\" }"
+                            ))
+                    .andExpect(status().isBadRequest()
+                    );
+        }
+
+
 
     }
 
