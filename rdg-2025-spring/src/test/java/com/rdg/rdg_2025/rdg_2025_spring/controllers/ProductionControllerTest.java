@@ -45,6 +45,17 @@ public class ProductionControllerTest {
         mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
     }
 
+    private Production testProduction = new Production(
+            "Test Production",
+            new Venue(),
+            "Test Author",
+            "Test Description",
+            LocalDateTime.now(),
+            false,
+            false,
+            "Test File String"
+    );
+
     @Nested
     @DisplayName("addNewProduction controller tests")
     class addNewProductionControllerTests {
@@ -53,17 +64,6 @@ public class ProductionControllerTest {
         @WithMockUser(roles="ADMIN")
         void test201StatusWhenServiceSuccessfullySavesProduction() throws Exception {
             // Arrange
-            Production testProduction = new Production(
-                    "Test Production",
-                    new Venue(),
-                    "Test Author",
-                    "Test Description",
-                    LocalDateTime.now(),
-                    false,
-                    false,
-                    "Test File String"
-            );
-
             when(productionService.addNewProduction(any(NewProductionRequest.class))).thenReturn(testProduction);
 
             // Act & Assert
@@ -76,6 +76,23 @@ public class ProductionControllerTest {
                     .andExpect(status().isCreated()
                     );
 
+        }
+
+        @Test
+        void testExpectedUriWhenSuccessfullySavesProduction() throws Exception {
+            // Arrange
+            when(productionService.addNewProduction(any(NewProductionRequest.class))).thenReturn(testProduction);
+            int testProductionId = testProduction.getId();
+
+            // Act & Assert
+            mockMvc.perform(post("/productions/new")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(
+                                    "{ \"name\": \"Test Production\", \"venueId\": \"1\", \"author\": \"Test Author\", \"description\": \"Test Description\", " +
+                                            "\"auditionDate\": \"2025-10-10T10:00:00\", \"sundowners\": false, \"notConfirmed\": false, \"flyerFile\": \"Test Flyer File\" }"
+                            ))
+                    .andExpect(header().string("Location", "/productions/" + testProductionId)
+                    );
         }
 
 
