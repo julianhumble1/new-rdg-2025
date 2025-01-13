@@ -1,5 +1,6 @@
 package com.rdg.rdg_2025.rdg_2025_spring.services;
 
+import com.rdg.rdg_2025.rdg_2025_spring.helpers.SlugUtils;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Production;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Venue;
 import com.rdg.rdg_2025.rdg_2025_spring.payload.request.production.NewProductionRequest;
@@ -39,10 +40,24 @@ public class ProductionService {
                 newProductionRequest.getFlyerFile()
         );
 
-        Production savedProduction = productionRepository.save(production);
+        Production updatedProduction = updateNameAndSlugIfRepeatPerformance(production);
+
+        Production savedProduction = productionRepository.save(updatedProduction);
 
         return savedProduction;
 
+    }
+
+    private Production updateNameAndSlugIfRepeatPerformance(Production production) {
+        // check if production name has already been used
+        int timesPerformed = productionRepository.countByFieldNameStartingWith(production.getName());
+
+        if (timesPerformed > 0) {
+            production.setName(production.getName() + " (" + (timesPerformed + 1) + ")");
+            production.setSlug(SlugUtils.generateSlug(production.getName()));
+        }
+
+        return production;
     }
 
 }
