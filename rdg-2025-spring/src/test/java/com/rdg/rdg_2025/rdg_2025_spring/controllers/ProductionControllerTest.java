@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
@@ -127,6 +128,23 @@ public class ProductionControllerTest {
                     .andExpect(jsonPath("$.production.updatedAt").isNotEmpty())
                     .andExpect(jsonPath("$.production.slug").isNotEmpty()
 
+                    );
+        }
+
+        @Test
+        @WithMockUser(roles="ADMIN")
+        void testDataIntegrityViolationExceptionReturns409Error() throws Exception{
+            // Arrange
+            when(productionService.addNewProduction(any(NewProductionRequest.class))).thenThrow(new DataIntegrityViolationException("Data integrity violation"));
+
+            // Act & Assert
+            mockMvc.perform(post("/productions/new")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(
+                                    "{ \"name\": \"Test Production\", \"venueId\": \"1\", \"author\": \"Test Author\", \"description\": \"Test Description\", " +
+                                            "\"auditionDate\": \"2025-10-10T10:00:00\", \"sundowners\": false, \"notConfirmed\": false, \"flyerFile\": \"Test Flyer File\" }"
+                            ))
+                    .andExpect(status().isConflict()
                     );
         }
 

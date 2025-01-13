@@ -6,6 +6,8 @@ import com.rdg.rdg_2025.rdg_2025_spring.payload.response.production.ProductionRe
 import com.rdg.rdg_2025.rdg_2025_spring.services.ProductionService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -27,6 +29,8 @@ public class ProductionController {
             Production production = productionService.addNewProduction(newProductionRequest);
             URI location = URI.create("/productions/" + production.getId());
             return ResponseEntity.created(location).body(new ProductionResponse(production));
+        } catch (DataIntegrityViolationException ex) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
             return null;
