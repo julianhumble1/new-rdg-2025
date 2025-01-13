@@ -14,6 +14,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.dao.DataAccessException;
+import org.springframework.dao.DataIntegrityViolationException;
 
 import java.lang.reflect.Method;
 import java.time.LocalDateTime;
@@ -132,6 +133,19 @@ public class ProductionServiceTest {
             when(productionRepository.save(any(Production.class))).thenThrow(new PersistenceException("Data persistence failed"){});
             // Act & Assert
             DatabaseException ex = assertThrows(DatabaseException.class, () -> productionService.addNewProduction(testNewProductionRequest));
+        }
+
+        @Test
+        void testDuplicateProductionNameThrowsDataIntegrityViolationException() {
+            // Arrange
+            Venue testVenue = new Venue();
+            when(venueRepository.findById(1)).thenReturn(Optional.of(testVenue));
+
+            when(productionRepository.countByFieldNameStartingWith(any(String.class))).thenReturn(0);
+            when(productionRepository.save(any(Production.class))).thenThrow(new DataIntegrityViolationException("Duplicate name"){});
+
+            // Act & Assert
+            DataIntegrityViolationException ex = assertThrows(DataIntegrityViolationException.class, () -> productionService.addNewProduction(testNewProductionRequest));
         }
 
         @Nested
