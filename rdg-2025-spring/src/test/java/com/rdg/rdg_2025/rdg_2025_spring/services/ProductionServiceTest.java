@@ -108,6 +108,19 @@ public class ProductionServiceTest {
             }
 
             @Test
+            void returnsOriginalSlugIfNeverPerformedBefore() throws Exception {
+                // Arrange
+                when(productionRepository.countByFieldNameStartingWith(any())).thenReturn(0);
+
+                String expected = "test-production";
+                // Act
+                String result = ((Production) updateNameAndSlugIfRepeatPerformance.invoke(productionService, testProduction)).getSlug();
+
+                // Assert
+                assertEquals(expected, result);
+            }
+
+            @Test
             void returnsNameWithTwoInBracketsIfPerformedOnceBefore() throws Exception {
                 // Arrange
                 when(productionRepository.countByFieldNameStartingWith(any())).thenReturn(1);
@@ -119,6 +132,8 @@ public class ProductionServiceTest {
                 // Assert
                 assertEquals(expected, result);
             }
+
+
 
         }
 
