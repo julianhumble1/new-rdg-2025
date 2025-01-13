@@ -3,13 +3,13 @@ import { useEffect, useState } from "react"
 import Cookies from "js-cookie"
 import Login from "./components/Login.jsx"
 import Home from "./components/Home.jsx"
-import './App.css'
 import Header from "./components/Header.jsx"
 import Dashboard from "./components/dashboards/Dashboard.jsx"
 import UserDashboard from "./components/dashboards/UserDashboard.jsx"
 import AdminDashboard from "./components/dashboards/AdminDashboard.jsx"
 import NewVenueForm from "./components/venues/NewVenueForm.jsx"
 import AllVenuesList from "./components/venues/AllVenuesList.jsx"
+import NewProductionForm from "./components/productions/NewProductionForm.jsx"
 
 
 function App() {
@@ -48,6 +48,8 @@ function App() {
 
         <Route path="/venues/new" element={<NewVenueForm />} />
         <Route path="/venues/" element={<AllVenuesList />} />
+
+        <Route path ="/productions/new" element={<NewProductionForm />} />
       </Routes>
     </Router>
   )
