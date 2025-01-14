@@ -68,6 +68,23 @@ public class FestivalControllerTest {
                     .andExpect(status().isCreated());
         }
 
+        @Test
+        @WithMockUser(roles="ADMIN")
+        void testExpectedURIWhenServiceSuccessfullySavesFestival() throws Exception {
+            // Arrange
+            when(festivalService.addNewFestival(any(NewFestivalRequest.class))).thenReturn(testFestival);
+            int testFestivalId = testFestival.getId();
+
+            // Act & Assert
+            mockMvc.perform(post("/festivals")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(
+                                    "{\"name\": \"Test Festival\", \"venueId\": 1, \"year\": 2025, \"month\": 1, \"description\": \"Test Description\"}"
+                            ))
+                    .andExpect(header().string("Location", "/festivals" + "/" + testFestivalId));
+        }
+
+
     }
 
 }
