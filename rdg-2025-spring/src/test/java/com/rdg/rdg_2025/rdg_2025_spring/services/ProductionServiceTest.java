@@ -305,6 +305,17 @@ public class ProductionServiceTest {
             });
         }
 
+        @Test
+        void testPersistenceExceptionThrowsDatabaseException() {
+            // Arrange
+            when(productionRepository.findAll()).thenThrow(new PersistenceException("Data persistence failed"){});
+
+            // Act & Assert
+            DatabaseException ex = assertThrows(DatabaseException.class, () -> {
+                productionService.getAllProductions();
+            });
+        }
+
 
     }
 
