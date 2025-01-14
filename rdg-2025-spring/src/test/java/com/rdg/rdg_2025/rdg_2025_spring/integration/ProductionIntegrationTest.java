@@ -22,6 +22,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -93,205 +94,222 @@ public class ProductionIntegrationTest {
     @AfterEach
     public void cleanup() {productionRepository.deleteAll();}
 
-    @Test
-    void testFullProductionDetailsWithNoVenueReturns201() throws Exception {
-        mockMvc.perform(post("/productions/new")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .header("Authorization", adminToken)
-                        .content(
-                                "{ \"name\": \"Test Production\", \"author\": \"Test Author\", \"description\": \"Test Description\", " +
-                                        "\"auditionDate\": \"2025-10-10T10:00:00\", \"sundowners\": false, \"notConfirmed\": false, \"flyerFile\": \"Test Flyer File\" }"
-                        ))
-                .andExpect(status().isCreated()
-                );
+    @Nested
+    @DisplayName("addNewProduction integration tests")
+    class addNewProductionIntegrationTests {
+
+        @Test
+        void testFullProductionDetailsWithNoVenueReturns201() throws Exception {
+            mockMvc.perform(post("/productions/new")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", adminToken)
+                            .content(
+                                    "{ \"name\": \"Test Production\", \"author\": \"Test Author\", \"description\": \"Test Description\", " +
+                                            "\"auditionDate\": \"2025-10-10T10:00:00\", \"sundowners\": false, \"notConfirmed\": false, \"flyerFile\": \"Test Flyer File\" }"
+                            ))
+                    .andExpect(status().isCreated()
+                    );
+        }
+
+        @Test
+        void testFullProductionDetailsWithNoVenueReturnsExpectedProductionObject() throws Exception {
+            mockMvc.perform(post("/productions/new")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", adminToken)
+                            .content(
+                                    "{ \"name\": \"Test Production\", \"author\": \"Test Author\", \"description\": \"Test Description\", " +
+                                            "\"auditionDate\": \"2025-10-10T10:00:00\", \"sundowners\": false, \"notConfirmed\": false, \"flyerFile\": \"Test Flyer File\" }"
+                            ))
+                    .andExpect(jsonPath("$.production.name").value("Test Production")
+                    );
+        }
+
+        @Test
+        void testFullProductionDetailsWithValidVenueReturns201() throws Exception {
+            mockMvc.perform(post("/productions/new")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", adminToken)
+                            .content(
+                                    "{ \"name\": \"Test Production\", \"venueId\": " + testVenue1.getId() + ", \"author\": \"Test Author\", \"description\": \"Test Description\", " +
+                                            "\"auditionDate\": \"2025-10-10T10:00:00\", \"sundowners\": false, \"notConfirmed\": false, \"flyerFile\": \"Test Flyer File\" }"
+                            ))
+                    .andExpect(status().isCreated()
+                    );
+        }
+
+        @Test
+        void testOnlyNameReturns201() throws Exception {
+            mockMvc.perform(post("/productions/new")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", adminToken)
+                            .content(
+                                    "{ \"name\": \"Test Production\"}"
+                            ))
+                    .andExpect(status().isCreated()
+                    );
+        }
+
+        @Test
+        void testDuplicateVenueNameReturnsNameWithNumberOnEnd() throws Exception {
+
+            // Arrange
+            Production existingProduction = new Production(
+                    "Test Production",
+                    null, null, null, null, false, false, null
+            );
+
+            productionRepository.save(existingProduction);
+
+            // Act & Assert
+            mockMvc.perform(post("/productions/new")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", adminToken)
+                            .content(
+                                    "{ \"name\": \"Test Production\", \"author\": \"Test Author\", \"description\": \"Test Description\", " +
+                                            "\"auditionDate\": \"2025-10-10T10:00:00\", \"sundowners\": false, \"notConfirmed\": false, \"flyerFile\": \"Test Flyer File\" }"
+                            ))
+                    .andExpect(jsonPath("$.production.name").value("Test Production (2)")
+                    );
+        }
+
+        @Test
+        void testDuplicateVenueNameReturnsSlugWithNumberOnEnd() throws Exception {
+
+            // Arrange
+            Production existingProduction = new Production(
+                    "Test Production",
+                    null, null, null, null, false, false, null
+            );
+
+            productionRepository.save(existingProduction);
+
+            // Act & Assert
+            mockMvc.perform(post("/productions/new")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", adminToken)
+                            .content(
+                                    "{ \"name\": \"Test Production\", \"author\": \"Test Author\", \"description\": \"Test Description\", " +
+                                            "\"auditionDate\": \"2025-10-10T10:00:00\", \"sundowners\": false, \"notConfirmed\": false, \"flyerFile\": \"Test Flyer File\" }"
+                            ))
+                    .andExpect(jsonPath("$.production.slug").value("test-production-2")
+                    );
+        }
+
+        @Test
+        void testInvalidVenueIdResponds400BadRequest() throws Exception {
+            mockMvc.perform(post("/productions/new")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", adminToken)
+                            .content(
+                                    "{ \"name\": \"Test Production\", \"venueId\": " + (testVenue1.getId() - 1) + ", \"author\": \"Test Author\", \"description\": \"Test Description\", " +
+                                            "\"auditionDate\": \"2025-10-10T10:00:00\", \"sundowners\": false, \"notConfirmed\": false, \"flyerFile\": \"Test Flyer File\" }"
+                            ))
+                    .andExpect(status().isBadRequest()
+                    );
+        }
+
+        @Test
+        void testVenueIdNotIntReturns400BadRequest() throws Exception {
+            mockMvc.perform(post("/productions/new")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", adminToken)
+                            .content(
+                                    "{ \"name\": \"Test Production\", \"venueId\": \"Bad Venue Id\", \"author\": \"Test Author\", \"description\": \"Test Description\", " +
+                                            "\"auditionDate\": \"2025-10-10T10:00:00\", \"sundowners\": false, \"notConfirmed\": false, \"flyerFile\": \"Test Flyer File\" }"
+                            ))
+                    .andExpect(status().isBadRequest()
+                    );
+        }
+
+        @Test
+        void testAuditionDateNotDateResponds400BadRequest() throws Exception {
+            mockMvc.perform(post("/productions/new")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", adminToken)
+                            .content(
+                                    "{ \"name\": \"Test Production\", \"venueId\": " + testVenue1.getId() + ", \"author\": \"Test Author\", \"description\": \"Test Description\", " +
+                                            "\"auditionDate\": \"Bad Date\", \"sundowners\": false, \"notConfirmed\": false, \"flyerFile\": \"Test Flyer File\" }"
+                            ))
+                    .andExpect(status().isBadRequest()
+                    );
+        }
+
+        @Test
+        void testSundownersNotBooleanResponds400BadRequest() throws Exception {
+            mockMvc.perform(post("/productions/new")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", adminToken)
+                            .content(
+                                    "{ \"name\": \"Test Production\", \"venueId\": " + testVenue1.getId() + ", \"author\": \"Test Author\", \"description\": \"Test Description\", " +
+                                            "\"auditionDate\": \"2025-10-10T10:00:00\", \"sundowners\": \"Bad Boolean\", \"notConfirmed\": false, \"flyerFile\": \"Test Flyer File\" }"
+                            ))
+                    .andExpect(status().isBadRequest()
+                    );
+        }
+
+        @Test
+        void testNotConfirmedNotBooleanResponds400BadRequest() throws Exception {
+            mockMvc.perform(post("/productions/new")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", adminToken)
+                            .content(
+                                    "{ \"name\": \"Test Production\", \"venueId\": " + testVenue1.getId() + ", \"author\": \"Test Author\", \"description\": \"Test Description\", " +
+                                            "\"auditionDate\": \"2025-10-10T10:00:00\", \"sundowners\": false, \"notConfirmed\": \"Bad Boolean\", \"flyerFile\": \"Test Flyer File\" }"
+                            ))
+                    .andExpect(status().isBadRequest()
+                    );
+        }
+
+        @Test
+        void testMissingTokenResponds401() throws Exception {
+            mockMvc.perform(post("/productions/new")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(
+                                    "{ \"name\": \"Test Production\", \"venueId\": " + testVenue1.getId() + ", \"author\": \"Test Author\", \"description\": \"Test Description\", " +
+                                            "\"auditionDate\": \"2025-10-10T10:00:00\", \"sundowners\": false, \"notConfirmed\": false, \"flyerFile\": \"Test Flyer File\" }"
+                            ))
+                    .andExpect(status().isUnauthorized()
+                    );
+        }
+
+        @Test
+        void testBadTokenResponds401() throws Exception {
+            mockMvc.perform(post("/productions/new")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", "Bad Token")
+                            .content(
+                                    "{ \"name\": \"Test Production\", \"venueId\": " + testVenue1.getId() + ", \"author\": \"Test Author\", \"description\": \"Test Description\", " +
+                                            "\"auditionDate\": \"2025-10-10T10:00:00\", \"sundowners\": false, \"notConfirmed\": false, \"flyerFile\": \"Test Flyer File\" }"
+                            ))
+                    .andExpect(status().isUnauthorized()
+                    );
+        }
+
+        @Test
+        void testUserTokenResponds403() throws Exception {
+            mockMvc.perform(post("/productions/new")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", userToken)
+                            .content(
+                                    "{ \"name\": \"Test Production\", \"venueId\": " + testVenue1.getId() + ", \"author\": \"Test Author\", \"description\": \"Test Description\", " +
+                                            "\"auditionDate\": \"2025-10-10T10:00:00\", \"sundowners\": false, \"notConfirmed\": false, \"flyerFile\": \"Test Flyer File\" }"
+                            ))
+                    .andExpect(status().isForbidden()
+                    );
+        }
     }
 
-    @Test
-    void testFullProductionDetailsWithNoVenueReturnsExpectedProductionObject() throws Exception {
-        mockMvc.perform(post("/productions/new")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .header("Authorization", adminToken)
-                        .content(
-                                "{ \"name\": \"Test Production\", \"author\": \"Test Author\", \"description\": \"Test Description\", " +
-                                        "\"auditionDate\": \"2025-10-10T10:00:00\", \"sundowners\": false, \"notConfirmed\": false, \"flyerFile\": \"Test Flyer File\" }"
-                        ))
-                .andExpect(jsonPath("$.production.name").value("Test Production")
-                );
+
+    @Nested
+    @DisplayName("getAllProductions integration tests")
+    class getAllProductionsIntegrationTests {
+
+        @Test
+        void testSuccessfulGetResponds200() throws Exception{
+            // Act & Assert
+            mockMvc.perform(get("/productions"))
+                    .andExpect(status().isOk());
+        }
+
     }
-
-    @Test
-    void testFullProductionDetailsWithValidVenueReturns201() throws Exception {
-        mockMvc.perform(post("/productions/new")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .header("Authorization", adminToken)
-                        .content(
-                                "{ \"name\": \"Test Production\", \"venueId\": " + testVenue1.getId() + ", \"author\": \"Test Author\", \"description\": \"Test Description\", " +
-                                        "\"auditionDate\": \"2025-10-10T10:00:00\", \"sundowners\": false, \"notConfirmed\": false, \"flyerFile\": \"Test Flyer File\" }"
-                        ))
-                .andExpect(status().isCreated()
-                );
-    }
-
-    @Test
-    void testOnlyNameReturns201() throws Exception {
-        mockMvc.perform(post("/productions/new")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .header("Authorization", adminToken)
-                        .content(
-                                "{ \"name\": \"Test Production\"}"
-                        ))
-                .andExpect(status().isCreated()
-                );
-    }
-
-    @Test
-    void testDuplicateVenueNameReturnsNameWithNumberOnEnd() throws Exception {
-
-        // Arrange
-        Production existingProduction = new Production(
-                "Test Production",
-                null, null, null, null, false, false, null
-        );
-
-        productionRepository.save(existingProduction);
-
-        // Act & Assert
-        mockMvc.perform(post("/productions/new")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .header("Authorization", adminToken)
-                        .content(
-                                "{ \"name\": \"Test Production\", \"author\": \"Test Author\", \"description\": \"Test Description\", " +
-                                        "\"auditionDate\": \"2025-10-10T10:00:00\", \"sundowners\": false, \"notConfirmed\": false, \"flyerFile\": \"Test Flyer File\" }"
-                        ))
-                .andExpect(jsonPath("$.production.name").value("Test Production (2)")
-                );
-    }
-
-    @Test
-    void testDuplicateVenueNameReturnsSlugWithNumberOnEnd() throws Exception {
-
-        // Arrange
-        Production existingProduction = new Production(
-                "Test Production",
-                null, null, null, null, false, false, null
-        );
-
-        productionRepository.save(existingProduction);
-
-        // Act & Assert
-        mockMvc.perform(post("/productions/new")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .header("Authorization", adminToken)
-                        .content(
-                                "{ \"name\": \"Test Production\", \"author\": \"Test Author\", \"description\": \"Test Description\", " +
-                                        "\"auditionDate\": \"2025-10-10T10:00:00\", \"sundowners\": false, \"notConfirmed\": false, \"flyerFile\": \"Test Flyer File\" }"
-                        ))
-                .andExpect(jsonPath("$.production.slug").value("test-production-2")
-                );
-    }
-
-    @Test
-    void testInvalidVenueIdResponds400BadRequest() throws Exception {
-        mockMvc.perform(post("/productions/new")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .header("Authorization", adminToken)
-                        .content(
-                                "{ \"name\": \"Test Production\", \"venueId\": " + (testVenue1.getId() - 1) + ", \"author\": \"Test Author\", \"description\": \"Test Description\", " +
-                                        "\"auditionDate\": \"2025-10-10T10:00:00\", \"sundowners\": false, \"notConfirmed\": false, \"flyerFile\": \"Test Flyer File\" }"
-                        ))
-                .andExpect(status().isBadRequest()
-                );
-    }
-
-    @Test
-    void testVenueIdNotIntReturns400BadRequest() throws Exception {
-        mockMvc.perform(post("/productions/new")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .header("Authorization", adminToken)
-                        .content(
-                                "{ \"name\": \"Test Production\", \"venueId\": \"Bad Venue Id\", \"author\": \"Test Author\", \"description\": \"Test Description\", " +
-                                        "\"auditionDate\": \"2025-10-10T10:00:00\", \"sundowners\": false, \"notConfirmed\": false, \"flyerFile\": \"Test Flyer File\" }"
-                        ))
-                .andExpect(status().isBadRequest()
-                );
-    }
-
-    @Test
-    void testAuditionDateNotDateResponds400BadRequest() throws Exception {
-        mockMvc.perform(post("/productions/new")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .header("Authorization", adminToken)
-                        .content(
-                                "{ \"name\": \"Test Production\", \"venueId\": " + testVenue1.getId() + ", \"author\": \"Test Author\", \"description\": \"Test Description\", " +
-                                        "\"auditionDate\": \"Bad Date\", \"sundowners\": false, \"notConfirmed\": false, \"flyerFile\": \"Test Flyer File\" }"
-                        ))
-                .andExpect(status().isBadRequest()
-                );
-    }
-
-    @Test
-    void testSundownersNotBooleanResponds400BadRequest() throws Exception {
-        mockMvc.perform(post("/productions/new")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .header("Authorization", adminToken)
-                        .content(
-                                "{ \"name\": \"Test Production\", \"venueId\": " + testVenue1.getId() + ", \"author\": \"Test Author\", \"description\": \"Test Description\", " +
-                                        "\"auditionDate\": \"2025-10-10T10:00:00\", \"sundowners\": \"Bad Boolean\", \"notConfirmed\": false, \"flyerFile\": \"Test Flyer File\" }"
-                        ))
-                .andExpect(status().isBadRequest()
-                );
-    }
-
-    @Test
-    void testNotConfirmedNotBooleanResponds400BadRequest() throws Exception {
-        mockMvc.perform(post("/productions/new")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .header("Authorization", adminToken)
-                        .content(
-                                "{ \"name\": \"Test Production\", \"venueId\": " + testVenue1.getId() + ", \"author\": \"Test Author\", \"description\": \"Test Description\", " +
-                                        "\"auditionDate\": \"2025-10-10T10:00:00\", \"sundowners\": false, \"notConfirmed\": \"Bad Boolean\", \"flyerFile\": \"Test Flyer File\" }"
-                        ))
-                .andExpect(status().isBadRequest()
-                );
-    }
-
-    @Test
-    void testMissingTokenResponds401() throws Exception {
-        mockMvc.perform(post("/productions/new")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(
-                                "{ \"name\": \"Test Production\", \"venueId\": " + testVenue1.getId() + ", \"author\": \"Test Author\", \"description\": \"Test Description\", " +
-                                        "\"auditionDate\": \"2025-10-10T10:00:00\", \"sundowners\": false, \"notConfirmed\": false, \"flyerFile\": \"Test Flyer File\" }"
-                        ))
-                .andExpect(status().isUnauthorized()
-                );
-    }
-
-    @Test
-    void testBadTokenResponds401() throws Exception {
-        mockMvc.perform(post("/productions/new")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .header("Authorization", "Bad Token")
-                        .content(
-                                "{ \"name\": \"Test Production\", \"venueId\": " + testVenue1.getId() + ", \"author\": \"Test Author\", \"description\": \"Test Description\", " +
-                                        "\"auditionDate\": \"2025-10-10T10:00:00\", \"sundowners\": false, \"notConfirmed\": false, \"flyerFile\": \"Test Flyer File\" }"
-                        ))
-                .andExpect(status().isUnauthorized()
-                );
-    }
-
-    @Test
-    void testUserTokenResponds403() throws Exception {
-        mockMvc.perform(post("/productions/new")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .header("Authorization", userToken)
-                        .content(
-                                "{ \"name\": \"Test Production\", \"venueId\": " + testVenue1.getId() + ", \"author\": \"Test Author\", \"description\": \"Test Description\", " +
-                                        "\"auditionDate\": \"2025-10-10T10:00:00\", \"sundowners\": false, \"notConfirmed\": false, \"flyerFile\": \"Test Flyer File\" }"
-                        ))
-                .andExpect(status().isForbidden()
-                );
-    }
-
-
 }
