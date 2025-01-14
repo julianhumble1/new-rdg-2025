@@ -15,9 +15,11 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.core.parameters.P;
 
 import java.lang.reflect.Method;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -230,6 +232,24 @@ public class ProductionServiceTest {
             List<Production> productions = productionService.getAllProductions();
             // Assert
             assertEquals(Collections.EMPTY_LIST, productions);
+
+        }
+
+        @Test
+        void testGetAllProductionsWithOneProductionInDatabaseReturnsListLengthOne() {
+            // Arrange
+            Production production = new Production(
+                    "Test Production",
+                    new Venue(), null, null, null,  false, false, null
+            );
+            ArrayList<Production> productionList = new ArrayList<>();
+            productionList.add(production);
+            when(productionRepository.findAll()).thenReturn(productionList);
+
+            // Act
+            List<Production> productions = productionService.getAllProductions();
+            // Assert
+            assertEquals(1, productions.size());
 
         }
 
