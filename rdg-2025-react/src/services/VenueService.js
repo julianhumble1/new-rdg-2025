@@ -8,7 +8,7 @@ export default class VenueService {
         const token = Cookies.get("token")
 
         try {
-            const response = await axios.post("http://localhost:8080/venues/new", 
+            const response = await axios.post("http://localhost:8080/venues", 
                 {
                     "name": name,
                     "address": address,
@@ -22,6 +22,7 @@ export default class VenueService {
                     }
                 }
             )
+            
             return response
         } catch (e) {
             if (e.response.status === 401 || e.response.status === 403) {
@@ -41,7 +42,7 @@ export default class VenueService {
         const token = Cookies.get("token")
 
         try {
-            const response = await axios.get("http://localhost:8080/venues/",
+            const response = await axios.get("http://localhost:8080/venues",
                 {
                     headers: {
                         "Authorization": `Bearer ${token}`
@@ -54,6 +55,8 @@ export default class VenueService {
                 throw new Error("Failed to authenticate as administrator")
             } else if (e.response.status === 500) {
                 throw new Error("Internal server error")
+            } else {
+                throw new Error(e.message)
             }
         }
 

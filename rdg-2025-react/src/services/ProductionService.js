@@ -8,7 +8,7 @@ export default class ProductionService {
         const token = Cookies.get("token")
 
         try {
-            const response = await axios.post("http://localhost:8080/productions/new", 
+            const response = await axios.post("http://localhost:8080/productions", 
                 {
                     name: name,
                     venueId: venueId,
@@ -34,6 +34,19 @@ export default class ProductionService {
                 throw new Error("Production with this name already exists")
             } else if (e.response.status === 400) {
                 throw new Error("Bad request: details are not in expected format")
+            }
+        }
+    }
+
+    static getAllProductions = async () => {
+        try {
+            const response = await axios.get("http://localhost:8080/productions")
+            return response
+        } catch (e) {
+            if (e.response.status === 500) {
+                throw new Error("Internal server error")
+            } else {
+                throw new Error(e.message)
             }
         }
     }

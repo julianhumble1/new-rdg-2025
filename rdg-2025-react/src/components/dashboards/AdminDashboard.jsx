@@ -29,7 +29,7 @@ const AdminDashboard = () => {
           </div>
           <div className="flex flex-col">
             <Link to="/venues/new" className="underline text-blue-500 hover:text-blue-700">Add New Venue</Link>
-            <Link to="/venues/" className="underline text-blue-500 hover:text-blue-700">See All Venues</Link>
+            <Link to="/venues" className="underline text-blue-500 hover:text-blue-700">See All Venues</Link>
           </div>
         </div>
       </div>
@@ -41,6 +41,7 @@ const AdminDashboard = () => {
           </div>
           <div className="flex flex-col">
             <Link to="/productions/new" className="underline text-blue-500 hover:text-blue-700">Add New Production</Link>
+            <Link to="/productions" className="underline text-blue-500 hover:text-blue-700">See All Productions</Link>
           </div>
         </div>
 

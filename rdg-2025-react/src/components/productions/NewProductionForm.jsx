@@ -91,8 +91,7 @@ const NewProductionForm = () => {
                 <div className="italic">
                     Audition Date
                 </div>
-              {/* <input placeholder="12/12/12" className="border p-1" value={auditionDate} onChange={(e) => setAuditionDate(e.target.value)}/> */}
-              <DatePicker className="border rounded p-1" selected={auditionDate} onChange={(date) => setAuditionDate(date)} dateFormat="dd/MM/yyyy"/>
+              <DatePicker className="border rounded p-1" selected={auditionDate} onChange={(date) => setAuditionDate(date)} dateFormat="dd/MM/yyyy" isClearable/>
             </div>
             <div className=" flex gap-2">
                 <div className="italic">

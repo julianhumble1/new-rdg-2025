@@ -10,6 +10,7 @@ import AdminDashboard from "./components/dashboards/AdminDashboard.jsx"
 import NewVenueForm from "./components/venues/NewVenueForm.jsx"
 import AllVenuesList from "./components/venues/AllVenuesList.jsx"
 import NewProductionForm from "./components/productions/NewProductionForm.jsx"
+import AllProductionsList from "./components/productions/AllProductionsList.jsx"
 
 
 function App() {
@@ -47,9 +48,10 @@ function App() {
         <Route path="/admin-dashboard" element={<AdminDashboard />} />
 
         <Route path="/venues/new" element={<NewVenueForm />} />
-        <Route path="/venues/" element={<AllVenuesList />} />
+        <Route path="/venues" element={<AllVenuesList />} />
 
-        <Route path ="/productions/new" element={<NewProductionForm />} />
+        <Route path="/productions/new" element={<NewProductionForm />} />
+        <Route path="/productions" element={<AllProductionsList />} />
       </Routes>
     </Router>
   )
