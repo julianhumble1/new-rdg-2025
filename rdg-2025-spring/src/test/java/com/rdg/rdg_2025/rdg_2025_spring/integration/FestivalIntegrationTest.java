@@ -22,6 +22,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -105,6 +106,18 @@ public class FestivalIntegrationTest {
                                     "{\"name\": \"Test Festival\", \"year\": 2025, \"month\": 1, \"description\": \"Test Description\"}"
                             ))
                     .andExpect(status().isCreated());
+        }
+
+        @Test
+        void testFullFestivalDetailsWithNoVenueReturnsExpectedProductionObject() throws Exception {
+            mockMvc.perform(post("/festivals")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", adminToken)
+                            .content(
+                                    "{\"name\": \"Test Festival\", \"year\": 2025, \"month\": 1, \"description\": \"Test Description\"}"
+                            ))
+                    .andExpect(jsonPath("$.festival.name").value("Test Festival")
+                    );
         }
 
     }
