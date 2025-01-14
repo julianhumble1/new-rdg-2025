@@ -45,8 +45,13 @@ public class ProductionController {
 
     @GetMapping("/")
     public ResponseEntity<?> getAllProductions() {
-        List<Production> productions = productionService.getAllProductions();
-        return ResponseEntity.ok(new ProductionsResponse((ArrayList<Production>) productions));
+        try {
+            List<Production> productions = productionService.getAllProductions();
+            return ResponseEntity.ok(new ProductionsResponse((ArrayList<Production>) productions));
+
+        } catch (DatabaseException ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
+        }
     }
 
 
