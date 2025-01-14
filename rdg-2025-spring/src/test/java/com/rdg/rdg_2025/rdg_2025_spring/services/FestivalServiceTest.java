@@ -95,7 +95,17 @@ public class FestivalServiceTest {
         }
 
         @Test
-        void testDataAccessExceptionThrowsDatabaseException() {
+        void testVenueFindDataAccessExceptionThrowsDatabaseException() {
+            // Arrange
+            when(venueRepository.findById(1)).thenThrow(new DataAccessException("Data Access Error") {});
+            // Act & Assert
+            DatabaseException ex = assertThrows(DatabaseException.class, () ->
+                    festivalService.addNewFestival(testNewFestivalRequest)
+            );
+        }
+
+        @Test
+        void testFestivalSaveDataAccessExceptionThrowsDatabaseException() {
             // Arrange
             Venue testVenue = new Venue();
             when(venueRepository.findById(1)).thenReturn(Optional.of(testVenue));

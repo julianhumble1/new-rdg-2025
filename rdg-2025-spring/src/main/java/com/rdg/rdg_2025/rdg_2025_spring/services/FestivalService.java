@@ -25,8 +25,12 @@ public class FestivalService {
         Venue venue = null;
 
         if (newFestivalRequest.getVenueId() != 0) {
-            venue = venueRepository.findById(newFestivalRequest.getVenueId())
+            try {
+                venue = venueRepository.findById(newFestivalRequest.getVenueId())
                     .orElseThrow(() -> new EntityNotFoundException("Venue not found with id: " + newFestivalRequest.getVenueId()));
+            } catch (DataAccessException ex) {
+                throw new DatabaseException(ex.getMessage());
+            }
         }
 
         Festival festival = new Festival(
