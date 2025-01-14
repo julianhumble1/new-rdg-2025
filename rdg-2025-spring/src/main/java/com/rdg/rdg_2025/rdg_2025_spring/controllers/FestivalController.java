@@ -5,6 +5,7 @@ import com.rdg.rdg_2025.rdg_2025_spring.models.Festival;
 import com.rdg.rdg_2025.rdg_2025_spring.payload.request.festivals.NewFestivalRequest;
 import com.rdg.rdg_2025.rdg_2025_spring.payload.response.festival.NewFestivalResponse;
 import com.rdg.rdg_2025.rdg_2025_spring.services.FestivalService;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -31,6 +32,8 @@ public class FestivalController {
             return ResponseEntity.created(location).body(new NewFestivalResponse(festival));
         } catch (DatabaseException ex) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
+        } catch (EntityNotFoundException ex) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
         }
     }
 

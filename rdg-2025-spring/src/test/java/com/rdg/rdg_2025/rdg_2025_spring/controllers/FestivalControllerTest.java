@@ -6,6 +6,7 @@ import com.rdg.rdg_2025.rdg_2025_spring.models.Venue;
 import com.rdg.rdg_2025.rdg_2025_spring.payload.request.festivals.NewFestivalRequest;
 import com.rdg.rdg_2025.rdg_2025_spring.payload.request.production.NewProductionRequest;
 import com.rdg.rdg_2025.rdg_2025_spring.services.FestivalService;
+import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -124,6 +125,22 @@ public class FestivalControllerTest {
                                     "{\"name\": \"Test Festival\", \"venueId\": 1, \"year\": 2025, \"month\": 1, \"description\": \"Test Description\"}"
                             ))
                     .andExpect(status().isInternalServerError());
+        }
+
+        @Test
+        @WithMockUser(roles="ADMIN")
+        void testInvalidVenueIdReturns400BadRequest() throws Exception{
+            // Arrange
+            when(festivalService.addNewFestival(any(NewFestivalRequest.class))).thenThrow(new EntityNotFoundException("Invalid venue id"));
+
+            // Act & Assert
+            mockMvc.perform(post("/festivals")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(
+                                    "{\"name\": \"Test Festival\", \"venueId\": 1, \"year\": 2025, \"month\": 1, \"description\": \"Test Description\"}"
+                            ))
+                    .andExpect(status().isBadRequest()
+                    );
         }
 
 
