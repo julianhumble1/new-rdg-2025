@@ -23,6 +23,8 @@ public class FestivalService {
 
     public Festival addNewFestival(NewFestivalRequest newFestivalRequest) {
 
+        System.out.println("reached service" + newFestivalRequest);
+
         Venue venue = null;
 
         if (newFestivalRequest.getVenueId() != 0) {
@@ -43,6 +45,7 @@ public class FestivalService {
         );
 
         try {
+            System.out.println("reached attempt to save" + festival);
             Festival savedFestival = festivalRepository.save(festival);
             return savedFestival;
         } catch (DataAccessException | PersistenceException ex) {

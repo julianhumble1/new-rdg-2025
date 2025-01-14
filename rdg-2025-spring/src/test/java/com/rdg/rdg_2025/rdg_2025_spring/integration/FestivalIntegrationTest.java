@@ -135,5 +135,17 @@ public class FestivalIntegrationTest {
                     .andExpect(status().isCreated());
         }
 
+        @Test
+        void testOnlyNameAndYearReturns201() throws Exception {
+            // Act & Assert
+            mockMvc.perform(post("/festivals")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", adminToken)
+                            .content(
+                                    "{\"name\": \"Test Festival\", \"year\": 2025}"
+                            ))
+                    .andExpect(status().isCreated());
+        }
+
     }
 }

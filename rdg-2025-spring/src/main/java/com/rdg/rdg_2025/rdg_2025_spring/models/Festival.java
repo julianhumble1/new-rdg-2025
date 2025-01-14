@@ -27,11 +27,11 @@ public class Festival {
     @ManyToOne
     private Venue venue;
 
-    @NotNull
-    private Integer year;
+    @Min(1)
+    private int year;
 
     @Max(12)
-    @Min(1)
+    @Min(0)
     private int month;
 
     private String description;
