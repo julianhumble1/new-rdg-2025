@@ -115,7 +115,15 @@ public class ProductionServiceTest {
         }
 
         @Test
-        void testDataAccessExceptionThrowsDatabaseException() {
+        void testVenueDataAccessExceptionThrowsDatabaseException() {
+            // Arrange
+            when(venueRepository.findById(1)).thenThrow(new DataAccessException("Data access failed"){});
+            // Act & Assert
+            DatabaseException ex = assertThrows(DatabaseException.class, () -> productionService.addNewProduction(testNewProductionRequest));
+        }
+
+        @Test
+        void testProductionDataAccessExceptionThrowsDatabaseException() {
             // Arrange
             Venue testVenue = new Venue();
             when(venueRepository.findById(1)).thenReturn(Optional.of(testVenue));
@@ -127,7 +135,7 @@ public class ProductionServiceTest {
         }
 
         @Test
-        void testPersistenceExceptionThrowsDatabaseException () {
+        void testProductionPersistenceExceptionThrowsDatabaseException () {
             // Arrange
             Venue testVenue = new Venue();
             when(venueRepository.findById(1)).thenReturn(Optional.of(testVenue));

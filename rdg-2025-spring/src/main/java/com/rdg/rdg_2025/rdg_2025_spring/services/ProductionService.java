@@ -29,9 +29,14 @@ public class ProductionService {
         Venue venue = null;
 
         // if venue provided, check it exists
+
         if (newProductionRequest.getVenueId() != 0) {
+            try {
             venue = venueRepository.findById(newProductionRequest.getVenueId())
                     .orElseThrow(() -> new EntityNotFoundException("Venue not found with id: " + newProductionRequest.getVenueId()));
+            } catch (DataAccessException ex) {
+                throw new DatabaseException(ex.getMessage());
+            }
         }
 
         Production production = new Production(
