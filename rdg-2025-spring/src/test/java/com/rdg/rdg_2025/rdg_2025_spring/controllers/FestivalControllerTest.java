@@ -1,5 +1,6 @@
 package com.rdg.rdg_2025.rdg_2025_spring.controllers;
 
+import com.rdg.rdg_2025.rdg_2025_spring.exception.DatabaseException;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Festival;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Venue;
 import com.rdg.rdg_2025.rdg_2025_spring.payload.request.festivals.NewFestivalRequest;
@@ -109,6 +110,22 @@ public class FestivalControllerTest {
 
                     );
         }
+
+        @Test
+        @WithMockUser(roles="ADMIN")
+        void testDatabaseExceptionResponds500() throws Exception {
+            // Arrange
+            when(festivalService.addNewFestival(any(NewFestivalRequest.class))).thenThrow(new DatabaseException("Database Error"));
+
+            // Act & Assert
+            mockMvc.perform(post("/festivals")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(
+                                    "{\"name\": \"Test Festival\", \"venueId\": 1, \"year\": 2025, \"month\": 1, \"description\": \"Test Description\"}"
+                            ))
+                    .andExpect(status().isInternalServerError());
+        }
+
 
 
     }
