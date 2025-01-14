@@ -61,6 +61,7 @@ public class WebSecurityConfig {
                         auth.requestMatchers("/auth/**").permitAll()
                                 .requestMatchers("/checkAuth/**").permitAll()
                                 .requestMatchers("/venues/**").permitAll()
+                                .requestMatchers("productions/**").permitAll()
                                 .anyRequest().authenticated()
                 );
 

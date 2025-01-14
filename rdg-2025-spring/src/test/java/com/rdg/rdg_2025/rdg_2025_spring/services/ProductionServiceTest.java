@@ -18,6 +18,8 @@ import org.springframework.dao.DataIntegrityViolationException;
 
 import java.lang.reflect.Method;
 import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -212,6 +214,25 @@ public class ProductionServiceTest {
             }
 
         }
+
+    }
+
+    @Nested
+    @DisplayName("getAllProductions service tests")
+    class getAllProductionsServiceTests{
+
+        @Test
+        void testGetAllProductionsWithEmptyDatabaseReturnsEmptyList() {
+            // Arrange
+            when(productionRepository.findAll()).thenReturn(Collections.EMPTY_LIST);
+
+            // Act
+            List<Production> productions = productionService.getAllProductions();
+            // Assert
+            assertEquals(Collections.EMPTY_LIST, productions);
+
+        }
+
 
     }
 

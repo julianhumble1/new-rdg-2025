@@ -13,6 +13,8 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ProductionService {
 
@@ -54,7 +56,6 @@ public class ProductionService {
             throw new DatabaseException(ex.getMessage());
         }
 
-
     }
 
     private Production updateNameAndSlugIfRepeatPerformance(Production production) {
@@ -67,6 +68,13 @@ public class ProductionService {
         }
 
         return production;
+    }
+
+    public List<Production> getAllProductions() {
+
+        List<Production> productions = productionRepository.findAll();
+
+        return productions;
     }
 
 }
