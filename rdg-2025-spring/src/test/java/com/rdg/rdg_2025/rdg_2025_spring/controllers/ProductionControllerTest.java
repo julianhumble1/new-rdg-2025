@@ -106,7 +106,7 @@ public class ProductionControllerTest {
 
         @Test
         @WithMockUser(roles="ADMIN")
-        void testReturnedVenueWhenServiceSuccessfullySavesVenue() throws Exception{
+        void testExpectedReturnedProductionWhenServiceSuccessfullySavesProduction() throws Exception{
             // Arrange
             when(productionService.addNewProduction(any(NewProductionRequest.class))).thenReturn(testProduction);
 
