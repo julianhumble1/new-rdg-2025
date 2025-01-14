@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDateTime;
 
@@ -26,8 +27,8 @@ public class Festival {
     @ManyToOne
     private Venue venue;
 
-    @NotBlank
-    private int year;
+    @NotNull
+    private Integer year;
 
     @Max(12)
     @Min(1)
