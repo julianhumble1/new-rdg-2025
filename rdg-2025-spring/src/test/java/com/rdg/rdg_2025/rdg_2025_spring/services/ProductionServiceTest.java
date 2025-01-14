@@ -238,13 +238,13 @@ public class ProductionServiceTest {
         @Test
         void testGetAllProductionsWithOneProductionInDatabaseReturnsListLengthOne() {
             // Arrange
-            Production production = new Production(
+            Production testProduction = new Production(
                     "Test Production",
                     new Venue(), null, null, null,  false, false, null
             );
-            ArrayList<Production> productionList = new ArrayList<>();
-            productionList.add(production);
-            when(productionRepository.findAll()).thenReturn(productionList);
+            ArrayList<Production> testProductionList = new ArrayList<>();
+            testProductionList.add(testProduction);
+            when(productionRepository.findAll()).thenReturn(testProductionList);
 
             // Act
             List<Production> productions = productionService.getAllProductions();
@@ -256,18 +256,41 @@ public class ProductionServiceTest {
         @Test
         void testGetAllProductionsWithOneProductionInDatabaseReturnsExpectedProduction() {
             // Arrange
-            Production production = new Production(
+            Production testProduction = new Production(
                     "Test Production",
                     new Venue(), null, null, null,  false, false, null
             );
-            ArrayList<Production> productionList = new ArrayList<>();
-            productionList.add(production);
-            when(productionRepository.findAll()).thenReturn(productionList);
+            ArrayList<Production> testProductionList = new ArrayList<>();
+            testProductionList.add(testProduction);
+            when(productionRepository.findAll()).thenReturn(testProductionList);
 
             // Act
             List<Production> productions = productionService.getAllProductions();
             // Assert
-            assertEquals(production, productions.get(0));
+            assertEquals(testProduction, productions.get(0));
+
+        }
+
+        @Test
+        void testGetAllProductionsMultipleProductionsInDatabaseReturnsExpectedLength() {
+            // Arrange
+            Production testProduction1 = new Production(
+                    "Test Production",
+                    new Venue(), null, null, null,  false, false, null
+            );
+            Production testProduction2 = new Production(
+                    "Another Test Production",
+                    new Venue(), null, null, null,  false, false, null
+            );
+            ArrayList<Production> testProductionList = new ArrayList<>();
+            testProductionList.add(testProduction1);
+            testProductionList.add(testProduction2);
+            when(productionRepository.findAll()).thenReturn(testProductionList);
+
+            // Act
+            List<Production> productions = productionService.getAllProductions();
+            // Assert
+            assertEquals(2, productions.size());
 
         }
 
