@@ -220,6 +220,20 @@ public class FestivalControllerTest {
                     .andExpect(status().isBadRequest());
         }
 
+        @Test
+        @WithMockUser(roles="ADMIN")
+        void testMissingYearResponds400BadRequest() throws Exception {
+            // Arrange
+
+            // Act & Assert
+            mockMvc.perform(post("/festivals")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(
+                                    "{\"name\": \"Test Festival\", \"venueId\": 1, \"month\": 1, \"description\": \"Test Description\"}"
+                            ))
+                    .andExpect(status().isBadRequest());
+        }
+
 
 
     }
