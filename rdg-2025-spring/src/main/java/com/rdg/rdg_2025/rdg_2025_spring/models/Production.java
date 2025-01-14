@@ -1,5 +1,8 @@
 package com.rdg.rdg_2025.rdg_2025_spring.models;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.rdg.rdg_2025.rdg_2025_spring.helpers.SlugUtils;
 import jakarta.persistence.*;
 
@@ -7,6 +10,9 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name="productions")
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id")
 public class Production {
 
     @Id

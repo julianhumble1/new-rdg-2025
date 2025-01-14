@@ -163,7 +163,7 @@ public class VenueIntegrationTest {
                     .andExpect(status().isBadRequest());
         }
 
-        // Commenting out as getting strange results and unable to make it pass although functions as expected in reality
+        // Disabling as getting strange results and unable to make it pass although functions as expected in reality
         @Test
         @Disabled
         void testDuplicateNameVenueReturns409() throws Exception {
