@@ -8,6 +8,7 @@ import com.rdg.rdg_2025.rdg_2025_spring.payload.request.festivals.NewFestivalReq
 import com.rdg.rdg_2025.rdg_2025_spring.repository.FestivalRepository;
 import com.rdg.rdg_2025.rdg_2025_spring.repository.VenueRepository;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.persistence.PersistenceException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -117,6 +118,23 @@ public class FestivalServiceTest {
             // Act & Assert
             DatabaseException ex = assertThrows(DatabaseException.class, () ->
                 festivalService.addNewFestival(testNewFestivalRequest)
+            );
+
+        }
+
+        @Test
+        void testFestivalSavePersistenceExceptionThrowsDatabaseException() {
+            // Arrange
+            Venue testVenue = new Venue();
+            when(venueRepository.findById(1)).thenReturn(Optional.of(testVenue));
+
+            when(festivalRepository.save(any(Festival.class))).thenThrow(
+                    new PersistenceException("Persistence Error") {}
+            );
+
+            // Act & Assert
+            DatabaseException ex = assertThrows(DatabaseException.class, () ->
+                    festivalService.addNewFestival(testNewFestivalRequest)
             );
 
         }
