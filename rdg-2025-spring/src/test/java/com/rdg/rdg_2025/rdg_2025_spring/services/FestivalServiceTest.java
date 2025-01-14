@@ -1,5 +1,6 @@
 package com.rdg.rdg_2025.rdg_2025_spring.services;
 
+import com.rdg.rdg_2025.rdg_2025_spring.exception.DatabaseException;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Festival;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Production;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Venue;
@@ -14,6 +15,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.dao.DataAccessException;
 
 import java.util.Optional;
 
@@ -89,6 +91,23 @@ public class FestivalServiceTest {
             Festival result = festivalService.addNewFestival(onlyNameAndYearFestivalRequest);
             // Assert
             assertEquals(onlyNameAndYearFestival, result);
+
+        }
+
+        @Test
+        void testDataAccessExceptionThrowsDatabaseException() {
+            // Arrange
+            Venue testVenue = new Venue();
+            when(venueRepository.findById(1)).thenReturn(Optional.of(testVenue));
+
+            when(festivalRepository.save(any(Festival.class))).thenThrow(
+                    new DataAccessException("Data Access Error") {}
+            );
+
+            // Act & Assert
+            DatabaseException ex = assertThrows(DatabaseException.class, () ->
+                festivalService.addNewFestival(testNewFestivalRequest)
+            );
 
         }
 
