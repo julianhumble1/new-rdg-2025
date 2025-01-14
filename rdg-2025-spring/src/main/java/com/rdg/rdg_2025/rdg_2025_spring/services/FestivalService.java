@@ -20,14 +20,24 @@ public class FestivalService {
 
     public Festival addNewFestival(NewFestivalRequest newFestivalRequest) {
 
-        Venue venue = new Venue();
+        Venue venue = null;
 
         if (newFestivalRequest.getVenueId() != 0) {
             venue = venueRepository.findById(newFestivalRequest.getVenueId())
                     .orElseThrow(() -> new EntityNotFoundException("Venue not found with id: " + newFestivalRequest.getVenueId()));
         }
 
-        return new Festival();
+        Festival festival = new Festival(
+                newFestivalRequest.getName(),
+                venue,
+                newFestivalRequest.getYear(),
+                newFestivalRequest.getMonth(),
+                newFestivalRequest.getDescription()
+        );
+
+        Festival savedFestival = festivalRepository.save(festival);
+
+        return savedFestival;
     }
 
 }

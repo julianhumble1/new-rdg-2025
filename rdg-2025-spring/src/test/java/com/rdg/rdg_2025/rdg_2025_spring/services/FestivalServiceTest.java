@@ -14,6 +14,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -51,6 +54,21 @@ public class FestivalServiceTest {
             EntityNotFoundException ex = assertThrows(EntityNotFoundException.class, () -> {
                 festivalService.addNewFestival(testNewFestivalRequest);
             });
+        }
+
+        @Test
+        void testNewFestivalWithFullDetailsIncludingVenueReturnsFestivalObject() {
+            // Arrange
+            Venue testVenue = new Venue();
+            when(venueRepository.findById(any())).thenReturn(Optional.of(testVenue));
+
+            when(festivalRepository.save(any(Festival.class))).thenReturn(testFestival);
+
+            // Act
+            Festival result = festivalService.addNewFestival(testNewFestivalRequest);
+            // Assert
+            assertEquals(testFestival, result);
+
         }
 
     }
