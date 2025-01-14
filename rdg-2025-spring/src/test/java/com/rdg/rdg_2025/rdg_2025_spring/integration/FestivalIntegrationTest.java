@@ -269,6 +269,18 @@ public class FestivalIntegrationTest {
                     .andExpect(status().isUnauthorized());
         }
 
+        @Test
+        void testUserTokenResponds403() throws Exception {
+            // Act & Assert
+            mockMvc.perform(post("/festivals")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", userToken)
+                            .content(
+                                    "{\"name\": \"Test Festival\", \"year\": 2025, \"month\": 1, \"description\": \"Test Description\"}"
+                            ))
+                    .andExpect(status().isForbidden());
+        }
+
 
 
     }
