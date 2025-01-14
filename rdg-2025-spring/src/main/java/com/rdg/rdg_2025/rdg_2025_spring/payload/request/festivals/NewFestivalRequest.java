@@ -12,7 +12,7 @@ public class NewFestivalRequest {
 
     private int venueId;
 
-    @NotNull
+    @Min(1)
     private int year;
 
     @Max(12)
@@ -30,6 +30,17 @@ public class NewFestivalRequest {
     }
 
     public NewFestivalRequest() {
+    }
+
+    @Override
+    public String toString() {
+        return "NewFestivalRequest{" +
+                "name='" + name + '\'' +
+                ", venueId=" + venueId +
+                ", year=" + year +
+                ", month=" + month +
+                ", description='" + description + '\'' +
+                '}';
     }
 
     public String getName() {

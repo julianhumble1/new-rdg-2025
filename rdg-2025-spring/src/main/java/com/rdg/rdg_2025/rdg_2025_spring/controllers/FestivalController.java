@@ -27,6 +27,7 @@ public class FestivalController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> createNewFestival(@Valid @RequestBody NewFestivalRequest newFestivalRequest) {
         try {
+            System.out.println(newFestivalRequest);
             Festival festival = festivalService.addNewFestival(newFestivalRequest);
             URI location = URI.create("/festivals/" + festival.getId());
             return ResponseEntity.created(location).body(new NewFestivalResponse(festival));
