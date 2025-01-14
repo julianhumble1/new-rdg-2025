@@ -181,15 +181,28 @@ public class FestivalControllerTest {
         @WithMockUser(roles="ADMIN")
         void testEmptyNameResponds400BadRequest() throws Exception {
             // Arrange
-            Festival onlyNameAndYearFestival = new Festival("Test Festival", null, 2025, 0, null);
 
-            when(festivalService.addNewFestival(any(NewFestivalRequest.class))).thenReturn(onlyNameAndYearFestival);
 
             // Act & Assert
             mockMvc.perform(post("/festivals")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(
                                     "{\"name\": \"\", \"venueId\": 1, \"year\": 2025, \"month\": 1, \"description\": \"Test Description\"}"
+                            ))
+                    .andExpect(status().isBadRequest());
+        }
+
+        @Test
+        @WithMockUser(roles="ADMIN")
+        void testMissingNameResponds400BadRequest() throws Exception {
+            // Arrange
+
+
+            // Act & Assert
+            mockMvc.perform(post("/festivals")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(
+                                    "{\"venueId\": 1, \"year\": 2025, \"month\": 1, \"description\": \"Test Description\"}"
                             ))
                     .andExpect(status().isBadRequest());
         }
