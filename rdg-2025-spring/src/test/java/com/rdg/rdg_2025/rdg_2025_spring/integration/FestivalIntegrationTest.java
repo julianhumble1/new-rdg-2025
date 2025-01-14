@@ -147,5 +147,21 @@ public class FestivalIntegrationTest {
                     .andExpect(status().isCreated());
         }
 
+        @Test
+        void testInvalidVenueIdResponds400BadRequest() throws Exception {
+            // Arrange
+            int testVenueId = testVenue1.getId();
+            // Act & Assert
+            mockMvc.perform(post("/festivals")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", adminToken)
+                            .content(
+                                    "{\"name\": \"Test Festival\",\"venueId\": " + (testVenueId - 1) + ", \"year\": 2025, \"month\": 1, \"description\": \"Test Description\"}"
+                            ))
+                    .andExpect(status().isBadRequest());
+        }
+
+
+
     }
 }
