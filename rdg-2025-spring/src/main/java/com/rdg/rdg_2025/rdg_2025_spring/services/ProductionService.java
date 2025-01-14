@@ -72,9 +72,14 @@ public class ProductionService {
 
     public List<Production> getAllProductions() {
 
-        List<Production> productions = productionRepository.findAll();
+        try {
+            List<Production> productions = productionRepository.findAll();
+            return productions;
 
-        return productions;
+        } catch (DataAccessException ex) {
+            throw new DatabaseException(ex.getMessage());
+        }
+
     }
 
 }

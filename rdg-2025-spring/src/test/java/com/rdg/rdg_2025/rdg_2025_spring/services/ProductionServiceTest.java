@@ -294,6 +294,17 @@ public class ProductionServiceTest {
 
         }
 
+        @Test
+        void testDataAccessExceptionThrowsDatabaseException() {
+            // Arrange
+            when(productionRepository.findAll()).thenThrow(new DataAccessException("Data access failed"){});
+
+            // Act & Assert
+            DatabaseException ex = assertThrows(DatabaseException.class, () -> {
+                productionService.getAllProductions();
+            });
+        }
+
 
     }
 
