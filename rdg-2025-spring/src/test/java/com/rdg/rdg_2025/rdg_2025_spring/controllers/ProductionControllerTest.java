@@ -334,5 +334,17 @@ public class ProductionControllerTest {
 
         }
 
+        @Test
+        void testSuccessfulGetResponseContainsProductionObject() throws Exception {
+            // Arrange
+            ArrayList<Production> productions = new ArrayList<>();
+            productions.add(testProduction);
+            when(productionService.getAllProductions()).thenReturn(productions);
+            // Act & Assert
+            mockMvc.perform(get("/productions/"))
+                    .andExpect(jsonPath("$.productions[0].name").value("Test Production"));
+
+        }
+
     }
 }
