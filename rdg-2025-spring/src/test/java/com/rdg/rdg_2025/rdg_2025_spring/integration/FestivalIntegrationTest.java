@@ -222,6 +222,30 @@ public class FestivalIntegrationTest {
                     .andExpect(status().isBadRequest());
         }
 
+        @Test
+        void testMonthNotIntResponds400BadRequest() throws Exception {
+            // Act & Assert
+            mockMvc.perform(post("/festivals")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", adminToken)
+                            .content(
+                                    "{\"name\": \"Test Festival\",\"year\": 2025, \"month\": \"Bad month\", \"description\": \"Test Description\"}"
+                            ))
+                    .andExpect(status().isBadRequest());
+        }
+
+        @Test
+        void testMonthAbove12Responds400BadRequest() throws Exception {
+            // Act & Assert
+            mockMvc.perform(post("/festivals")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", adminToken)
+                            .content(
+                                    "{\"name\": \"Test Festival\",\"year\": 2025, \"month\": 13, \"description\": \"Test Description\"}"
+                            ))
+                    .andExpect(status().isBadRequest());
+        }
+
 
 
     }
