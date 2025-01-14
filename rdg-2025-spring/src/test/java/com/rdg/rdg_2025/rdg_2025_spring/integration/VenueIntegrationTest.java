@@ -86,7 +86,7 @@ public class VenueIntegrationTest {
 
         @Test
         void testFullVenueDetailsWithAdminTokenReturns201() throws Exception {
-            mockMvc.perform(post("/venues/new")
+            mockMvc.perform(post("/venues")
                     .contentType(MediaType.APPLICATION_JSON)
                     .header("Authorization", adminToken)
                     .content(
@@ -98,7 +98,7 @@ public class VenueIntegrationTest {
 
         @Test
         void testVenueNameOthersEmptyWithAdminTokenReturns201() throws Exception {
-            mockMvc.perform(post("/venues/new")
+            mockMvc.perform(post("/venues")
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", adminToken)
                             .content(
@@ -110,7 +110,7 @@ public class VenueIntegrationTest {
 
         @Test
         void testMultipleVenuesWithDifferentNamesCanBeAdded() throws Exception {
-            mockMvc.perform(post("/venues/new")
+            mockMvc.perform(post("/venues")
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", adminToken)
                             .content(
@@ -118,7 +118,7 @@ public class VenueIntegrationTest {
                                             "\"town\": \"\", \"url\": \"\" }"
                             ));
 
-            mockMvc.perform(post("/venues/new")
+            mockMvc.perform(post("/venues")
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", adminToken)
                             .content(
@@ -130,7 +130,7 @@ public class VenueIntegrationTest {
 
         @Test
         void testVenueNameOthersMissingWithAdminTokenReturns201() throws Exception {
-            mockMvc.perform(post("/venues/new")
+            mockMvc.perform(post("/venues")
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", adminToken)
                             .content(
@@ -141,7 +141,7 @@ public class VenueIntegrationTest {
 
         @Test
         void testMissingVenueNameWithAdminTokenReturns400() throws Exception {
-            mockMvc.perform(post("/venues/new")
+            mockMvc.perform(post("/venues")
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", adminToken)
                             .content(
@@ -153,7 +153,7 @@ public class VenueIntegrationTest {
 
         @Test
         void testEmptyVenueNameWithAdminTokenReturns400() throws Exception {
-            mockMvc.perform(post("/venues/new")
+            mockMvc.perform(post("/venues")
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", adminToken)
                             .content(
@@ -170,7 +170,7 @@ public class VenueIntegrationTest {
             Venue venue = new Venue("Test Venue", null, null, null, null, null);
             venueRepository.save(venue);
 
-            mockMvc.perform(post("/venues/new")
+            mockMvc.perform(post("/venues")
                     .contentType(MediaType.APPLICATION_JSON)
                     .header("Authorization", adminToken)
                     .content(
@@ -182,7 +182,7 @@ public class VenueIntegrationTest {
 
         @Test
         void testMissingTokenReturns401() throws Exception {
-            mockMvc.perform(post("/venues/new")
+            mockMvc.perform(post("/venues")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(
                                     "{ \"name\": \"Test Venue\", \"notes\": \"Test Notes\", \"postcode\": \"Test Postcode\", \"address\": \"Test Address\", " +
@@ -193,7 +193,7 @@ public class VenueIntegrationTest {
 
         @Test
         void testBadTokenReturns401() throws Exception {
-            mockMvc.perform(post("/venues/new")
+            mockMvc.perform(post("/venues")
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", "fake token")
                             .content(
@@ -205,7 +205,7 @@ public class VenueIntegrationTest {
 
         @Test
         void testUserTokenReturns403() throws Exception {
-            mockMvc.perform(post("/venues/new")
+            mockMvc.perform(post("/venues")
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", userToken)
                             .content(
@@ -225,7 +225,7 @@ public class VenueIntegrationTest {
         @Test
         void testSuccessfulGetWithAdminTokenReturns200() throws Exception {
             // Act & Assert
-            mockMvc.perform(get("/venues/")
+            mockMvc.perform(get("/venues")
                     .header("Authorization", adminToken))
                     .andExpect(status().isOk());
         }
@@ -237,23 +237,22 @@ public class VenueIntegrationTest {
             venueRepository.save(venue);
 
             // Act & Assert
-            mockMvc.perform(get("/venues/")
+            mockMvc.perform(get("/venues")
                     .header("Authorization", adminToken))
                     .andExpect(jsonPath("$.venues").isArray());
-
         }
 
         @Test
         void testMissingAdminTokenReturns401() throws Exception {
             // Act & Assert
-            mockMvc.perform(get("/venues/"))
+            mockMvc.perform(get("/venues"))
                     .andExpect(status().isUnauthorized());
         }
 
         @Test
         void testBadAdminTokenReturns401() throws Exception {
             // Act & Assert
-            mockMvc.perform(get("/venues/")
+            mockMvc.perform(get("/venues")
                             .header("Authorization", "Fake token"))
                     .andExpect(status().isUnauthorized());
         }
@@ -261,7 +260,7 @@ public class VenueIntegrationTest {
         @Test
         void testUserTokenReturns403() throws Exception {
             // Act & Assert
-            mockMvc.perform(get("/venues/")
+            mockMvc.perform(get("/venues")
                             .header("Authorization", userToken))
                     .andExpect(status().isForbidden());
         }

@@ -27,7 +27,7 @@ public class VenueController {
     @Autowired
     VenueService venueService;
 
-    @PostMapping("/new")
+    @PostMapping()
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> addNewVenue(@Valid @RequestBody NewVenueRequest newVenueRequest) {
 
@@ -43,7 +43,7 @@ public class VenueController {
 
     }
 
-    @GetMapping("/")
+    @GetMapping()
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> getAllVenues() {
         try {

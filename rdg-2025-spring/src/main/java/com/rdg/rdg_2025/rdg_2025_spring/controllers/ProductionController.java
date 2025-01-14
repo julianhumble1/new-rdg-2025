@@ -27,7 +27,7 @@ public class ProductionController {
     @Autowired
     ProductionService productionService;
 
-    @PostMapping("/new")
+    @PostMapping()
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> addNewProduction(@Valid @RequestBody NewProductionRequest newProductionRequest) {
         try {
@@ -43,7 +43,7 @@ public class ProductionController {
         }
     }
 
-    @GetMapping("/")
+    @GetMapping()
     public ResponseEntity<?> getAllProductions() {
         try {
             List<Production> productions = productionService.getAllProductions();

@@ -75,7 +75,7 @@ public class ProductionControllerTest {
             when(productionService.addNewProduction(any(NewProductionRequest.class))).thenReturn(testProduction);
 
             // Act & Assert
-            mockMvc.perform(post("/productions/new")
+            mockMvc.perform(post("/productions")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(
                             "{ \"name\": \"Test Production\", \"venueId\": \"1\", \"author\": \"Test Author\", \"description\": \"Test Description\", " +
@@ -93,13 +93,14 @@ public class ProductionControllerTest {
             int testProductionId = testProduction.getId();
 
             // Act & Assert
-            mockMvc.perform(post("/productions/new")
+            mockMvc.perform(post("/productions")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(
                                     "{ \"name\": \"Test Production\", \"venueId\": \"1\", \"author\": \"Test Author\", \"description\": \"Test Description\", " +
                                             "\"auditionDate\": \"2025-10-10T10:00:00\", \"sundowners\": false, \"notConfirmed\": false, \"flyerFile\": \"Test Flyer File\" }"
                             ))
-                    .andExpect(header().string("Location", "/productions/" + testProductionId)
+                    .andExpect(header().string("Location", "/productions" + "/" + testProductionId)
+
                     );
         }
 
@@ -112,7 +113,7 @@ public class ProductionControllerTest {
             String formattedAuditionDate = testProduction.getAuditionDate().format(formatter);
 
             // Act & Assert
-            mockMvc.perform(post("/productions/new")
+            mockMvc.perform(post("/productions")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(
                                     "{ \"name\": \"Test Production\", \"venueId\": \"1\", \"author\": \"Test Author\", \"description\": \"Test Description\", " +
@@ -141,7 +142,7 @@ public class ProductionControllerTest {
             when(productionService.addNewProduction(any(NewProductionRequest.class))).thenThrow(new DataIntegrityViolationException("Data integrity violation"));
 
             // Act & Assert
-            mockMvc.perform(post("/productions/new")
+            mockMvc.perform(post("/productions")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(
                                     "{ \"name\": \"Test Production\", \"venueId\": \"1\", \"author\": \"Test Author\", \"description\": \"Test Description\", " +
@@ -158,7 +159,7 @@ public class ProductionControllerTest {
             when(productionService.addNewProduction(any(NewProductionRequest.class))).thenThrow(new DatabaseException("Database Exception"));
 
             // Act & Assert
-            mockMvc.perform(post("/productions/new")
+            mockMvc.perform(post("/productions")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(
                                     "{ \"name\": \"Test Production\", \"venueId\": \"1\", \"author\": \"Test Author\", \"description\": \"Test Description\", " +
@@ -175,7 +176,7 @@ public class ProductionControllerTest {
             when(productionService.addNewProduction(any(NewProductionRequest.class))).thenThrow(new EntityNotFoundException("Invalid Venue Id"));
 
             // Act & Assert
-            mockMvc.perform(post("/productions/new")
+            mockMvc.perform(post("/productions")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(
                                     "{ \"name\": \"Test Production\", \"venueId\": \"1\", \"author\": \"Test Author\", \"description\": \"Test Description\", " +
@@ -198,7 +199,7 @@ public class ProductionControllerTest {
             when(productionService.addNewProduction(any(NewProductionRequest.class))).thenReturn(emptyNonNameValuesProduction);
 
             // Act & Assert
-            mockMvc.perform(post("/productions/new")
+            mockMvc.perform(post("/productions")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(
                                     "{ \"name\": \"Test Production\", \"venueId\": \"\", \"author\": \"\", \"description\": \"\", " +
@@ -222,7 +223,7 @@ public class ProductionControllerTest {
             when(productionService.addNewProduction(any(NewProductionRequest.class))).thenReturn(emptyNonNameValuesProduction);
 
             // Act & Assert
-            mockMvc.perform(post("/productions/new")
+            mockMvc.perform(post("/productions")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(
                                     "{ \"name\": \"Test Production\"}"
@@ -235,7 +236,7 @@ public class ProductionControllerTest {
         @WithMockUser(roles="ADMIN")
         void testEmptyNameReturns400BadRequest() throws Exception{
             // Act & Assert
-            mockMvc.perform(post("/productions/new")
+            mockMvc.perform(post("/productions")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(
                                     "{\"venueId\": \"1\", \"author\": \"Test Author\", \"description\": \"Test Description\", " +
@@ -249,7 +250,7 @@ public class ProductionControllerTest {
         @WithMockUser(roles="ADMIN")
         void testMissingNameReturns400BadRequest() throws Exception{
             // Act & Assert
-            mockMvc.perform(post("/productions/new")
+            mockMvc.perform(post("/productions")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(
                                     "{\"name\":\"\", \"venueId\": \"1\", \"author\": \"Test Author\", \"description\": \"Test Description\", " +
@@ -263,7 +264,7 @@ public class ProductionControllerTest {
         @WithMockUser(roles="ADMIN")
         void testVenueIdNotIntReturns400BadRequest() throws Exception{
             // Act & Assert
-            mockMvc.perform(post("/productions/new")
+            mockMvc.perform(post("/productions")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(
                                     "{\"name\":\"Test Production\", \"venueId\": \"Bad Venue Id\", \"author\": \"Test Author\", \"description\": \"Test Description\", " +
@@ -277,7 +278,7 @@ public class ProductionControllerTest {
         @WithMockUser(roles="ADMIN")
         void testAuditionDateNotDateReturns400BadRequest() throws Exception{
             // Act & Assert
-            mockMvc.perform(post("/productions/new")
+            mockMvc.perform(post("/productions")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(
                                     "{\"name\":\"Test Production\", \"venueId\": \"1\", \"author\": \"Test Author\", \"description\": \"Test Description\", " +
@@ -291,7 +292,7 @@ public class ProductionControllerTest {
         @WithMockUser(roles="ADMIN")
         void testSundownersNotBooleanReturns400BadRequest() throws Exception{
             // Act & Assert
-            mockMvc.perform(post("/productions/new")
+            mockMvc.perform(post("/productions")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(
                                     "{\"name\":\"Test Production\", \"venueId\": \"1\", \"author\": \"Test Author\", \"description\": \"Test Description\", " +
@@ -305,7 +306,7 @@ public class ProductionControllerTest {
         @WithMockUser(roles="ADMIN")
         void testNotConfirmedNotBooleanReturns400BadRequest() throws Exception{
             // Act & Assert
-            mockMvc.perform(post("/productions/new")
+            mockMvc.perform(post("/productions")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(
                                     "{\"name\":\"Test Production\", \"venueId\": \"1\", \"author\": \"Test Author\", \"description\": \"Test Description\", " +
@@ -329,7 +330,7 @@ public class ProductionControllerTest {
             ArrayList<Production> productions = new ArrayList<>();
             when(productionService.getAllProductions()).thenReturn(productions);
             // Act & Assert
-            mockMvc.perform(get("/productions/"))
+            mockMvc.perform(get("/productions"))
                     .andExpect(status().isOk());
 
         }
@@ -341,7 +342,7 @@ public class ProductionControllerTest {
             productions.add(testProduction);
             when(productionService.getAllProductions()).thenReturn(productions);
             // Act & Assert
-            mockMvc.perform(get("/productions/"))
+            mockMvc.perform(get("/productions"))
                     .andExpect(jsonPath("$.productions[0].name").value("Test Production"));
 
         }
@@ -352,7 +353,7 @@ public class ProductionControllerTest {
             when(productionService.getAllProductions()).thenThrow(new DatabaseException("Database Error"));
 
             // Act & Assert
-            mockMvc.perform(get("/productions/"))
+            mockMvc.perform(get("/productions"))
                     .andExpect(status().isInternalServerError());
         }
 

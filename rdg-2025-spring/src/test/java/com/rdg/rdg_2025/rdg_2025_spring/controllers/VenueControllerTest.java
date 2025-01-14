@@ -62,7 +62,7 @@ public class VenueControllerTest {
             when(venueService.addNewVenue(any(NewVenueRequest.class))).thenReturn(testVenue);
 
             // Act & Assert
-            mockMvc.perform(post("/venues/new")
+            mockMvc.perform(post("/venues")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(
                             "{ \"name\": \"Test Venue\", \"notes\": \"Test Notes\", \"postcode\": \"Test Postcode\", \"address\": \"Test Address\", " +
@@ -81,7 +81,7 @@ public class VenueControllerTest {
             when(venueService.addNewVenue(any(NewVenueRequest.class))).thenReturn(testVenue);
 
             // Act & Assert
-            mockMvc.perform(post("/venues/new")
+            mockMvc.perform(post("/venues")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(
                                     "{ \"name\": \"Test Venue\", \"notes\": \"Test Notes\", \"postcode\": \"Test Postcode\", \"address\": \"Test Address\", " +
@@ -99,7 +99,7 @@ public class VenueControllerTest {
             when(venueService.addNewVenue(any(NewVenueRequest.class))).thenReturn(testVenue);
 
             // Act & Assert
-            mockMvc.perform(post("/venues/new")
+            mockMvc.perform(post("/venues")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(
                                     "{ \"name\": \"Test Venue\", \"notes\": \"Test Notes\", \"postcode\": \"Test Postcode\", \"address\": \"Test Address\", " +
@@ -127,7 +127,7 @@ public class VenueControllerTest {
             when(venueService.addNewVenue(any(NewVenueRequest.class))).thenThrow(new DataIntegrityViolationException("Data integrity violation"));
 
             // Act & Assert
-            mockMvc.perform(post("/venues/new")
+            mockMvc.perform(post("/venues")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(
                                     "{ \"name\": \"Test Venue\", \"notes\": \"Test Notes\", \"postcode\": \"Test Postcode\", \"address\": \"Test Address\", " +
@@ -145,7 +145,7 @@ public class VenueControllerTest {
             when(venueService.addNewVenue(any(NewVenueRequest.class))).thenThrow(new DatabaseException("Database Error"));
 
             // Act & Assert
-            mockMvc.perform(post("/venues/new")
+            mockMvc.perform(post("/venues")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(
                                     "{ \"name\": \"Test Venue\", \"notes\": \"Test Notes\", \"postcode\": \"Test Postcode\", \"address\": \"Test Address\", " +
@@ -160,7 +160,7 @@ public class VenueControllerTest {
         void testEmptyNameReturns400BadRequest() throws Exception{
 
             // Act & Assert
-            mockMvc.perform(post("/venues/new")
+            mockMvc.perform(post("/venues")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(
                                     "{ \"name\": \"\", \"notes\": \"Test Notes\", \"postcode\": \"Test Postcode\", \"address\": \"Test Address\", " +
@@ -175,7 +175,7 @@ public class VenueControllerTest {
         void testMissingNameReturns400BadRequest() throws Exception{
 
             // Act & Assert
-            mockMvc.perform(post("/venues/new")
+            mockMvc.perform(post("/venues")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(
                                     "{ \"notes\": \"Test Notes\", \"postcode\": \"Test Postcode\", \"address\": \"Test Address\", " +
@@ -193,7 +193,7 @@ public class VenueControllerTest {
             when(venueService.addNewVenue(any(NewVenueRequest.class))).thenReturn(testVenue);
 
             // Act & Assert
-            mockMvc.perform(post("/venues/new")
+            mockMvc.perform(post("/venues")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(
                                     "{ \"name\": \"Test Venue\" }"
@@ -210,7 +210,7 @@ public class VenueControllerTest {
             when(venueService.addNewVenue(any(NewVenueRequest.class))).thenReturn(testVenue);
 
             // Act & Assert
-            mockMvc.perform(post("/venues/new")
+            mockMvc.perform(post("/venues")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(
                                     "{ \"name\": \"Test Venue\", \"notes\": \"\", \"postcode\": \"\", \"address\": \"\", " +
@@ -233,7 +233,7 @@ public class VenueControllerTest {
             ArrayList<Venue> venues = new ArrayList<>();
             when(venueService.getAllVenues()).thenReturn(venues);
             // Act & Assert
-            mockMvc.perform(get("/venues/"))
+            mockMvc.perform(get("/venues"))
                             .andExpect(status().isOk());
 
         }
@@ -248,7 +248,7 @@ public class VenueControllerTest {
 
             when(venueService.getAllVenues()).thenReturn(venues);
             // Act & Assert
-            mockMvc.perform(get("/venues/"))
+            mockMvc.perform(get("/venues"))
                     .andExpect(jsonPath("$.venues[0].name").value("Test Venue"));
 
         }
@@ -260,7 +260,7 @@ public class VenueControllerTest {
             when(venueService.getAllVenues()).thenThrow(new DatabaseException("Database Error"));
 
             // Act & Assert
-            mockMvc.perform(get("/venues/"))
+            mockMvc.perform(get("/venues"))
                     .andExpect(status().isInternalServerError());
         }
 

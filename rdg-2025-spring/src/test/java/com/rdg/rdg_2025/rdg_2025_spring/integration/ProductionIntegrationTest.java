@@ -100,7 +100,7 @@ public class ProductionIntegrationTest {
 
         @Test
         void testFullProductionDetailsWithNoVenueReturns201() throws Exception {
-            mockMvc.perform(post("/productions/new")
+            mockMvc.perform(post("/productions")
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", adminToken)
                             .content(
@@ -113,7 +113,7 @@ public class ProductionIntegrationTest {
 
         @Test
         void testFullProductionDetailsWithNoVenueReturnsExpectedProductionObject() throws Exception {
-            mockMvc.perform(post("/productions/new")
+            mockMvc.perform(post("/productions")
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", adminToken)
                             .content(
@@ -126,7 +126,7 @@ public class ProductionIntegrationTest {
 
         @Test
         void testFullProductionDetailsWithValidVenueReturns201() throws Exception {
-            mockMvc.perform(post("/productions/new")
+            mockMvc.perform(post("/productions")
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", adminToken)
                             .content(
@@ -139,7 +139,7 @@ public class ProductionIntegrationTest {
 
         @Test
         void testOnlyNameReturns201() throws Exception {
-            mockMvc.perform(post("/productions/new")
+            mockMvc.perform(post("/productions")
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", adminToken)
                             .content(
@@ -161,7 +161,7 @@ public class ProductionIntegrationTest {
             productionRepository.save(existingProduction);
 
             // Act & Assert
-            mockMvc.perform(post("/productions/new")
+            mockMvc.perform(post("/productions")
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", adminToken)
                             .content(
@@ -184,7 +184,7 @@ public class ProductionIntegrationTest {
             productionRepository.save(existingProduction);
 
             // Act & Assert
-            mockMvc.perform(post("/productions/new")
+            mockMvc.perform(post("/productions")
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", adminToken)
                             .content(
@@ -197,7 +197,7 @@ public class ProductionIntegrationTest {
 
         @Test
         void testInvalidVenueIdResponds400BadRequest() throws Exception {
-            mockMvc.perform(post("/productions/new")
+            mockMvc.perform(post("/productions")
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", adminToken)
                             .content(
@@ -210,7 +210,7 @@ public class ProductionIntegrationTest {
 
         @Test
         void testVenueIdNotIntReturns400BadRequest() throws Exception {
-            mockMvc.perform(post("/productions/new")
+            mockMvc.perform(post("/productions")
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", adminToken)
                             .content(
@@ -223,7 +223,7 @@ public class ProductionIntegrationTest {
 
         @Test
         void testAuditionDateNotDateResponds400BadRequest() throws Exception {
-            mockMvc.perform(post("/productions/new")
+            mockMvc.perform(post("/productions")
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", adminToken)
                             .content(
@@ -236,7 +236,7 @@ public class ProductionIntegrationTest {
 
         @Test
         void testSundownersNotBooleanResponds400BadRequest() throws Exception {
-            mockMvc.perform(post("/productions/new")
+            mockMvc.perform(post("/productions")
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", adminToken)
                             .content(
@@ -249,7 +249,7 @@ public class ProductionIntegrationTest {
 
         @Test
         void testNotConfirmedNotBooleanResponds400BadRequest() throws Exception {
-            mockMvc.perform(post("/productions/new")
+            mockMvc.perform(post("/productions")
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", adminToken)
                             .content(
@@ -262,7 +262,7 @@ public class ProductionIntegrationTest {
 
         @Test
         void testMissingTokenResponds401() throws Exception {
-            mockMvc.perform(post("/productions/new")
+            mockMvc.perform(post("/productions")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(
                                     "{ \"name\": \"Test Production\", \"venueId\": " + testVenue1.getId() + ", \"author\": \"Test Author\", \"description\": \"Test Description\", " +
@@ -274,7 +274,7 @@ public class ProductionIntegrationTest {
 
         @Test
         void testBadTokenResponds401() throws Exception {
-            mockMvc.perform(post("/productions/new")
+            mockMvc.perform(post("/productions")
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", "Bad Token")
                             .content(
@@ -287,7 +287,7 @@ public class ProductionIntegrationTest {
 
         @Test
         void testUserTokenResponds403() throws Exception {
-            mockMvc.perform(post("/productions/new")
+            mockMvc.perform(post("/productions")
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", userToken)
                             .content(
@@ -309,6 +309,21 @@ public class ProductionIntegrationTest {
             // Act & Assert
             mockMvc.perform(get("/productions"))
                     .andExpect(status().isOk());
+        }
+
+        @Test
+        void testSuccessfulGetWithVenuesInDatabaseReturnsVenuesArray() throws Exception {
+            // Arrange
+            Production testProduction = new Production(
+                    "Test Production",
+                    null, null, null, null, false, false, null
+            );
+            productionRepository.save(testProduction);
+
+            // Act & Assert
+            mockMvc.perform(get("/productions"))
+                    .andExpect(jsonPath("$.productions").isArray());
+
         }
 
     }
