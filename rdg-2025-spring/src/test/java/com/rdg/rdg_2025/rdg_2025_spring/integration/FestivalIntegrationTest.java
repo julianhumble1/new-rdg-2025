@@ -198,6 +198,18 @@ public class FestivalIntegrationTest {
                     .andExpect(status().isBadRequest());
         }
 
+        @Test
+        void testMissingYearResponds400BadRequest() throws Exception {
+            // Act & Assert
+            mockMvc.perform(post("/festivals")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", adminToken)
+                            .content(
+                                    "{\"name\": \"Test Festival\", \"month\": 1, \"description\": \"Test Description\"}"
+                            ))
+                    .andExpect(status().isBadRequest());
+        }
+
 
 
     }
