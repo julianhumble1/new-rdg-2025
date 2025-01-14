@@ -49,14 +49,14 @@ public class ProductionControllerTest {
         mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
     }
 
-    private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSSS");
+    private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
 
     private Production testProduction = new Production(
             "Test Production",
             new Venue(),
             "Test Author",
             "Test Description",
-            LocalDateTime.now(),
+            LocalDateTime.parse("2025-10-10T10:00:00", formatter),
             false,
             false,
             "Test File String"
