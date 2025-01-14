@@ -253,6 +253,24 @@ public class ProductionServiceTest {
 
         }
 
+        @Test
+        void testGetAllProductionsWithOneProductionInDatabaseReturnsExpectedProduction() {
+            // Arrange
+            Production production = new Production(
+                    "Test Production",
+                    new Venue(), null, null, null,  false, false, null
+            );
+            ArrayList<Production> productionList = new ArrayList<>();
+            productionList.add(production);
+            when(productionRepository.findAll()).thenReturn(productionList);
+
+            // Act
+            List<Production> productions = productionService.getAllProductions();
+            // Assert
+            assertEquals(production, productions.get(0));
+
+        }
+
 
     }
 
