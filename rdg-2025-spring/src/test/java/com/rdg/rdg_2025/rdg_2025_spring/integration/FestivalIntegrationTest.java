@@ -174,6 +174,18 @@ public class FestivalIntegrationTest {
         }
 
         @Test
+        void testEmptyNameResponds400BadRequest() throws Exception {
+            // Act & Assert
+            mockMvc.perform(post("/festivals")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", adminToken)
+                            .content(
+                                    "{\"name\": \"\", \"year\": 2025, \"month\": 1, \"description\": \"Test Description\"}"
+                            ))
+                    .andExpect(status().isBadRequest());
+        }
+
+        @Test
         void testVenueIdNotIntResponds400BadRequest() throws Exception {
             // Arrange
             // Act & Assert
