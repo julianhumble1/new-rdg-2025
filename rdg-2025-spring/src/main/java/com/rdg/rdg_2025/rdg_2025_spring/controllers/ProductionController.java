@@ -4,6 +4,7 @@ import com.rdg.rdg_2025.rdg_2025_spring.exception.DatabaseException;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Production;
 import com.rdg.rdg_2025.rdg_2025_spring.payload.request.production.NewProductionRequest;
 import com.rdg.rdg_2025.rdg_2025_spring.payload.response.production.ProductionResponse;
+import com.rdg.rdg_2025.rdg_2025_spring.payload.response.production.ProductionsResponse;
 import com.rdg.rdg_2025.rdg_2025_spring.services.ProductionService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
@@ -15,6 +16,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -39,5 +42,12 @@ public class ProductionController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
         }
     }
+
+    @GetMapping("/")
+    public ResponseEntity<?> getAllProductions() {
+        List<Production> productions = productionService.getAllProductions();
+        return ResponseEntity.ok(new ProductionsResponse((ArrayList<Production>) productions));
+    }
+
 
 }

@@ -75,7 +75,6 @@ public class ProductionService {
         try {
             List<Production> productions = productionRepository.findAll();
             return productions;
-
         } catch (DataAccessException | PersistenceException ex) {
             throw new DatabaseException(ex.getMessage());
         }

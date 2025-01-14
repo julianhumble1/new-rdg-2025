@@ -21,9 +21,11 @@ import org.springframework.web.context.WebApplicationContext;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -317,4 +319,20 @@ public class ProductionControllerTest {
 
     }
 
+    @Nested
+    @DisplayName("getAllProductions controller tests")
+    class getAllProductionsControllerTests {
+
+        @Test
+        void testSuccessfulGetReturns200Code() throws Exception {
+            // Arrange
+            ArrayList<Production> productions = new ArrayList<>();
+            when(productionService.getAllProductions()).thenReturn(productions);
+            // Act & Assert
+            mockMvc.perform(get("/productions/"))
+                    .andExpect(status().isOk());
+
+        }
+
+    }
 }
