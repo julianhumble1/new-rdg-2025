@@ -10,6 +10,8 @@ public class NewFestivalRequest {
     private String name;
 
     private int venueId;
+
+    @NotBlank
     private int year;
 
     @Max(12)

@@ -1,6 +1,7 @@
 package com.rdg.rdg_2025.rdg_2025_spring.services;
 
 import com.rdg.rdg_2025.rdg_2025_spring.models.Festival;
+import com.rdg.rdg_2025.rdg_2025_spring.models.Production;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Venue;
 import com.rdg.rdg_2025.rdg_2025_spring.payload.request.festivals.NewFestivalRequest;
 import com.rdg.rdg_2025.rdg_2025_spring.repository.FestivalRepository;
@@ -68,6 +69,26 @@ public class FestivalServiceTest {
             Festival result = festivalService.addNewFestival(testNewFestivalRequest);
             // Assert
             assertEquals(testFestival, result);
+
+        }
+
+        @Test
+        void testNewFestivalWithOnlyNameAndYearReturnsFestivalObject() {
+            // Arrange
+            NewFestivalRequest onlyNameAndYearFestivalRequest = new NewFestivalRequest(
+                    "Test Festival", 0, 2025, 0, "Test Description"
+            );
+
+            Festival onlyNameAndYearFestival= new Festival(
+                    "Test Festival", new Venue(), 2025, 0, "Test Description"
+            );
+
+            when(festivalRepository.save(any(Festival.class))).thenReturn(onlyNameAndYearFestival);
+
+            // Act
+            Festival result = festivalService.addNewFestival(onlyNameAndYearFestivalRequest);
+            // Assert
+            assertEquals(onlyNameAndYearFestival, result);
 
         }
 

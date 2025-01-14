@@ -26,6 +26,7 @@ public class Festival {
     @ManyToOne
     private Venue venue;
 
+    @NotBlank
     private int year;
 
     @Max(12)
