@@ -16,7 +16,7 @@ public class NewFestivalRequest {
     private int year;
 
     @Max(12)
-    @Min(1)
+    @Min(0)
     private int month;
 
     private String description;

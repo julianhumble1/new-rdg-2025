@@ -143,6 +143,23 @@ public class FestivalControllerTest {
                     );
         }
 
+        @Test
+        @WithMockUser(roles="ADMIN")
+        void testOnlyNameAndYearWithEmptyOtherValuesReturns201() throws Exception {
+            // Arrange
+            Festival onlyNameAndYearFestival = new Festival("Test Festival", null, 2025, 0, null);
+
+            when(festivalService.addNewFestival(any(NewFestivalRequest.class))).thenReturn(onlyNameAndYearFestival);
+
+            // Act & Assert
+            mockMvc.perform(post("/festivals")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(
+                                    "{\"name\": \"Test Festival\", \"venueId\": \"\", \"year\": 2025, \"month\": \"\", \"description\": \"\"}"
+                            ))
+                    .andExpect(status().isCreated());
+        }
+
 
 
     }
