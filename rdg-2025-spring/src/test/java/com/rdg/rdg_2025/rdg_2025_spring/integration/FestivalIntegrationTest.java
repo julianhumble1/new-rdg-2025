@@ -270,6 +270,18 @@ public class FestivalIntegrationTest {
         }
 
         @Test
+        void testBadTokenResponds401() throws Exception {
+            // Act & Assert
+            mockMvc.perform(post("/festivals")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", "Bad Token")
+                            .content(
+                                    "{\"name\": \"Test Festival\", \"year\": 2025, \"month\": 1, \"description\": \"Test Description\"}"
+                            ))
+                    .andExpect(status().isUnauthorized());
+        }
+
+        @Test
         void testUserTokenResponds403() throws Exception {
             // Act & Assert
             mockMvc.perform(post("/festivals")
