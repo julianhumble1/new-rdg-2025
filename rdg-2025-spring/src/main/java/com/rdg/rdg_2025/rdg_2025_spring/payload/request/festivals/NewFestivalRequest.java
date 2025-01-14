@@ -3,6 +3,7 @@ package com.rdg.rdg_2025.rdg_2025_spring.payload.request.festivals;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 public class NewFestivalRequest {
 
@@ -11,7 +12,7 @@ public class NewFestivalRequest {
 
     private int venueId;
 
-    @NotBlank
+    @NotNull
     private int year;
 
     @Max(12)
