@@ -120,5 +120,20 @@ public class FestivalIntegrationTest {
                     );
         }
 
+        @Test
+        void testFullProductionDetailsWithValidVenueReturns201() throws Exception {
+            // Arrange
+            int testVenueId = testVenue1.getId();
+
+            // Act & Assert
+            mockMvc.perform(post("/festivals")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", adminToken)
+                            .content(
+                                    "{\"name\": \"Test Festival\",\"venueId\": " + testVenueId + ", \"year\": 2025, \"month\": 1, \"description\": \"Test Description\"}"
+                            ))
+                    .andExpect(status().isCreated());
+        }
+
     }
 }
