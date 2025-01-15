@@ -172,6 +172,19 @@ public class FestivalServiceTest {
 
         }
 
+        @Test
+        void testGetAllFestivalsWithOneFestivalInDatabaseReturnsExpectedFestival() {
+            // Arrange
+            ArrayList<Festival> testFestivalList = new ArrayList<>();
+            testFestivalList.add(testFestival);
+            when(festivalRepository.findAll()).thenReturn(testFestivalList);
+            // Act
+            List<Festival> festivals = festivalService.getAllFestivals();
+            // Assert
+            assertEquals(testFestival, festivals.get(0));
+
+        }
+
     }
 
 }
