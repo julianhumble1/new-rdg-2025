@@ -1,5 +1,6 @@
 package com.rdg.rdg_2025.rdg_2025_spring.integration;
 
+import com.rdg.rdg_2025.rdg_2025_spring.models.Festival;
 import com.rdg.rdg_2025.rdg_2025_spring.models.User;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Venue;
 import com.rdg.rdg_2025.rdg_2025_spring.repository.FestivalRepository;
@@ -310,6 +311,18 @@ public class FestivalIntegrationTest {
                             .header("Authorization", adminToken))
                     .andExpect(status().isOk());
 
+        }
+
+        @Test
+        void testSuccessfulGetWithFestivalsInDatabaseRespondsFestivalsArray() throws Exception {
+            // Arrange
+            Festival testFestival = new Festival("Test Festival", testVenue1, 2025, 1, "Test Description");
+            festivalRepository.save(testFestival);
+
+            // Act & Assert
+            mockMvc.perform(get("/festivals")
+                            .header("Authorization", adminToken))
+                    .andExpect(jsonPath("$.festivals").isArray());
         }
 
 
