@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class FestivalService {
 
@@ -50,6 +52,15 @@ public class FestivalService {
         }
 
 
+    }
+
+    public List<Festival> getAllFestivals() {
+        try {
+            List<Festival> festivals = festivalRepository.findAll();
+            return festivals;
+        } catch (Exception ex) {
+            return null;
+        }
     }
 
 }

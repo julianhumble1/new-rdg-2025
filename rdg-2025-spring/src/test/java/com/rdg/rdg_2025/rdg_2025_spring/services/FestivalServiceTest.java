@@ -18,6 +18,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.dao.DataAccessException;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -136,6 +138,23 @@ public class FestivalServiceTest {
             DatabaseException ex = assertThrows(DatabaseException.class, () ->
                     festivalService.addNewFestival(testNewFestivalRequest)
             );
+
+        }
+
+    }
+
+    @Nested
+    @DisplayName("getAllFestivals service tests")
+    class getAllFestivalsServiceTests {
+
+        @Test
+        void testGetAllFestivalsWithEmptyDatabaseReturnsEmptyList() {
+            // Arrange
+            when(festivalRepository.findAll()).thenReturn(Collections.EMPTY_LIST);
+            // Act
+            List<Festival> festivals = festivalService.getAllFestivals();
+            // Assert
+            assertEquals(Collections.EMPTY_LIST, festivals);
 
         }
 
