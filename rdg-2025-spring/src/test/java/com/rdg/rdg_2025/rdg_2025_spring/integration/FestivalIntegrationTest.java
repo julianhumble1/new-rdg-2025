@@ -340,6 +340,14 @@ public class FestivalIntegrationTest {
                     .andExpect(status().isUnauthorized());
         }
 
+        @Test
+        void testUserTokenReturns403() throws Exception {
+            // Act & Assert
+            mockMvc.perform(get("/festivals")
+                            .header("Authorization", userToken))
+                    .andExpect(status().isForbidden());
+        }
+
 
     }
 }
