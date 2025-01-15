@@ -18,6 +18,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.dao.DataAccessException;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -155,6 +156,19 @@ public class FestivalServiceTest {
             List<Festival> festivals = festivalService.getAllFestivals();
             // Assert
             assertEquals(Collections.EMPTY_LIST, festivals);
+
+        }
+
+        @Test
+        void testGetAllFestivalsWithOneFestivalInDatabaseReturnsListLengthOne() {
+            // Arrange
+            ArrayList<Festival> testFestivalList = new ArrayList<>();
+            testFestivalList.add(testFestival);
+            when(festivalRepository.findAll()).thenReturn(testFestivalList);
+            // Act
+            List<Festival> festivals = festivalService.getAllFestivals();
+            // Assert
+            assertEquals(1, festivals.size());
 
         }
 
