@@ -325,6 +325,13 @@ public class FestivalIntegrationTest {
                     .andExpect(jsonPath("$.festivals").isArray());
         }
 
+        @Test
+        void testMissingAdminTokenReturns401() throws Exception {
+            // Act & Assert
+            mockMvc.perform(get("/festivals"))
+                    .andExpect(status().isUnauthorized());
+        }
+
 
     }
 }
