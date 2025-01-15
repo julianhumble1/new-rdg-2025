@@ -316,6 +316,7 @@ public class FestivalControllerTest {
     class getAllFestivalsControllerTests {
 
         @Test
+        @WithMockUser(roles="ADMIN")
         void testSuccessfulGetReturns200Code() throws Exception {
             // Arrange
             ArrayList<Festival> festivals = new ArrayList<>();
@@ -328,6 +329,7 @@ public class FestivalControllerTest {
         }
 
         @Test
+        @WithMockUser(roles="ADMIN")
         void testSuccessfulGetContainsFestivalObject() throws Exception {
             // Arrange
             ArrayList<Festival> festivals = new ArrayList<>();
@@ -337,7 +339,17 @@ public class FestivalControllerTest {
             mockMvc.perform(get("/festivals"))
                     .andExpect(jsonPath("$.festivals[0].name").value("Test Festival"));
 
+        }
 
+        @Test
+        @WithMockUser(roles="ADMIN")
+        void testDatabaseExceptionResponds500() throws Exception {
+            // Arrange
+            when(festivalService.getAllFestivals()).thenThrow(new DatabaseException("Database Error"));
+
+            // Act & Assert
+            mockMvc.perform(get("/festivals"))
+                    .andExpect(status().isInternalServerError());
         }
 
     }

@@ -48,8 +48,8 @@ public class FestivalController {
         try {
             List<Festival> festivals = festivalService.getAllFestivals();
             return ResponseEntity.ok(new FestivalsResponse((ArrayList<Festival>) festivals));
-        } catch (Exception ex) {
-            return null;
+        } catch (DatabaseException ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
         }
     }
 
