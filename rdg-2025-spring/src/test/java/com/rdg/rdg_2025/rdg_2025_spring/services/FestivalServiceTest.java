@@ -200,6 +200,17 @@ public class FestivalServiceTest {
 
         }
 
+        @Test
+        void testDataAccessExceptionThrowsDatabaseException() {
+            // Arrange
+            when(festivalRepository.findAll()).thenThrow(new DataAccessException("Data access failed"){});
+
+            // Act & Assert
+            DatabaseException ex = assertThrows(DatabaseException.class, () -> {
+                festivalService.getAllFestivals();
+            });
+        }
+
     }
 
 }

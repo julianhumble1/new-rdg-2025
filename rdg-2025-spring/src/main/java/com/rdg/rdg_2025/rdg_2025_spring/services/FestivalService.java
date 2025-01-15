@@ -58,8 +58,8 @@ public class FestivalService {
         try {
             List<Festival> festivals = festivalRepository.findAll();
             return festivals;
-        } catch (Exception ex) {
-            return null;
+        } catch (DataAccessException ex) {
+            throw new DatabaseException(ex.getMessage());
         }
     }
 
