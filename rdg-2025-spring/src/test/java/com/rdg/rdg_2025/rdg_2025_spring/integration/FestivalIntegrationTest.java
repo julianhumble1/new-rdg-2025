@@ -21,6 +21,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -293,6 +294,23 @@ public class FestivalIntegrationTest {
                     .andExpect(status().isForbidden());
         }
 
+
+
+    }
+
+    @Nested
+    @DisplayName("getAllFestivals integration tests")
+    class getAllFestivalsIntegrationTests {
+
+        @Test
+        void testSuccessfulGetWithAdminTokenResponds200 () throws Exception {
+
+            // Act & Assert
+            mockMvc.perform(get("/festivals")
+                            .header("Authorization", adminToken))
+                    .andExpect(status().isOk());
+
+        }
 
 
     }
