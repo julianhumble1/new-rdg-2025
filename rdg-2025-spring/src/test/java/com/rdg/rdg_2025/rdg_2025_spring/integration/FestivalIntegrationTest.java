@@ -332,6 +332,14 @@ public class FestivalIntegrationTest {
                     .andExpect(status().isUnauthorized());
         }
 
+        @Test
+        void testBadAdminTokenReturns401() throws Exception {
+            // Act & Assert
+            mockMvc.perform(get("/festivals")
+                            .header("Authorization", "Fake token"))
+                    .andExpect(status().isUnauthorized());
+        }
+
 
     }
 }
