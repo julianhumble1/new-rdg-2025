@@ -44,8 +44,18 @@ const AdminDashboard = () => {
             <Link to="/productions" className="underline text-blue-500 hover:text-blue-700">See All Productions</Link>
           </div>
         </div>
-
         
+      </div>
+
+      <div className="flex flex-col gap-2 border border-black w-fit p-3">
+        <div className=" w-fit p-1">
+          <div className="italic underline">
+            Festivals
+          </div>
+          <div className="flex flex-col">
+            <Link to="/festivals/new" className="underline text-blue-500 hover:text-blue-700">Add New Festival</Link>
+          </div>
+        </div>
       </div>
       
     </div>

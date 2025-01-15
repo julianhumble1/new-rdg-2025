@@ -37,7 +37,7 @@ const NewProductionForm = () => {
                 notConfirmed,
                 flyerFile
             )
-            setSuccessMessage(`Successfully created '${response.data.production.name}!'`)
+            setSuccessMessage(`Successfully created '${response.data.production.name}'!`)
             setFailMessage("")
         } catch (e) {
             setSuccessMessage("")

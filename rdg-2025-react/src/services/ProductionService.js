@@ -35,7 +35,7 @@ export default class ProductionService {
             } else if (e.response.status === 400) {
                 throw new Error("Bad request: details are not in expected format")
             }
-        }
+        } 
     }
 
     static getAllProductions = async () => {
