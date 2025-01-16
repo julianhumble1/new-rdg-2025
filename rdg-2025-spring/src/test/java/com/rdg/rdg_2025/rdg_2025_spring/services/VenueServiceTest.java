@@ -247,6 +247,15 @@ public class VenueServiceTest {
             });
         }
 
+        @Test
+        void testNonExistentVenueIdReturnsFalse() {
+            // Arrange
+            when(venueRepository.existsById(anyInt())).thenReturn(false);
+            // Act
+            boolean result = venueService.deleteVenueById(1);
+            // Assert
+            assertEquals(false, result);
 
+        }
     }
 }
