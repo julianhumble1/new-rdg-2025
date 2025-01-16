@@ -58,12 +58,16 @@ public class VenueController {
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> deleteVenueById(@PathVariable int id) {
-        boolean deleted = venueService.deleteVenueById(id);
-        if (deleted) {
-            return ResponseEntity.noContent().build();
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                    new MessageResponse("Could not delete as venue does not exist"));
+        try {
+            boolean deleted = venueService.deleteVenueById(id);
+            if (deleted) {
+                return ResponseEntity.noContent().build();
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                        new MessageResponse("Could not delete as venue does not exist"));
+            }
+        } catch (DatabaseException ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
         }
     }
 

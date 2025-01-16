@@ -290,6 +290,16 @@ public class VenueControllerTest {
                     .andExpect(status().isNotFound());
         }
 
+        @Test
+        @WithMockUser(roles = "ADMIN")
+        void testDatabaseExceptionResponds500() throws Exception {
+            // Arrange
+            when(venueService.deleteVenueById(anyInt())).thenThrow(new DatabaseException("Database Exception"));
+            // Act & Assert
+            mockMvc.perform(delete("/venues/1"))
+                    .andExpect(status().isInternalServerError());
+        }
+
     }
 
 }
