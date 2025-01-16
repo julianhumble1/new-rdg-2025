@@ -236,6 +236,17 @@ public class VenueServiceTest {
             });
         }
 
+        @Test
+        void testDeletePersistenceExceptionThrowsDatabaseException() {
+            // Arrange
+            when(venueRepository.existsById(any())).thenReturn(true);
+            doThrow(new PersistenceException("Data persistence exception") {}).when(venueRepository).deleteById(anyInt());
+            // Act & Assert
+            DatabaseException ex = assertThrows(DatabaseException.class, () -> {
+                venueService.deleteVenueById(1);
+            });
+        }
+
 
     }
 }

@@ -58,7 +58,7 @@ public class VenueService {
             } else {
                 return false;
             }
-        } catch (DataAccessException ex) {
+        } catch (DataAccessException | PersistenceException ex) {
             throw new DatabaseException(ex.getMessage());
         }
     }
