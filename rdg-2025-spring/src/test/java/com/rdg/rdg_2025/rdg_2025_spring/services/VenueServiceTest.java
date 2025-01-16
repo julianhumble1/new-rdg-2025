@@ -24,6 +24,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -217,6 +219,17 @@ public class VenueServiceTest {
         void testExistsDataAccessExceptionThrowsDatabaseException() {
             // Arrange
             when(venueRepository.existsById(any())).thenThrow(new DataAccessException("Data Access Exception"){});
+            // Act & Assert
+            DatabaseException ex = assertThrows(DatabaseException.class, () -> {
+                venueService.deleteVenueById(1);
+            });
+        }
+
+        @Test
+        void testDeleteDataAccessExceptionThrowsDatabaseException() {
+            // Arrange
+            when(venueRepository.existsById(any())).thenReturn(true);
+            doThrow(new DataAccessException("Data access exception") {}).when(venueRepository).deleteById(anyInt());
             // Act & Assert
             DatabaseException ex = assertThrows(DatabaseException.class, () -> {
                 venueService.deleteVenueById(1);
