@@ -5,6 +5,7 @@ import com.rdg.rdg_2025.rdg_2025_spring.models.Venue;
 import com.rdg.rdg_2025.rdg_2025_spring.payload.request.venue.NewVenueRequest;
 import com.rdg.rdg_2025.rdg_2025_spring.repository.VenueRepository;
 import jakarta.persistence.PersistenceException;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -195,5 +196,24 @@ public class VenueServiceTest {
 
     }
 
+    @Nested
+    @DisplayName("deleteVenue service tests")
+    class deleteVenueServiceTests {
 
+        Venue testVenue1 = new Venue("Test Venue", "Test Notes", "Test Postcode", "Test Address", "Test Town", "www.test.com");
+        Venue testVenue2 = new Venue("Test Venue", "Test Notes", "Test Postcode", "Test Address", "Test Town", "www.test.com");
+
+        @Test
+        void testSuccessfulDeletionReturnsTrue() {
+            // Arrange
+            when(venueRepository.existsById(any())).thenReturn(true);
+            // Act
+            boolean result = venueService.deleteVenueById(1);
+            // Assert
+            assertEquals(true, result);
+        }
+
+
+
+    }
 }

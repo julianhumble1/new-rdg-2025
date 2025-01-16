@@ -10,9 +10,6 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name="productions")
-@JsonIdentityInfo(
-        generator = ObjectIdGenerators.PropertyGenerator.class,
-        property = "id")
 public class Production {
 
     @Id
@@ -23,6 +20,7 @@ public class Production {
     private String name;
 
     @ManyToOne
+    @JsonManagedReference
     private Venue venue;
 
     private String author;

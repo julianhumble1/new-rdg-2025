@@ -1,7 +1,6 @@
 package com.rdg.rdg_2025.rdg_2025_spring.models;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -12,9 +11,6 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name="festivals")
-@JsonIdentityInfo(
-        generator = ObjectIdGenerators.PropertyGenerator.class,
-        property = "id")
 public class Festival {
 
     @Id
@@ -25,6 +21,7 @@ public class Festival {
     private String name;
 
     @ManyToOne
+    @JsonManagedReference
     private Venue venue;
 
     @Min(1)
@@ -52,6 +49,20 @@ public class Festival {
     }
 
     public Festival() {
+    }
+
+    @Override
+    public String toString() {
+        return "Festival{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", venue=" + venue +
+                ", year=" + year +
+                ", month=" + month +
+                ", description='" + description + '\'' +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                '}';
     }
 
     public int getId() {

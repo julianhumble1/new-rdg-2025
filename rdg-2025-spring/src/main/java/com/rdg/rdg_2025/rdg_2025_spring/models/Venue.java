@@ -1,9 +1,6 @@
 package com.rdg.rdg_2025.rdg_2025_spring.models;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.*;
 import com.rdg.rdg_2025.rdg_2025_spring.helpers.SlugUtils;
 import jakarta.persistence.*;
 
@@ -13,9 +10,6 @@ import java.util.List;
 
 @Entity
 @Table(name="venues")
-@JsonIdentityInfo(
-        generator = ObjectIdGenerators.PropertyGenerator.class,
-        property = "id")
 public class Venue {
 
     @Id
@@ -40,9 +34,11 @@ public class Venue {
     private String slug;
 
     @OneToMany(mappedBy = "venue", cascade = CascadeType.ALL)
+    @JsonBackReference
     private List<Production> productions = new ArrayList<>();
 
     @OneToMany(mappedBy= "venue", cascade = CascadeType.ALL)
+    @JsonBackReference
     private List<Festival> festivals = new ArrayList<>();
 
     public Venue(String name, String notes, String postcode, String address, String town, String url) {

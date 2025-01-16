@@ -10,7 +10,6 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -49,5 +48,19 @@ public class VenueService {
             throw new DatabaseException(ex.getMessage());
         }
 
+    }
+
+    public boolean deleteVenueById(int venueId) {
+        try {
+            if (venueRepository.existsById(venueId)) {
+                venueRepository.deleteById(venueId);
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+            return false;
+        }
     }
 }
