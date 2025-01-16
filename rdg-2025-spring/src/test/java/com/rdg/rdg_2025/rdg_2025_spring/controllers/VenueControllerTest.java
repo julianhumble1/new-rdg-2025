@@ -280,6 +280,16 @@ public class VenueControllerTest {
                     .andExpect(status().isNoContent());
         }
 
+        @Test
+        @WithMockUser(roles = "ADMIN")
+        void testNonExistentVenueResponds404() throws Exception {
+            // Arrange
+            when(venueService.deleteVenueById(anyInt())).thenReturn(false);
+            // Act & Assert
+            mockMvc.perform(delete("/venues/1"))
+                    .andExpect(status().isNotFound());
+        }
+
     }
 
 }
