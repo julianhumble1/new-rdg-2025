@@ -3,6 +3,7 @@ package com.rdg.rdg_2025.rdg_2025_spring.controllers;
 import com.rdg.rdg_2025.rdg_2025_spring.exception.DatabaseException;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Venue;
 import com.rdg.rdg_2025.rdg_2025_spring.payload.request.venue.NewVenueRequest;
+import com.rdg.rdg_2025.rdg_2025_spring.payload.response.MessageResponse;
 import com.rdg.rdg_2025.rdg_2025_spring.payload.response.venue.VenueResponse;
 import com.rdg.rdg_2025.rdg_2025_spring.payload.response.venue.VenuesResponse;
 import com.rdg.rdg_2025.rdg_2025_spring.services.VenueService;
@@ -51,6 +52,18 @@ public class VenueController {
             return ResponseEntity.ok().body(new VenuesResponse((ArrayList<Venue>) venues));
         } catch (DatabaseException ex) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> deleteVenueById(@PathVariable int id) {
+        boolean deleted = venueService.deleteVenueById(id);
+        if (deleted) {
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                    new MessageResponse("Could not delete as venue does not exist"));
         }
     }
 

@@ -25,9 +25,9 @@ import org.springframework.web.context.WebApplicationContext;
 import java.util.ArrayList;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(VenueController.class)
@@ -262,6 +262,22 @@ public class VenueControllerTest {
             // Act & Assert
             mockMvc.perform(get("/venues"))
                     .andExpect(status().isInternalServerError());
+        }
+
+    }
+
+    @Nested
+    @DisplayName("deleteVenueById Controller Tests")
+    class deleteVenueByControllerTests {
+
+        @Test
+        @WithMockUser(roles = "ADMIN")
+        void testSuccessfulDeletionResponds204() throws Exception {
+            // Arrange
+            when(venueService.deleteVenueById(anyInt())).thenReturn(true);
+            // Act & Assert
+            mockMvc.perform(delete("/venues/1"))
+                    .andExpect(status().isNoContent());
         }
 
     }
