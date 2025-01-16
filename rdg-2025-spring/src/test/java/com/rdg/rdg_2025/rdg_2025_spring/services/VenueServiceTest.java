@@ -213,6 +213,15 @@ public class VenueServiceTest {
             assertEquals(true, result);
         }
 
+        @Test
+        void testExistsDataAccessExceptionThrowsDatabaseException() {
+            // Arrange
+            when(venueRepository.existsById(any())).thenThrow(new DataAccessException("Data Access Exception"){});
+            // Act & Assert
+            DatabaseException ex = assertThrows(DatabaseException.class, () -> {
+                venueService.deleteVenueById(1);
+            });
+        }
 
 
     }

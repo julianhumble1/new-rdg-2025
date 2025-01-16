@@ -58,9 +58,8 @@ public class VenueService {
             } else {
                 return false;
             }
-        } catch (Exception ex) {
-            System.out.println(ex.getMessage());
-            return false;
+        } catch (DataAccessException ex) {
+            throw new DatabaseException(ex.getMessage());
         }
     }
 }
