@@ -384,6 +384,16 @@ public class VenueIntegrationTest {
             assert(associatedFestival).isPresent();
         }
 
+        @Test
+        void testNonExistentVenueIdResponds404() throws Exception {
+            // Arrange
+            int testVenueId = testVenue1.getId();
+            // Act
+            mockMvc.perform(delete("/venues/" + (testVenueId - 1))
+                    .header("Authorization", adminToken))
+            .andExpect(status().isNotFound());
+        }
+
     }
 
 
