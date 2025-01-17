@@ -403,6 +403,15 @@ public class VenueIntegrationTest {
                     .andExpect(status().isBadRequest());
         }
 
+        @Test
+        void testMissingTokenResponds401() throws Exception {
+            // Arrange
+            int testVenueId = testVenue1.getId();
+            // Act & Assert
+            mockMvc.perform(delete("/venues/" + testVenueId))
+                    .andExpect(status().isUnauthorized());
+        }
+
     }
 
 
