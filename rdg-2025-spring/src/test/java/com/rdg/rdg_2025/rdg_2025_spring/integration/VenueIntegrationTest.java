@@ -412,6 +412,16 @@ public class VenueIntegrationTest {
                     .andExpect(status().isUnauthorized());
         }
 
+        @Test
+        void testBadTokenResponds401() throws Exception {
+            // Arrange
+            int testVenueId = testVenue1.getId();
+            // Act & Assert
+            mockMvc.perform(delete("/venues/" + testVenueId)
+                    .header("Authorization", "Bad Token"))
+                    .andExpect(status().isUnauthorized());
+        }
+
     }
 
 
