@@ -21,6 +21,9 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -334,6 +337,21 @@ public class VenueIntegrationTest {
             mockMvc.perform(delete("/venues/" + testVenueId)
                             .header("Authorization", adminToken))
                     .andExpect(status().isNoContent());
+        }
+
+        @Test
+        void testAssociatedProductionIsNotDeletedAfterDeletionOfVenue() throws Exception {
+            // Arrange
+            int testVenueId = testVenue1.getId();
+            // Act
+            mockMvc.perform(delete("/venues/" + testVenueId)
+                            .header("Authorization", adminToken));
+
+            int testProduction1Id = testProduction1.getId();
+            Optional<Production> associatedProduction = productionRepository.findById(testProduction1Id);
+
+            // Assert
+            assert(associatedProduction).isPresent();
         }
 
     }
