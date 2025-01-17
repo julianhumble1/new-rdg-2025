@@ -3,6 +3,7 @@ package com.rdg.rdg_2025.rdg_2025_spring.models;
 import com.fasterxml.jackson.annotation.*;
 import com.rdg.rdg_2025.rdg_2025_spring.helpers.SlugUtils;
 import jakarta.persistence.*;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;

@@ -24,6 +24,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -340,6 +341,20 @@ public class VenueIntegrationTest {
         }
 
         @Test
+        void testVenueIsNoLongerInDatabaseFollowingDeletion() throws Exception {
+            // Arrange
+            int testVenueId = testVenue1.getId();
+            // Act
+            mockMvc.perform(delete("/venues/" + testVenueId)
+                            .header("Authorization", adminToken));
+
+            Optional<Venue> retrievedVenue = venueRepository.findById(testVenueId);
+
+            // Assert
+            assert(retrievedVenue).isEmpty();
+        }
+
+        @Test
         void testAssociatedProductionIsNotDeletedAfterDeletionOfVenue() throws Exception {
             // Arrange
             int testVenueId = testVenue1.getId();
@@ -352,6 +367,21 @@ public class VenueIntegrationTest {
 
             // Assert
             assert(associatedProduction).isPresent();
+        }
+
+        @Test
+        void testAssociatedFestivalIsNotDeletedAfterDeletionOfVenue() throws Exception {
+            // Arrange
+            int testVenueId = testVenue1.getId();
+            // Act
+            mockMvc.perform(delete("/venues/" + testVenueId)
+                    .header("Authorization", adminToken));
+
+            int testFestival1Id = testFestival1.getId();
+            Optional<Festival> associatedFestival = festivalRepository.findById(testFestival1Id);
+
+            // Assert
+            assert(associatedFestival).isPresent();
         }
 
     }
