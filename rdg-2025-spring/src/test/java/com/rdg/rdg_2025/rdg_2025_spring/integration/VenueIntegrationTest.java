@@ -388,10 +388,19 @@ public class VenueIntegrationTest {
         void testNonExistentVenueIdResponds404() throws Exception {
             // Arrange
             int testVenueId = testVenue1.getId();
-            // Act
+            // Act & Assert
             mockMvc.perform(delete("/venues/" + (testVenueId - 1))
                     .header("Authorization", adminToken))
             .andExpect(status().isNotFound());
+        }
+
+        @Test
+        void testBadVenueIdResponds400() throws Exception {
+            // Arrange
+            // Act & Assert
+            mockMvc.perform(delete("/venues/" + "Bad venue")
+                            .header("Authorization", adminToken))
+                    .andExpect(status().isBadRequest());
         }
 
     }
