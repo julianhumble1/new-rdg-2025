@@ -1,10 +1,10 @@
 package com.rdg.rdg_2025.rdg_2025_spring.integration;
 
+import com.rdg.rdg_2025.rdg_2025_spring.models.Festival;
+import com.rdg.rdg_2025.rdg_2025_spring.models.Production;
 import com.rdg.rdg_2025.rdg_2025_spring.models.User;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Venue;
-import com.rdg.rdg_2025.rdg_2025_spring.repository.RoleRepository;
-import com.rdg.rdg_2025.rdg_2025_spring.repository.UserRepository;
-import com.rdg.rdg_2025.rdg_2025_spring.repository.VenueRepository;
+import com.rdg.rdg_2025.rdg_2025_spring.repository.*;
 import com.rdg.rdg_2025.rdg_2025_spring.security.jwt.JwtUtils;
 import com.rdg.rdg_2025.rdg_2025_spring.utils.AuthTestUtils;
 import jakarta.transaction.Transactional;
@@ -20,8 +20,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -70,19 +70,19 @@ public class VenueIntegrationTest {
         userRepository.deleteAll();
     }
 
-    @BeforeEach
-    public void setup() {
-        venueRepository.deleteAll();
-    }
-
-    @AfterEach
-    public void cleanup() {
-        venueRepository.deleteAll();
-    }
-
     @Nested
     @DisplayName("POST addNewVenue integration tests")
     class postAddNewVenueIntegrationTests {
+
+        @BeforeEach
+        public void setup() {
+            venueRepository.deleteAll();
+        }
+
+        @AfterEach
+        public void cleanup() {
+            venueRepository.deleteAll();
+        }
 
         @Test
         void testFullVenueDetailsWithAdminTokenReturns201() throws Exception {
@@ -222,6 +222,16 @@ public class VenueIntegrationTest {
     @DisplayName("GET getAllVenues integration tests")
     class getGetAllVenuesIntegrationTests {
 
+        @BeforeEach
+        public void setup() {
+            venueRepository.deleteAll();
+        }
+
+        @AfterEach
+        public void cleanup() {
+            venueRepository.deleteAll();
+        }
+
         @Test
         void testSuccessfulGetWithAdminTokenReturns200() throws Exception {
             // Act & Assert
@@ -265,6 +275,66 @@ public class VenueIntegrationTest {
                     .andExpect(status().isForbidden());
         }
 
+
+    }
+
+    @Nested
+    @DisplayName("DELETE deleteVenueById integration tests")
+    class deleteVenueByIdIntegrationTests {
+
+        @Autowired
+        private ProductionRepository productionRepository;
+
+        @Autowired
+        private FestivalRepository festivalRepository;
+
+        Venue testVenue1;
+        Venue testVenue2;
+
+        Production testProduction1;
+        Production testProduction2;
+
+        Festival testFestival1;
+        Festival testFestival2 ;
+
+        @BeforeEach
+        public void populateDatabase() {
+
+            testVenue1 = new Venue("Test Venue", "Test Notes", "Test Postcode", "Test Address", "Test Town", "www.test.com");
+            testVenue2 = new Venue("Another Test Venue", "Test Notes", "Test Postcode", "Test Address", "Test Town", "www.test.com");
+
+            venueRepository.save(testVenue1);
+            venueRepository.save(testVenue2);
+
+            testProduction1 = new Production("Test Production 1", testVenue1, null, null, null, false, false, null);
+            testProduction2 = new Production("Test Production 2", testVenue2, null, null, null, false, false, null);
+
+            productionRepository.save(testProduction1);
+            productionRepository.save(testProduction2);
+
+            testFestival1  = new Festival("Test Festival 1", testVenue1, 2025, 1, "Test Description");
+            testFestival2 = new Festival("Test Festival 2", testVenue2, 2025, 1, "Test Description");
+
+            festivalRepository.save(testFestival1);
+            festivalRepository.save(testFestival2);
+        }
+
+        @AfterEach
+        public void clearDatabase() {
+            productionRepository.deleteAll();
+            festivalRepository.deleteAll();
+            venueRepository.deleteAll();
+        }
+
+        @Test
+        void testSuccessfulDeletionResponds204() throws Exception {
+            // Arrange
+            int testVenueId = testVenue1.getId();
+            // Act
+            mockMvc.perform(delete("/venues/" + testVenueId)
+                            .header("Authorization", adminToken))
+                    .andExpect(status().isNoContent());
+        }
 
     }
 

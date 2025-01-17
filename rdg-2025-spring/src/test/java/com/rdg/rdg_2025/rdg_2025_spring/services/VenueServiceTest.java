@@ -37,7 +37,6 @@ public class VenueServiceTest {
     @Mock
     private VenueRepository venueRepository;
 
-
     @Nested
     @DisplayName("addNewVenue service tests")
     class addNewVenueServiceTests {

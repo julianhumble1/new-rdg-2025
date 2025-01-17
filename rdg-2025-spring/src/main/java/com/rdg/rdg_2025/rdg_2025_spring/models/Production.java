@@ -3,6 +3,8 @@ package com.rdg.rdg_2025.rdg_2025_spring.models;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.rdg.rdg_2025.rdg_2025_spring.helpers.SlugUtils;
 import jakarta.persistence.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDateTime;
 
@@ -17,8 +19,9 @@ public class Production {
     @Column(nullable = false)
     private String name;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JsonManagedReference
+    @OnDelete(action = OnDeleteAction.SET_NULL)
     private Venue venue;
 
     private String author;
@@ -52,6 +55,24 @@ public class Production {
         this.updatedAt = LocalDateTime.now();
 
         this.slug = SlugUtils.generateSlug(name);
+    }
+
+    @Override
+    public String toString() {
+        return "Production{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", venue=" + venue +
+                ", author='" + author + '\'' +
+                ", description='" + description + '\'' +
+                ", auditionDate=" + auditionDate +
+                ", sundowners=" + sundowners +
+                ", notConfirmed=" + notConfirmed +
+                ", flyerFile='" + flyerFile + '\'' +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                ", slug='" + slug + '\'' +
+                '}';
     }
 
     public int getId() {
