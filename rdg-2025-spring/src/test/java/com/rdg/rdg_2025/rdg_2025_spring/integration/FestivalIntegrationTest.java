@@ -303,6 +303,9 @@ public class FestivalIntegrationTest {
     @DisplayName("getAllFestivals integration tests")
     class getAllFestivalsIntegrationTests {
 
+        @Autowired
+        private VenueRepository venueRepository;
+
         @Test
         void testSuccessfulGetWithAdminTokenResponds200 () throws Exception {
 
@@ -316,7 +319,9 @@ public class FestivalIntegrationTest {
         @Test
         void testSuccessfulGetWithFestivalsInDatabaseRespondsFestivalsArray() throws Exception {
             // Arrange
-            Festival testFestival = new Festival("Test Festival", testVenue1, 2025, 1, "Test Description");
+            Venue managedTestVenue1 = venueRepository.findById(testVenue1.getId()).orElseThrow(() -> new RuntimeException("Venue not found"));
+
+            Festival testFestival = new Festival("Test Festival", managedTestVenue1, 2025, 1, "Test Description");
             festivalRepository.save(testFestival);
 
             // Act & Assert

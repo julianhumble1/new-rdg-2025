@@ -304,6 +304,9 @@ public class ProductionIntegrationTest {
     @DisplayName("getAllProductions integration tests")
     class getAllProductionsIntegrationTests {
 
+        @Autowired
+        private VenueRepository venueRepository;
+
         @Test
         void testSuccessfulGetResponds200() throws Exception{
             // Act & Assert
@@ -314,9 +317,11 @@ public class ProductionIntegrationTest {
         @Test
         void testSuccessfulGetWithVenuesInDatabaseReturnsVenuesArray() throws Exception {
             // Arrange
+            Venue managedTestVenue1 = venueRepository.findById(testVenue1.getId()).orElseThrow(() -> new RuntimeException("Venue not found"));
+
             Production testProduction = new Production(
                     "Test Production",
-                    null, null, null, null, false, false, null
+                    managedTestVenue1, null, null, null, false, false, null
             );
             productionRepository.save(testProduction);
 
