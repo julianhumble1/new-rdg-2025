@@ -62,4 +62,31 @@ export default class VenueService {
 
     }
 
+    static deleteVenue = async (venueId) => {
+        const token = Cookies.get("token")
+
+        try {
+            const response = await axios.delete(`http://localhost:8080/venues/${venueId}`,
+                {
+                    headers: {
+                        "Authorization": `Bearer ${token}`
+                    }
+                }
+            )
+            return response;
+        } catch (e) {
+            if (e.response.status === 401 || e.response.status === 403) {
+                throw new Error("Failed to authenticate as administrator")
+            } else if (e.response.status === 500) {
+                throw new Error("Internal server error")
+            } else if (e.response.status === 404) {
+                throw new Error("Venue does not exist to be deleted")
+            } else if (e.response.status === 400) {
+                throw new Error("Provided venue id must be integer")
+            }
+        }
+
+
+    }
+
 }

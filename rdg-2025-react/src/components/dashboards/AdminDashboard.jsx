@@ -11,7 +11,6 @@ const AdminDashboard = () => {
         try {
           await UserService.checkAdmin()
         } catch (error) {
-          console.log(error)
           navigate("/dashboard")
         }
   
@@ -54,6 +53,7 @@ const AdminDashboard = () => {
           </div>
           <div className="flex flex-col">
             <Link to="/festivals/new" className="underline text-blue-500 hover:text-blue-700">Add New Festival</Link>
+            <Link to="/festivals" className="underline text-blue-500 hover:text-blue-700">See All Festivals</Link>
           </div>
         </div>
       </div>

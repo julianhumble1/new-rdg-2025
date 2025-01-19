@@ -12,13 +12,12 @@ import AllVenuesList from "./components/venues/AllVenuesList.jsx"
 import NewProductionForm from "./components/productions/NewProductionForm.jsx"
 import AllProductionsList from "./components/productions/AllProductionsList.jsx"
 import NewFestivalForm from "./components/festivals/NewFestivalForm.jsx"
+import AllFestivalsList from "./components/festivals/AllFestivalsList.jsx"
 
 
 function App() {
 
   const [loggedIn, setLoggedIn] = useState(false)
-
-  
 
   useEffect(() => {
     const token = Cookies.get("token")
@@ -55,6 +54,7 @@ function App() {
         <Route path="/productions" element={<AllProductionsList />} />
 
         <Route path="/festivals/new" element={<NewFestivalForm />} />
+        <Route path="/festivals" element={<AllFestivalsList />} />
       </Routes>
     </Router>
   )

@@ -14,11 +14,9 @@ const AllProductionsList = () => {
         const fetchAllProductions = async () => {
             try {
                 const response = await ProductionService.getAllProductions()
-                console.log(response)
                 setProductions(response.data.productions)
                 setLoading(false)
             } catch (e) {
-                console.log(e)
                 setFetchError(e.message)
                 setLoading(false)
             }
