@@ -71,6 +71,8 @@ public class VenueService {
             Venue updatedVenue = venueRepository.save(updatedVenueObject);
 
             return updatedVenue;
+        } catch (EntityNotFoundException ex) {
+            throw new EntityNotFoundException(ex.getMessage());
         } catch (DataIntegrityViolationException ex) {
             throw new DataIntegrityViolationException(ex.getMessage());
         } catch (DataAccessException | PersistenceException ex) {

@@ -397,6 +397,18 @@ public class VenueServiceTest {
 
         }
 
+        @Test
+        void testVenueDoesNotExistsThrowsEntityNotFoundException() {
+            // Arrange
+            when(venueRepository.findById(anyInt())).thenReturn(Optional.empty());
+
+            // Act & Assert
+            EntityNotFoundException ex = assertThrows(EntityNotFoundException.class, () -> {
+                venueService.updateVenue(1, new VenueRequest());
+            });
+
+        }
+
 
     }
 }
