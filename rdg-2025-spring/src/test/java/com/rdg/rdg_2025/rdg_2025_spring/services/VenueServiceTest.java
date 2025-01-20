@@ -19,6 +19,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -256,5 +257,23 @@ public class VenueServiceTest {
             assertEquals(false, result);
 
         }
+    }
+
+    @Nested
+    @DisplayName("getVenue service tests")
+    class getVenueServiceTests {
+
+        @Test
+        void testReturnsFoundVenueWhenVenueExists() {
+            // Arrange
+            Venue testVenue = new Venue("Test Venue", "Test Notes", "Test Postcode", "Test Address", "Test Town", "www.test.com");
+            when(venueRepository.findById(anyInt())).thenReturn(Optional.of(testVenue));
+
+            // Act
+            Venue fetchedVenue = venueService.getVenueById(testVenue.getId());
+            // Assert
+            assertEquals(testVenue, fetchedVenue);
+        }
+
     }
 }

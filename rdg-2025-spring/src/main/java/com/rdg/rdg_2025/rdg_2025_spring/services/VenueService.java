@@ -4,6 +4,7 @@ import com.rdg.rdg_2025.rdg_2025_spring.exception.DatabaseException;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Venue;
 import com.rdg.rdg_2025.rdg_2025_spring.payload.request.venue.NewVenueRequest;
 import com.rdg.rdg_2025.rdg_2025_spring.repository.VenueRepository;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.PersistenceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -11,6 +12,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class VenueService {
@@ -37,7 +39,6 @@ public class VenueService {
         } catch (DataAccessException | PersistenceException ex) {
             throw new DatabaseException(ex.getMessage());
         }
-
     }
 
     public List<Venue> getAllVenues() {
@@ -47,8 +48,14 @@ public class VenueService {
         } catch (DataAccessException | PersistenceException ex) {
             throw new DatabaseException(ex.getMessage());
         }
-
     }
+
+    public Venue getVenueById(int venueId) {
+        Venue venue = venueRepository.findById(venueId)
+                .orElseThrow(() -> new EntityNotFoundException("Venue not found with id: " + venueId));
+        return venue;
+    }
+
 
     public boolean deleteVenueById(int venueId) {
         try {

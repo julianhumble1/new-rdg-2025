@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name="festivals")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Festival {
 
     @Id

@@ -315,7 +315,7 @@ public class ProductionIntegrationTest {
         }
 
         @Test
-        void testSuccessfulGetWithVenuesInDatabaseReturnsVenuesArray() throws Exception {
+        void testSuccessfulGetWithProductionsInDatabaseReturnsProductionsArray() throws Exception {
             // Arrange
             Venue managedTestVenue1 = venueRepository.findById(testVenue1.getId()).orElseThrow(() -> new RuntimeException("Venue not found"));
 
