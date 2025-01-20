@@ -403,7 +403,7 @@ public class VenueControllerTest {
 
         @Test
         @WithMockUser(roles="ADMIN")
-        void successfulUpdateResponds200() throws Exception {
+        void testSuccessfulUpdateResponds200() throws Exception {
             // Arrange
             Venue updatedTestVenue = new Venue("Test Venue", "Test Notes", "Test Postcode", "Test Address", "Test Town", "www.test.com");
             when(venueService.updateVenue(anyInt(), any(VenueRequest.class))).thenReturn(updatedTestVenue);
@@ -418,7 +418,7 @@ public class VenueControllerTest {
 
         @Test
         @WithMockUser(roles="ADMIN")
-        void successfulUpdateRespondsExpectedVenueObject() throws Exception {
+        void testSuccessfulUpdateRespondsExpectedVenueObject() throws Exception {
             // Arrange
             Venue updatedTestVenue = new Venue("Test Venue", "Test Notes", "Test Postcode", "Test Address", "Test Town", "www.test.com");
             when(venueService.updateVenue(anyInt(), any(VenueRequest.class))).thenReturn(updatedTestVenue);
@@ -429,6 +429,20 @@ public class VenueControllerTest {
                                     "{ \"name\": \"Updated Test Venue\", \"notes\": \"Updated Test Notes\", \"postcode\": \"Updated Test Postcode\", \"address\": \"Updated Test Address\", " +
                                             "\"town\": \"Updated Test Town\", \"url\": \"www.updatedtest.com\" }"))
                     .andExpect(jsonPath("$.venue.name").value("Test Venue"));
+        }
+
+        @Test
+        @WithMockUser(roles="ADMIN")
+        void testDatabaseExceptionResponds500() throws Exception {
+            // Arrange
+            when(venueService.updateVenue(anyInt(), any(VenueRequest.class))).thenThrow(new DatabaseException("Database exception"));
+            // Act & Assert
+            mockMvc.perform(patch("/venues/1")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(
+                                    "{ \"name\": \"Updated Test Venue\", \"notes\": \"Updated Test Notes\", \"postcode\": \"Updated Test Postcode\", \"address\": \"Updated Test Address\", " +
+                                            "\"town\": \"Updated Test Town\", \"url\": \"www.updatedtest.com\" }"))
+                    .andExpect(status().isInternalServerError());
         }
 
 

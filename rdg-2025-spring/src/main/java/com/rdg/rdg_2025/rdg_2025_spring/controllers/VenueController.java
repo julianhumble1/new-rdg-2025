@@ -70,9 +70,14 @@ public class VenueController {
     @PatchMapping("/{venueId}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> updateVenue(@PathVariable int venueId, @Valid @RequestBody VenueRequest updateVenueRequest) {
-        
-        Venue updatedVenue = venueService.updateVenue(venueId, updateVenueRequest);
-        return ResponseEntity.ok().body(new VenueResponse(updatedVenue));
+
+        try {
+            Venue updatedVenue = venueService.updateVenue(venueId, updateVenueRequest);
+            return ResponseEntity.ok().body(new VenueResponse(updatedVenue));
+
+        } catch (DatabaseException ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
+        }
 
     }
 
