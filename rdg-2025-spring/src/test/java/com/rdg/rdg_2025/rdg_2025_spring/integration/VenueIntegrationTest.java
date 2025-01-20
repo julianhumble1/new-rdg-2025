@@ -434,5 +434,31 @@ public class VenueIntegrationTest {
 
     }
 
+    @Nested
+    @DisplayName("GET getVenueById integration tests")
+    class getVenueByIdIntegrationTests {
+
+        @BeforeEach
+        public void setup() {
+            venueRepository.deleteAll();
+        }
+
+        @AfterEach
+        public void cleanup() {
+            venueRepository.deleteAll();
+        }
+
+
+        @Test
+        void testSuccessfulGetReturns200() throws Exception {
+
+            Venue testVenue = new Venue("Test Venue", "Test Notes", "Test Postcode", "Test Address", "Test Town", "Test URL");
+            venueRepository.save(testVenue);
+            // Act & Assert
+            mockMvc.perform(get("/venues/" + testVenue.getId()))
+                    .andExpect(status().isOk());
+        }
+
+    }
 
 }
