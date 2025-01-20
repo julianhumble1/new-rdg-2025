@@ -580,7 +580,22 @@ public class VenueIntegrationTest {
                     .andExpect(jsonPath("$.venue.postcode").value("Updated Test Postcode"))
                     .andExpect(jsonPath("$.venue.address").value("Updated Test Address"))
                     .andExpect(jsonPath("$.venue.town").value("Updated Test Town"))
-                    .andExpect(jsonPath("$.venue.url").value("www.updatedtest.com"));
+                    .andExpect(jsonPath("$.venue.url").value("www.updatedtest.com"))
+                    .andExpect(jsonPath("$.venue.slug").value("updated-test-venue"));
+
+        }
+
+        @Test
+        void testOnlyNameResponds200() throws Exception {
+            // Arrange
+            // Act & Assert
+            mockMvc.perform(patch("/venues/" + existingVenue.getId())
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", adminToken)
+                            .content(
+                                    "{ \"name\": \"Updated Test Venue\"}"
+                            ))
+                    .andExpect(status().isOk());
 
         }
 
