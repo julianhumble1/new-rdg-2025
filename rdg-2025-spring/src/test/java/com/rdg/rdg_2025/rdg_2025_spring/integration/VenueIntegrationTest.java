@@ -515,6 +515,16 @@ public class VenueIntegrationTest {
                     .andExpect(jsonPath("$.festivals[0].name").value("Test Festival"));
         }
 
+        @Test
+        void testNonExistentVenueIdResponds404() throws Exception {
+            // Arrange
+            Venue testVenue = new Venue("Test Venue", "Test Notes", "Test Postcode", "Test Address", "Test Town", "Test URL");
+            venueRepository.save(testVenue);
+            // Act & Assert
+            mockMvc.perform(get("/venues/" + (testVenue.getId() - 1)))
+                    .andExpect(status().isNotFound());
+        }
+
     }
 
 }
