@@ -350,7 +350,6 @@ public class VenueServiceTest {
             DatabaseException ex = assertThrows(DatabaseException.class, () -> {
                venueService.updateVenue(1, new VenueRequest());
             });
-
         }
 
         @Test
@@ -360,6 +359,21 @@ public class VenueServiceTest {
             when(venueRepository.findById(anyInt())).thenReturn(Optional.of(testVenue));
 
             when(venueRepository.save(any(Venue.class))).thenThrow(new DataAccessException("Data access exception") {});
+
+            // Act & Assert
+            DatabaseException ex = assertThrows(DatabaseException.class, () -> {
+                venueService.updateVenue(1, new VenueRequest());
+            });
+
+        }
+
+        @Test
+        void testSavePersistenceExceptionThrowsDatabaseException() {
+            // Arrange
+            Venue testVenue = new Venue("Test Venue", "Test Notes", "Test Postcode", "Test Address", "Test Town", "www.test.com");
+            when(venueRepository.findById(anyInt())).thenReturn(Optional.of(testVenue));
+
+            when(venueRepository.save(any(Venue.class))).thenThrow(new PersistenceException("Persistence exception") {});
 
             // Act & Assert
             DatabaseException ex = assertThrows(DatabaseException.class, () -> {

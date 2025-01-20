@@ -80,7 +80,7 @@ public class VenueService {
             Venue updatedVenue = venueRepository.save(venue);
 
             return updatedVenue;
-        } catch (DataAccessException ex) {
+        } catch (DataAccessException | PersistenceException ex) {
             throw new DatabaseException(ex.getMessage());
         }
     }
