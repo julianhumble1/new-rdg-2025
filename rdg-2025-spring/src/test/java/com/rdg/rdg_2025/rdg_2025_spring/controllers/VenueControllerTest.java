@@ -345,6 +345,16 @@ public class VenueControllerTest {
                     .andExpect(status().isNotFound());
         }
 
+        @Test
+        void testSuccessfulGetVenueReturnsProductionsArray() throws Exception {
+            // Arrange
+            Venue testVenue = new Venue("Test Venue", null, null, null, null, null);
+            when(venueService.getVenueById(anyInt())).thenReturn(testVenue);
+            // Act & Assert
+            mockMvc.perform(get("/venues/1"))
+                    .andExpect(jsonPath("$.productions").isArray());
+        }
+
     }
 
 }
