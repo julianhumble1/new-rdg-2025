@@ -552,7 +552,6 @@ public class VenueIntegrationTest {
         @Test
         void testFullDetailsWithAdminTokenResponds200() throws Exception {
             // Arrange
-
             // Act & Assert
             mockMvc.perform(patch("/venues/" + existingVenue.getId())
                             .contentType(MediaType.APPLICATION_JSON)
@@ -562,6 +561,26 @@ public class VenueIntegrationTest {
                                             " \"address\": \"Updated Test Address\", \"town\": \"Updated Test Town\", \"url\": \"www.updatedtest.com\" }"
                             ))
                     .andExpect(status().isOk());
+
+        }
+
+        @Test
+        void testFullDetailsWithAdminTokenRespondsExpectedVenueObject() throws Exception {
+            // Arrange
+            // Act & Assert
+            mockMvc.perform(patch("/venues/" + existingVenue.getId())
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", adminToken)
+                            .content(
+                                    "{ \"name\": \"Updated Test Venue\", \"notes\": \"Updated Test Notes\", \"postcode\": \"Updated Test Postcode\"," +
+                                            " \"address\": \"Updated Test Address\", \"town\": \"Updated Test Town\", \"url\": \"www.updatedtest.com\" }"
+                            ))
+                    .andExpect(jsonPath("$.venue.name").value("Updated Test Venue"))
+                    .andExpect(jsonPath("$.venue.notes").value("Updated Test Notes"))
+                    .andExpect(jsonPath("$.venue.postcode").value("Updated Test Postcode"))
+                    .andExpect(jsonPath("$.venue.address").value("Updated Test Address"))
+                    .andExpect(jsonPath("$.venue.town").value("Updated Test Town"))
+                    .andExpect(jsonPath("$.venue.url").value("www.updatedtest.com"));
 
         }
 
