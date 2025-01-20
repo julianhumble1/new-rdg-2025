@@ -1,6 +1,7 @@
 package com.rdg.rdg_2025.rdg_2025_spring.controllers;
 
 import com.rdg.rdg_2025.rdg_2025_spring.exception.DatabaseException;
+import com.rdg.rdg_2025.rdg_2025_spring.models.Festival;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Production;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Venue;
 
@@ -370,6 +371,7 @@ public class VenueControllerTest {
             mockMvc.perform(get("/venues/1"))
                     .andExpect(jsonPath("$.productions[0].name").value("Test Production"));
         }
+
         @Test
         void testSuccessfulGetVenueReturnsFestivalsArray() throws Exception {
             // Arrange
@@ -378,6 +380,19 @@ public class VenueControllerTest {
             // Act & Assert
             mockMvc.perform(get("/venues/1"))
                     .andExpect(jsonPath("$.festivals").isArray());
+        }
+
+        @Test
+        void testSuccessfulGetVenueReturnsExpectedFestivalsInArray() throws Exception {
+            // Arrange
+            Venue testVenue = new Venue("Test Venue", null, null, null, null, null);
+            when(venueService.getVenueById(anyInt())).thenReturn(testVenue);
+            Festival testFestival = new Festival("Test Festival", testVenue, 2025, 1, null);
+            testVenue.setFestivals(Arrays.asList(testFestival));
+
+            // Act & Assert
+            mockMvc.perform(get("/venues/1"))
+                    .andExpect(jsonPath("$.festivals[0].name").value("Test Festival"));
         }
 
     }
