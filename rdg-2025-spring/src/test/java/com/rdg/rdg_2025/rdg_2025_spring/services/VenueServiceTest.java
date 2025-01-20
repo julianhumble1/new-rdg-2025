@@ -406,9 +406,9 @@ public class VenueServiceTest {
             EntityNotFoundException ex = assertThrows(EntityNotFoundException.class, () -> {
                 venueService.updateVenue(1, new VenueRequest());
             });
-
         }
 
 
     }
+
 }

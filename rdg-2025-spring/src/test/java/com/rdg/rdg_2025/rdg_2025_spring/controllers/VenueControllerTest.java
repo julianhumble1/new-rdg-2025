@@ -397,4 +397,28 @@ public class VenueControllerTest {
 
     }
 
+    @Nested
+    @DisplayName("updateVenue Controller Tests")
+    class updateVenueControllerTests {
+
+        @Test
+        @WithMockUser(roles="ADMIN")
+        void successfulUpdateResponds200() throws Exception {
+            // Arrange
+            Venue updatedTestVenue = new Venue("Test Venue", "Test Notes", "Test Postcode", "Test Address", "Test Town", "www.test.com");
+            when(venueService.updateVenue(anyInt(), any(VenueRequest.class))).thenReturn(updatedTestVenue);
+            // Act & Assert
+            mockMvc.perform(patch("/venues/1")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(
+                    "{ \"name\": \"Updated Test Venue\", \"notes\": \"Updated Test Notes\", \"postcode\": \"Updated Test Postcode\", \"address\": \"Updated Test Address\", " +
+                            "\"town\": \"Updated Test Town\", \"url\": \"www.updatedtest.com\" }"))
+                    .andExpect(status().isOk());
+            ;
+        }
+
+
+    }
+
+
 }

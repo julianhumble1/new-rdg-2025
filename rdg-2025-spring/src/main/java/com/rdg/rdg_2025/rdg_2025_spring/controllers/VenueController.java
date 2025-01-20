@@ -67,6 +67,15 @@ public class VenueController {
         }
     }
 
+    @PatchMapping("/{venueId}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> updateVenue(@PathVariable int venueId, @Valid @RequestBody VenueRequest updateVenueRequest) {
+        
+        Venue updatedVenue = venueService.updateVenue(venueId, updateVenueRequest);
+        return ResponseEntity.ok().body(new VenueResponse(updatedVenue));
+
+    }
+
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> deleteVenueById(@PathVariable int id) {
