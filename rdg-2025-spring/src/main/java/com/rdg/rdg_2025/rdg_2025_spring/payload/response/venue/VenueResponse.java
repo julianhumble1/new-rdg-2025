@@ -1,5 +1,6 @@
 package com.rdg.rdg_2025.rdg_2025_spring.payload.response.venue;
 
+import com.rdg.rdg_2025.rdg_2025_spring.models.Festival;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Production;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Venue;
 
@@ -12,17 +13,12 @@ public class VenueResponse {
 
     private List<Production> productions;
 
+    private List<Festival> festivals;
+
     public VenueResponse(Venue venue) {
         this.venue = venue;
         this.productions = venue.getProductions();
-    }
-
-    @Override
-    public String toString() {
-        return "VenueResponse{" +
-                "venue=" + venue +
-                ", productions=" + productions +
-                '}';
+        this.festivals = venue.getFestivals();
     }
 
     public Venue getVenue() {
@@ -39,5 +35,13 @@ public class VenueResponse {
 
     public void setProductions(List<Production> productions) {
         this.productions = productions;
+    }
+
+    public List<Festival> getFestivals() {
+        return festivals;
+    }
+
+    public void setFestivals(List<Festival> festivals) {
+        this.festivals = festivals;
     }
 }

@@ -59,7 +59,6 @@ public class VenueController {
     public ResponseEntity<?> getVenueById(@PathVariable int venueId) {
         try {
             Venue venue = venueService.getVenueById(venueId);
-            System.out.println(new VenueResponse(venue));
             return ResponseEntity.ok().body(new VenueResponse(venue));
         } catch (DatabaseException ex) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());

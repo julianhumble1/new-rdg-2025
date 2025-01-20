@@ -358,7 +358,7 @@ public class VenueControllerTest {
         }
 
         @Test
-        void testSuccessfulGetVenueReturnsProductionsInArray() throws Exception {
+        void testSuccessfulGetVenueReturnsExpectedProductionsInArray() throws Exception {
             // Arrange
             Venue testVenue = new Venue("Test Venue", null, null, null, null, null);
             when(venueService.getVenueById(anyInt())).thenReturn(testVenue);
@@ -369,6 +369,15 @@ public class VenueControllerTest {
             // Act & Assert
             mockMvc.perform(get("/venues/1"))
                     .andExpect(jsonPath("$.productions[0].name").value("Test Production"));
+        }
+        @Test
+        void testSuccessfulGetVenueReturnsFestivalsArray() throws Exception {
+            // Arrange
+            Venue testVenue = new Venue("Test Venue", null, null, null, null, null);
+            when(venueService.getVenueById(anyInt())).thenReturn(testVenue);
+            // Act & Assert
+            mockMvc.perform(get("/venues/1"))
+                    .andExpect(jsonPath("$.festivals").isArray());
         }
 
     }
