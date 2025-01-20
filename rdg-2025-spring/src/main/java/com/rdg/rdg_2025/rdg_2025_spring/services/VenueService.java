@@ -66,17 +66,19 @@ public class VenueService {
             Venue venue = venueRepository.findById(venueId)
                     .orElseThrow(() -> new EntityNotFoundException("Venue not found with id: " + venueId));
 
-            venue.setName(updateVenueRequest.getName());
+            if (updateVenueRequest.getName() != null) {
+                venue.setName(updateVenueRequest.getName());
+                venue.setSlug(SlugUtils.generateSlug(venue.getName()));
+            }
             venue.setNotes(updateVenueRequest.getNotes());
             venue.setPostcode(updateVenueRequest.getPostcode());
             venue.setAddress(updateVenueRequest.getAddress());
             venue.setTown(updateVenueRequest.getTown());
             venue.setUrl(updateVenueRequest.getUrl());
-            venue.setSlug(SlugUtils.generateSlug(updateVenueRequest.getName()));
             venue.setUpdatedAt(LocalDateTime.now());
 
-
             Venue updatedVenue = venueRepository.save(venue);
+
             return updatedVenue;
         } catch (DataAccessException ex) {
             throw new DatabaseException(ex.getMessage());
