@@ -534,4 +534,38 @@ public class VenueIntegrationTest {
 
     }
 
+    @Nested
+    @DisplayName("PATCH updateVenue integration tests")
+    class updateVenueIntegrationTests {
+
+        Venue existingVenue;
+
+        @BeforeEach
+        void beforeEach() {
+            existingVenue = new Venue("Test Venue", "Test Notes", "Test Postcode", "Test Address", "Test Town", "www.test.com");
+            venueRepository.save(existingVenue);
+        }
+
+        @AfterEach
+        void afterEach() { venueRepository.deleteAll();}
+
+        @Test
+        void testFullDetailsWithAdminTokenResponds200() throws Exception {
+            // Arrange
+
+            // Act & Assert
+            mockMvc.perform(patch("/venues/" + existingVenue.getId())
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", adminToken)
+                            .content(
+                                    "{ \"name\": \"Updated Test Venue\", \"notes\": \"Updated Test Notes\", \"postcode\": \"Updated Test Postcode\"," +
+                                            " \"address\": \"Updated Test Address\", \"town\": \"Updated Test Town\", \"url\": \"www.updatedtest.com\" }"
+                            ))
+                    .andExpect(status().isOk());
+
+        }
+
+
+    }
+
 }
