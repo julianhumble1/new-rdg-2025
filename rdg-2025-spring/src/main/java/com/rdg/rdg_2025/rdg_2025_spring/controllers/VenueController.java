@@ -56,8 +56,12 @@ public class VenueController {
 
     @GetMapping("/{venueId}")
     public ResponseEntity<?> getVenueById(@PathVariable int venueId) {
-        Venue venue = venueService.getVenueById(venueId);
-        return ResponseEntity.ok().body(new VenueResponse(venue));
+        try {
+            Venue venue = venueService.getVenueById(venueId);
+            return ResponseEntity.ok().body(new VenueResponse(venue));
+        } catch (DatabaseException ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
+        }
     }
 
     @DeleteMapping("/{id}")

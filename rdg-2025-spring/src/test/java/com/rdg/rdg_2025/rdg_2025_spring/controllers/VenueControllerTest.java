@@ -326,6 +326,15 @@ public class VenueControllerTest {
                     .andExpect(jsonPath("$.venue.name").value("Test Venue"));
         }
 
+        @Test
+        void testDatabaseExceptionResponds500() throws Exception {
+            // Arrange
+            when(venueService.getVenueById(anyInt())).thenThrow(new DatabaseException("database exception"));
+            // Act & Assert
+            mockMvc.perform(get("/venues/1"))
+                    .andExpect(status().isInternalServerError());
+        }
+
     }
 
 }
