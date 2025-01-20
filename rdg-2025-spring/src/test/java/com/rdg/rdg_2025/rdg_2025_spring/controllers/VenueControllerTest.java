@@ -302,4 +302,30 @@ public class VenueControllerTest {
 
     }
 
+    @Nested
+    @DisplayName("getVenueById Controller Tests")
+    class getVenueByIdControllerTests {
+
+        @Test
+        void testSuccessfulGetReturns200Code() throws Exception {
+            // Arrange
+            Venue testVenue = new Venue("Test Venue", null, null, null, null, null);
+            when(venueService.getVenueById(anyInt())).thenReturn(testVenue);
+            // Act & Assert
+            mockMvc.perform(get("/venues/1"))
+                    .andExpect(status().isOk());
+        }
+
+        @Test
+        void testSuccessfulGetReturnsVenueObject() throws Exception {
+            // Arrange
+            Venue testVenue = new Venue("Test Venue", null, null, null, null, null);
+            when(venueService.getVenueById(anyInt())).thenReturn(testVenue);
+            // Act & Assert
+            mockMvc.perform(get("/venues/1"))
+                    .andExpect(jsonPath("$.venue.name").value("Test Venue"));
+        }
+
+    }
+
 }

@@ -41,7 +41,6 @@ public class VenueController {
         } catch (DatabaseException ex) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
         }
-
     }
 
     @GetMapping()
@@ -53,6 +52,12 @@ public class VenueController {
         } catch (DatabaseException ex) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
         }
+    }
+
+    @GetMapping("/{venueId}")
+    public ResponseEntity<?> getVenueById(@PathVariable int venueId) {
+        Venue venue = venueService.getVenueById(venueId);
+        return ResponseEntity.ok().body(new VenueResponse(venue));
     }
 
     @DeleteMapping("/{id}")

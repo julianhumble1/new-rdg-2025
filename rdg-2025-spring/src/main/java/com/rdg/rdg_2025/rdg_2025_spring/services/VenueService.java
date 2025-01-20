@@ -60,7 +60,6 @@ public class VenueService {
         }
     }
 
-
     public boolean deleteVenueById(int venueId) {
         try {
             if (venueRepository.existsById(venueId)) {
