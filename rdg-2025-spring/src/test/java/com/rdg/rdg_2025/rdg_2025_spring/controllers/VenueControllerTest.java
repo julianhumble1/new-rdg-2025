@@ -503,6 +503,20 @@ public class VenueControllerTest {
                     .andExpect(status().isBadRequest());
         }
 
+        @Test
+        @WithMockUser(roles="ADMIN")
+        void testMissingVenueNameResponds400() throws Exception {
+            // Arrange
+
+            // Act & Assert
+            mockMvc.perform(patch("/venues/1")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(
+                                    "{\"notes\": \"Updated Test Notes\", \"postcode\": \"Updated Test Postcode\", \"address\": \"Updated Test Address\", " +
+                                            "\"town\": \"Updated Test Town\", \"url\": \"www.updatedtest.com\" }"))
+                    .andExpect(status().isBadRequest());
+        }
+
 
     }
 
