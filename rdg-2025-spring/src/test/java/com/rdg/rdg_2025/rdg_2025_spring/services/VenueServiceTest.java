@@ -4,6 +4,7 @@ import com.rdg.rdg_2025.rdg_2025_spring.exception.DatabaseException;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Venue;
 import com.rdg.rdg_2025.rdg_2025_spring.payload.request.venue.NewVenueRequest;
 import com.rdg.rdg_2025.rdg_2025_spring.repository.VenueRepository;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.PersistenceException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
@@ -273,6 +274,28 @@ public class VenueServiceTest {
             Venue fetchedVenue = venueService.getVenueById(testVenue.getId());
             // Assert
             assertEquals(testVenue, fetchedVenue);
+        }
+
+        @Test
+        void testThrowsEntityNotFoundExceptionWhenVenueDoesNotExist() {
+            // Arrange
+            when(venueRepository.findById(anyInt())).thenReturn(Optional.empty());
+
+            // Act & Assert
+            EntityNotFoundException ex = assertThrows(EntityNotFoundException.class, () -> {
+                venueService.getVenueById(1);
+            });
+        }
+
+        @Test
+        void testThrowsDatabaseExceptionWhenDataAccessException() {
+            // Arrange
+            when(venueRepository.findById(anyInt())).thenThrow(new DataAccessException("Data access exception") {});
+
+            // Act & Assert
+            DatabaseException ex = assertThrows(DatabaseException.class, () -> {
+                venueService.getVenueById(1);
+            });
         }
 
     }

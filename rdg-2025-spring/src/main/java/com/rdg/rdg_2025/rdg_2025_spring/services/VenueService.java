@@ -51,9 +51,13 @@ public class VenueService {
     }
 
     public Venue getVenueById(int venueId) {
-        Venue venue = venueRepository.findById(venueId)
-                .orElseThrow(() -> new EntityNotFoundException("Venue not found with id: " + venueId));
-        return venue;
+        try {
+            Venue venue = venueRepository.findById(venueId)
+                    .orElseThrow(() -> new EntityNotFoundException("Venue not found with id: " + venueId));
+            return venue;
+        } catch (DataAccessException ex) {
+            throw new DatabaseException(ex.getMessage());
+        }
     }
 
 
