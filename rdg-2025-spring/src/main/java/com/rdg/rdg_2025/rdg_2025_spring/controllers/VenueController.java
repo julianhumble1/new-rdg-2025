@@ -7,6 +7,7 @@ import com.rdg.rdg_2025.rdg_2025_spring.payload.response.MessageResponse;
 import com.rdg.rdg_2025.rdg_2025_spring.payload.response.venue.VenueResponse;
 import com.rdg.rdg_2025.rdg_2025_spring.payload.response.venue.VenuesResponse;
 import com.rdg.rdg_2025.rdg_2025_spring.services.VenueService;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -61,6 +62,8 @@ public class VenueController {
             return ResponseEntity.ok().body(new VenueResponse(venue));
         } catch (DatabaseException ex) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
+        } catch (EntityNotFoundException ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
         }
     }
 

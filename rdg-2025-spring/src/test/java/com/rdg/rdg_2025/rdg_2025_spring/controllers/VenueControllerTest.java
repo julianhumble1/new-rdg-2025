@@ -5,6 +5,7 @@ import com.rdg.rdg_2025.rdg_2025_spring.models.Venue;
 
 import com.rdg.rdg_2025.rdg_2025_spring.payload.request.venue.NewVenueRequest;
 import com.rdg.rdg_2025.rdg_2025_spring.services.VenueService;
+import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -333,6 +334,15 @@ public class VenueControllerTest {
             // Act & Assert
             mockMvc.perform(get("/venues/1"))
                     .andExpect(status().isInternalServerError());
+        }
+
+        @Test
+        void testEntityNotFoundExceptionResponds404() throws Exception {
+            // Arrange
+            when(venueService.getVenueById(anyInt())).thenThrow(new EntityNotFoundException("Venue id does not exist"));
+            // Act & Assert
+            mockMvc.perform(get("/venues/1"))
+                    .andExpect(status().isNotFound());
         }
 
     }
