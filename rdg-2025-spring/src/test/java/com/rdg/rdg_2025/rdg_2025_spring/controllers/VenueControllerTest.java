@@ -1,6 +1,7 @@
 package com.rdg.rdg_2025.rdg_2025_spring.controllers;
 
 import com.rdg.rdg_2025.rdg_2025_spring.exception.DatabaseException;
+import com.rdg.rdg_2025.rdg_2025_spring.models.Production;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Venue;
 
 import com.rdg.rdg_2025.rdg_2025_spring.payload.request.venue.NewVenueRequest;
@@ -24,6 +25,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -353,6 +355,20 @@ public class VenueControllerTest {
             // Act & Assert
             mockMvc.perform(get("/venues/1"))
                     .andExpect(jsonPath("$.productions").isArray());
+        }
+
+        @Test
+        void testSuccessfulGetVenueReturnsProductionsInArray() throws Exception {
+            // Arrange
+            Venue testVenue = new Venue("Test Venue", null, null, null, null, null);
+            when(venueService.getVenueById(anyInt())).thenReturn(testVenue);
+            Production testProduction = new Production(
+                    "Test Production", testVenue, null, null, null, false, false, null
+            );
+            testVenue.setProductions(Arrays.asList(testProduction));
+            // Act & Assert
+            mockMvc.perform(get("/venues/1"))
+                    .andExpect(jsonPath("$.productions[0].name").value("Test Production"));
         }
 
     }
