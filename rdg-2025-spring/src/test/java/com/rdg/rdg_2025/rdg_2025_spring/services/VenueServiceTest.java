@@ -341,6 +341,18 @@ public class VenueServiceTest {
             assertEquals("updated-test-venue", actualVenue.getSlug());
         }
 
+        @Test
+        void testFindDataAccessExceptionThrowsDatabaseException() {
+            // Arrange
+            when(venueRepository.findById(anyInt())).thenThrow(new DataAccessException("Data access exception") {});
+
+            // Act & Assert
+            DatabaseException ex = assertThrows(DatabaseException.class, () -> {
+               venueService.updateVenue(1, new VenueRequest());
+            });
+
+        }
+
 
     }
 }
