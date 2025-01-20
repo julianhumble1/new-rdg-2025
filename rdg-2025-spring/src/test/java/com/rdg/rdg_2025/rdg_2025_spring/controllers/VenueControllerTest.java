@@ -475,6 +475,21 @@ public class VenueControllerTest {
                     .andExpect(status().isNotFound());
         }
 
+        @Test
+        @WithMockUser(roles="ADMIN")
+        void testVenueIdNotIntResponds400() throws Exception {
+            // Arrange
+            when(venueService.updateVenue(anyInt(), any(VenueRequest.class)))
+                    .thenThrow(new EntityNotFoundException("No venue with this id exists"));
+            // Act & Assert
+            mockMvc.perform(patch("/venues/badVenueId")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(
+                                    "{ \"name\": \"Updated Test Venue\", \"notes\": \"Updated Test Notes\", \"postcode\": \"Updated Test Postcode\", \"address\": \"Updated Test Address\", " +
+                                            "\"town\": \"Updated Test Town\", \"url\": \"www.updatedtest.com\" }"))
+                    .andExpect(status().isBadRequest());
+        }
+
 
     }
 
