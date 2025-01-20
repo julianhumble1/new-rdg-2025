@@ -382,6 +382,21 @@ public class VenueServiceTest {
 
         }
 
+        @Test
+        void testSameNameAsExistingVenueThrowsDataIntegrityViolationException() {
+            // Arrange
+            Venue testVenue = new Venue("Test Venue", "Test Notes", "Test Postcode", "Test Address", "Test Town", "www.test.com");
+            when(venueRepository.findById(anyInt())).thenReturn(Optional.of(testVenue));
+
+            when(venueRepository.save(any(Venue.class))).thenThrow(new DataIntegrityViolationException("Data Integrity Violation"));
+
+            // Act & Assert
+            DataIntegrityViolationException ex = assertThrows(DataIntegrityViolationException.class, () -> {
+                venueService.updateVenue(1, new VenueRequest());
+            });
+
+        }
+
 
     }
 }

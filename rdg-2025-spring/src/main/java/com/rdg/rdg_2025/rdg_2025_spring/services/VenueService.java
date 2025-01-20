@@ -66,23 +66,31 @@ public class VenueService {
             Venue venue = venueRepository.findById(venueId)
                     .orElseThrow(() -> new EntityNotFoundException("Venue not found with id: " + venueId));
 
-            if (updateVenueRequest.getName() != null) {
-                venue.setName(updateVenueRequest.getName());
-                venue.setSlug(SlugUtils.generateSlug(venue.getName()));
-            }
-            venue.setNotes(updateVenueRequest.getNotes());
-            venue.setPostcode(updateVenueRequest.getPostcode());
-            venue.setAddress(updateVenueRequest.getAddress());
-            venue.setTown(updateVenueRequest.getTown());
-            venue.setUrl(updateVenueRequest.getUrl());
-            venue.setUpdatedAt(LocalDateTime.now());
+            Venue updatedVenueObject = updateVenueObject(updateVenueRequest, venue);
 
-            Venue updatedVenue = venueRepository.save(venue);
+            Venue updatedVenue = venueRepository.save(updatedVenueObject);
 
             return updatedVenue;
+        } catch (DataIntegrityViolationException ex) {
+            throw new DataIntegrityViolationException(ex.getMessage());
         } catch (DataAccessException | PersistenceException ex) {
             throw new DatabaseException(ex.getMessage());
         }
+    }
+
+    private Venue updateVenueObject(VenueRequest updateVenueRequest, Venue venue) {
+        if (updateVenueRequest.getName() != null) {
+            venue.setName(updateVenueRequest.getName());
+            venue.setSlug(SlugUtils.generateSlug(venue.getName()));
+        }
+        venue.setNotes(updateVenueRequest.getNotes());
+        venue.setPostcode(updateVenueRequest.getPostcode());
+        venue.setAddress(updateVenueRequest.getAddress());
+        venue.setTown(updateVenueRequest.getTown());
+        venue.setUrl(updateVenueRequest.getUrl());
+        venue.setUpdatedAt(LocalDateTime.now());
+
+        return venue;
     }
 
     public boolean deleteVenueById(int venueId) {
