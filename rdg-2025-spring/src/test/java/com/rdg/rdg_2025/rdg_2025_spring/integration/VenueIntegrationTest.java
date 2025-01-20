@@ -21,6 +21,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 
+import java.util.Arrays;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -476,6 +477,20 @@ public class VenueIntegrationTest {
             // Act & Assert
             mockMvc.perform(get("/venues/" + testVenue.getId()))
                     .andExpect(jsonPath("$.productions").isArray());
+        }
+
+        @Test
+        void testSuccessfulGetReturnsExpectedProductionInArray() throws Exception {
+            // Arrange
+            Venue testVenue = new Venue("Test Venue", "Test Notes", "Test Postcode", "Test Address", "Test Town", "Test URL");
+            Production testProduction = new Production(
+                    "Test Production", testVenue, null, null, null, false, false, null
+            );
+            testVenue.setProductions(Arrays.asList(testProduction));
+            venueRepository.save(testVenue);
+            // Act & Assert
+            mockMvc.perform(get("/venues/" + testVenue.getId()))
+                    .andExpect(jsonPath("$.productions[0].name").value("Test Production"));
         }
 
     }
