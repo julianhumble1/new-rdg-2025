@@ -2,11 +2,10 @@ package com.rdg.rdg_2025.rdg_2025_spring.services;
 
 import com.rdg.rdg_2025.rdg_2025_spring.exception.DatabaseException;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Venue;
-import com.rdg.rdg_2025.rdg_2025_spring.payload.request.venue.NewVenueRequest;
+import com.rdg.rdg_2025.rdg_2025_spring.payload.request.venue.VenueRequest;
 import com.rdg.rdg_2025.rdg_2025_spring.repository.VenueRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.PersistenceException;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -51,7 +50,7 @@ public class VenueServiceTest {
 
             // Act
             Venue result = venueService.addNewVenue(
-                    new NewVenueRequest("Test Venue", "Test Notes", "Test Postcode", "Test Address", "Test Town", "www.test.com")
+                    new VenueRequest("Test Venue", "Test Notes", "Test Postcode", "Test Address", "Test Town", "www.test.com")
             );
 
             // Assert
@@ -66,7 +65,7 @@ public class VenueServiceTest {
 
             // Act
             Venue result = venueService.addNewVenue(
-                    new NewVenueRequest("Test Venue", null, null, null, null, null)
+                    new VenueRequest("Test Venue", null, null, null, null, null)
             );
 
             // Assert
@@ -80,7 +79,7 @@ public class VenueServiceTest {
 
             // Act & Assert
             DataIntegrityViolationException ex = assertThrows(DataIntegrityViolationException.class, () -> {
-                venueService.addNewVenue(new NewVenueRequest(
+                venueService.addNewVenue(new VenueRequest(
                         "Test Venue", "Test Notes", "Test Postcode", "Test Address", "Test Town", "www.test.com")
                 );
             });
@@ -93,7 +92,7 @@ public class VenueServiceTest {
 
             // Act & Assert
             DatabaseException ex = assertThrows(DatabaseException.class, () -> {
-                venueService.addNewVenue(new NewVenueRequest(
+                venueService.addNewVenue(new VenueRequest(
                         "Test Venue", "Test Notes", "Test Postcode", "Test Address", "Test Town", "www.test.com")
                 );
             });
@@ -106,7 +105,7 @@ public class VenueServiceTest {
 
             // Act & Assert
             DatabaseException ex = assertThrows(DatabaseException.class, () -> {
-                venueService.addNewVenue(new NewVenueRequest(
+                venueService.addNewVenue(new VenueRequest(
                         "Test Venue", "Test Notes", "Test Postcode", "Test Address", "Test Town", "www.test.com")
                 );
             });
@@ -297,6 +296,51 @@ public class VenueServiceTest {
                 venueService.getVenueById(1);
             });
         }
+
+    }
+
+    @Nested
+    @DisplayName("updateVenue service tests")
+    class updateVenueServiceTests {
+
+        @Test
+        void updateVenueWithAllFieldsSuccessReturnsExpectedVenueObject() {
+            // Arrange
+            Venue testVenue = new Venue("Test Venue", "Test Notes", "Test Postcode", "Test Address", "Test Town", "www.test.com");
+            when(venueRepository.findById(anyInt())).thenReturn(Optional.of(testVenue));
+
+            VenueRequest updateVenueRequest = new VenueRequest(
+                    "Updated Test Venue",
+                    "Updated Test Notes",
+                    "Updated Test Postcode",
+                    "Updated Test Address",
+                    "Updated Test Town",
+                    "www.updatedtest.com"
+                    );
+
+            Venue updatedTestVenue = new Venue(
+                    "Updated Test Venue",
+                    "Updated Test Notes",
+                    "Updated Test Postcode",
+                    "Updated Test Address",
+                    "Updated Test Town",
+                    "www.updatedtest.com"
+            );
+
+            when(venueRepository.save(any(Venue.class))).thenReturn(updatedTestVenue);
+
+            // Act
+            Venue actualVenue = venueService.updateVenue(1, updateVenueRequest);
+            // Assert
+            assertEquals("Updated Test Venue", actualVenue.getName());
+            assertEquals("Updated Test Notes", actualVenue.getNotes());
+            assertEquals("Updated Test Postcode", actualVenue.getPostcode());
+            assertEquals("Updated Test Address", actualVenue.getAddress());
+            assertEquals("Updated Test Town", actualVenue.getTown());
+            assertEquals("www.updatedtest.com", actualVenue.getUrl());
+            assertEquals("updated-test-venue", actualVenue.getSlug());
+        }
+
 
     }
 }

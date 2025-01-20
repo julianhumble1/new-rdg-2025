@@ -5,7 +5,7 @@ import com.rdg.rdg_2025.rdg_2025_spring.models.Festival;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Production;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Venue;
 
-import com.rdg.rdg_2025.rdg_2025_spring.payload.request.venue.NewVenueRequest;
+import com.rdg.rdg_2025.rdg_2025_spring.payload.request.venue.VenueRequest;
 import com.rdg.rdg_2025.rdg_2025_spring.services.VenueService;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
@@ -63,7 +63,7 @@ public class VenueControllerTest {
         void test201StatusWhenServiceSuccessfullySavesVenue() throws Exception{
             // Arrange
             Venue testVenue = new Venue("Test Venue", "Test Notes", "Test Postcode", "Test Address", "Test Town", "www.test.com");
-            when(venueService.addNewVenue(any(NewVenueRequest.class))).thenReturn(testVenue);
+            when(venueService.addNewVenue(any(VenueRequest.class))).thenReturn(testVenue);
 
             // Act & Assert
             mockMvc.perform(post("/venues")
@@ -82,7 +82,7 @@ public class VenueControllerTest {
             // Arrange
             Venue testVenue = new Venue("Test Venue", "Test Notes", "Test Postcode", "Test Address", "Test Town", "www.test.com");
             int testVenueId = testVenue.getId();
-            when(venueService.addNewVenue(any(NewVenueRequest.class))).thenReturn(testVenue);
+            when(venueService.addNewVenue(any(VenueRequest.class))).thenReturn(testVenue);
 
             // Act & Assert
             mockMvc.perform(post("/venues")
@@ -100,7 +100,7 @@ public class VenueControllerTest {
         void testReturnedVenueWhenServiceSuccessfullySavesVenue() throws Exception{
             // Arrange
             Venue testVenue = new Venue("Test Venue", "Test Notes", "Test Postcode", "Test Address", "Test Town", "www.test.com");
-            when(venueService.addNewVenue(any(NewVenueRequest.class))).thenReturn(testVenue);
+            when(venueService.addNewVenue(any(VenueRequest.class))).thenReturn(testVenue);
 
             // Act & Assert
             mockMvc.perform(post("/venues")
@@ -128,7 +128,7 @@ public class VenueControllerTest {
         void testDataIntegrityViolationExceptionReturns409Error() throws Exception{
             // Arrange
             Venue testVenue = new Venue("Test Venue", "Test Notes", "Test Postcode", "Test Address", "Test Town", "www.test.com");
-            when(venueService.addNewVenue(any(NewVenueRequest.class))).thenThrow(new DataIntegrityViolationException("Data integrity violation"));
+            when(venueService.addNewVenue(any(VenueRequest.class))).thenThrow(new DataIntegrityViolationException("Data integrity violation"));
 
             // Act & Assert
             mockMvc.perform(post("/venues")
@@ -146,7 +146,7 @@ public class VenueControllerTest {
         void testDataBaseExceptionReturns500Error() throws Exception{
             // Arrange
             Venue testVenue = new Venue("Test Venue", "Test Notes", "Test Postcode", "Test Address", "Test Town", "www.test.com");
-            when(venueService.addNewVenue(any(NewVenueRequest.class))).thenThrow(new DatabaseException("Database Error"));
+            when(venueService.addNewVenue(any(VenueRequest.class))).thenThrow(new DatabaseException("Database Error"));
 
             // Act & Assert
             mockMvc.perform(post("/venues")
@@ -194,7 +194,7 @@ public class VenueControllerTest {
         void testNameWithMissingOtherValuesReturns201() throws Exception{
             // Arrange
             Venue testVenue = new Venue("Test Venue", null, null, null, null, null);
-            when(venueService.addNewVenue(any(NewVenueRequest.class))).thenReturn(testVenue);
+            when(venueService.addNewVenue(any(VenueRequest.class))).thenReturn(testVenue);
 
             // Act & Assert
             mockMvc.perform(post("/venues")
@@ -211,7 +211,7 @@ public class VenueControllerTest {
         void testNameWithEmptyOtherValuesReturns201() throws Exception{
             // Arrange
             Venue testVenue = new Venue("Test Venue", null, null, null, null, null);
-            when(venueService.addNewVenue(any(NewVenueRequest.class))).thenReturn(testVenue);
+            when(venueService.addNewVenue(any(VenueRequest.class))).thenReturn(testVenue);
 
             // Act & Assert
             mockMvc.perform(post("/venues")

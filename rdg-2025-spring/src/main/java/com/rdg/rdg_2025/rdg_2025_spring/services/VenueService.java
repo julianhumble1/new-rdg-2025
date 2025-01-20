@@ -1,8 +1,9 @@
 package com.rdg.rdg_2025.rdg_2025_spring.services;
 
 import com.rdg.rdg_2025.rdg_2025_spring.exception.DatabaseException;
+import com.rdg.rdg_2025.rdg_2025_spring.helpers.SlugUtils;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Venue;
-import com.rdg.rdg_2025.rdg_2025_spring.payload.request.venue.NewVenueRequest;
+import com.rdg.rdg_2025.rdg_2025_spring.payload.request.venue.VenueRequest;
 import com.rdg.rdg_2025.rdg_2025_spring.repository.VenueRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.PersistenceException;
@@ -11,8 +12,8 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class VenueService {
@@ -20,7 +21,7 @@ public class VenueService {
     @Autowired
     VenueRepository venueRepository;
 
-    public Venue addNewVenue(NewVenueRequest newVenueRequest) {
+    public Venue addNewVenue(VenueRequest newVenueRequest) {
 
         Venue venue = new Venue(
                 newVenueRequest.getName(),
@@ -58,6 +59,21 @@ public class VenueService {
         } catch (DataAccessException ex) {
             throw new DatabaseException(ex.getMessage());
         }
+    }
+
+    public Venue updateVenue(int venueId, VenueRequest updateVenueRequest) {
+        Venue venue = venueRepository.findById(venueId)
+                .orElseThrow(() -> new EntityNotFoundException("Venue not found with id: " + venueId));
+        venue.setName(updateVenueRequest.getName());
+        venue.setNotes(updateVenueRequest.getNotes());
+        venue.setPostcode(updateVenueRequest.getPostcode());
+        venue.setAddress(updateVenueRequest.getAddress());
+        venue.setTown(updateVenueRequest.getTown());
+        venue.setUrl(updateVenueRequest.getUrl());
+        venue.setSlug(SlugUtils.generateSlug(updateVenueRequest.getName()));
+        venue.setUpdatedAt(LocalDateTime.now());
+        Venue updatedVenue = venueRepository.save(venue);
+        return updatedVenue;
     }
 
     public boolean deleteVenueById(int venueId) {
