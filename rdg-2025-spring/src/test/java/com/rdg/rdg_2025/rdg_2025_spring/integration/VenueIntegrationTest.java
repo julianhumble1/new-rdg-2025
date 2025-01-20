@@ -525,6 +525,13 @@ public class VenueIntegrationTest {
                     .andExpect(status().isNotFound());
         }
 
+        @Test
+        void testInvalidVenueIdResponds400() throws Exception {
+            // Act & Assert
+            mockMvc.perform(get("/venues/" + "Bad Venue Id"))
+                    .andExpect(status().isBadRequest());
+        }
+
     }
 
 }
