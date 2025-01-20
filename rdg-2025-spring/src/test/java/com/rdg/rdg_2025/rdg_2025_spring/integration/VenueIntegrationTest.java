@@ -450,7 +450,7 @@ public class VenueIntegrationTest {
 
         @Test
         void testSuccessfulGetReturns200() throws Exception {
-
+            // Arrange
             Venue testVenue = new Venue("Test Venue", "Test Notes", "Test Postcode", "Test Address", "Test Town", "Test URL");
             venueRepository.save(testVenue);
             // Act & Assert
@@ -460,12 +460,22 @@ public class VenueIntegrationTest {
 
         @Test
         void testSuccessfulGetReturnsExpectedVenue() throws Exception {
-
+            // Arrange
             Venue testVenue = new Venue("Test Venue", "Test Notes", "Test Postcode", "Test Address", "Test Town", "Test URL");
             venueRepository.save(testVenue);
             // Act & Assert
             mockMvc.perform(get("/venues/" + testVenue.getId()))
                     .andExpect(jsonPath("$.venue.name").value("Test Venue"));
+        }
+
+        @Test
+        void testSuccessfulGetReturnsProductionsArray() throws Exception {
+            // Arrange
+            Venue testVenue = new Venue("Test Venue", "Test Notes", "Test Postcode", "Test Address", "Test Town", "Test URL");
+            venueRepository.save(testVenue);
+            // Act & Assert
+            mockMvc.perform(get("/venues/" + testVenue.getId()))
+                    .andExpect(jsonPath("$.productions").isArray());
         }
 
     }
