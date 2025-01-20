@@ -503,6 +503,18 @@ public class VenueIntegrationTest {
                     .andExpect(jsonPath("$.festivals").isArray());
         }
 
+        @Test
+        void testSuccessfulGetReturnsExpectedFestivalInArray() throws Exception {
+            // Arrange
+            Venue testVenue = new Venue("Test Venue", "Test Notes", "Test Postcode", "Test Address", "Test Town", "Test URL");
+            Festival testFestival = new Festival("Test Festival", testVenue, 2025, 1, null);
+            testVenue.setFestivals(Arrays.asList(testFestival));
+            venueRepository.save(testVenue);
+            // Act & Assert
+            mockMvc.perform(get("/venues/" + testVenue.getId()))
+                    .andExpect(jsonPath("$.festivals[0].name").value("Test Festival"));
+        }
+
     }
 
 }
