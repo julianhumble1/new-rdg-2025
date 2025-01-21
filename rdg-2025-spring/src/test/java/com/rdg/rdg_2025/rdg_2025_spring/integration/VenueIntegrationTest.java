@@ -656,16 +656,32 @@ public class VenueIntegrationTest {
         void testNonExistentVenueIdResponds404() throws Exception {
             // Arrange
             // Act & Assert
-            mockMvc.perform(patch("/venues/" + existingVenue1.getId())
+            mockMvc.perform(patch("/venues/" + (existingVenue1.getId() -1))
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", adminToken)
                             .content(
                                     "{ \"name\": \"Updated Test Venue\", \"notes\": \"Updated Test Notes\", \"postcode\": \"Updated Test Postcode\"," +
                                             " \"address\": \"Updated Test Address\", \"town\": \"Updated Test Town\", \"url\": \"www.updatedtest.com\" }"
                             ))
-                    .andExpect(status().isOk());
+                    .andExpect(status().isNotFound());
 
         }
+
+        @Test
+        void testBadVenueIdResponds400() throws Exception {
+            // Arrange
+            // Act & Assert
+            mockMvc.perform(patch("/venues/" + "bad venue id")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", adminToken)
+                            .content(
+                                    "{ \"name\": \"Updated Test Venue\", \"notes\": \"Updated Test Notes\", \"postcode\": \"Updated Test Postcode\"," +
+                                            " \"address\": \"Updated Test Address\", \"town\": \"Updated Test Town\", \"url\": \"www.updatedtest.com\" }"
+                            ))
+                    .andExpect(status().isBadRequest());
+
+        }
+
 
 
     }
