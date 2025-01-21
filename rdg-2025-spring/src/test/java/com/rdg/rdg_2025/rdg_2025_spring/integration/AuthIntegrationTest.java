@@ -160,6 +160,24 @@ public class AuthIntegrationTest {
                     .andExpect(jsonPath("$.token").isNotEmpty());
 
         }
+
+        @Test
+        void testCorrectUserUsernameAndPasswordRespondsWithExpectedDetails() throws Exception {
+            // Arrange
+            Long userId = testUser.getId();
+            String username = testUser.getUsername();
+            String email = testUser.getEmail();
+
+            // Act
+            mockMvc.perform(post("/auth/signin")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content("{ \"username\": \"test_user\",  \"password\": \"password123\" }"))
+                    .andExpect(jsonPath("$.id").value(userId))
+                    .andExpect(jsonPath("$.username").value(username))
+                    .andExpect(jsonPath("$.email").value(email))
+                    .andExpect(jsonPath("$.roles[0]").value("ROLE_USER"));
+
+        }
     }
 
 
