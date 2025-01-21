@@ -204,10 +204,18 @@ public class AuthIntegrationTest {
     class signUpIntegrationTests {
 
         @Test
-        void testSignUpWithFullDetailsResponds200() throws Exception {
+        void testSignUpUserWithFullDetailsResponds200() throws Exception {
             mockMvc.perform(post("/auth/signup")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content("{\"username\": \"new_user\", \"email\": \"user@new.com\", \"password\": \"password123\", \"role\": [\"user\"] }"))
+                    .andExpect(status().isOk());
+        }
+
+        @Test
+        void testSignUpAdminWithFullDetailsResponds200() throws Exception {
+            mockMvc.perform(post("/auth/signup")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content("{\"username\": \"new_admin\", \"email\": \"admin@new.com\", \"password\": \"password123\", \"role\": [\"admin\"] }"))
                     .andExpect(status().isOk());
         }
 
