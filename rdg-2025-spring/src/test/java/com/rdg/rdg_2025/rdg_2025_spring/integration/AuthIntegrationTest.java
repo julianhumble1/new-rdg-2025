@@ -19,6 +19,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.List;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -116,6 +118,25 @@ public class AuthIntegrationTest {
                             .contentType(MediaType.APPLICATION_JSON)
                             .content("{ \"username\": \"test_admin\",  \"password\": \"password123\" }"))
                     .andExpect(jsonPath("$.token").isNotEmpty());
+
+        }
+
+        @Test
+        void testCorrectAdminUsernameAndPasswordRespondsWithExpectedDetails() throws Exception {
+            // Arrange
+            Long adminId = testAdmin.getId();
+            String username = testAdmin.getUsername();
+            String email = testAdmin.getEmail();
+
+            // Act
+            mockMvc.perform(post("/auth/signin")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content("{ \"username\": \"test_admin\",  \"password\": \"password123\" }"))
+                    .andExpect(jsonPath("$.id").value(adminId))
+                    .andExpect(jsonPath("$.username").value(username))
+                    .andExpect(jsonPath("$.email").value(email))
+                    .andExpect(jsonPath("$.roles[0]").value("ROLE_ADMIN"))
+            ;
 
         }
     }
