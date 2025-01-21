@@ -49,7 +49,6 @@ public class FestivalControllerTest {
         mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
     }
 
-
     private Festival testFestival = new Festival(
             "Test Festival", new Venue(), 2025, 1, "Test Description"
     );
