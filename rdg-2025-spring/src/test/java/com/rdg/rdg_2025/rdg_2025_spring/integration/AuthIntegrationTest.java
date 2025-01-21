@@ -327,6 +327,22 @@ public class AuthIntegrationTest {
                     .andExpect(status().isBadRequest());
         }
 
+        @Test
+        void testEmptyRoleResponds400() throws Exception {
+            mockMvc.perform(post("/auth/signup")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content("{\"username\": \"new_admin\", \"email\": \"admin@new.com\", \"password\": \"password123\" \"role\": []}"))
+                    .andExpect(status().isBadRequest());
+        }
+
+        @Test
+        void testBadRoleResponds400() throws Exception {
+            mockMvc.perform(post("/auth/signup")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content("{\"username\": \"new_admin\", \"email\": \"admin@new.com\", \"password\": \"password123\" \"role\": [\"bad role\"]}"))
+                    .andExpect(status().isBadRequest());
+        }
+
     }
 
 }
