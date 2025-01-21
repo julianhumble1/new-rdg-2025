@@ -13,6 +13,7 @@ import NewProductionForm from "./components/productions/NewProductionForm.jsx"
 import AllProductionsList from "./components/productions/AllProductionsList.jsx"
 import NewFestivalForm from "./components/festivals/NewFestivalForm.jsx"
 import AllFestivalsList from "./components/festivals/AllFestivalsList.jsx"
+import VenuePage from "./components/venues/VenuePage.jsx"
 
 
 function App() {
@@ -49,6 +50,7 @@ function App() {
 
         <Route path="/venues/new" element={<NewVenueForm />} />
         <Route path="/venues" element={<AllVenuesList />} />
+        <Route path="/venues/:id" element={<VenuePage />} />
 
         <Route path="/productions/new" element={<NewProductionForm />} />
         <Route path="/productions" element={<AllProductionsList />} />

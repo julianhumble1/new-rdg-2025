@@ -14,8 +14,6 @@ const AllVenuesList = () => {
     const [deleteError, setDeleteError] = useState("")
     const [deleteSuccess, setDeleteSuccess] = useState("")
 
-
-
     const handleDelete = (venue) => {
         setShowConfirmDelete(true)
         setVenueToDelete(venue)
