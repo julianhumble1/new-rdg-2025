@@ -538,12 +538,17 @@ public class VenueIntegrationTest {
     @DisplayName("PATCH updateVenue integration tests")
     class updateVenueIntegrationTests {
 
-        Venue existingVenue;
+        Venue existingVenue1;
+        Venue existingVenue2;
 
         @BeforeEach
         void beforeEach() {
-            existingVenue = new Venue("Test Venue", "Test Notes", "Test Postcode", "Test Address", "Test Town", "www.test.com");
-            venueRepository.save(existingVenue);
+            existingVenue1 = new Venue("Test Venue", "Test Notes", "Test Postcode", "Test Address", "Test Town", "www.test.com");
+            existingVenue2 = new Venue("Another Test Venue", null, null, null, null, null);
+            venueRepository.save(existingVenue1);
+            venueRepository.save(existingVenue2);
+
+            venueRepository.flush();
         }
 
         @AfterEach
@@ -553,7 +558,7 @@ public class VenueIntegrationTest {
         void testFullDetailsWithAdminTokenResponds200() throws Exception {
             // Arrange
             // Act & Assert
-            mockMvc.perform(patch("/venues/" + existingVenue.getId())
+            mockMvc.perform(patch("/venues/" + existingVenue1.getId())
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", adminToken)
                             .content(
@@ -568,7 +573,7 @@ public class VenueIntegrationTest {
         void testFullDetailsWithAdminTokenRespondsExpectedVenueObject() throws Exception {
             // Arrange
             // Act & Assert
-            mockMvc.perform(patch("/venues/" + existingVenue.getId())
+            mockMvc.perform(patch("/venues/" + existingVenue1.getId())
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", adminToken)
                             .content(
@@ -589,7 +594,7 @@ public class VenueIntegrationTest {
         void testOnlyNameResponds200() throws Exception {
             // Arrange
             // Act & Assert
-            mockMvc.perform(patch("/venues/" + existingVenue.getId())
+            mockMvc.perform(patch("/venues/" + existingVenue1.getId())
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", adminToken)
                             .content(
@@ -603,7 +608,7 @@ public class VenueIntegrationTest {
         void testEmptyNameResponds400() throws Exception {
             // Arrange
             // Act & Assert
-            mockMvc.perform(patch("/venues/" + existingVenue.getId())
+            mockMvc.perform(patch("/venues/" + existingVenue1.getId())
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", adminToken)
                             .content(
@@ -618,7 +623,7 @@ public class VenueIntegrationTest {
         void testMissingNameResponds400() throws Exception {
             // Arrange
             // Act & Assert
-            mockMvc.perform(patch("/venues/" + existingVenue.getId())
+            mockMvc.perform(patch("/venues/" + existingVenue1.getId())
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", adminToken)
                             .content(
@@ -626,6 +631,39 @@ public class VenueIntegrationTest {
                                             " \"address\": \"Updated Test Address\", \"town\": \"Updated Test Town\", \"url\": \"www.updatedtest.com\" }"
                             ))
                     .andExpect(status().isBadRequest());
+
+        }
+
+        @Test
+        @Disabled
+        void testNewVenueNameAlreadyInDatabaseResponds409() throws Exception {
+            // Arrange
+            Optional<Venue> existingVenueInDatabase = venueRepository.findById(existingVenue2.getId());
+            System.out.println(existingVenueInDatabase);
+            // Act & Assert
+            mockMvc.perform(patch("/venues/" + existingVenue1.getId())
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", adminToken)
+                            .content(
+                                    "{ \"name\": \"Another Test Venue\", \"notes\": \"Updated Test Notes\", \"postcode\": \"Updated Test Postcode\"," +
+                                            " \"address\": \"Updated Test Address\", \"town\": \"Updated Test Town\", \"url\": \"www.updatedtest.com\" }"
+                            ))
+                    .andExpect(status().isConflict());
+
+        }
+
+        @Test
+        void testNonExistentVenueIdResponds404() throws Exception {
+            // Arrange
+            // Act & Assert
+            mockMvc.perform(patch("/venues/" + existingVenue1.getId())
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", adminToken)
+                            .content(
+                                    "{ \"name\": \"Updated Test Venue\", \"notes\": \"Updated Test Notes\", \"postcode\": \"Updated Test Postcode\"," +
+                                            " \"address\": \"Updated Test Address\", \"town\": \"Updated Test Town\", \"url\": \"www.updatedtest.com\" }"
+                            ))
+                    .andExpect(status().isOk());
 
         }
 

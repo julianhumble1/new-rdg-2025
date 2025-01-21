@@ -7,6 +7,7 @@ import com.rdg.rdg_2025.rdg_2025_spring.payload.request.venue.VenueRequest;
 import com.rdg.rdg_2025.rdg_2025_spring.repository.VenueRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.PersistenceException;
+import jakarta.validation.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -35,7 +36,7 @@ public class VenueService {
         try {
             Venue savedVenue = venueRepository.save(venue);
             return savedVenue;
-        } catch (DataIntegrityViolationException ex) {
+        } catch (DataIntegrityViolationException | ConstraintViolationException ex) {
             throw new DataIntegrityViolationException(ex.getMessage());
         } catch (DataAccessException | PersistenceException ex) {
             throw new DatabaseException(ex.getMessage());
@@ -73,7 +74,7 @@ public class VenueService {
             return updatedVenue;
         } catch (EntityNotFoundException ex) {
             throw new EntityNotFoundException(ex.getMessage());
-        } catch (DataIntegrityViolationException ex) {
+        } catch (DataIntegrityViolationException | ConstraintViolationException ex) {
             throw new DataIntegrityViolationException(ex.getMessage());
         } catch (DataAccessException | PersistenceException ex) {
             throw new DatabaseException(ex.getMessage());
