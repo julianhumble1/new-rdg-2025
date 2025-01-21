@@ -79,16 +79,6 @@ public class VenueIntegrationTest {
     @DisplayName("POST addNewVenue integration tests")
     class postAddNewVenueIntegrationTests {
 
-        @BeforeEach
-        public void setup() {
-            venueRepository.deleteAll();
-        }
-
-        @AfterEach
-        public void cleanup() {
-            venueRepository.deleteAll();
-        }
-
         @Test
         void testFullVenueDetailsWithAdminTokenReturns201() throws Exception {
             mockMvc.perform(post("/venues")
@@ -170,7 +160,6 @@ public class VenueIntegrationTest {
 
         // Disabling as getting strange results and unable to make it pass although functions as expected in reality
         @Test
-        @Disabled
         void testDuplicateNameVenueReturns409() throws Exception {
             Venue venue = new Venue("Test Venue", null, null, null, null, null);
             venueRepository.save(venue);
