@@ -58,7 +58,7 @@ public class AuthIntegrationTest {
             // Act
             mockMvc.perform(post("/auth/signin")
                             .contentType(MediaType.APPLICATION_JSON)
-                            .content(" \"username\": \"test_user\" "))
+                            .content("{ \"username\": \"test_user\" }"))
                     .andExpect(status().isBadRequest());
 
         }
@@ -69,7 +69,7 @@ public class AuthIntegrationTest {
             // Act
             mockMvc.perform(post("/auth/signin")
                             .contentType(MediaType.APPLICATION_JSON)
-                            .content(" \"username\": \"test_user\", \"password\": \"\" "))
+                            .content("{ \"username\": \"test_user\", \"password\": \"\" }"))
                     .andExpect(status().isBadRequest());
 
         }
@@ -80,7 +80,7 @@ public class AuthIntegrationTest {
             // Act
             mockMvc.perform(post("/auth/signin")
                             .contentType(MediaType.APPLICATION_JSON)
-                            .content("  \"password\": \"password123\" "))
+                            .content("{  \"password\": \"password123\" }"))
                     .andExpect(status().isBadRequest());
 
         }
@@ -91,8 +91,19 @@ public class AuthIntegrationTest {
             // Act
             mockMvc.perform(post("/auth/signin")
                             .contentType(MediaType.APPLICATION_JSON)
-                            .content("\"username\": \"\",  \"password\": \"password123\" "))
+                            .content("{ \"username\": \"\",  \"password\": \"password123\" }"))
                     .andExpect(status().isBadRequest());
+
+        }
+
+        @Test
+        void testCorrectAdminUsernameAndPasswordResponds200() throws Exception {
+            // Arrange
+            // Act
+            mockMvc.perform(post("/auth/signin")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content("{ \"username\": \"test_admin\",  \"password\": \"password123\" }"))
+                    .andExpect(status().isOk());
 
         }
     }
