@@ -296,6 +296,14 @@ public class AuthIntegrationTest {
         }
 
         @Test
+        void testBlankPasswordResponds400() throws Exception {
+            mockMvc.perform(post("/auth/signup")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content("{\"username\": \"new_admin\", \"email\": \"admin@new.com\",\"password\": \"\", \"role\": [\"admin\"] }"))
+                    .andExpect(status().isBadRequest());
+        }
+
+        @Test
         void testShortPasswordResponds400() throws Exception {
             mockMvc.perform(post("/auth/signup")
                             .contentType(MediaType.APPLICATION_JSON)
