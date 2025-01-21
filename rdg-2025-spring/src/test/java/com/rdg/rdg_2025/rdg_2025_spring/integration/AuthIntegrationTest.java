@@ -14,12 +14,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.List;
+
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -34,26 +33,26 @@ public class AuthIntegrationTest {
     @Autowired
     private MockMvc mockMvc;
 
+    private static User testAdmin;
+    private static User testUser;
+
+    @BeforeAll
+    public static void setUpExistingAdminAndUser(
+            @Autowired UserRepository userRepository,
+            @Autowired RoleRepository roleRepository,
+            @Autowired PasswordEncoder passwordEncoder
+    ) {
+
+        userRepository.deleteAll();
+
+        testAdmin = AuthTestUtils.createTestAdmin(userRepository, roleRepository, passwordEncoder);
+        testUser = AuthTestUtils.createTestUser(userRepository, roleRepository, passwordEncoder);
+
+    }
+
     @Nested
     @DisplayName("auth sign in integration tests")
     class authSignInIntegrationTests {
-
-        private static User testAdmin;
-        private static User testUser;
-
-        @BeforeAll
-        public static void setUpExistingAdminAndUser(
-                @Autowired UserRepository userRepository,
-                @Autowired RoleRepository roleRepository,
-                @Autowired PasswordEncoder passwordEncoder
-        ) {
-
-            userRepository.deleteAll();
-
-            testAdmin = AuthTestUtils.createTestAdmin(userRepository, roleRepository, passwordEncoder);
-            testUser = AuthTestUtils.createTestUser(userRepository, roleRepository, passwordEncoder);
-
-        }
 
         @Test
         void testRequestMissingPasswordResponds400() throws Exception {
@@ -200,5 +199,18 @@ public class AuthIntegrationTest {
         }
     }
 
+    @Nested
+    @DisplayName("sign up integration tests")
+    class signUpIntegrationTests {
+
+        @Test
+        void testSignUpWithFullDetailsResponds200() throws Exception {
+            mockMvc.perform(post("/auth/signup")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content("{\"username\": \"new_user\", \"email\": \"user@new.com\", \"password\": \"password123\", \"role\": [\"user\"] }"))
+                    .andExpect(status().isOk());
+        }
+
+    }
 
 }
