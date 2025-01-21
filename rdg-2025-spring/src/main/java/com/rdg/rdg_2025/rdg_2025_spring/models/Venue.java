@@ -59,22 +59,6 @@ public class Venue {
     public Venue() {
     }
 
-    @Override
-    public String toString() {
-        return "Venue{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", notes='" + notes + '\'' +
-                ", postcode='" + postcode + '\'' +
-                ", address='" + address + '\'' +
-                ", town='" + town + '\'' +
-                ", url='" + url + '\'' +
-                ", createdAt=" + createdAt +
-                ", updatedAt=" + updatedAt +
-                ", slug='" + slug + '\'' +
-                '}';
-    }
-
     public int getId() {
         return id;
     }

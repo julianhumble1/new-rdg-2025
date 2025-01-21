@@ -57,24 +57,6 @@ public class Production {
         this.slug = SlugUtils.generateSlug(name);
     }
 
-    @Override
-    public String toString() {
-        return "Production{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", venue=" + venue +
-                ", author='" + author + '\'' +
-                ", description='" + description + '\'' +
-                ", auditionDate=" + auditionDate +
-                ", sundowners=" + sundowners +
-                ", notConfirmed=" + notConfirmed +
-                ", flyerFile='" + flyerFile + '\'' +
-                ", createdAt=" + createdAt +
-                ", updatedAt=" + updatedAt +
-                ", slug='" + slug + '\'' +
-                '}';
-    }
-
     public int getId() {
         return id;
     }

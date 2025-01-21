@@ -54,20 +54,6 @@ public class Festival {
     public Festival() {
     }
 
-    @Override
-    public String toString() {
-        return "Festival{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", venue=" + venue +
-                ", year=" + year +
-                ", month=" + month +
-                ", description='" + description + '\'' +
-                ", createdAt=" + createdAt +
-                ", updatedAt=" + updatedAt +
-                '}';
-    }
-
     public int getId() {
         return id;
     }
