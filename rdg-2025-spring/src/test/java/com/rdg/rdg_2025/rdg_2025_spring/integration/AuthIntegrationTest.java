@@ -20,6 +20,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -104,6 +105,17 @@ public class AuthIntegrationTest {
                             .contentType(MediaType.APPLICATION_JSON)
                             .content("{ \"username\": \"test_admin\",  \"password\": \"password123\" }"))
                     .andExpect(status().isOk());
+
+        }
+
+        @Test
+        void testCorrectAdminUsernameAndPasswordRespondsWithJwtToken() throws Exception {
+            // Arrange
+            // Act
+            mockMvc.perform(post("/auth/signin")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content("{ \"username\": \"test_admin\",  \"password\": \"password123\" }"))
+                    .andExpect(jsonPath("$.token").isNotEmpty());
 
         }
     }
