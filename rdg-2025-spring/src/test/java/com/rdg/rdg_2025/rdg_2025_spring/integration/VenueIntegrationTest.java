@@ -696,6 +696,21 @@ public class VenueIntegrationTest {
 
         }
 
+        @Test
+        void testBadTokenResponds401() throws Exception {
+            // Arrange
+            // Act & Assert
+            mockMvc.perform(patch("/venues/" + existingVenue1.getId())
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", "Bad token")
+                            .content(
+                                    "{ \"name\": \"Updated Test Venue\", \"notes\": \"Updated Test Notes\", \"postcode\": \"Updated Test Postcode\"," +
+                                            " \"address\": \"Updated Test Address\", \"town\": \"Updated Test Town\", \"url\": \"www.updatedtest.com\" }"
+                            ))
+                    .andExpect(status().isUnauthorized());
+
+        }
+
 
 
     }
