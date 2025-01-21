@@ -311,6 +311,14 @@ public class AuthIntegrationTest {
                     .andExpect(status().isBadRequest());
         }
 
+        @Test
+        void testLongPasswordResponds400() throws Exception {
+            mockMvc.perform(post("/auth/signup")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content("{\"username\": \"new_admin\", \"email\": \"admin@new.com\", \"password\": \" " + ("a".repeat(41)) + " \", \"role\": [\"admin\"] }"))
+                    .andExpect(status().isBadRequest());
+        }
+
     }
 
 }
