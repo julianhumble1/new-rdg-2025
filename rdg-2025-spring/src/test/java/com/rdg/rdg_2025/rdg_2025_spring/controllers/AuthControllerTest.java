@@ -79,6 +79,17 @@ public class AuthControllerTest {
 
         }
 
+        @Test
+        void testRequestBlankPasswordResponds400() throws Exception {
+            // Arrange
+            // Act
+            mockMvc.perform(post("/auth/signin")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(" \"username\": \"username\", \"password\": \"\" "))
+                    .andExpect(status().isBadRequest());
+
+        }
+
     }
 
 }
