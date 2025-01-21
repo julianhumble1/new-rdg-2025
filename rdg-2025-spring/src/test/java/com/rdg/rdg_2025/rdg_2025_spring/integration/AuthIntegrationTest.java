@@ -139,6 +139,17 @@ public class AuthIntegrationTest {
             ;
 
         }
+
+        @Test
+        void testCorrectUserUsernameAndPasswordResponds200() throws Exception {
+            // Arrange
+            // Act
+            mockMvc.perform(post("/auth/signin")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content("{ \"username\": \"test_user\",  \"password\": \"password123\" }"))
+                    .andExpect(status().isOk());
+
+        }
     }
 
 
