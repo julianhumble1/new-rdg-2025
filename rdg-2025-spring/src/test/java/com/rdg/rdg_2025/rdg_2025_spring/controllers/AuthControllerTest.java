@@ -60,11 +60,21 @@ public class AuthControllerTest {
         @Test
         void testRequestMissingPasswordResponds400() throws Exception {
             // Arrange
-
             // Act
             mockMvc.perform(post("/auth/signin")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(" \"username\": \"username\" "))
+                    .andExpect(status().isBadRequest());
+
+        }
+
+        @Test
+        void testRequestMissingUsernameResponds400() throws Exception {
+            // Arrange
+            // Act
+            mockMvc.perform(post("/auth/signin")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(" \"password\": \"password\" "))
                     .andExpect(status().isBadRequest());
 
         }
