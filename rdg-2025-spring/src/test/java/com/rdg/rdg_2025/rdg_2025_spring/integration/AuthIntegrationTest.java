@@ -178,6 +178,26 @@ public class AuthIntegrationTest {
                     .andExpect(jsonPath("$.roles[0]").value("ROLE_USER"));
 
         }
+
+        @Test
+        void testUsernameNotInDatabaseResponds401() throws Exception {
+            // Arrange
+            // Act & Assert
+            mockMvc.perform(post("/auth/signin")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content("{ \"username\": \"non_existent_user\",  \"password\": \"password123\" }"))
+                    .andExpect(status().isUnauthorized());
+        }
+
+        @Test
+        void testPasswordDoesNotMatchUsernameThrows401() throws Exception {
+            // Arrange
+            // Act & Assert
+            mockMvc.perform(post("/auth/signin")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content("{ \"username\": \"test_user\",  \"password\": \"not_the_password\" }"))
+                    .andExpect(status().isUnauthorized());
+        }
     }
 
 
