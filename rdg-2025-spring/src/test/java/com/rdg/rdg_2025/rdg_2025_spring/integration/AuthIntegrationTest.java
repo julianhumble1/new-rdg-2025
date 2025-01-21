@@ -319,6 +319,14 @@ public class AuthIntegrationTest {
                     .andExpect(status().isBadRequest());
         }
 
+        @Test
+        void testMissingRoleResponds400() throws Exception {
+            mockMvc.perform(post("/auth/signup")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content("{\"username\": \"new_admin\", \"email\": \"admin@new.com\", \"password\": \"password123\" }"))
+                    .andExpect(status().isBadRequest());
+        }
+
     }
 
 }
