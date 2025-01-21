@@ -135,8 +135,7 @@ public class AuthIntegrationTest {
                     .andExpect(jsonPath("$.id").value(adminId))
                     .andExpect(jsonPath("$.username").value(username))
                     .andExpect(jsonPath("$.email").value(email))
-                    .andExpect(jsonPath("$.roles[0]").value("ROLE_ADMIN"))
-            ;
+                    .andExpect(jsonPath("$.roles[0]").value("ROLE_ADMIN"));
 
         }
 
@@ -148,6 +147,17 @@ public class AuthIntegrationTest {
                             .contentType(MediaType.APPLICATION_JSON)
                             .content("{ \"username\": \"test_user\",  \"password\": \"password123\" }"))
                     .andExpect(status().isOk());
+
+        }
+
+        @Test
+        void testCorrectUserUsernameAndPasswordRespondsWithJwtToken() throws Exception {
+            // Arrange
+            // Act
+            mockMvc.perform(post("/auth/signin")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content("{ \"username\": \"test_user\",  \"password\": \"password123\" }"))
+                    .andExpect(jsonPath("$.token").isNotEmpty());
 
         }
     }
