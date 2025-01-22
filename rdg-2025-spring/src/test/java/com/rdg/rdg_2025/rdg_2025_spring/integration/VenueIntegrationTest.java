@@ -527,21 +527,23 @@ public class VenueIntegrationTest {
     @DisplayName("PATCH updateVenue integration tests")
     class updateVenueIntegrationTests {
 
-        Venue existingVenue1;
-        Venue existingVenue2;
+        static Venue existingVenue1;
+        static Venue existingVenue2;
 
-        @BeforeEach
-        void beforeEach() {
+        @BeforeAll
+        static void beforeAll(@Autowired VenueRepository venueRepository) {
+
+            venueRepository.deleteAll();
+
             existingVenue1 = new Venue("Test Venue", "Test Notes", "Test Postcode", "Test Address", "Test Town", "www.test.com");
             existingVenue2 = new Venue("Another Test Venue", null, null, null, null, null);
             venueRepository.save(existingVenue1);
             venueRepository.save(existingVenue2);
 
-            venueRepository.flush();
         }
 
-        @AfterEach
-        void afterEach() { venueRepository.deleteAll();}
+        @AfterAll
+        static void afterAll(@Autowired VenueRepository venueRepository) { venueRepository.deleteAll();}
 
         @Test
         void testFullDetailsWithAdminTokenResponds200() throws Exception {
