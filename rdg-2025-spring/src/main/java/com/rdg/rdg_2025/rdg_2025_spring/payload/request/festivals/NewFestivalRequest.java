@@ -6,9 +6,10 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 
-@Getter @Setter @NoArgsConstructor
+@Getter @Setter @NoArgsConstructor @ToString
 public class NewFestivalRequest {
 
     @NotBlank
@@ -31,16 +32,5 @@ public class NewFestivalRequest {
         this.year = year;
         this.month = month;
         this.description = description;
-    }
-
-    @Override
-    public String toString() {
-        return "NewFestivalRequest{" +
-                "name='" + name + '\'' +
-                ", venueId=" + venueId +
-                ", year=" + year +
-                ", month=" + month +
-                ", description='" + description + '\'' +
-                '}';
     }
 }

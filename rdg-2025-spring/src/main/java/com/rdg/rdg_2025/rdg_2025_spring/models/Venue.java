@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDateTime;
@@ -14,7 +15,7 @@ import java.util.List;
 
 @Entity
 @Table(name="venues")
-@Getter @Setter @NoArgsConstructor
+@Getter @Setter @NoArgsConstructor @ToString
 public class Venue {
 
     @Id
@@ -58,23 +59,5 @@ public class Venue {
         this.updatedAt = LocalDateTime.now();
 
         this.slug = SlugUtils.generateSlug(name);
-    }
-
-    @Override
-    public String toString() {
-        return "Venue{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", notes='" + notes + '\'' +
-                ", postcode='" + postcode + '\'' +
-                ", address='" + address + '\'' +
-                ", town='" + town + '\'' +
-                ", url='" + url + '\'' +
-                ", createdAt=" + createdAt +
-                ", updatedAt=" + updatedAt +
-                ", slug='" + slug + '\'' +
-                ", productions=" + productions +
-                ", festivals=" + festivals +
-                '}';
     }
 }
