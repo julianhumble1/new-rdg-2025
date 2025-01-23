@@ -83,7 +83,12 @@ public class ProductionService {
         } catch (DataAccessException | PersistenceException ex) {
             throw new DatabaseException(ex.getMessage());
         }
+    }
 
+    public Production getProductionById(int productionId) {
+        Production production = productionRepository.findById(productionId)
+                .orElseThrow(() -> new EntityNotFoundException("No Production with this id"));
+        return production;
     }
 
 }

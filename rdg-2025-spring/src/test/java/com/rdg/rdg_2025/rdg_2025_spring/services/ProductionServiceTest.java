@@ -26,6 +26,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -321,6 +322,23 @@ public class ProductionServiceTest {
             DatabaseException ex = assertThrows(DatabaseException.class, () -> {
                 productionService.getAllProductions();
             });
+        }
+
+
+    }
+
+    @Nested
+    @DisplayName("getProductionById service tests")
+    class getProductionByIdServiceTests {
+
+        @Test
+        void testSuccessfulGetReturnsProductionObject() {
+            // Arrange
+            when(productionRepository.findById(anyInt())).thenReturn(Optional.of(testProduction));
+            // Act
+            Production retrivedProduction = productionService.getProductionById(1);
+            // Assert
+            assertEquals(testProduction, retrivedProduction);
         }
 
 

@@ -158,7 +158,6 @@ public class VenueIntegrationTest {
                     .andExpect(status().isBadRequest());
         }
 
-        // Disabling as getting strange results and unable to make it pass although functions as expected in reality
         @Test
         void testDuplicateNameVenueReturns409() throws Exception {
             Venue venue = new Venue("Test Venue", null, null, null, null, null);
@@ -626,7 +625,6 @@ public class VenueIntegrationTest {
         }
 
         @Test
-        @Disabled
         void testNewVenueNameAlreadyInDatabaseResponds409() throws Exception {
             // Arrange
             Optional<Venue> existingVenueInDatabase = venueRepository.findById(existingVenue2.getId());
