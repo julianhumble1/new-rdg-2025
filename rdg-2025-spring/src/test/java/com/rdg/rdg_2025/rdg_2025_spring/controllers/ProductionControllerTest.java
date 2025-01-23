@@ -372,5 +372,14 @@ public class ProductionControllerTest {
                     .andExpect(status().isOk());
         }
 
+        @Test
+        void testSuccessfulGetRespondsExpectedProduction() throws Exception {
+            // Arrange
+            when(productionService.getProductionById(anyInt())).thenReturn(testProduction);
+            // Act & Assert
+            mockMvc.perform(get("/productions/1"))
+                    .andExpect(jsonPath("$.production.name").value("Test Production"));
+        }
+
     }
 }
