@@ -341,6 +341,16 @@ public class ProductionServiceTest {
             assertEquals(testProduction, retrivedProduction);
         }
 
+        @Test
+        void testNonExistentProductionIdThrowsEntityNotFoundException() {
+            // Arrange
+            when(productionRepository.findById(anyInt())).thenReturn(Optional.empty());
+
+            // Act & Assert
+            EntityNotFoundException ex = assertThrows(EntityNotFoundException.class, () -> {
+                productionService.getProductionById(1);
+            });
+        }
 
     }
 
