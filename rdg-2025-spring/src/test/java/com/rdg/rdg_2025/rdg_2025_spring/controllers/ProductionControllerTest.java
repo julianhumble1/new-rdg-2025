@@ -391,5 +391,15 @@ public class ProductionControllerTest {
 
         }
 
+        @Test
+        void testDatabaseExceptionResponds500() throws Exception {
+            // Arrange
+            when(productionService.getProductionById(anyInt())).thenThrow(new DatabaseException("Database exception"));
+            // Act & Assert
+            mockMvc.perform(get("/productions/1"))
+                    .andExpect(status().isInternalServerError());
+
+        }
+
     }
 }
