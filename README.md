@@ -70,8 +70,28 @@ Once the back-end is complete, I will host the MySQL instance online (probably G
 
 At that stage, I will then add more styling to the front end using TailwindCSS, as well as tests.
 
-### Route diagrams
+### Route Diagrams
 
 **Venues**
 
 ![post venue diagram](./images/post-venue-diagram.jpg)
+
+![get venues diagram](./images/get-venues-diagram.jpg)
+
+![delete venue diagram](./images/delete-venue-diagram.jpg)
+
+![get venue diagram](./images/get-venue-diagram.jpg)
+
+![patch venue diagram](./images/patch-venue-diagram.jpg)
+
+**Productions**
+
+![post production diagram](./images/post-production-diagram.jpg)
+
+![get productions diagram](./images/get-productions-diagram.jpg)
+
+**Festivals**
+
+![post festival diagram](./images/post-festival-diagram.jpg)
+
+![get festivals diagram](./images/get-festivals-diagram.jpg)
