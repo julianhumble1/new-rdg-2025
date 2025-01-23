@@ -381,5 +381,15 @@ public class ProductionControllerTest {
                     .andExpect(jsonPath("$.production.name").value("Test Production"));
         }
 
+        @Test
+        void testEntityNotFoundExceptionResponds404() throws Exception {
+            // Arrange
+            when(productionService.getProductionById(anyInt())).thenThrow(new EntityNotFoundException("No production with this id"));
+            // Act & Assert
+            mockMvc.perform(get("/productions/1"))
+                    .andExpect(status().isNotFound());
+
+        }
+
     }
 }

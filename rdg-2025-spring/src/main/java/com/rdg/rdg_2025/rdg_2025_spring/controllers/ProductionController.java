@@ -57,8 +57,12 @@ public class ProductionController {
     @GetMapping("/{productionId}")
     public ResponseEntity<?> getProductionById(@PathVariable int productionId) {
 
-        Production production = productionService.getProductionById(productionId);
-        return ResponseEntity.ok(new ProductionResponse(production));
+        try {
+            Production production = productionService.getProductionById(productionId);
+            return ResponseEntity.ok(new ProductionResponse(production));
+        } catch (EntityNotFoundException ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+        }
 
     }
 
