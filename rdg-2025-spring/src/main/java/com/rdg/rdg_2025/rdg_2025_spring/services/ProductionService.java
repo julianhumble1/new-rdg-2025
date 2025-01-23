@@ -86,9 +86,13 @@ public class ProductionService {
     }
 
     public Production getProductionById(int productionId) {
-        Production production = productionRepository.findById(productionId)
-                .orElseThrow(() -> new EntityNotFoundException("No Production with this id"));
-        return production;
+        try {
+            Production production = productionRepository.findById(productionId)
+                    .orElseThrow(() -> new EntityNotFoundException("No Production with this id"));
+            return production;
+        } catch (DataAccessException ex) {
+            throw new DatabaseException(ex.getMessage());
+        }
     }
 
 }
