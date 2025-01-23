@@ -1,0 +1,161 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
+  <title>Coverage Report > SignUpRequest</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.rdg.rdg_2025.rdg_2025_spring.payload.request.auth</a>
+</div>
+
+<h1>Coverage Summary for Class: SignUpRequest (com.rdg.rdg_2025.rdg_2025_spring.payload.request.auth)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">SignUpRequest</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/9)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/9)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.rdg.rdg_2025.rdg_2025_spring.payload.request.auth;
+&nbsp;
+&nbsp;import jakarta.validation.constraints.Email;
+&nbsp;import jakarta.validation.constraints.NotBlank;
+&nbsp;import jakarta.validation.constraints.Size;
+&nbsp;
+&nbsp;import java.util.Set;
+&nbsp;
+<b class="nc">&nbsp;public class SignUpRequest {</b>
+&nbsp;
+&nbsp;    @NotBlank
+&nbsp;    @Size(min=3, max=20)
+&nbsp;    private String username;
+&nbsp;
+&nbsp;    @NotBlank
+&nbsp;    @Size(max=50)
+&nbsp;    @Email
+&nbsp;    private String email;
+&nbsp;
+&nbsp;    private Set&lt;String&gt; role;
+&nbsp;
+&nbsp;    @NotBlank
+&nbsp;    @Size(min=6, max=40)
+&nbsp;    private String password;
+&nbsp;
+&nbsp;    public String getUsername() {
+<b class="nc">&nbsp;        return username;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setUsername(String username) {
+<b class="nc">&nbsp;        this.username = username;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public String getEmail() {
+<b class="nc">&nbsp;        return email;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setEmail(String email) {
+<b class="nc">&nbsp;        this.email = email;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public Set&lt;String&gt; getRole() {
+<b class="nc">&nbsp;        return role;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setRole(Set&lt;String&gt; role) {
+<b class="nc">&nbsp;        this.role = role;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public String getPassword() {
+<b class="nc">&nbsp;        return password;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setPassword(String password) {
+<b class="nc">&nbsp;        this.password = password;</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-01-13 17:08</div>
+</div>
+</body>
+</html>
