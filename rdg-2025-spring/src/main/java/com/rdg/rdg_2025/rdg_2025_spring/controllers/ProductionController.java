@@ -54,5 +54,13 @@ public class ProductionController {
         }
     }
 
+    @GetMapping("/{productionId}")
+    public ResponseEntity<?> getProductionById(@PathVariable int productionId) {
+
+        Production production = productionService.getProductionById(productionId);
+        return ResponseEntity.ok(new ProductionResponse(production));
+
+    }
+
 
 }

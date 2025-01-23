@@ -23,6 +23,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -354,6 +355,21 @@ public class ProductionControllerTest {
             // Act & Assert
             mockMvc.perform(get("/productions"))
                     .andExpect(status().isInternalServerError());
+        }
+
+    }
+
+    @Nested
+    @DisplayName("getProductionById controller tests")
+    class getProductionByIdControllerTests {
+
+        @Test
+        void testSuccessfulGetResponds200() throws Exception {
+            // Arrange
+            when(productionService.getProductionById(anyInt())).thenReturn(testProduction);
+            // Act & Assert
+            mockMvc.perform(get("/productions/1"))
+                    .andExpect(status().isOk());
         }
 
     }
