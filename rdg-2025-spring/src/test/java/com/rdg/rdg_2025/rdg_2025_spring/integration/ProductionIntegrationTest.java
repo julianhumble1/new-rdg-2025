@@ -400,5 +400,13 @@ public class ProductionIntegrationTest {
                     .andExpect(status().isNotFound());
         }
 
+        @Test
+        void testBadVenueIdResponds400() throws Exception {
+            // Arrange
+            // Act & Assert
+            mockMvc.perform(get("/productions/badVenueId"))
+                    .andExpect(status().isBadRequest());
+        }
+
     }
 }
