@@ -93,7 +93,7 @@ At that stage, I will then add more styling to the front end using TailwindCSS, 
 
 ![get production diagram](./images/get-production-diagram.jpg)
 
-#### Productions
+#### Festivals
 
 ![post festival diagram](./images/post-festival-diagram.jpg)
 
