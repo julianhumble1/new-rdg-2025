@@ -45,6 +45,7 @@ The following is a list of entities and their corresponding routes that have bee
 **Productions** 
 * POST ("/productions") - create new production
 * GET ("/productions") - get all productions
+* GET ("/productions/{id}) - get specific production
 
 **Festivals**
 * POST ("/festivals") - create new festival
