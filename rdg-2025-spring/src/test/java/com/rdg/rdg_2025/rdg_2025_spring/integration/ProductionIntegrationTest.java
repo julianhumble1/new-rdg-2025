@@ -392,5 +392,13 @@ public class ProductionIntegrationTest {
                     .andExpect(jsonPath("$.production.venue.name").value("Test Venue 1"));
         }
 
+        @Test
+        void testNonExistentVenueIdResponds404() throws Exception {
+            // Arrange
+            // Act & Assert
+            mockMvc.perform(get("/productions/" + (testProduction.getId() - 1)))
+                    .andExpect(status().isNotFound());
+        }
+
     }
 }
