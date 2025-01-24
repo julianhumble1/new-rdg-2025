@@ -407,9 +407,20 @@ public class ProductionServiceTest {
         void testIfVenueIdProvidedButDoesNotExistThrowsEntityNotFoundException() {
             // Arrange
             when(productionRepository.findById(anyInt())).thenReturn(Optional.of(testProduction));
-            when(venueRepository.findById(anyInt())).thenThrow(new EntityNotFoundException());
+            when(venueRepository.findById(anyInt())).thenReturn(Optional.empty());
             // Act & Assert
             EntityNotFoundException ex = assertThrows(EntityNotFoundException.class, () -> {
+                productionService.updateProductionObject(1, testUpdateProductionRequest);
+            });
+        }
+
+        @Test
+        void testVenueExistsCheckDataAccessExceptionThrowsDatabaseException() {
+            // Arrange
+            when(productionRepository.findById(anyInt())).thenReturn(Optional.of(testProduction));
+            when(venueRepository.findById(anyInt())).thenThrow(new DataAccessException("Data Access Exception") {});
+            // Act & Assert
+            DatabaseException ex = assertThrows(DatabaseException.class, () -> {
                 productionService.updateProductionObject(1, testUpdateProductionRequest);
             });
         }
