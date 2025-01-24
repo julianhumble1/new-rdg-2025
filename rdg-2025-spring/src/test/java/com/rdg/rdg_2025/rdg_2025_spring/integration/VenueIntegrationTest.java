@@ -625,24 +625,6 @@ public class VenueIntegrationTest {
         }
 
         @Test
-        @Disabled
-        void testNewVenueNameAlreadyInDatabaseResponds409() throws Exception {
-            // Arrange
-            Optional<Venue> existingVenueInDatabase = venueRepository.findById(existingVenue2.getId());
-            System.out.println(existingVenueInDatabase);
-            // Act & Assert
-            mockMvc.perform(patch("/venues/" + existingVenue1.getId())
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .header("Authorization", adminToken)
-                            .content(
-                                    "{ \"name\": \"Another Test Venue\", \"notes\": \"Updated Test Notes\", \"postcode\": \"Updated Test Postcode\"," +
-                                            " \"address\": \"Updated Test Address\", \"town\": \"Updated Test Town\", \"url\": \"www.updatedtest.com\" }"
-                            ))
-                    .andExpect(status().isConflict());
-
-        }
-
-        @Test
         void testNonExistentVenueIdResponds404() throws Exception {
             // Arrange
             // Act & Assert
