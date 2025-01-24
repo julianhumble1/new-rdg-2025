@@ -378,5 +378,19 @@ public class ProductionIntegrationTest {
                     .andExpect(status().isOk());
         }
 
+        @Test
+        void testSuccessfulGetRespondsExpectedProductionObject() throws Exception {
+            // Arrange
+            // Act & Assert
+            mockMvc.perform(get("/productions/" + testProduction.getId()))
+                    .andExpect(jsonPath("$.production.name").value("Test Production"))
+                    .andExpect(jsonPath("$.production.author").value("Test Author"))
+                    .andExpect(jsonPath("$.production.description").value("Test Description"))
+                    .andExpect(jsonPath("$.production.sundowners").value(false))
+                    .andExpect(jsonPath("$.production.notConfirmed").value(false))
+                    .andExpect(jsonPath("$.production.flyerFile").value("Test File String"))
+                    .andExpect(jsonPath("$.production.venue.name").value("Test Venue 1"));
+        }
+
     }
 }
