@@ -23,7 +23,6 @@ export default class FestivalService {
                 }
 
             )
-            console.log(response)
             return response;
         } catch (e) {
             if (e.response.status === 401 || e.response.status === 403) {

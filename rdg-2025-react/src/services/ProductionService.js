@@ -51,4 +51,19 @@ export default class ProductionService {
         }
     }
 
+    static getProductionById = async (productionId) => {
+        try {
+            const response = await axios.get(`http://localhost:8080/productions/${productionId}`)
+            return response
+        } catch (e) {
+            if (e.response.status === 500) {
+                throw new Error("Internal Server Error")
+            } else if (e.response.status === 404) {
+                throw new Error("No production with this id")
+            } else if (e.response.status === 400) {
+                throw new Error("Bad or missing production id")
+            }
+        }
+    }
+
 }

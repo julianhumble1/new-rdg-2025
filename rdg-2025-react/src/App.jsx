@@ -14,6 +14,7 @@ import AllProductionsList from "./components/productions/AllProductionsList.jsx"
 import NewFestivalForm from "./components/festivals/NewFestivalForm.jsx"
 import AllFestivalsList from "./components/festivals/AllFestivalsList.jsx"
 import VenuePage from "./components/venues/VenuePage.jsx"
+import ProductionPage from "./components/productions/ProductionPage.jsx"
 
 
 function App() {
@@ -54,6 +55,7 @@ function App() {
 
         <Route path="/productions/new" element={<NewProductionForm />} />
         <Route path="/productions" element={<AllProductionsList />} />
+        <Route path="/productions/:id" element={<ProductionPage />} />
 
         <Route path="/festivals/new" element={<NewFestivalForm />} />
         <Route path="/festivals" element={<AllFestivalsList />} />

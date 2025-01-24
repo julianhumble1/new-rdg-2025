@@ -104,7 +104,7 @@ const VenuePage = () => {
                     <button className="text-blue-500 hover:text-blue-700 hover:underline" onClick={() => setEditMode(true)}>
                         Edit
                     </button>
-                    <button className="text-blue-500 hover:text-blue-700 hover:underline" onClick={() => setShowConfirmDelete(true)}>
+                    <button className="text-blue-500 hover:text-blue-700 hover:underline" onClick={() => handleDelete()}>
                         Delete
                     </button>
                 </div>
