@@ -3,7 +3,7 @@ package com.rdg.rdg_2025.rdg_2025_spring.controllers;
 import com.rdg.rdg_2025.rdg_2025_spring.exception.DatabaseException;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Production;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Venue;
-import com.rdg.rdg_2025.rdg_2025_spring.payload.request.production.NewProductionRequest;
+import com.rdg.rdg_2025.rdg_2025_spring.payload.request.production.ProductionRequest;
 import com.rdg.rdg_2025.rdg_2025_spring.services.ProductionService;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.*;
@@ -72,7 +72,7 @@ public class ProductionControllerTest {
         @WithMockUser(roles="ADMIN")
         void test201StatusWhenServiceSuccessfullySavesProduction() throws Exception {
             // Arrange
-            when(productionService.addNewProduction(any(NewProductionRequest.class))).thenReturn(testProduction);
+            when(productionService.addNewProduction(any(ProductionRequest.class))).thenReturn(testProduction);
 
             // Act & Assert
             mockMvc.perform(post("/productions")
@@ -89,7 +89,7 @@ public class ProductionControllerTest {
         @Test
         void testExpectedUriWhenSuccessfullySavesProduction() throws Exception {
             // Arrange
-            when(productionService.addNewProduction(any(NewProductionRequest.class))).thenReturn(testProduction);
+            when(productionService.addNewProduction(any(ProductionRequest.class))).thenReturn(testProduction);
             int testProductionId = testProduction.getId();
 
             // Act & Assert
@@ -108,7 +108,7 @@ public class ProductionControllerTest {
         @WithMockUser(roles="ADMIN")
         void testExpectedReturnedProductionWhenServiceSuccessfullySavesProduction() throws Exception{
             // Arrange
-            when(productionService.addNewProduction(any(NewProductionRequest.class))).thenReturn(testProduction);
+            when(productionService.addNewProduction(any(ProductionRequest.class))).thenReturn(testProduction);
 
             String formattedAuditionDate = testProduction.getAuditionDate().format(formatter);
 
@@ -139,7 +139,7 @@ public class ProductionControllerTest {
         @WithMockUser(roles="ADMIN")
         void testDataIntegrityViolationExceptionReturns409Error() throws Exception{
             // Arrange
-            when(productionService.addNewProduction(any(NewProductionRequest.class))).thenThrow(new DataIntegrityViolationException("Data integrity violation"));
+            when(productionService.addNewProduction(any(ProductionRequest.class))).thenThrow(new DataIntegrityViolationException("Data integrity violation"));
 
             // Act & Assert
             mockMvc.perform(post("/productions")
@@ -156,7 +156,7 @@ public class ProductionControllerTest {
         @WithMockUser(roles="ADMIN")
         void testDataBaseExceptionReturns500Error() throws Exception{
             // Arrange
-            when(productionService.addNewProduction(any(NewProductionRequest.class))).thenThrow(new DatabaseException("Database Exception"));
+            when(productionService.addNewProduction(any(ProductionRequest.class))).thenThrow(new DatabaseException("Database Exception"));
 
             // Act & Assert
             mockMvc.perform(post("/productions")
@@ -173,7 +173,7 @@ public class ProductionControllerTest {
         @WithMockUser(roles="ADMIN")
         void testInvalidVenueIdReturns400BadRequest() throws Exception{
             // Arrange
-            when(productionService.addNewProduction(any(NewProductionRequest.class))).thenThrow(new EntityNotFoundException("Invalid Venue Id"));
+            when(productionService.addNewProduction(any(ProductionRequest.class))).thenThrow(new EntityNotFoundException("Invalid Venue Id"));
 
             // Act & Assert
             mockMvc.perform(post("/productions")
@@ -196,7 +196,7 @@ public class ProductionControllerTest {
                     null, null, null, null, false, false, null
             );
 
-            when(productionService.addNewProduction(any(NewProductionRequest.class))).thenReturn(emptyNonNameValuesProduction);
+            when(productionService.addNewProduction(any(ProductionRequest.class))).thenReturn(emptyNonNameValuesProduction);
 
             // Act & Assert
             mockMvc.perform(post("/productions")
@@ -213,14 +213,14 @@ public class ProductionControllerTest {
         @WithMockUser(roles="ADMIN")
         void testNameWithMissingOtherValuesReturns201() throws Exception{
             // Arrange
-            when(productionService.addNewProduction(any(NewProductionRequest.class))).thenReturn(testProduction);
+            when(productionService.addNewProduction(any(ProductionRequest.class))).thenReturn(testProduction);
 
             Production emptyNonNameValuesProduction = new Production(
                     "Test Production",
                     null, null, null, null, false, false, null
             );
 
-            when(productionService.addNewProduction(any(NewProductionRequest.class))).thenReturn(emptyNonNameValuesProduction);
+            when(productionService.addNewProduction(any(ProductionRequest.class))).thenReturn(emptyNonNameValuesProduction);
 
             // Act & Assert
             mockMvc.perform(post("/productions")

@@ -8,7 +8,7 @@ import lombok.Setter;
 import java.time.LocalDateTime;
 
 @Getter @Setter @NoArgsConstructor
-public class NewProductionRequest {
+public class ProductionRequest {
 
     @NotBlank
     private String name;
@@ -21,7 +21,7 @@ public class NewProductionRequest {
     private boolean notConfirmed;
     private String flyerFile;
 
-    public NewProductionRequest(String name, int venueId, String author, String description, LocalDateTime auditionDate, boolean sundowners, boolean notConfirmed, String flyerFile) {
+    public ProductionRequest(String name, int venueId, String author, String description, LocalDateTime auditionDate, boolean sundowners, boolean notConfirmed, String flyerFile) {
         this.name = name;
         this.venueId = venueId;
         this.author = author;

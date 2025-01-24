@@ -3,7 +3,7 @@ package com.rdg.rdg_2025.rdg_2025_spring.services;
 import com.rdg.rdg_2025.rdg_2025_spring.exception.DatabaseException;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Production;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Venue;
-import com.rdg.rdg_2025.rdg_2025_spring.payload.request.production.NewProductionRequest;
+import com.rdg.rdg_2025.rdg_2025_spring.payload.request.production.ProductionRequest;
 import com.rdg.rdg_2025.rdg_2025_spring.repository.ProductionRepository;
 import com.rdg.rdg_2025.rdg_2025_spring.repository.VenueRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -41,7 +41,7 @@ public class ProductionServiceTest {
     @Mock
     private VenueRepository venueRepository;
 
-    private NewProductionRequest testNewProductionRequest = new NewProductionRequest(
+    private ProductionRequest testProductionRequest = new ProductionRequest(
             "Test Production",
             1,
             "Test Author",
@@ -73,7 +73,7 @@ public class ProductionServiceTest {
             when(venueRepository.findById(any())).thenReturn(Optional.empty());
             // Act & Assert
             EntityNotFoundException ex = assertThrows(EntityNotFoundException.class, () -> {
-                productionService.addNewProduction(testNewProductionRequest);
+                productionService.addNewProduction(testProductionRequest);
             });
 
         }
@@ -87,7 +87,7 @@ public class ProductionServiceTest {
             when(productionRepository.countByNameStartingWith(any(String.class))).thenReturn(0);
             when(productionRepository.save(any(Production.class))).thenReturn(testProduction);
             // Act
-            Production result = productionService.addNewProduction(testNewProductionRequest);
+            Production result = productionService.addNewProduction(testProductionRequest);
             // Assert
             assertEquals(testProduction, result);
         }
@@ -95,7 +95,7 @@ public class ProductionServiceTest {
         @Test
         void testNewProductionWithOnlyNameReturnsProductionObject() {
             // Arrange
-            NewProductionRequest onlyNameRequest = new NewProductionRequest(
+            ProductionRequest onlyNameRequest = new ProductionRequest(
                     "Test Production",
                     0, null, null, null, false, false, null);
 
@@ -120,7 +120,7 @@ public class ProductionServiceTest {
             // Arrange
             when(venueRepository.findById(1)).thenThrow(new DataAccessException("Data access failed"){});
             // Act & Assert
-            DatabaseException ex = assertThrows(DatabaseException.class, () -> productionService.addNewProduction(testNewProductionRequest));
+            DatabaseException ex = assertThrows(DatabaseException.class, () -> productionService.addNewProduction(testProductionRequest));
         }
 
         @Test
@@ -132,7 +132,7 @@ public class ProductionServiceTest {
             when(productionRepository.countByNameStartingWith(any(String.class))).thenReturn(0);
             when(productionRepository.save(any(Production.class))).thenThrow(new DataAccessException("Data access failed"){});
             // Act & Assert
-            DatabaseException ex = assertThrows(DatabaseException.class, () -> productionService.addNewProduction(testNewProductionRequest));
+            DatabaseException ex = assertThrows(DatabaseException.class, () -> productionService.addNewProduction(testProductionRequest));
         }
 
         @Test
@@ -144,7 +144,7 @@ public class ProductionServiceTest {
             when(productionRepository.countByNameStartingWith(any(String.class))).thenReturn(0);
             when(productionRepository.save(any(Production.class))).thenThrow(new PersistenceException("Data persistence failed"){});
             // Act & Assert
-            DatabaseException ex = assertThrows(DatabaseException.class, () -> productionService.addNewProduction(testNewProductionRequest));
+            DatabaseException ex = assertThrows(DatabaseException.class, () -> productionService.addNewProduction(testProductionRequest));
         }
 
         @Test
@@ -157,7 +157,7 @@ public class ProductionServiceTest {
             when(productionRepository.save(any(Production.class))).thenThrow(new DataIntegrityViolationException("Duplicate name"){});
 
             // Act & Assert
-            DataIntegrityViolationException ex = assertThrows(DataIntegrityViolationException.class, () -> productionService.addNewProduction(testNewProductionRequest));
+            DataIntegrityViolationException ex = assertThrows(DataIntegrityViolationException.class, () -> productionService.addNewProduction(testProductionRequest));
         }
 
         @Nested
@@ -366,4 +366,31 @@ public class ProductionServiceTest {
 
     }
 
+    @Nested
+    @DisplayName("updateProduction service tests")
+    class updateProductionServiceTests {
+
+        ProductionRequest testUpdateProductionRequest = new ProductionRequest(
+                "Updated Test Production",
+                1,
+                "Updated Test Author",
+                "Updated Test Description",
+                LocalDateTime.now(),
+                true,
+                true,
+                "Updated File String"
+        );
+
+        @Test
+        void testProductionIdNotValidThrowsEntityNotFoundException() {
+            // Arrange
+            when(productionRepository.findById(anyInt())).thenReturn(Optional.empty());
+            // Act & Assert
+            EntityNotFoundException ex = assertThrows(EntityNotFoundException.class, () -> {
+               productionService.updateProductionObject(1, testUpdateProductionRequest);
+            });
+
+        }
+
+    }
 }

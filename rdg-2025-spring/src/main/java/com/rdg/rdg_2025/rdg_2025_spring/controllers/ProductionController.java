@@ -2,14 +2,13 @@ package com.rdg.rdg_2025.rdg_2025_spring.controllers;
 
 import com.rdg.rdg_2025.rdg_2025_spring.exception.DatabaseException;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Production;
-import com.rdg.rdg_2025.rdg_2025_spring.payload.request.production.NewProductionRequest;
+import com.rdg.rdg_2025.rdg_2025_spring.payload.request.production.ProductionRequest;
 import com.rdg.rdg_2025.rdg_2025_spring.payload.response.production.ProductionResponse;
 import com.rdg.rdg_2025.rdg_2025_spring.payload.response.production.ProductionsResponse;
 import com.rdg.rdg_2025.rdg_2025_spring.services.ProductionService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,9 +29,9 @@ public class ProductionController {
 
     @PostMapping()
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> addNewProduction(@Valid @RequestBody NewProductionRequest newProductionRequest) {
+    public ResponseEntity<?> addNewProduction(@Valid @RequestBody ProductionRequest productionRequest) {
         try {
-            Production production = productionService.addNewProduction(newProductionRequest);
+            Production production = productionService.addNewProduction(productionRequest);
             URI location = URI.create("/productions/" + production.getId());
             return ResponseEntity.created(location).body(new ProductionResponse(production));
         } catch (DataIntegrityViolationException ex) {

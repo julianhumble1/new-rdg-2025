@@ -4,7 +4,6 @@ import com.rdg.rdg_2025.rdg_2025_spring.exception.DatabaseException;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Festival;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Venue;
 import com.rdg.rdg_2025.rdg_2025_spring.payload.request.festivals.NewFestivalRequest;
-import com.rdg.rdg_2025.rdg_2025_spring.payload.request.production.NewProductionRequest;
 import com.rdg.rdg_2025.rdg_2025_spring.services.FestivalService;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
