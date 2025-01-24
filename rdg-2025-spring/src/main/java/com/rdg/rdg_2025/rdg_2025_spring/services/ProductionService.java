@@ -102,6 +102,9 @@ public class ProductionService {
 
         } catch (EntityNotFoundException ex) {
             throw new EntityNotFoundException(ex.getMessage());
+        }
+        catch (DataIntegrityViolationException ex) {
+            throw new DataIntegrityViolationException(ex.getMessage());
         } catch (DataAccessException | PersistenceException ex) {
             throw new DatabaseException(ex.getMessage());
         }

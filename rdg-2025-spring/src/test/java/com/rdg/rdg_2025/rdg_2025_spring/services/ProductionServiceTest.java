@@ -472,5 +472,18 @@ public class ProductionServiceTest {
             });
         }
 
+        @Test
+        void testSaveNewProductionIntegrityViolationThrowsDataIntegrityViolationException() {
+            // Arrange
+            when(productionRepository.findById(anyInt())).thenReturn(Optional.of(testProduction));
+            when(venueRepository.findById(anyInt())).thenReturn(Optional.of(new Venue()));
+
+            when(productionRepository.save(any(Production.class))).thenThrow(new DataIntegrityViolationException("Duplicate production slug"));
+            // Act & Assert
+            DataIntegrityViolationException ex = assertThrows(DataIntegrityViolationException.class, () -> {
+                productionService.updateProductionObject(1, testUpdateProductionRequest);
+            });
+        }
+
     }
 }
