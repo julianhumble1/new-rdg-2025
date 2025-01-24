@@ -27,7 +27,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class ProductionServiceTest {
@@ -423,6 +423,27 @@ public class ProductionServiceTest {
             DatabaseException ex = assertThrows(DatabaseException.class, () -> {
                 productionService.updateProductionObject(1, testUpdateProductionRequest);
             });
+        }
+
+        @Test
+        void testNoVenueIdProvidedThenNoCallToVenueRepository() {
+            // Arrange
+            ProductionRequest noVenueProductionRequest = new ProductionRequest(
+                    "Updated Test Production",
+                    0,
+                    "Updated Test Author",
+                    "Updated Test Description",
+                    LocalDateTime.now(),
+                    true,
+                    true,
+                    "Updated File String"
+            );
+
+            when(productionRepository.findById(anyInt())).thenReturn(Optional.of(testProduction));
+            // Act
+            Production result = productionService.updateProductionObject(1, noVenueProductionRequest);
+            // Assert
+            verify(venueRepository, never()).findById(anyInt());
         }
 
     }

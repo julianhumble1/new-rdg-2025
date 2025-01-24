@@ -98,7 +98,10 @@ public class ProductionService {
     public Production updateProductionObject(int productionId, ProductionRequest productionRequest) {
         try {
             Production existingProduction = productionRepository.findById(productionId).orElseThrow(() -> new EntityNotFoundException("No Production with this id"));
-            Venue venue = venueRepository.findById(productionRequest.getVenueId()).orElseThrow(() -> new EntityNotFoundException("No Venue with this id"));
+            Venue associatedVenue;
+            if (productionRequest.getVenueId() > 0) {
+                associatedVenue = venueRepository.findById(productionRequest.getVenueId()).orElseThrow(() -> new EntityNotFoundException("No Venue with this id"));
+            }
         } catch (DataAccessException ex) {
             throw new DatabaseException(ex.getMessage());
         }
