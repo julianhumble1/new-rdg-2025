@@ -73,7 +73,7 @@ At that stage, I will then add more styling to the front end using TailwindCSS, 
 
 ### Route Diagrams
 
-**Venues**
+#### Venues
 
 ![post venue diagram](./images/post-venue-diagram.jpg)
 
@@ -85,7 +85,7 @@ At that stage, I will then add more styling to the front end using TailwindCSS, 
 
 ![patch venue diagram](./images/patch-venue-diagram.jpg)
 
-**Productions**
+#### Productions
 
 ![post production diagram](./images/post-production-diagram.jpg)
 
@@ -93,7 +93,7 @@ At that stage, I will then add more styling to the front end using TailwindCSS, 
 
 ![get production diagram](./images/get-production-diagram.jpg)
 
-**Festivals**
+#### Productions
 
 ![post festival diagram](./images/post-festival-diagram.jpg)
 
