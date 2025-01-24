@@ -441,9 +441,22 @@ public class ProductionServiceTest {
 
             when(productionRepository.findById(anyInt())).thenReturn(Optional.of(testProduction));
             // Act
-            Production result = productionService.updateProductionObject(1, noVenueProductionRequest);
+            productionService.updateProductionObject(1, noVenueProductionRequest);
             // Assert
             verify(venueRepository, never()).findById(anyInt());
+        }
+
+        @Test
+        void testSaveNewProductionDataAccessExceptionThrowsDatabaseException() {
+            // Arrange
+            when(productionRepository.findById(anyInt())).thenReturn(Optional.of(testProduction));
+            when(venueRepository.findById(anyInt())).thenReturn(Optional.of(new Venue()));
+
+            when(productionRepository.save(any(Production.class))).thenThrow(new DataAccessException("Data Access Exception") {});
+            // Act & Assert
+            DatabaseException ex = assertThrows(DatabaseException.class, () -> {
+                productionService.updateProductionObject(1, testUpdateProductionRequest);
+            });
         }
 
     }
