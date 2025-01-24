@@ -15,7 +15,7 @@ import java.util.List;
 
 @Entity
 @Table(name="venues")
-@Getter @Setter @NoArgsConstructor @ToString
+@Getter @Setter @NoArgsConstructor @ToString(exclude = "productions")
 public class Venue {
 
     @Id

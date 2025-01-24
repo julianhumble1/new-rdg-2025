@@ -22,6 +22,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Optional;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -299,7 +303,6 @@ public class ProductionIntegrationTest {
         }
     }
 
-
     @Nested
     @DisplayName("getAllProductions integration tests")
     class getAllProductionsIntegrationTests {
@@ -329,6 +332,50 @@ public class ProductionIntegrationTest {
             mockMvc.perform(get("/productions"))
                     .andExpect(jsonPath("$.productions").isArray());
 
+        }
+
+    }
+
+    @Nested
+    @DisplayName("getProductionById integration tests")
+    class getProductionByIdIntegrationTest {
+
+        @Autowired
+        VenueRepository venueRepository;
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+
+        Production testProduction;
+
+        @BeforeEach
+        void beforeEach() {
+            productionRepository.deleteAll();
+            Venue managedTestVenue1 = venueRepository.findById(testVenue1.getId()).orElseThrow(() -> new RuntimeException("Failed to find venue"));
+
+            testProduction = new Production(
+                    "Test Production",
+                    managedTestVenue1,
+                    "Test Author",
+                    "Test Description",
+                    LocalDateTime.parse("2025-10-10T10:00:00", formatter),
+                    false,
+                    false,
+                    "Test File String"
+            );
+            productionRepository.save(testProduction);
+        }
+
+        @AfterEach
+        void afterEach() {
+            productionRepository.deleteAll();
+        }
+
+        @Test
+        void testSuccessfulGetResponds200() throws Exception {
+            // Arrange
+            // Act & Assert
+            mockMvc.perform(get("/productions/" + testProduction.getId()))
+                    .andExpect(status().isOk());
         }
 
     }
