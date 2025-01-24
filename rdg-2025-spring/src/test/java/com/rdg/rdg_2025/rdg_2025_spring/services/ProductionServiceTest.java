@@ -459,5 +459,18 @@ public class ProductionServiceTest {
             });
         }
 
+        @Test
+        void testSaveNewProductionPersistenceExceptionThrowsDatabaseException() {
+            // Arrange
+            when(productionRepository.findById(anyInt())).thenReturn(Optional.of(testProduction));
+            when(venueRepository.findById(anyInt())).thenReturn(Optional.of(new Venue()));
+
+            when(productionRepository.save(any(Production.class))).thenThrow(new PersistenceException("Persistence exception"));
+            // Act & Assert
+            DatabaseException ex = assertThrows(DatabaseException.class, () -> {
+                productionService.updateProductionObject(1, testUpdateProductionRequest);
+            });
+        }
+
     }
 }

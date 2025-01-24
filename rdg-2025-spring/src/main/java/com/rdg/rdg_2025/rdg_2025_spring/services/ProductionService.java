@@ -100,7 +100,9 @@ public class ProductionService {
 
             return updatedProduction;
 
-        } catch (DataAccessException ex) {
+        } catch (EntityNotFoundException ex) {
+            throw new EntityNotFoundException(ex.getMessage());
+        } catch (DataAccessException | PersistenceException ex) {
             throw new DatabaseException(ex.getMessage());
         }
     }
