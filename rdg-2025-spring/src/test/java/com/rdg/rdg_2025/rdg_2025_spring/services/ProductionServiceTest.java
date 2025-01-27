@@ -162,14 +162,14 @@ public class ProductionServiceTest {
 
         @Nested
         @DisplayName("updateNameAndSlug tests")
-        class updateNameAndSlugTests {
+        class updateProductionRequestNameTests {
 
-            static Method updateNameAndSlugIfRepeatPerformance;
+            static Method updateProductionRequestNameIfRepeatPerformance;
 
             @BeforeAll
             static void getPrivateMethod() throws Exception {
-                updateNameAndSlugIfRepeatPerformance = ProductionService.class.getDeclaredMethod("updateNameAndSlugIfRepeatPerformance", Production.class);
-                updateNameAndSlugIfRepeatPerformance.setAccessible(true);
+                updateProductionRequestNameIfRepeatPerformance = ProductionService.class.getDeclaredMethod("updateProductionRequestNameIfRepeatPerformance", ProductionRequest.class);
+                updateProductionRequestNameIfRepeatPerformance.setAccessible(true);
             }
 
             @Test
@@ -178,23 +178,10 @@ public class ProductionServiceTest {
                 when(productionRepository.countByNameStartingWith(any())).thenReturn(0);
 
                 // Act
-                String result = ((Production) updateNameAndSlugIfRepeatPerformance.invoke(productionService, testProduction)).getName();
+                String result = ((ProductionRequest) updateProductionRequestNameIfRepeatPerformance.invoke(productionService, testProductionRequest)).getName();
 
                 // Assert
                 assertEquals(testProduction.getName(), result);
-            }
-
-            @Test
-            void returnsOriginalSlugIfNeverPerformedBefore() throws Exception {
-                // Arrange
-                when(productionRepository.countByNameStartingWith(any())).thenReturn(0);
-
-                String expected = "test-production";
-                // Act
-                String result = ((Production) updateNameAndSlugIfRepeatPerformance.invoke(productionService, testProduction)).getSlug();
-
-                // Assert
-                assertEquals(expected, result);
             }
 
             @Test
@@ -204,20 +191,7 @@ public class ProductionServiceTest {
 
                 String expected = testProduction.getName() + " (2)";
                 // Act
-                String result = ((Production) updateNameAndSlugIfRepeatPerformance.invoke(productionService, testProduction)).getName();
-
-                // Assert
-                assertEquals(expected, result);
-            }
-
-            @Test
-            void returnSlugWithTwoOnEndIfPerformedOnceBefore() throws Exception {
-                // Arrange
-                when(productionRepository.countByNameStartingWith(any())).thenReturn(1);
-
-                String expected = "test-production-2";
-                // Act
-                String result = ((Production) updateNameAndSlugIfRepeatPerformance.invoke(productionService, testProduction)).getSlug();
+                String result = ((ProductionRequest) updateProductionRequestNameIfRepeatPerformance.invoke(productionService, testProductionRequest)).getName();
 
                 // Assert
                 assertEquals(expected, result);

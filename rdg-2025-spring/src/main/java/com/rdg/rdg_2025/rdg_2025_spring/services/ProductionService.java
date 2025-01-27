@@ -39,6 +39,8 @@ public class ProductionService {
             }
         }
 
+        updateProductionRequestNameIfRepeatPerformance(productionRequest);
+
         Production production = new Production(
                 productionRequest.getName(),
                 venue,
@@ -50,9 +52,9 @@ public class ProductionService {
                 productionRequest.getFlyerFile()
         );
 
-        Production updatedProduction = updateNameAndSlugIfRepeatPerformance(production);
+//        Production updatedProduction = updateNameAndSlugIfRepeatPerformance(production);
         try {
-            Production savedProduction = productionRepository.save(updatedProduction);
+            Production savedProduction = productionRepository.save(production);
 
             return savedProduction;
         } catch (DataIntegrityViolationException ex) {
@@ -85,19 +87,23 @@ public class ProductionService {
 
     public Production updateProduction(int productionId, ProductionRequest productionRequest) {
         try {
-            Production existingProduction = productionRepository.findById(productionId).orElseThrow(() -> new EntityNotFoundException("No Production with this id"));
+            Production production = productionRepository.findById(productionId).orElseThrow(() -> new EntityNotFoundException("No Production with this id"));
+
             Venue associatedVenue = null;
             if (productionRequest.getVenueId() > 0) {
                 associatedVenue = venueRepository.findById(productionRequest.getVenueId()).orElseThrow(() -> new EntityNotFoundException("No Venue with this id"));
             }
 
-            Production updatedProductionObject = updateProductionObject(productionRequest, existingProduction, associatedVenue);
-
-            if (updatedProductionObject.getName() != existingProduction.getName()) {
-                updatedProductionObject = updateNameAndSlugIfRepeatPerformance(updatedProductionObject);
+            if ((productionRequest.getName().compareTo(production.getName())) != 0) {
+                System.out.println("name changing to another name");
+                System.out.println(productionRequest);
+                updateProductionRequestNameIfRepeatPerformance(productionRequest);
+                System.out.println(productionRequest);
             }
 
-            return productionRepository.save(updatedProductionObject);
+            updateProductionDetails(productionRequest, production, associatedVenue);
+
+            return productionRepository.save(production);
 
         } catch (EntityNotFoundException ex) {
             throw new EntityNotFoundException(ex.getMessage());
@@ -110,23 +116,20 @@ public class ProductionService {
 
     // PRIVATE HELPER METHODS
 
-    private Production updateNameAndSlugIfRepeatPerformance(Production production) {
-        // check if production name has already been used
-        int timesPerformed = productionRepository.countByNameStartingWith(production.getName());
+    private ProductionRequest updateProductionRequestNameIfRepeatPerformance(ProductionRequest productionRequest) {
+        int timesPerformed = productionRepository.countByNameStartingWith(productionRequest.getName());
 
         if (timesPerformed > 0) {
-            production.setName(production.getName() + " (" + (timesPerformed + 1) + ")");
-            production.setSlug(production.getSlug() + "-" + (timesPerformed + 1));
+            productionRequest.setName(productionRequest.getName() + " (" + (timesPerformed + 1) + ")");
         }
 
-        return production;
+        return productionRequest;
     }
 
-    private Production updateProductionObject(ProductionRequest updateProductionRequest, Production production, Venue venue) {
-        if (updateProductionRequest.getName() != null) {
-            production.setName(updateProductionRequest.getName());
-            production.setSlug(SlugUtils.generateSlug(production.getName()));
-        }
+    private Production updateProductionDetails(ProductionRequest updateProductionRequest, Production production, Venue venue) {
+
+        production.setName(updateProductionRequest.getName());
+        production.setSlug(SlugUtils.generateSlug(production.getName()));
         production.setVenue(venue);
         production.setAuthor(updateProductionRequest.getAuthor());
         production.setDescription(updateProductionRequest.getDescription());

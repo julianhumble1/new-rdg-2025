@@ -478,7 +478,6 @@ public class ProductionIntegrationTest {
         @Test
         void testSuccessfulUpdateOnlyNameRespondsExpectedProductionObject() throws Exception {
             // Arrange
-            Venue managedTestVenue2 = venueRepository.findById(testVenue2.getId()).orElseThrow(() -> new RuntimeException("Venue not found"));
             // Act & Assert
             mockMvc.perform(patch("/productions/" + testExistingProduction.getId())
                             .contentType(MediaType.APPLICATION_JSON)
@@ -495,6 +494,29 @@ public class ProductionIntegrationTest {
                     .andExpect(jsonPath("$.production.notConfirmed").value(false))
                     .andExpect(jsonPath("$.production.flyerFile").isEmpty())
                     .andExpect(jsonPath("$.production.slug").value("updated-test-production"));
+        }
+
+        @Test
+        void testUpdateToExistingProductionNameRespondsNameWithBrackets() throws Exception {
+            // Arrange
+            Production existingProduction = new Production(
+                    "Existing Production", null, null, null, null, false, false, null
+
+            );
+            mockMvc.perform(post("/productions")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", adminToken)
+                            .content(
+                                    "{ \"name\": \"Existing Production\"}"
+                            ));
+            // Act & Assert
+            mockMvc.perform(patch("/productions/" + testExistingProduction.getId())
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", adminToken)
+                            .content(
+                                    "{ \"name\": \"Existing Production\" }"
+                            ))
+                    .andExpect(jsonPath("$.production.name").value("Existing Production (2)"));
         }
 
     }
