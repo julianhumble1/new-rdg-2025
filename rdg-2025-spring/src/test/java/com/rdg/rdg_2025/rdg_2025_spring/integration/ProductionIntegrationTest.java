@@ -605,5 +605,20 @@ public class ProductionIntegrationTest {
                     .andExpect(status().isBadRequest());
         }
 
+        @Test
+        void testSundownersNotBooleanResponds400() throws Exception {
+            // Arrange
+            Venue managedTestVenue2 = venueRepository.findById(testVenue2.getId()).orElseThrow(() -> new RuntimeException("Venue not found"));
+            // Act & Assert
+            mockMvc.perform(patch("/productions/" + testExistingProduction.getId())
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", adminToken)
+                            .content(
+                                    "{ \"name\": \"Updated Test Production\", \"venueId\": " + managedTestVenue2.getId() +  ", \"author\": \"Updated Test Author\", \"description\": \"Updated Test Description\", " +
+                                            "\"auditionDate\": \"2025-11-10T10:00:00\", \"sundowners\": \"not a boolean\", \"notConfirmed\": true, \"flyerFile\": \"Updated Test Flyer File\" }"
+                            ))
+                    .andExpect(status().isBadRequest());
+        }
+
     }
 }
