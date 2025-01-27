@@ -447,15 +447,13 @@ public class ProductionIntegrationTest {
                                     "{ \"name\": \"Updated Test Production\", \"venueId\": " + managedTestVenue2.getId() +  ", \"author\": \"Updated Test Author\", \"description\": \"Updated Test Description\", " +
                                             "\"auditionDate\": \"2025-11-10T10:00:00\", \"sundowners\": true, \"notConfirmed\": true, \"flyerFile\": \"Updated Test Flyer File\" }"
                             ))
-                    .andExpect(status().isOk()
-                    );
+                    .andExpect(status().isOk());
         }
 
         @Test
         void testSuccessfulUpdateWithFullProductionDetailsRespondsExpectedProductionObject() throws Exception {
             // Arrange
             Venue managedTestVenue2 = venueRepository.findById(testVenue2.getId()).orElseThrow(() -> new RuntimeException("Venue not found"));
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
 
             // Act & Assert
             mockMvc.perform(patch("/productions/" + testExistingProduction.getId())
@@ -472,8 +470,31 @@ public class ProductionIntegrationTest {
                     .andExpect(jsonPath("$.production.auditionDate").value("2025-11-10T10:00:00"))
                     .andExpect(jsonPath("$.production.sundowners").value(true))
                     .andExpect(jsonPath("$.production.notConfirmed").value(true))
-                    .andExpect(jsonPath("$.production.flyerFile").value("Updated Test Flyer File"));
+                    .andExpect(jsonPath("$.production.flyerFile").value("Updated Test Flyer File"))
+                    .andExpect(jsonPath("$.production.slug").value("updated-test-production"));
 
+        }
+
+        @Test
+        void testSuccessfulUpdateOnlyNameRespondsExpectedProductionObject() throws Exception {
+            // Arrange
+            Venue managedTestVenue2 = venueRepository.findById(testVenue2.getId()).orElseThrow(() -> new RuntimeException("Venue not found"));
+            // Act & Assert
+            mockMvc.perform(patch("/productions/" + testExistingProduction.getId())
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", adminToken)
+                            .content(
+                                    "{ \"name\": \"Updated Test Production\" }"
+                            ))
+                    .andExpect(jsonPath("$.production.name").value("Updated Test Production"))
+                    .andExpect(jsonPath("$.production.venue").isEmpty())
+                    .andExpect(jsonPath("$.production.author").isEmpty())
+                    .andExpect(jsonPath("$.production.description").isEmpty())
+                    .andExpect(jsonPath("$.production.auditionDate").isEmpty())
+                    .andExpect(jsonPath("$.production.sundowners").value(false))
+                    .andExpect(jsonPath("$.production.notConfirmed").value(false))
+                    .andExpect(jsonPath("$.production.flyerFile").isEmpty())
+                    .andExpect(jsonPath("$.production.slug").value("updated-test-production"));
         }
 
     }
