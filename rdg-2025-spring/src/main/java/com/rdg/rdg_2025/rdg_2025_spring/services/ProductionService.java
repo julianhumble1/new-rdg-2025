@@ -14,6 +14,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -133,6 +134,7 @@ public class ProductionService {
         production.setSundowners(updateProductionRequest.isSundowners());
         production.setNotConfirmed(updateProductionRequest.isNotConfirmed());
         production.setFlyerFile(updateProductionRequest.getFlyerFile());
+        production.setUpdatedAt(LocalDateTime.now());
 
         return production;
     }

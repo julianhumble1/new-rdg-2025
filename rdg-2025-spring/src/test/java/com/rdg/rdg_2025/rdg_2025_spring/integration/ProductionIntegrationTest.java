@@ -26,8 +26,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -406,6 +405,50 @@ public class ProductionIntegrationTest {
             // Act & Assert
             mockMvc.perform(get("/productions/badVenueId"))
                     .andExpect(status().isBadRequest());
+        }
+
+    }
+
+    @Nested
+    @DisplayName("updateProduction integration tests")
+    class updateProductionIntegrationTests {
+
+        @Autowired
+        private VenueRepository venueRepository;
+
+        Production testExistingProduction;
+
+        @BeforeEach
+        void beforeEach() {
+            Venue managedTestVenue1 = venueRepository.findById(testVenue1.getId()).orElseThrow(() -> new RuntimeException("Venue not found"));
+
+            testExistingProduction = new Production(
+                    "Test Production",
+                    managedTestVenue1,
+                    "Test Author",
+                    "Test Description",
+                    LocalDateTime.now(),
+                    false,
+                    false,
+                    "Test Flyer File"
+            );
+            productionRepository.save(testExistingProduction);
+        }
+
+        @Test
+        void testSuccessfulUpdateWithProductionDetailsNoVenueIdResponds200() throws Exception {
+            // Arrange
+            Venue managedTestVenue2 = venueRepository.findById(testVenue2.getId()).orElseThrow(() -> new RuntimeException("Venue not found"));
+            // Act & Assert
+            mockMvc.perform(patch("/productions/" + testExistingProduction.getId())
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", adminToken)
+                            .content(
+                                    "{ \"name\": \"Updated Test Production\", \"venueId\": " + managedTestVenue2.getId() +  ", \"author\": \"Updated Test Author\", \"description\": \"Updated Test Description\", " +
+                                            "\"auditionDate\": \"2025-11-10T10:00:00\", \"sundowners\": true, \"notConfirmed\": true, \"flyerFile\": \"Updated Test Flyer File\" }"
+                            ))
+                    .andExpect(status().isOk()
+                    );
         }
 
     }
