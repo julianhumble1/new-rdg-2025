@@ -440,5 +440,22 @@ public class ProductionControllerTest {
 
         }
 
+        @Test
+        @WithMockUser(roles="ADMIN")
+        void testSundownersNotBooleanResponds400() throws Exception {
+            // Arrange
+
+            // Act & Assert
+            mockMvc.perform(patch("/productions/1")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(
+                                    "{ \"name\": \"Updated Test Production\", \"venueId\": \"1\", \"author\": \"Updated Test Author\", \"description\": \"Updated Test Description\", " +
+                                            "\"auditionDate\": \"2025-11-10T10:00:00\", \"sundowners\": \"Not a boolean\", \"notConfirmed\": true, \"flyerFile\": \"Updated Test Flyer File\" }"
+                            ))
+                    .andExpect(status().isBadRequest());
+
+
+        }
+
     }
 }
