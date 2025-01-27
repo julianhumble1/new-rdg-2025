@@ -436,7 +436,7 @@ public class ProductionIntegrationTest {
         }
 
         @Test
-        void testSuccessfulUpdateWithProductionDetailsNoVenueIdResponds200() throws Exception {
+        void testSuccessfulUpdateWithFullProductionDetailsResponds200() throws Exception {
             // Arrange
             Venue managedTestVenue2 = venueRepository.findById(testVenue2.getId()).orElseThrow(() -> new RuntimeException("Venue not found"));
             // Act & Assert
@@ -449,6 +449,31 @@ public class ProductionIntegrationTest {
                             ))
                     .andExpect(status().isOk()
                     );
+        }
+
+        @Test
+        void testSuccessfulUpdateWithFullProductionDetailsRespondsExpectedProductionObject() throws Exception {
+            // Arrange
+            Venue managedTestVenue2 = venueRepository.findById(testVenue2.getId()).orElseThrow(() -> new RuntimeException("Venue not found"));
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+
+            // Act & Assert
+            mockMvc.perform(patch("/productions/" + testExistingProduction.getId())
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", adminToken)
+                            .content(
+                                    "{ \"name\": \"Updated Test Production\", \"venueId\": " + managedTestVenue2.getId() +  ", \"author\": \"Updated Test Author\", \"description\": \"Updated Test Description\", " +
+                                            "\"auditionDate\": \"2025-11-10T10:00:00\", \"sundowners\": true, \"notConfirmed\": true, \"flyerFile\": \"Updated Test Flyer File\" }"
+                            ))
+                    .andExpect(jsonPath("$.production.name").value("Updated Test Production"))
+                    .andExpect(jsonPath("$.production.venue.id").value(managedTestVenue2.getId()))
+                    .andExpect(jsonPath("$.production.author").value("Updated Test Author"))
+                    .andExpect(jsonPath("$.production.description").value("Updated Test Description"))
+                    .andExpect(jsonPath("$.production.auditionDate").value("2025-11-10T10:00:00"))
+                    .andExpect(jsonPath("$.production.sundowners").value(true))
+                    .andExpect(jsonPath("$.production.notConfirmed").value(true))
+                    .andExpect(jsonPath("$.production.flyerFile").value("Updated Test Flyer File"));
+
         }
 
     }
