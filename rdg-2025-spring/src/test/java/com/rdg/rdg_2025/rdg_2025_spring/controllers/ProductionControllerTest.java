@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.parameters.P;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
@@ -528,6 +529,31 @@ public class ProductionControllerTest {
                                             "\"auditionDate\": \"2025-11-10T10:00:00\", \"sundowners\": true, \"notConfirmed\": true, \"flyerFile\": \"Updated Test Flyer File\" }"
                             ))
                     .andExpect(status().isOk());
+        }
+
+        @Test
+        @WithMockUser(roles="ADMIN")
+        void testSuccessfulUpdateRespondsExpectedProductionObject() throws Exception {
+            // Arrange
+            Production testUpdatedProduction = new Production(
+                    "Updated Test Production",
+                    new Venue(),
+                    "Updated Test Author",
+                    "Updated Test Description",
+                    LocalDateTime.now(),
+                    true,
+                    true,
+                    "Updated Test Flyer File"
+            );
+            when(productionService.updateProduction(anyInt(), any(ProductionRequest.class))).thenReturn(testUpdatedProduction);
+            // Act & Assert
+            mockMvc.perform(patch("/productions/1")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(
+                                    "{ \"name\": \"Updated Test Production\", \"venueId\": \"1\", \"author\": \"Updated Test Author\", \"description\": \"Updated Test Description\", " +
+                                            "\"auditionDate\": \"2025-11-10T10:00:00\", \"sundowners\": true, \"notConfirmed\": true, \"flyerFile\": \"Updated Test Flyer File\" }"
+                            ))
+                    .andExpect(jsonPath("$.production.name").value("Updated Test Production"));
         }
 
     }
