@@ -485,5 +485,20 @@ public class ProductionControllerTest {
                     .andExpect(status().isInternalServerError());
         }
 
+        @Test
+        @WithMockUser(roles="ADMIN")
+        void testEntityNotFoundExceptionResponds404() throws Exception {
+            // Arrange
+            when(productionService.updateProduction(anyInt(), any(ProductionRequest.class))).thenThrow(new EntityNotFoundException());
+            // Act & Assert
+            mockMvc.perform(patch("/productions/1")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(
+                                    "{ \"name\": \"Updated Test Production\", \"venueId\": \"1\", \"author\": \"Updated Test Author\", \"description\": \"Updated Test Description\", " +
+                                            "\"auditionDate\": \"2025-11-10T10:00:00\", \"sundowners\": true, \"notConfirmed\": true, \"flyerFile\": \"Updated Test Flyer File\" }"
+                            ))
+                    .andExpect(status().isNotFound());
+        }
+
     }
 }
