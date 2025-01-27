@@ -423,5 +423,22 @@ public class ProductionControllerTest {
 
         }
 
+        @Test
+        @WithMockUser(roles="ADMIN")
+        void testAuditionDateNotDateResponds400() throws Exception {
+            // Arrange
+
+            // Act & Assert
+            mockMvc.perform(patch("/productions/1")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(
+                                    "{ \"name\": \"Updated Test Production\", \"venueId\": \"1\", \"author\": \"Updated Test Author\", \"description\": \"Updated Test Description\", " +
+                                            "\"auditionDate\": \"Not a date\", \"sundowners\": true, \"notConfirmed\": true, \"flyerFile\": \"Updated Test Flyer File\" }"
+                            ))
+                    .andExpect(status().isBadRequest());
+
+
+        }
+
     }
 }
