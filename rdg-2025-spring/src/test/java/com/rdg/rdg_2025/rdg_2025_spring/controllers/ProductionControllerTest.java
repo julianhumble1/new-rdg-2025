@@ -25,8 +25,7 @@ import java.util.ArrayList;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(ProductionController.class)
@@ -398,6 +397,29 @@ public class ProductionControllerTest {
             // Act & Assert
             mockMvc.perform(get("/productions/1"))
                     .andExpect(status().isInternalServerError());
+
+        }
+
+    }
+
+    @Nested
+    @DisplayName("updateProduction controller tests")
+    class updateProductionControllerTests {
+
+        @Test
+        @WithMockUser(roles="ADMIN")
+        void testVenueIdNotIntegerResponds400() throws Exception {
+            // Arrange
+
+            // Act & Assert
+            mockMvc.perform(patch("/productions/1")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(
+                            "{ \"name\": \"Updated Test Production\", \"venueId\": \"Not an integer\", \"author\": \"Updated Test Author\", \"description\": \"Updated Test Description\", " +
+                                    "\"auditionDate\": \"2025-11-10T10:00:00\", \"sundowners\": true, \"notConfirmed\": true, \"flyerFile\": \"Updated Test Flyer File\" }"
+                    ))
+                    .andExpect(status().isBadRequest());
+
 
         }
 

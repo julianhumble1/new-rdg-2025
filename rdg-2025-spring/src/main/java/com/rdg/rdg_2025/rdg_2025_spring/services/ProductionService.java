@@ -82,7 +82,7 @@ public class ProductionService {
         }
     }
 
-    public Production updateProductionObject(int productionId, ProductionRequest productionRequest) {
+    public Production updateProduction(int productionId, ProductionRequest productionRequest) {
         try {
             Production existingProduction = productionRepository.findById(productionId).orElseThrow(() -> new EntityNotFoundException("No Production with this id"));
             Venue associatedVenue = null;
@@ -96,14 +96,11 @@ public class ProductionService {
                 updatedProductionObject = updateNameAndSlugIfRepeatPerformance(updatedProductionObject);
             }
 
-            Production updatedProduction = productionRepository.save(updatedProductionObject);
-
-            return updatedProduction;
+            return productionRepository.save(updatedProductionObject);
 
         } catch (EntityNotFoundException ex) {
             throw new EntityNotFoundException(ex.getMessage());
-        }
-        catch (DataIntegrityViolationException ex) {
+        } catch (DataIntegrityViolationException ex) {
             throw new DataIntegrityViolationException(ex.getMessage());
         } catch (DataAccessException | PersistenceException ex) {
             throw new DatabaseException(ex.getMessage());

@@ -387,7 +387,7 @@ public class ProductionServiceTest {
             when(productionRepository.findById(anyInt())).thenReturn(Optional.empty());
             // Act & Assert
             EntityNotFoundException ex = assertThrows(EntityNotFoundException.class, () -> {
-               productionService.updateProductionObject(1, testUpdateProductionRequest);
+               productionService.updateProduction(1, testUpdateProductionRequest);
             });
 
         }
@@ -398,7 +398,7 @@ public class ProductionServiceTest {
             when(productionRepository.findById(anyInt())).thenThrow(new DataAccessException("Data access exception") {});
             // Act & Assert
             DatabaseException ex = assertThrows(DatabaseException.class, () -> {
-                productionService.updateProductionObject(1, testUpdateProductionRequest);
+                productionService.updateProduction(1, testUpdateProductionRequest);
             });
 
         }
@@ -410,7 +410,7 @@ public class ProductionServiceTest {
             when(venueRepository.findById(anyInt())).thenReturn(Optional.empty());
             // Act & Assert
             EntityNotFoundException ex = assertThrows(EntityNotFoundException.class, () -> {
-                productionService.updateProductionObject(1, testUpdateProductionRequest);
+                productionService.updateProduction(1, testUpdateProductionRequest);
             });
         }
 
@@ -421,7 +421,7 @@ public class ProductionServiceTest {
             when(venueRepository.findById(anyInt())).thenThrow(new DataAccessException("Data Access Exception") {});
             // Act & Assert
             DatabaseException ex = assertThrows(DatabaseException.class, () -> {
-                productionService.updateProductionObject(1, testUpdateProductionRequest);
+                productionService.updateProduction(1, testUpdateProductionRequest);
             });
         }
 
@@ -441,7 +441,7 @@ public class ProductionServiceTest {
 
             when(productionRepository.findById(anyInt())).thenReturn(Optional.of(testProduction));
             // Act
-            productionService.updateProductionObject(1, noVenueProductionRequest);
+            productionService.updateProduction(1, noVenueProductionRequest);
             // Assert
             verify(venueRepository, never()).findById(anyInt());
         }
@@ -455,7 +455,7 @@ public class ProductionServiceTest {
             when(productionRepository.save(any(Production.class))).thenThrow(new DataAccessException("Data Access Exception") {});
             // Act & Assert
             DatabaseException ex = assertThrows(DatabaseException.class, () -> {
-                productionService.updateProductionObject(1, testUpdateProductionRequest);
+                productionService.updateProduction(1, testUpdateProductionRequest);
             });
         }
 
@@ -468,7 +468,7 @@ public class ProductionServiceTest {
             when(productionRepository.save(any(Production.class))).thenThrow(new PersistenceException("Persistence exception"));
             // Act & Assert
             DatabaseException ex = assertThrows(DatabaseException.class, () -> {
-                productionService.updateProductionObject(1, testUpdateProductionRequest);
+                productionService.updateProduction(1, testUpdateProductionRequest);
             });
         }
 
@@ -481,7 +481,7 @@ public class ProductionServiceTest {
             when(productionRepository.save(any(Production.class))).thenThrow(new DataIntegrityViolationException("Duplicate production slug"));
             // Act & Assert
             DataIntegrityViolationException ex = assertThrows(DataIntegrityViolationException.class, () -> {
-                productionService.updateProductionObject(1, testUpdateProductionRequest);
+                productionService.updateProduction(1, testUpdateProductionRequest);
             });
         }
 
