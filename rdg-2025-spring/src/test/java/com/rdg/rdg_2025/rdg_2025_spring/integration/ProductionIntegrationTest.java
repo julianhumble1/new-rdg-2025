@@ -530,5 +530,20 @@ public class ProductionIntegrationTest {
                     .andExpect(status().isNotFound());
         }
 
+        @Test
+        void testNonExistentProductionIdResponds404() throws Exception {
+            // Arrange
+            Venue managedTestVenue2 = venueRepository.findById(testVenue2.getId()).orElseThrow(() -> new RuntimeException("Venue not found"));
+
+            // Act & Assert
+            mockMvc.perform(patch("/productions/" + (testExistingProduction.getId() + 1))
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", adminToken)
+                            .content(
+                                    "{ \"name\": \"Existing Production\", \"venueId\": " + managedTestVenue2.getId() +  "}"
+                            ))
+                    .andExpect(status().isNotFound());
+        }
+
     }
 }
