@@ -52,11 +52,8 @@ public class ProductionService {
                 productionRequest.getFlyerFile()
         );
 
-//        Production updatedProduction = updateNameAndSlugIfRepeatPerformance(production);
         try {
-            Production savedProduction = productionRepository.save(production);
-
-            return savedProduction;
+            return productionRepository.save(production);
         } catch (DataIntegrityViolationException ex) {
             throw new DataIntegrityViolationException(ex.getMessage());
         } catch (DataAccessException | PersistenceException ex) {
@@ -95,10 +92,7 @@ public class ProductionService {
             }
 
             if ((productionRequest.getName().compareTo(production.getName())) != 0) {
-                System.out.println("name changing to another name");
-                System.out.println(productionRequest);
                 updateProductionRequestNameIfRepeatPerformance(productionRequest);
-                System.out.println(productionRequest);
             }
 
             updateProductionDetails(productionRequest, production, associatedVenue);

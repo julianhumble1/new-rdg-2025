@@ -503,12 +503,7 @@ public class ProductionIntegrationTest {
                     "Existing Production", null, null, null, null, false, false, null
 
             );
-            mockMvc.perform(post("/productions")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .header("Authorization", adminToken)
-                            .content(
-                                    "{ \"name\": \"Existing Production\"}"
-                            ));
+            productionRepository.save(existingProduction);
             // Act & Assert
             mockMvc.perform(patch("/productions/" + testExistingProduction.getId())
                             .contentType(MediaType.APPLICATION_JSON)
@@ -516,7 +511,23 @@ public class ProductionIntegrationTest {
                             .content(
                                     "{ \"name\": \"Existing Production\" }"
                             ))
-                    .andExpect(jsonPath("$.production.name").value("Existing Production (2)"));
+                    .andExpect(jsonPath("$.production.name").value("Existing Production (2)"))
+                    .andExpect(jsonPath("$.production.slug").value("existing-production-2"));
+        }
+
+        @Test
+        void testNonExistentVenueIdResponds404() throws Exception {
+            // Arrange
+            Venue managedTestVenue2 = venueRepository.findById(testVenue2.getId()).orElseThrow(() -> new RuntimeException("Venue not found"));
+
+            // Act & Assert
+            mockMvc.perform(patch("/productions/" + testExistingProduction.getId())
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", adminToken)
+                            .content(
+                                    "{ \"name\": \"Existing Production\", \"venueId\": " + (managedTestVenue2.getId() + 1) +  "}"
+                            ))
+                    .andExpect(status().isNotFound());
         }
 
     }
