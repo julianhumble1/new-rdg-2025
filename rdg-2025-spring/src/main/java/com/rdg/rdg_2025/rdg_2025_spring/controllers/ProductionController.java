@@ -71,6 +71,11 @@ public class ProductionController {
 
     @PatchMapping("/{productionId}")
     public ResponseEntity<?> updateProduction(@PathVariable int productionId, @Valid @RequestBody ProductionRequest updateProductionRequest) {
+        try {
+            Production updateProduction = productionService.updateProduction(productionId, updateProductionRequest);
+        } catch (DatabaseException ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
+        }
         return ResponseEntity.ok("Ok");
     }
 
