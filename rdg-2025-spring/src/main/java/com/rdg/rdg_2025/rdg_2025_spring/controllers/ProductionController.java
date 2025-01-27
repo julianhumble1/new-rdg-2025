@@ -70,6 +70,7 @@ public class ProductionController {
     }
 
     @PatchMapping("/{productionId}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> updateProduction(@PathVariable int productionId, @Valid @RequestBody ProductionRequest updateProductionRequest) {
         try {
             Production updatedProduction = productionService.updateProduction(productionId, updateProductionRequest);
