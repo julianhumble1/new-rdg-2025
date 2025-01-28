@@ -91,7 +91,7 @@ public class ProductionService {
                 associatedVenue = venueRepository.findById(productionRequest.getVenueId()).orElseThrow(() -> new EntityNotFoundException("No Venue with this id"));
             }
 
-            if ((productionRequest.getName().compareTo(production.getName())) != 0) {
+            if (!(productionRequest.getName().equals(production.getName()))) {
                 updateProductionRequestNameIfRepeatPerformance(productionRequest);
             }
 
@@ -112,6 +112,7 @@ public class ProductionService {
 
     private ProductionRequest updateProductionRequestNameIfRepeatPerformance(ProductionRequest productionRequest) {
         int timesPerformed = productionRepository.countByNameStartingWith(productionRequest.getName());
+        System.out.println(timesPerformed);
 
         if (timesPerformed > 0) {
             productionRequest.setName(productionRequest.getName() + " (" + (timesPerformed + 1) + ")");

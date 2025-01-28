@@ -24,18 +24,11 @@ public class VenueService {
 
     public Venue addNewVenue(VenueRequest newVenueRequest) {
 
-        Venue venue = new Venue(
-                newVenueRequest.getName(),
-                newVenueRequest.getNotes(),
-                newVenueRequest.getPostcode(),
-                newVenueRequest.getAddress(),
-                newVenueRequest.getTown(),
-                newVenueRequest.getUrl()
-        );
+        Venue venue = new Venue();
+        updateVenueFromRequest(newVenueRequest, venue);
 
         try {
-            Venue savedVenue = venueRepository.save(venue);
-            return savedVenue;
+            return venueRepository.save(venue);
         } catch (DataIntegrityViolationException | ConstraintViolationException ex) {
             throw new DataIntegrityViolationException(ex.getMessage());
         } catch (DataAccessException | PersistenceException ex) {
@@ -67,11 +60,9 @@ public class VenueService {
             Venue venue = venueRepository.findById(venueId)
                     .orElseThrow(() -> new EntityNotFoundException("Venue not found with id: " + venueId));
 
-            Venue updatedVenueObject = updateVenueObject(updateVenueRequest, venue);
+            updateVenueFromRequest(updateVenueRequest, venue);
 
-            Venue updatedVenue = venueRepository.save(updatedVenueObject);
-
-            return updatedVenue;
+            return venueRepository.save(venue);
         } catch (EntityNotFoundException ex) {
             throw new EntityNotFoundException(ex.getMessage());
         } catch (DataIntegrityViolationException | ConstraintViolationException ex) {
@@ -79,21 +70,6 @@ public class VenueService {
         } catch (DataAccessException | PersistenceException ex) {
             throw new DatabaseException(ex.getMessage());
         }
-    }
-
-    private Venue updateVenueObject(VenueRequest updateVenueRequest, Venue venue) {
-        if (updateVenueRequest.getName() != null) {
-            venue.setName(updateVenueRequest.getName());
-            venue.setSlug(SlugUtils.generateSlug(venue.getName()));
-        }
-        venue.setNotes(updateVenueRequest.getNotes());
-        venue.setPostcode(updateVenueRequest.getPostcode());
-        venue.setAddress(updateVenueRequest.getAddress());
-        venue.setTown(updateVenueRequest.getTown());
-        venue.setUrl(updateVenueRequest.getUrl());
-        venue.setUpdatedAt(LocalDateTime.now());
-
-        return venue;
     }
 
     public boolean deleteVenueById(int venueId) {
@@ -108,4 +84,25 @@ public class VenueService {
             throw new DatabaseException(ex.getMessage());
         }
     }
+
+    // PRIVATE HELPER METHODS
+
+    private Venue updateVenueFromRequest(VenueRequest updateVenueRequest, Venue venue) {
+        if (updateVenueRequest.getName() != null) {
+            venue.setName(updateVenueRequest.getName());
+            venue.setSlug(SlugUtils.generateSlug(venue.getName()));
+        }
+        venue.setNotes(updateVenueRequest.getNotes());
+        venue.setPostcode(updateVenueRequest.getPostcode());
+        venue.setAddress(updateVenueRequest.getAddress());
+        venue.setTown(updateVenueRequest.getTown());
+        venue.setUrl(updateVenueRequest.getUrl());
+        if (venue.getCreatedAt() == null) {
+            venue.setCreatedAt(LocalDateTime.now());
+        }
+        venue.setUpdatedAt(LocalDateTime.now());
+
+        return venue;
+    }
+
 }
