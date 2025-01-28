@@ -9,12 +9,14 @@ import com.rdg.rdg_2025.rdg_2025_spring.repository.FestivalRepository;
 import com.rdg.rdg_2025.rdg_2025_spring.repository.VenueRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.PersistenceException;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.dao.DataAccessException;
 
@@ -26,19 +28,22 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class FestivalServiceTest {
 
-    @InjectMocks
-    FestivalService festivalService;
+    VenueRepository venueRepository;
 
     @Mock
     FestivalRepository festivalRepository;
 
     @Mock
-    VenueRepository venueRepository;
+    VenueService venueService;
+
+    @InjectMocks
+    FestivalService festivalService;
 
     private NewFestivalRequest testNewFestivalRequest = new NewFestivalRequest(
             "Test Festival", 1, 2025, 4, "Test Description"
@@ -48,14 +53,19 @@ public class FestivalServiceTest {
             "Test Festival", new Venue(), 2025, 4, "Test Description"
     );
 
+    @BeforeEach
+    void setup() {
+        MockitoAnnotations.openMocks(this);
+    }
+
     @Nested
     @DisplayName("addNewFestival service tests")
-    class addNewFestivalServiceTests{
+    class AddNewFestivalServiceTests{
 
         @Test
         void testInvalidVenueIdThrowsEntityNotFoundException() {
             // Arrange
-            when(venueRepository.findById(any())).thenThrow(EntityNotFoundException.class);
+            when(venueService.getVenueById(anyInt())).thenThrow(new EntityNotFoundException());
 
             // Act & Assert
             EntityNotFoundException ex = assertThrows(EntityNotFoundException.class, () -> {
@@ -67,7 +77,7 @@ public class FestivalServiceTest {
         void testNewFestivalWithFullDetailsIncludingVenueReturnsFestivalObject() {
             // Arrange
             Venue testVenue = new Venue();
-            when(venueRepository.findById(any())).thenReturn(Optional.of(testVenue));
+            when(venueService.getVenueById(anyInt())).thenReturn(testVenue);
 
             when(festivalRepository.save(any(Festival.class))).thenReturn(testFestival);
 
@@ -101,7 +111,7 @@ public class FestivalServiceTest {
         @Test
         void testVenueFindDataAccessExceptionThrowsDatabaseException() {
             // Arrange
-            when(venueRepository.findById(1)).thenThrow(new DataAccessException("Data Access Error") {});
+            when(venueService.getVenueById(1)).thenThrow(new DatabaseException("Database Error") {});
             // Act & Assert
             DatabaseException ex = assertThrows(DatabaseException.class, () ->
                     festivalService.addNewFestival(testNewFestivalRequest)
@@ -112,7 +122,7 @@ public class FestivalServiceTest {
         void testFestivalSaveDataAccessExceptionThrowsDatabaseException() {
             // Arrange
             Venue testVenue = new Venue();
-            when(venueRepository.findById(1)).thenReturn(Optional.of(testVenue));
+            when(venueService.getVenueById(1)).thenReturn(testVenue);
 
             when(festivalRepository.save(any(Festival.class))).thenThrow(
                     new DataAccessException("Data Access Error") {}
@@ -129,7 +139,7 @@ public class FestivalServiceTest {
         void testFestivalSavePersistenceExceptionThrowsDatabaseException() {
             // Arrange
             Venue testVenue = new Venue();
-            when(venueRepository.findById(1)).thenReturn(Optional.of(testVenue));
+            when(venueService.getVenueById(1)).thenReturn(testVenue);
 
             when(festivalRepository.save(any(Festival.class))).thenThrow(
                     new PersistenceException("Persistence Error") {}
@@ -146,7 +156,7 @@ public class FestivalServiceTest {
 
     @Nested
     @DisplayName("getAllFestivals service tests")
-    class getAllFestivalsServiceTests {
+    class GetAllFestivalsServiceTests {
 
         @Test
         void testGetAllFestivalsWithEmptyDatabaseReturnsEmptyList() {

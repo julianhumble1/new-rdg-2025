@@ -10,6 +10,7 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.PersistenceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,21 +21,17 @@ public class FestivalService {
     @Autowired
     FestivalRepository festivalRepository;
 
-    @Autowired
-    VenueRepository venueRepository;
+    public FestivalService(VenueService venueService) {
+        this.venueService = venueService;
+    }
+
+    private VenueService venueService;
+
+    // METHODS
 
     public Festival addNewFestival(NewFestivalRequest newFestivalRequest) {
 
-        Venue venue = null;
-
-        if (newFestivalRequest.getVenueId() != 0) {
-            try {
-                venue = venueRepository.findById(newFestivalRequest.getVenueId())
-                    .orElseThrow(() -> new EntityNotFoundException("Venue not found with id: " + newFestivalRequest.getVenueId()));
-            } catch (DataAccessException ex) {
-                throw new DatabaseException(ex.getMessage());
-            }
-        }
+        Venue venue = getVenueFromService(newFestivalRequest);
 
         Festival festival = new Festival(
                 newFestivalRequest.getName(),
@@ -44,20 +41,39 @@ public class FestivalService {
                 newFestivalRequest.getDescription()
         );
 
-        try {
-            Festival savedFestival = festivalRepository.save(festival);
-            return savedFestival;
-        } catch (DataAccessException | PersistenceException ex) {
-            throw new DatabaseException(ex.getMessage());
-        }
+        return saveFestivalToDatabase(festival);
 
     }
 
     public List<Festival> getAllFestivals() {
         try {
-            List<Festival> festivals = festivalRepository.findAll();
-            return festivals;
+            return festivalRepository.findAll();
         } catch (DataAccessException ex) {
+            throw new DatabaseException(ex.getMessage());
+        }
+    }
+
+
+    // PRIVATE HELPER METHODS
+
+    private Venue getVenueFromService(NewFestivalRequest newFestivalRequest) {
+        Venue venue = null;
+        if (newFestivalRequest.getVenueId() > 0) {
+            try {
+                venue = venueService.getVenueById(newFestivalRequest.getVenueId());
+            } catch (EntityNotFoundException ex) {
+                throw new EntityNotFoundException(ex.getMessage(), ex);
+            } catch (DatabaseException ex) {
+                throw new DatabaseException(ex.getMessage(), ex);
+            }
+        }
+        return venue;
+    }
+
+    private Festival saveFestivalToDatabase(Festival festival) {
+        try {
+            return festivalRepository.save(festival);
+        } catch (DataAccessException | PersistenceException ex) {
             throw new DatabaseException(ex.getMessage());
         }
     }

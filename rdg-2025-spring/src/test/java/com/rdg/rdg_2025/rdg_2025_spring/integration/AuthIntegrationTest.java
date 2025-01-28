@@ -51,8 +51,8 @@ public class AuthIntegrationTest {
     }
 
     @Nested
-    @DisplayName("auth sign in integration tests")
-    class authSignInIntegrationTests {
+    @DisplayName("POST auth sign in integration tests")
+    class AuthSignInIntegrationTests {
 
         @Test
         void testRequestMissingPasswordResponds400() throws Exception {
@@ -200,8 +200,8 @@ public class AuthIntegrationTest {
     }
 
     @Nested
-    @DisplayName("sign up integration tests")
-    class signUpIntegrationTests {
+    @DisplayName("POST sign up integration tests")
+    class SignUpIntegrationTests {
 
         @Test
         void testSignUpUserWithFullDetailsResponds200() throws Exception {

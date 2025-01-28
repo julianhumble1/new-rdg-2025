@@ -5,13 +5,13 @@ import com.rdg.rdg_2025.rdg_2025_spring.models.Production;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Venue;
 import com.rdg.rdg_2025.rdg_2025_spring.payload.request.production.ProductionRequest;
 import com.rdg.rdg_2025.rdg_2025_spring.repository.ProductionRepository;
-import com.rdg.rdg_2025.rdg_2025_spring.repository.VenueRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.PersistenceException;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -32,14 +32,14 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 public class ProductionServiceTest {
 
-    @InjectMocks
-    private ProductionService productionService;
-
     @Mock
     private ProductionRepository productionRepository;
 
     @Mock
-    private VenueRepository venueRepository;
+    private VenueService venueService;
+
+    @InjectMocks
+    private ProductionService productionService;
 
     private ProductionRequest testProductionRequest = new ProductionRequest(
             "Test Production",
@@ -63,14 +63,19 @@ public class ProductionServiceTest {
             "Test File String"
     );
 
+    @BeforeEach
+    void setup() {
+        MockitoAnnotations.openMocks(this);
+    }
+
     @Nested
     @DisplayName("addNewProduction service tests")
-    class addNewProductionServiceTests {
+    class AddNewProductionServiceTests {
 
         @Test
         void testInvalidVenueIdThrowsEntityNotFoundException() {
             // Arrange
-            when(venueRepository.findById(any())).thenReturn(Optional.empty());
+            when(venueService.getVenueById(anyInt())).thenThrow(new EntityNotFoundException("Entity not found"));
             // Act & Assert
             EntityNotFoundException ex = assertThrows(EntityNotFoundException.class, () -> {
                 productionService.addNewProduction(testProductionRequest);
@@ -82,7 +87,7 @@ public class ProductionServiceTest {
         void testNewProductionWithFullDetailsIncludingVenueReturnsProductionObject() {
             // Arrange
             Venue testVenue = new Venue();
-            when(venueRepository.findById(1)).thenReturn(Optional.of(testVenue));
+            when(venueService.getVenueById(1)).thenReturn(testVenue);
 
             when(productionRepository.countByNameStartingWith(any(String.class))).thenReturn(0);
             when(productionRepository.save(any(Production.class))).thenReturn(testProduction);
@@ -118,7 +123,7 @@ public class ProductionServiceTest {
         @Test
         void testVenueDataAccessExceptionThrowsDatabaseException() {
             // Arrange
-            when(venueRepository.findById(1)).thenThrow(new DataAccessException("Data access failed"){});
+            when(venueService.getVenueById(1)).thenThrow(new DatabaseException("Data access failed"));
             // Act & Assert
             DatabaseException ex = assertThrows(DatabaseException.class, () -> productionService.addNewProduction(testProductionRequest));
         }
@@ -127,7 +132,7 @@ public class ProductionServiceTest {
         void testProductionDataAccessExceptionThrowsDatabaseException() {
             // Arrange
             Venue testVenue = new Venue();
-            when(venueRepository.findById(1)).thenReturn(Optional.of(testVenue));
+            when(venueService.getVenueById(1)).thenReturn(testVenue);
 
             when(productionRepository.countByNameStartingWith(any(String.class))).thenReturn(0);
             when(productionRepository.save(any(Production.class))).thenThrow(new DataAccessException("Data access failed"){});
@@ -139,7 +144,7 @@ public class ProductionServiceTest {
         void testProductionPersistenceExceptionThrowsDatabaseException () {
             // Arrange
             Venue testVenue = new Venue();
-            when(venueRepository.findById(1)).thenReturn(Optional.of(testVenue));
+            when(venueService.getVenueById(1)).thenReturn(testVenue);
 
             when(productionRepository.countByNameStartingWith(any(String.class))).thenReturn(0);
             when(productionRepository.save(any(Production.class))).thenThrow(new PersistenceException("Data persistence failed"){});
@@ -151,7 +156,7 @@ public class ProductionServiceTest {
         void testDuplicateProductionNameThrowsDataIntegrityViolationException() {
             // Arrange
             Venue testVenue = new Venue();
-            when(venueRepository.findById(1)).thenReturn(Optional.of(testVenue));
+            when(venueService.getVenueById(1)).thenReturn(testVenue);
 
             when(productionRepository.countByNameStartingWith(any(String.class))).thenReturn(0);
             when(productionRepository.save(any(Production.class))).thenThrow(new DataIntegrityViolationException("Duplicate name"){});
@@ -162,7 +167,7 @@ public class ProductionServiceTest {
 
         @Nested
         @DisplayName("updateNameAndSlug tests")
-        class updateProductionRequestNameTests {
+        class UpdateProductionRequestNameTests {
 
             static Method updateProductionRequestNameIfRepeatPerformance;
 
@@ -203,7 +208,7 @@ public class ProductionServiceTest {
 
     @Nested
     @DisplayName("getAllProductions service tests")
-    class getAllProductionsServiceTests{
+    class GetAllProductionsServiceTests{
 
         @Test
         void testGetAllProductionsWithEmptyDatabaseReturnsEmptyList() {
@@ -303,7 +308,7 @@ public class ProductionServiceTest {
 
     @Nested
     @DisplayName("getProductionById service tests")
-    class getProductionByIdServiceTests {
+    class GetProductionByIdServiceTests {
 
         @Test
         void testSuccessfulGetReturnsProductionObject() {
@@ -342,7 +347,7 @@ public class ProductionServiceTest {
 
     @Nested
     @DisplayName("updateProduction service tests")
-    class updateProductionServiceTests {
+    class UpdateProductionServiceTests {
 
         ProductionRequest testUpdateProductionRequest = new ProductionRequest(
                 "Updated Test Production",
@@ -381,7 +386,7 @@ public class ProductionServiceTest {
         void testIfVenueIdProvidedButDoesNotExistThrowsEntityNotFoundException() {
             // Arrange
             when(productionRepository.findById(anyInt())).thenReturn(Optional.of(testProduction));
-            when(venueRepository.findById(anyInt())).thenReturn(Optional.empty());
+            when(venueService.getVenueById(anyInt())).thenThrow(new EntityNotFoundException());
             // Act & Assert
             EntityNotFoundException ex = assertThrows(EntityNotFoundException.class, () -> {
                 productionService.updateProduction(1, testUpdateProductionRequest);
@@ -392,7 +397,7 @@ public class ProductionServiceTest {
         void testVenueExistsCheckDataAccessExceptionThrowsDatabaseException() {
             // Arrange
             when(productionRepository.findById(anyInt())).thenReturn(Optional.of(testProduction));
-            when(venueRepository.findById(anyInt())).thenThrow(new DataAccessException("Data Access Exception") {});
+            when(venueService.getVenueById(anyInt())).thenThrow(new DatabaseException("Data Access Exception") {});
             // Act & Assert
             DatabaseException ex = assertThrows(DatabaseException.class, () -> {
                 productionService.updateProduction(1, testUpdateProductionRequest);
@@ -417,14 +422,14 @@ public class ProductionServiceTest {
             // Act
             productionService.updateProduction(1, noVenueProductionRequest);
             // Assert
-            verify(venueRepository, never()).findById(anyInt());
+            verify(venueService, never()).getVenueById(anyInt());
         }
 
         @Test
         void testSaveNewProductionDataAccessExceptionThrowsDatabaseException() {
             // Arrange
             when(productionRepository.findById(anyInt())).thenReturn(Optional.of(testProduction));
-            when(venueRepository.findById(anyInt())).thenReturn(Optional.of(new Venue()));
+            when(venueService.getVenueById(anyInt())).thenReturn(new Venue());
 
             when(productionRepository.save(any(Production.class))).thenThrow(new DataAccessException("Data Access Exception") {});
             // Act & Assert
@@ -437,7 +442,7 @@ public class ProductionServiceTest {
         void testSaveNewProductionPersistenceExceptionThrowsDatabaseException() {
             // Arrange
             when(productionRepository.findById(anyInt())).thenReturn(Optional.of(testProduction));
-            when(venueRepository.findById(anyInt())).thenReturn(Optional.of(new Venue()));
+            when(venueService.getVenueById(anyInt())).thenReturn(new Venue());
 
             when(productionRepository.save(any(Production.class))).thenThrow(new PersistenceException("Persistence exception"));
             // Act & Assert
@@ -450,7 +455,7 @@ public class ProductionServiceTest {
         void testSaveNewProductionIntegrityViolationThrowsDataIntegrityViolationException() {
             // Arrange
             when(productionRepository.findById(anyInt())).thenReturn(Optional.of(testProduction));
-            when(venueRepository.findById(anyInt())).thenReturn(Optional.of(new Venue()));
+            when(venueService.getVenueById(anyInt())).thenReturn(new Venue());
 
             when(productionRepository.save(any(Production.class))).thenThrow(new DataIntegrityViolationException("Duplicate production slug"));
             // Act & Assert

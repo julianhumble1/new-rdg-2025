@@ -27,19 +27,12 @@ public class VenueService {
         Venue venue = new Venue();
         updateVenueFromRequest(newVenueRequest, venue);
 
-        try {
-            return venueRepository.save(venue);
-        } catch (DataIntegrityViolationException | ConstraintViolationException ex) {
-            throw new DataIntegrityViolationException(ex.getMessage());
-        } catch (DataAccessException | PersistenceException ex) {
-            throw new DatabaseException(ex.getMessage());
-        }
+        return saveVenueToDatabase(venue);
     }
 
     public List<Venue> getAllVenues() {
         try {
-            List<Venue> venues = venueRepository.findAll();
-            return venues;
+            return venueRepository.findAll();
         } catch (DataAccessException | PersistenceException ex) {
             throw new DatabaseException(ex.getMessage());
         }
@@ -47,29 +40,19 @@ public class VenueService {
 
     public Venue getVenueById(int venueId) {
         try {
-            Venue venue = venueRepository.findById(venueId)
+            return venueRepository.findById(venueId)
                     .orElseThrow(() -> new EntityNotFoundException("Venue not found with id: " + venueId));
-            return venue;
         } catch (DataAccessException ex) {
             throw new DatabaseException(ex.getMessage());
         }
     }
 
     public Venue updateVenue(int venueId, VenueRequest updateVenueRequest) {
-        try {
-            Venue venue = venueRepository.findById(venueId)
-                    .orElseThrow(() -> new EntityNotFoundException("Venue not found with id: " + venueId));
+        Venue venue = getVenueById(venueId);
 
-            updateVenueFromRequest(updateVenueRequest, venue);
+        updateVenueFromRequest(updateVenueRequest, venue);
 
-            return venueRepository.save(venue);
-        } catch (EntityNotFoundException ex) {
-            throw new EntityNotFoundException(ex.getMessage());
-        } catch (DataIntegrityViolationException | ConstraintViolationException ex) {
-            throw new DataIntegrityViolationException(ex.getMessage());
-        } catch (DataAccessException | PersistenceException ex) {
-            throw new DatabaseException(ex.getMessage());
-        }
+        return saveVenueToDatabase(venue);
     }
 
     public boolean deleteVenueById(int venueId) {
@@ -103,6 +86,16 @@ public class VenueService {
         venue.setUpdatedAt(LocalDateTime.now());
 
         return venue;
+    }
+
+    private Venue saveVenueToDatabase(Venue venue) {
+        try {
+            return venueRepository.save(venue);
+        } catch (DataIntegrityViolationException | ConstraintViolationException ex) {
+            throw new DataIntegrityViolationException(ex.getMessage());
+        } catch (DataAccessException | PersistenceException ex) {
+            throw new DatabaseException(ex.getMessage());
+        }
     }
 
 }

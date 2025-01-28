@@ -6,7 +6,6 @@ import com.rdg.rdg_2025.rdg_2025_spring.models.Production;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Venue;
 import com.rdg.rdg_2025.rdg_2025_spring.payload.request.production.ProductionRequest;
 import com.rdg.rdg_2025.rdg_2025_spring.repository.ProductionRepository;
-import com.rdg.rdg_2025.rdg_2025_spring.repository.VenueRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.PersistenceException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,42 +22,31 @@ public class ProductionService {
     @Autowired
     private ProductionRepository productionRepository;
 
-    @Autowired
-    private VenueRepository venueRepository;
+    public ProductionService(VenueService venueService) {
+        this.venueService = venueService;
+    }
+
+    private VenueService venueService;
+
+    // METHODS
 
     public Production addNewProduction(ProductionRequest productionRequest) {
 
-        Venue venue = null;
-        // if venue provided, check it exists
-        if (productionRequest.getVenueId() != 0) {
-            try {
-            venue = venueRepository.findById(productionRequest.getVenueId())
-                    .orElseThrow(() -> new EntityNotFoundException("Venue not found with id: " + productionRequest.getVenueId()));
-            } catch (DataAccessException ex) {
-                throw new DatabaseException(ex.getMessage());
-            }
-        }
+        Venue venue = getVenueFromService(productionRequest);
 
         updateProductionRequestNameIfRepeatPerformance(productionRequest);
 
         Production production = new Production();
         updateProductionFromRequest(productionRequest, production, venue);
 
-        try {
-            return productionRepository.save(production);
-        } catch (DataIntegrityViolationException ex) {
-            throw new DataIntegrityViolationException(ex.getMessage());
-        } catch (DataAccessException | PersistenceException ex) {
-            throw new DatabaseException(ex.getMessage());
-        }
+        return saveProductionToDatabase(production);
 
     }
 
     public List<Production> getAllProductions() {
 
         try {
-            List<Production> productions = productionRepository.findAll();
-            return productions;
+            return productionRepository.findAll();
         } catch (DataAccessException | PersistenceException ex) {
             throw new DatabaseException(ex.getMessage());
         }
@@ -66,41 +54,52 @@ public class ProductionService {
 
     public Production getProductionById(int productionId) {
         try {
-            Production production = productionRepository.findById(productionId)
+            return productionRepository.findById(productionId)
                     .orElseThrow(() -> new EntityNotFoundException("No Production with this id"));
-            return production;
         } catch (DataAccessException ex) {
             throw new DatabaseException(ex.getMessage());
         }
     }
 
     public Production updateProduction(int productionId, ProductionRequest productionRequest) {
+        Production production = getProductionById(productionId);
+
+        Venue venue = getVenueFromService(productionRequest);
+
+        if (!(productionRequest.getName().equals(production.getName()))) {
+            updateProductionRequestNameIfRepeatPerformance(productionRequest);
+        }
+
+        updateProductionFromRequest(productionRequest, production, venue);
+
+        return saveProductionToDatabase(production);
+    }
+
+    // PRIVATE HELPER METHODS
+
+    private Venue getVenueFromService(ProductionRequest productionRequest) {
+        Venue venue = null;
+        if (productionRequest.getVenueId() > 0) {
+            try {
+                venue = venueService.getVenueById(productionRequest.getVenueId());
+            } catch (EntityNotFoundException ex) {
+                throw new EntityNotFoundException(ex.getMessage(), ex);
+            } catch (DatabaseException ex) {
+                throw new DatabaseException(ex.getMessage(), ex);
+            }
+        }
+        return venue;
+    }
+
+    private Production saveProductionToDatabase(Production production) {
         try {
-            Production production = productionRepository.findById(productionId).orElseThrow(() -> new EntityNotFoundException("No Production with this id"));
-
-            Venue associatedVenue = null;
-            if (productionRequest.getVenueId() > 0) {
-                associatedVenue = venueRepository.findById(productionRequest.getVenueId()).orElseThrow(() -> new EntityNotFoundException("No Venue with this id"));
-            }
-
-            if (!(productionRequest.getName().equals(production.getName()))) {
-                updateProductionRequestNameIfRepeatPerformance(productionRequest);
-            }
-
-            updateProductionFromRequest(productionRequest, production, associatedVenue);
-
             return productionRepository.save(production);
-
-        } catch (EntityNotFoundException ex) {
-            throw new EntityNotFoundException(ex.getMessage());
         } catch (DataIntegrityViolationException ex) {
             throw new DataIntegrityViolationException(ex.getMessage());
         } catch (DataAccessException | PersistenceException ex) {
             throw new DatabaseException(ex.getMessage());
         }
     }
-
-    // PRIVATE HELPER METHODS
 
     private ProductionRequest updateProductionRequestNameIfRepeatPerformance(ProductionRequest productionRequest) {
         int timesPerformed = productionRepository.countByNameStartingWith(productionRequest.getName());

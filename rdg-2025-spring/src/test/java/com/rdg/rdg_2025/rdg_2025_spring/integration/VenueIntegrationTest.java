@@ -77,7 +77,7 @@ public class VenueIntegrationTest {
 
     @Nested
     @DisplayName("POST addNewVenue integration tests")
-    class postAddNewVenueIntegrationTests {
+    class PostAddNewVenueIntegrationTests {
 
         @Test
         void testFullVenueDetailsWithAdminTokenReturns201() throws Exception {
@@ -213,7 +213,7 @@ public class VenueIntegrationTest {
 
     @Nested
     @DisplayName("GET getAllVenues integration tests")
-    class getGetAllVenuesIntegrationTests {
+    class GetGetAllVenuesIntegrationTests {
 
         @BeforeEach
         public void setup() {
@@ -273,7 +273,7 @@ public class VenueIntegrationTest {
 
     @Nested
     @DisplayName("DELETE deleteVenueById integration tests")
-    class deleteVenueByIdIntegrationTests {
+    class DeleteVenueByIdIntegrationTests {
 
         @Autowired
         private ProductionRepository productionRepository;
@@ -425,7 +425,7 @@ public class VenueIntegrationTest {
 
     @Nested
     @DisplayName("GET getVenueById integration tests")
-    class getVenueByIdIntegrationTests {
+    class GetVenueByIdIntegrationTests {
 
         @BeforeEach
         public void setup() {
@@ -524,7 +524,7 @@ public class VenueIntegrationTest {
 
     @Nested
     @DisplayName("PATCH updateVenue integration tests")
-    class updateVenueIntegrationTests {
+    class UpdateVenueIntegrationTests {
 
         static Venue existingVenue1;
         static Venue existingVenue2;

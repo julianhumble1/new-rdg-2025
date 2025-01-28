@@ -55,7 +55,7 @@ public class FestivalControllerTest {
 
     @Nested
     @DisplayName("addNewFestival controller tests")
-    class addNewFestivalControllerTests {
+    class AddNewFestivalControllerTests {
 
         @Test
         @WithMockUser(roles="ADMIN")
@@ -311,7 +311,7 @@ public class FestivalControllerTest {
 
     @Nested
     @DisplayName("getAllFestivals controller tests")
-    class getAllFestivalsControllerTests {
+    class GetAllFestivalsControllerTests {
 
         @Test
         @WithMockUser(roles="ADMIN")

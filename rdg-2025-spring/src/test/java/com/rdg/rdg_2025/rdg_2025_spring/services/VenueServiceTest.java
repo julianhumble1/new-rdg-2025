@@ -40,7 +40,7 @@ public class VenueServiceTest {
 
     @Nested
     @DisplayName("addNewVenue service tests")
-    class addNewVenueServiceTests {
+    class AddNewVenueServiceTests {
 
         @Test
         void testAddNewVenueWithAllFieldsSuccessReturnsExpectedVenueObject() {
@@ -115,7 +115,7 @@ public class VenueServiceTest {
 
     @Nested
     @DisplayName("getAllVenues service tests")
-    class getAllVenuesServiceTests {
+    class GetAllVenuesServiceTests {
 
         @Test
         void testGetAllVenuesWithEmptyDatabaseReturnsEmptyList() {
@@ -200,7 +200,7 @@ public class VenueServiceTest {
 
     @Nested
     @DisplayName("deleteVenue service tests")
-    class deleteVenueServiceTests {
+    class DeleteVenueServiceTests {
 
         Venue testVenue1 = new Venue("Test Venue", "Test Notes", "Test Postcode", "Test Address", "Test Town", "www.test.com");
         Venue testVenue2 = new Venue("Test Venue", "Test Notes", "Test Postcode", "Test Address", "Test Town", "www.test.com");
@@ -261,7 +261,7 @@ public class VenueServiceTest {
 
     @Nested
     @DisplayName("getVenue service tests")
-    class getVenueServiceTests {
+    class GetVenueServiceTests {
 
         @Test
         void testReturnsFoundVenueWhenVenueExists() {
@@ -301,7 +301,7 @@ public class VenueServiceTest {
 
     @Nested
     @DisplayName("updateVenue service tests")
-    class updateVenueServiceTests {
+    class UpdateVenueServiceTests {
 
         @Test
         void updateVenueWithAllFieldsSuccessReturnsExpectedVenueObject() {
