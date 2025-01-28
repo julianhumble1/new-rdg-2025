@@ -51,7 +51,6 @@ public class FestivalService {
             throw new DatabaseException(ex.getMessage());
         }
 
-
     }
 
     public List<Festival> getAllFestivals() {

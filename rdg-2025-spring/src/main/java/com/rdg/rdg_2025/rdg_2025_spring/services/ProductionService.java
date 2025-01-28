@@ -111,9 +111,10 @@ public class ProductionService {
         }
 
         return productionRequest;
+
     }
 
-    private Production updateProductionFromRequest(ProductionRequest productionRequest, Production production, Venue venue) {
+    private void updateProductionFromRequest(ProductionRequest productionRequest, Production production, Venue venue) {
 
         production.setName(productionRequest.getName());
         production.setSlug(SlugUtils.generateSlug(production.getName()));
@@ -129,7 +130,6 @@ public class ProductionService {
         }
         production.setUpdatedAt(LocalDateTime.now());
 
-        return production;
     }
 
 }

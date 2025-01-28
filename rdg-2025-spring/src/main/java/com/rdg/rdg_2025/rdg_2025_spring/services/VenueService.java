@@ -87,16 +87,16 @@ public class VenueService {
 
     // PRIVATE HELPER METHODS
 
-    private Venue updateVenueFromRequest(VenueRequest updateVenueRequest, Venue venue) {
-        if (updateVenueRequest.getName() != null) {
-            venue.setName(updateVenueRequest.getName());
+    private Venue updateVenueFromRequest(VenueRequest venueRequest, Venue venue) {
+        if (venueRequest.getName() != null) {
+            venue.setName(venueRequest.getName());
             venue.setSlug(SlugUtils.generateSlug(venue.getName()));
         }
-        venue.setNotes(updateVenueRequest.getNotes());
-        venue.setPostcode(updateVenueRequest.getPostcode());
-        venue.setAddress(updateVenueRequest.getAddress());
-        venue.setTown(updateVenueRequest.getTown());
-        venue.setUrl(updateVenueRequest.getUrl());
+        venue.setNotes(venueRequest.getNotes());
+        venue.setPostcode(venueRequest.getPostcode());
+        venue.setAddress(venueRequest.getAddress());
+        venue.setTown(venueRequest.getTown());
+        venue.setUrl(venueRequest.getUrl());
         if (venue.getCreatedAt() == null) {
             venue.setCreatedAt(LocalDateTime.now());
         }
