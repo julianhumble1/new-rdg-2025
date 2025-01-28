@@ -70,7 +70,7 @@ public class ProductionServiceTest {
 
     @Nested
     @DisplayName("addNewProduction service tests")
-    class addNewProductionServiceTests {
+    class AddNewProductionServiceTests {
 
         @Test
         void testInvalidVenueIdThrowsEntityNotFoundException() {
@@ -167,7 +167,7 @@ public class ProductionServiceTest {
 
         @Nested
         @DisplayName("updateNameAndSlug tests")
-        class updateProductionRequestNameTests {
+        class UpdateProductionRequestNameTests {
 
             static Method updateProductionRequestNameIfRepeatPerformance;
 
@@ -208,7 +208,7 @@ public class ProductionServiceTest {
 
     @Nested
     @DisplayName("getAllProductions service tests")
-    class getAllProductionsServiceTests{
+    class GetAllProductionsServiceTests{
 
         @Test
         void testGetAllProductionsWithEmptyDatabaseReturnsEmptyList() {
@@ -308,7 +308,7 @@ public class ProductionServiceTest {
 
     @Nested
     @DisplayName("getProductionById service tests")
-    class getProductionByIdServiceTests {
+    class GetProductionByIdServiceTests {
 
         @Test
         void testSuccessfulGetReturnsProductionObject() {
@@ -347,7 +347,7 @@ public class ProductionServiceTest {
 
     @Nested
     @DisplayName("updateProduction service tests")
-    class updateProductionServiceTests {
+    class UpdateProductionServiceTests {
 
         ProductionRequest testUpdateProductionRequest = new ProductionRequest(
                 "Updated Test Production",

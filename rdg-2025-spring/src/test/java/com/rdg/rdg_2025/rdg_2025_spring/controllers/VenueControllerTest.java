@@ -56,7 +56,7 @@ public class VenueControllerTest {
 
     @Nested
     @DisplayName("addNewVenue Controller Tests")
-    class addNewVenueControllerTests {
+    class AddNewVenueControllerTests {
 
         @Test
         @WithMockUser(roles="ADMIN")
@@ -228,7 +228,7 @@ public class VenueControllerTest {
 
     @Nested
     @DisplayName("getAllVenues Controller Tests")
-    class getAllVenuesControllerTests {
+    class GetAllVenuesControllerTests {
 
         @Test
         @WithMockUser(roles="ADMIN")
@@ -272,7 +272,7 @@ public class VenueControllerTest {
 
     @Nested
     @DisplayName("deleteVenueById Controller Tests")
-    class deleteVenueByControllerTests {
+    class DeleteVenueByControllerTests {
 
         @Test
         @WithMockUser(roles = "ADMIN")
@@ -308,7 +308,7 @@ public class VenueControllerTest {
 
     @Nested
     @DisplayName("getVenueById Controller Tests")
-    class getVenueByIdControllerTests {
+    class GetVenueByIdControllerTests {
 
         @Test
         void testSuccessfulGetReturns200Code() throws Exception {
@@ -399,7 +399,7 @@ public class VenueControllerTest {
 
     @Nested
     @DisplayName("updateVenue Controller Tests")
-    class updateVenueControllerTests {
+    class UpdateVenueControllerTests {
 
         @Test
         @WithMockUser(roles="ADMIN")

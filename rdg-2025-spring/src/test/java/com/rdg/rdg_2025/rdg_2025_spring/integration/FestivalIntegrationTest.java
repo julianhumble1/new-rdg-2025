@@ -95,8 +95,8 @@ public class FestivalIntegrationTest {
     public void cleanup() {festivalRepository.deleteAll();}
 
     @Nested
-    @DisplayName("addNewFestival integration tests")
-    class addNewFestivalIntegrationTests {
+    @DisplayName("POST add new festival integration tests")
+    class AddNewFestivalIntegrationTests {
 
         @Test
         void testFullProductionDetailsWithNoVenueReturns201() throws Exception {
@@ -300,8 +300,8 @@ public class FestivalIntegrationTest {
     }
 
     @Nested
-    @DisplayName("getAllFestivals integration tests")
-    class getAllFestivalsIntegrationTests {
+    @DisplayName("GET get all festivals integration tests")
+    class GetAllFestivalsIntegrationTests {
 
         @Autowired
         private VenueRepository venueRepository;

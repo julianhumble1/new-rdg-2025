@@ -53,7 +53,7 @@ public class FestivalServiceTest {
 
     @Nested
     @DisplayName("addNewFestival service tests")
-    class addNewFestivalServiceTests{
+    class AddNewFestivalServiceTests{
 
         @Test
         void testInvalidVenueIdThrowsEntityNotFoundException() {
@@ -149,7 +149,7 @@ public class FestivalServiceTest {
 
     @Nested
     @DisplayName("getAllFestivals service tests")
-    class getAllFestivalsServiceTests {
+    class GetAllFestivalsServiceTests {
 
         @Test
         void testGetAllFestivalsWithEmptyDatabaseReturnsEmptyList() {

@@ -98,8 +98,8 @@ public class ProductionIntegrationTest {
     public void cleanup() {productionRepository.deleteAll();}
 
     @Nested
-    @DisplayName("addNewProduction integration tests")
-    class addNewProductionIntegrationTests {
+    @DisplayName("POST add new production integration tests")
+    class AddNewProductionIntegrationTests {
 
         @Test
         void testFullProductionDetailsWithNoVenueReturns201() throws Exception {
@@ -303,8 +303,8 @@ public class ProductionIntegrationTest {
     }
 
     @Nested
-    @DisplayName("getAllProductions integration tests")
-    class getAllProductionsIntegrationTests {
+    @DisplayName("GET get all productions integration tests")
+    class GetAllProductionsIntegrationTests {
 
         @Autowired
         private VenueRepository venueRepository;
@@ -336,8 +336,8 @@ public class ProductionIntegrationTest {
     }
 
     @Nested
-    @DisplayName("getProductionById integration tests")
-    class getProductionByIdIntegrationTest {
+    @DisplayName("GET get production by id integration tests")
+    class GetProductionByIdIntegrationTest {
 
         @Autowired
         VenueRepository venueRepository;
@@ -410,8 +410,8 @@ public class ProductionIntegrationTest {
     }
 
     @Nested
-    @DisplayName("updateProduction integration tests")
-    class updateProductionIntegrationTests {
+    @DisplayName("PATCH update production integration tests")
+    class UpdateProductionIntegrationTests {
 
         @Autowired
         private VenueRepository venueRepository;

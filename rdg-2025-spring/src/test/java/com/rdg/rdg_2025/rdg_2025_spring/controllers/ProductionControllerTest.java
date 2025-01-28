@@ -64,7 +64,7 @@ public class ProductionControllerTest {
 
     @Nested
     @DisplayName("addNewProduction controller tests")
-    class addNewProductionControllerTests {
+    class AddNewProductionControllerTests {
 
         @Test
         @WithMockUser(roles="ADMIN")
@@ -320,7 +320,7 @@ public class ProductionControllerTest {
 
     @Nested
     @DisplayName("getAllProductions controller tests")
-    class getAllProductionsControllerTests {
+    class GetAllProductionsControllerTests {
 
         @Test
         void testSuccessfulGetReturns200Code() throws Exception {
@@ -359,7 +359,7 @@ public class ProductionControllerTest {
 
     @Nested
     @DisplayName("getProductionById controller tests")
-    class getProductionByIdControllerTests {
+    class GetProductionByIdControllerTests {
 
         @Test
         void testSuccessfulGetResponds200() throws Exception {
@@ -403,7 +403,7 @@ public class ProductionControllerTest {
 
     @Nested
     @DisplayName("updateProduction controller tests")
-    class updateProductionControllerTests {
+    class UpdateProductionControllerTests {
 
         @Test
         @WithMockUser(roles="ADMIN")
