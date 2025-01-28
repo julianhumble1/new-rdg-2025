@@ -47,23 +47,6 @@ public class VenueService {
         }
     }
 
-//    public Venue updateVenue(int venueId, VenueRequest updateVenueRequest) {
-//        try {
-//            Venue venue = venueRepository.findById(venueId)
-//                    .orElseThrow(() -> new EntityNotFoundException("Venue not found with id: " + venueId));
-//
-//            updateVenueFromRequest(updateVenueRequest, venue);
-//
-//            return venueRepository.save(venue);
-//        } catch (EntityNotFoundException ex) {
-//            throw new EntityNotFoundException(ex.getMessage());
-//        } catch (DataIntegrityViolationException | ConstraintViolationException ex) {
-//            throw new DataIntegrityViolationException(ex.getMessage());
-//        } catch (DataAccessException | PersistenceException ex) {
-//            throw new DatabaseException(ex.getMessage());
-//        }
-//    }
-
     public Venue updateVenue(int venueId, VenueRequest updateVenueRequest) {
         Venue venue = getVenueById(venueId);
 
