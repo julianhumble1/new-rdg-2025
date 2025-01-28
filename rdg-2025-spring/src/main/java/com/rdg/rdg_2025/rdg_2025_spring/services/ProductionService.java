@@ -6,7 +6,6 @@ import com.rdg.rdg_2025.rdg_2025_spring.models.Production;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Venue;
 import com.rdg.rdg_2025.rdg_2025_spring.payload.request.production.ProductionRequest;
 import com.rdg.rdg_2025.rdg_2025_spring.repository.ProductionRepository;
-import com.rdg.rdg_2025.rdg_2025_spring.repository.VenueRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.PersistenceException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,8 +46,7 @@ public class ProductionService {
     public List<Production> getAllProductions() {
 
         try {
-            List<Production> productions = productionRepository.findAll();
-            return productions;
+            return productionRepository.findAll();
         } catch (DataAccessException | PersistenceException ex) {
             throw new DatabaseException(ex.getMessage());
         }
@@ -56,9 +54,8 @@ public class ProductionService {
 
     public Production getProductionById(int productionId) {
         try {
-            Production production = productionRepository.findById(productionId)
+            return productionRepository.findById(productionId)
                     .orElseThrow(() -> new EntityNotFoundException("No Production with this id"));
-            return production;
         } catch (DataAccessException ex) {
             throw new DatabaseException(ex.getMessage());
         }
