@@ -40,6 +40,9 @@ public class FestivalServiceTest {
     @Mock
     VenueRepository venueRepository;
 
+    @Mock
+    VenueService venueService;
+
     private NewFestivalRequest testNewFestivalRequest = new NewFestivalRequest(
             "Test Festival", 1, 2025, 4, "Test Description"
     );

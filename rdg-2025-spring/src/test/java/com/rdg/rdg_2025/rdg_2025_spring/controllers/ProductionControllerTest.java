@@ -62,8 +62,6 @@ public class ProductionControllerTest {
             "Test File String"
     );
 
-
-
     @Nested
     @DisplayName("addNewProduction controller tests")
     class addNewProductionControllerTests {
