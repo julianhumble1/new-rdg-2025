@@ -41,16 +41,8 @@ public class ProductionService {
 
         updateProductionRequestNameIfRepeatPerformance(productionRequest);
 
-        Production production = new Production(
-                productionRequest.getName(),
-                venue,
-                productionRequest.getAuthor(),
-                productionRequest.getDescription(),
-                productionRequest.getAuditionDate(),
-                productionRequest.isSundowners(),
-                productionRequest.isNotConfirmed(),
-                productionRequest.getFlyerFile()
-        );
+        Production production = new Production();
+        updateProductionFromRequest(productionRequest, production, venue);
 
         try {
             return productionRepository.save(production);
@@ -95,7 +87,7 @@ public class ProductionService {
                 updateProductionRequestNameIfRepeatPerformance(productionRequest);
             }
 
-            updateProductionDetails(productionRequest, production, associatedVenue);
+            updateProductionFromRequest(productionRequest, production, associatedVenue);
 
             return productionRepository.save(production);
 
@@ -121,17 +113,20 @@ public class ProductionService {
         return productionRequest;
     }
 
-    private Production updateProductionDetails(ProductionRequest updateProductionRequest, Production production, Venue venue) {
+    private Production updateProductionFromRequest(ProductionRequest productionRequest, Production production, Venue venue) {
 
-        production.setName(updateProductionRequest.getName());
+        production.setName(productionRequest.getName());
         production.setSlug(SlugUtils.generateSlug(production.getName()));
         production.setVenue(venue);
-        production.setAuthor(updateProductionRequest.getAuthor());
-        production.setDescription(updateProductionRequest.getDescription());
-        production.setAuditionDate(updateProductionRequest.getAuditionDate());
-        production.setSundowners(updateProductionRequest.isSundowners());
-        production.setNotConfirmed(updateProductionRequest.isNotConfirmed());
-        production.setFlyerFile(updateProductionRequest.getFlyerFile());
+        production.setAuthor(productionRequest.getAuthor());
+        production.setDescription(productionRequest.getDescription());
+        production.setAuditionDate(productionRequest.getAuditionDate());
+        production.setSundowners(productionRequest.isSundowners());
+        production.setNotConfirmed(productionRequest.isNotConfirmed());
+        production.setFlyerFile(productionRequest.getFlyerFile());
+        if (production.getCreatedAt() == null) {
+            production.setCreatedAt(LocalDateTime.now());
+        }
         production.setUpdatedAt(LocalDateTime.now());
 
         return production;
