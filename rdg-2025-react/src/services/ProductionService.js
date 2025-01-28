@@ -66,4 +66,34 @@ export default class ProductionService {
         }
     }
 
+    static updateProduction = async (productionId, name, venueId, author, description, auditionDate, sundowners, notConfirmed, flyerFile) => {
+        const token = Cookies.get("token")
+
+        try {
+            const response = await axios.patch(`http://localhost:8080/productions/${productionId}`,
+                {
+                    name: name,
+                    venueId: venueId,
+                    author: author,
+                    description: description,
+                    auditionDate: auditionDate,
+                    sundowners: sundowners,
+                    notConfirmed: notConfirmed,
+                    flyerFile: flyerFile
+                }, {
+                    headers: {
+                        "Authorization" : `Bearer ${token}`
+                    }
+                }
+            )
+
+            console.log(response)
+
+            return response;
+        } catch (e) {
+            throw new Error(e.response.message)
+        }
+
+    }
+
 }

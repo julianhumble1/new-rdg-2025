@@ -46,6 +46,7 @@ The following is a list of entities and their corresponding routes that have bee
 * POST ("/productions") - create new production
 * GET ("/productions") - get all productions
 * GET ("/productions/{id}) - get specific production
+* PATCH ("/productions/{id}) - update production
 
 **Festivals**
 * POST ("/festivals") - create new festival
@@ -92,6 +93,8 @@ At that stage, I will then add more styling to the front end using TailwindCSS, 
 ![get productions diagram](./images/get-productions-diagram.jpg)
 
 ![get production diagram](./images/get-production-diagram.jpg)
+
+![patch production diagram](./images/patch-production-diagram.jpg)
 
 #### Festivals
 

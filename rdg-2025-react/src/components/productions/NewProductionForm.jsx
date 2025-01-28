@@ -32,11 +32,12 @@ const NewProductionForm = () => {
                 venue.value,
                 author,
                 description,
-                format(auditionDate, "yyyy-MM-dd'T'HH:mm:ss.SSSSSSS"),
+                auditionDate ? format(auditionDate, "yyyy-MM-dd'T'HH:mm:ss.SSSSSSS") : "",
                 sundowners, 
                 notConfirmed,
                 flyerFile
             )
+            console.log(response)
             setSuccessMessage(`Successfully created '${response.data.production.name}'!`)
             setFailMessage("")
         } catch (e) {
