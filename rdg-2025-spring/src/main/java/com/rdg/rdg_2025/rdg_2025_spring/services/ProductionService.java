@@ -44,8 +44,6 @@ public class ProductionService {
 
     }
 
-
-
     public List<Production> getAllProductions() {
 
         try {
@@ -67,26 +65,17 @@ public class ProductionService {
     }
 
     public Production updateProduction(int productionId, ProductionRequest productionRequest) {
-        try {
-            Production production = productionRepository.findById(productionId).orElseThrow(() -> new EntityNotFoundException("No Production with this id"));
+        Production production = getProductionById(productionId);
 
-            Venue venue = getVenueFromService(productionRequest);
+        Venue venue = getVenueFromService(productionRequest);
 
-            if (!(productionRequest.getName().equals(production.getName()))) {
-                updateProductionRequestNameIfRepeatPerformance(productionRequest);
-            }
-
-            updateProductionFromRequest(productionRequest, production, venue);
-
-            return productionRepository.save(production);
-
-        } catch (EntityNotFoundException ex) {
-            throw new EntityNotFoundException(ex.getMessage());
-        } catch (DataIntegrityViolationException ex) {
-            throw new DataIntegrityViolationException(ex.getMessage());
-        } catch (DataAccessException | PersistenceException ex) {
-            throw new DatabaseException(ex.getMessage());
+        if (!(productionRequest.getName().equals(production.getName()))) {
+            updateProductionRequestNameIfRepeatPerformance(productionRequest);
         }
+
+        updateProductionFromRequest(productionRequest, production, venue);
+
+        return saveProductionToDatabase(production);
     }
 
     // PRIVATE HELPER METHODS
