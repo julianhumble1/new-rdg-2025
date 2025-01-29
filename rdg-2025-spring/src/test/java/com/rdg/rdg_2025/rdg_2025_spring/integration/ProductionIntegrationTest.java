@@ -773,6 +773,18 @@ public class ProductionIntegrationTest {
 
         }
 
+        @Test
+        void testProductionIdNotIntResponds400() throws Exception {
+            // Arrange
+            int productionId = testExistingProduction.getId();
+
+            // Act & Assert
+            mockMvc.perform(delete("/productions/" +  "notanint")
+                            .header("Authorization", adminToken))
+                    .andExpect(status().isBadRequest());
+
+        }
+
 
     }
 }
