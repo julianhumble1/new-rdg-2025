@@ -38,7 +38,7 @@ public class Venue {
     @Column(nullable = false, unique = true)
     private String slug;
 
-    @OneToMany(mappedBy = "venue", cascade = CascadeType.PERSIST, orphanRemoval = true)
+    @OneToMany(mappedBy = "venue", cascade = CascadeType.PERSIST)
     @JsonBackReference
     private List<Production> productions = new ArrayList<>();
 
