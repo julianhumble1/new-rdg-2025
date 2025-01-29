@@ -75,6 +75,14 @@ public class ProductionService {
         return saveProductionToDatabase(production);
     }
 
+    public boolean deleteProductionById(int productionId) {
+        if (productionRepository.existsById(productionId)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     // PRIVATE HELPER METHODS
 
     private Venue getVenueFromService(ProductionRequest productionRequest) {

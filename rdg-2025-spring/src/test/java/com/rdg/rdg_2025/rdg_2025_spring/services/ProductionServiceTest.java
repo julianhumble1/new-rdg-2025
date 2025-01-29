@@ -465,4 +465,21 @@ public class ProductionServiceTest {
         }
 
     }
+
+    @Nested
+    @DisplayName("deleteProductionById service tests")
+    class DeleteProductionServiceTests {
+
+        @Test
+        void testProductionDoesNotExistReturnsFalse() {
+            // Arrange
+            when(productionRepository.existsById(anyInt())).thenReturn(false);
+            // Act
+            boolean result = productionService.deleteProductionById(1);
+            // Assert
+            assertEquals(false, result);
+        }
+
+
+    }
 }
