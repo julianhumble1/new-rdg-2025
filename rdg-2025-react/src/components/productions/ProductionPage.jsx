@@ -1,14 +1,16 @@
 import { useState, useEffect, useCallback } from "react";
-import { Link, useParams, useSearchParams } from "react-router-dom"
+import { Link, useParams, useSearchParams, useNavigate } from "react-router-dom"
 import ProductionService from "../../services/ProductionService.js";
 import DateHelper from "../../utils/DateHelper.js";
 import EditProductionForm from "./EditProductionForm.jsx";
 import { format } from 'date-fns';
+import ConfirmDeleteModal from "../modals/ConfirmDeleteModal.jsx";
 
 const ProductionPage = () => {
 
     const productionId = useParams().id;
     const [searchParams] = useSearchParams();
+    const navigate = useNavigate();
 
     const [productionData, setProductionData] = useState(null);
 
@@ -19,6 +21,10 @@ const ProductionPage = () => {
     const [successMessage, setSuccessMessage] = useState("")
     const [failMessage, setFailMessage] = useState("")
 
+    const [deleteError, setDeleteError] = useState("")
+
+    const [showConfirmDelete, setShowConfirmDelete] = useState(false);
+
     const fetchProductionData = useCallback(async () => {
         try {
             const response = await ProductionService.getProductionById(productionId);
@@ -27,6 +33,20 @@ const ProductionPage = () => {
             setFailMessage(e.message)
         }
     }, [productionId])
+
+    const handleDelete = () => {
+        setShowConfirmDelete(true)
+    }
+
+    const handleConfirmDelete = async (production) => {
+        try {
+            await ProductionService.deleteProduction(production.id)
+            setShowConfirmDelete(false)
+            navigate("/productions")
+        } catch (e) {
+            setDeleteError(e.message)
+        }
+    }
 
     useEffect(() => {
         fetchProductionData()
@@ -59,12 +79,20 @@ const ProductionPage = () => {
 
     return (
         <div>
+            {showConfirmDelete &&
+                <ConfirmDeleteModal setShowConfirmDelete={setShowConfirmDelete} itemToDelete={productionData} handleConfirmDelete={ handleConfirmDelete } />
+            }
             <div className="font-bold text-xl p-3 ">
                 Production {productionId}: 
             </div>
             {fetchError &&
               <div>
                   {fetchError}
+                </div>
+            }
+            {deleteError && 
+                <div>
+                    {deleteError}
                 </div>
             }
             {(productionData && !editMode) &&
@@ -90,6 +118,9 @@ const ProductionPage = () => {
                     <div className="flex flex-row gap-3 items-start ">
                         <button className="text-blue-500 hover:text-blue-700 hover:underline pr-2" onClick={() => setEditMode(true)}>
                             Edit
+                        </button>
+                        <button className="text-blue-500 hover:text-blue-700 hover:underline" onClick={() => handleDelete()}>
+                            Delete
                         </button>
                     </div>
                 </div>

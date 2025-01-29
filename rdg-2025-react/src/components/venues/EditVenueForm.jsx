@@ -3,11 +3,11 @@ import { useState } from "react"
 const EditVenueForm = ({ venueData, handleEdit }) => {
     
     const [name, setName] = useState(venueData.name)
-    const [address, setAddress] = useState(venueData.address)
-    const [town, setTown] = useState(venueData.town)
-    const [postcode, setPostcode] = useState(venueData.postcode)
-    const [notes, setNotes] = useState(venueData.notes)
-    const [url, setUrl] = useState(venueData.url)
+    const [address, setAddress] = useState(venueData.address ? venueData.address : "")
+    const [town, setTown] = useState(venueData.town ? venueData.town : "")
+    const [postcode, setPostcode] = useState(venueData.postcode ? venueData.postcode : "")
+    const [notes, setNotes] = useState(venueData.notes ? venueData.notes : "")
+    const [url, setUrl] = useState(venueData.url ? venueData.url : "")
 
     return (
         <form className="flex flex-col gap-2" onSubmit={(event) => handleEdit(event, venueData.id, name, address, town, postcode, notes, url)}>

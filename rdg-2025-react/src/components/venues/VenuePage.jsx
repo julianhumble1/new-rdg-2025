@@ -44,15 +44,15 @@ const VenuePage = () => {
     }
 
     const handleConfirmDelete = async (venue) => {
-            try {
-                await VenueService.deleteVenue(venue.id)
-                setShowConfirmDelete(false)
-                setDeleteSuccess(`Successfully deleted '${venue.name}'`)
-                navigate("/venues")
-            } catch (e) {
-                setDeleteError(e.message)
-            }
+        try {
+            await VenueService.deleteVenue(venue.id)
+            setShowConfirmDelete(false)
+            setDeleteSuccess(`Successfully deleted '${venue.name}'`)
+            navigate("/venues")
+        } catch (e) {
+            setDeleteError(e.message)
         }
+    }
 
     useEffect(() => {
         fetchVenueData()
@@ -74,7 +74,7 @@ const VenuePage = () => {
 
     return (<>
         {showConfirmDelete &&
-            <ConfirmDeleteModal setShowConfirmDelete={setShowConfirmDelete} venueToDelete={venueData} handleConfirmDelete={ handleConfirmDelete } />
+            <ConfirmDeleteModal setShowConfirmDelete={setShowConfirmDelete} itemToDelete={venueData} handleConfirmDelete={ handleConfirmDelete } />
         }
         <div className="font-bold text-xl p-3 ">
             Venue {venueId}: 
@@ -140,9 +140,10 @@ const VenuePage = () => {
                         <div className="col-span-2 p-1">Name</div>
                         <div className="col-span-2 p-1">Venue</div>
                         <div className="col-span-2 p-1">Description</div>
-                        <div className="col-span-2 p-1">Sundowners</div>
+                        <div className="col-span-1 p-1">Sundowners</div>
                         <div className="col-span-2 p-1">Author</div>
-                        <div className="col-span-2 p-1">Date Created</div>
+                        <div className="col-span-1 p-1">Date Created</div>
+                        <div className="col-span-2 p-1">Actions</div>
                     </div>
                     {productions.map((production, index) => (
                         <ProductionRow productionData={production} key={index} />

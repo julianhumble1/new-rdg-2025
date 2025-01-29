@@ -48,7 +48,7 @@ const AllVenuesList = () => {
     return (<>
         <div>List of all venues</div>
         {showConfirmDelete &&
-            <ConfirmDeleteModal setShowConfirmDelete={setShowConfirmDelete} venueToDelete={venueToDelete} handleConfirmDelete={ handleConfirmDelete } />
+            <ConfirmDeleteModal setShowConfirmDelete={setShowConfirmDelete} itemToDelete={venueToDelete} handleConfirmDelete={ handleConfirmDelete } />
         }
         {deleteError &&
             <div className="text-red-500">

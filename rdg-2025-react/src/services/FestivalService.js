@@ -11,11 +11,11 @@ export default class FestivalService {
         try {
             const response = await axios.post("http://localhost:8080/festivals",
                 {
-                    "name": name,
+                    "name": name.trim(),
                     venueId: venueId,
                     year: year,
                     month: month,
-                    description: description
+                    description: description.trim()
                 }, {
                     headers: {
                         "Authorization" : `Bearer ${token}`

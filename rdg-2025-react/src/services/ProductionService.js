@@ -10,14 +10,14 @@ export default class ProductionService {
         try {
             const response = await axios.post("http://localhost:8080/productions", 
                 {
-                    name: name,
+                    name: name.trim(),
                     venueId: venueId,
-                    author: author,
-                    description: description,
+                    author: author.trim(),
+                    description: description.trim(),
                     auditionDate: auditionDate,
                     sundowners: sundowners,
                     notConfirmed: notConfirmed,
-                    flyerFile: flyerFile
+                    flyerFile: flyerFile.trim()
                 }, {
                     headers: {
                         "Authorization" : `Bearer ${token}`
@@ -72,14 +72,14 @@ export default class ProductionService {
         try {
             const response = await axios.patch(`http://localhost:8080/productions/${productionId}`,
                 {
-                    name: name,
+                    name: name.trim(),
                     venueId: venueId,
-                    author: author,
-                    description: description,
+                    author: author.trim(),
+                    description: description.trim(),
                     auditionDate: auditionDate,
                     sundowners: sundowners,
                     notConfirmed: notConfirmed,
-                    flyerFile: flyerFile
+                    flyerFile: flyerFile.trim()
                 }, {
                     headers: {
                         "Authorization" : `Bearer ${token}`
@@ -87,13 +87,28 @@ export default class ProductionService {
                 }
             )
 
-            console.log(response)
-
             return response;
         } catch (e) {
             throw new Error(e.response.message)
         }
 
+    }
+
+    static deleteProduction = async (productionId) => {
+        const token = Cookies.get("token")
+
+        try {
+            const response = await axios.delete(`http://localhost:8080/productions/${productionId}`,
+                {
+                    headers: {
+                        "Authorization" : `Bearer ${token}`
+                    }
+                }
+            )
+            return response
+        } catch (e) {
+            console.log(e)
+        }
     }
 
 }

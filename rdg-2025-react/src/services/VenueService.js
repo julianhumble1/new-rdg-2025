@@ -10,12 +10,12 @@ export default class VenueService {
         try {
             const response = await axios.post("http://localhost:8080/venues", 
                 {
-                    "name": name,
-                    "address": address,
-                    "town": town,
-                    "postcode": postcode,
-                    "notes": notes,
-                    "url": url
+                    "name": name.trim(),
+                    "address": address.trim(),
+                    "town": town.trim(),
+                    "postcode": postcode.trim(),
+                    "notes": notes.trim(),
+                    "url": url.trim()
                 }, {
                     headers: {
                         "Authorization" : `Bearer ${token}`
@@ -110,12 +110,12 @@ export default class VenueService {
         try {
             const response = await axios.patch(`http://localhost:8080/venues/${venueId}`, 
                 {
-                    "name": name,
-                    "address": address,
-                    "town": town,
-                    "postcode": postcode,
-                    "notes": notes,
-                    "url": url
+                    "name": name.trim(),
+                    "address": address.trim(),
+                    "town": town.trim(),
+                    "postcode": postcode.trim(),
+                    "notes": notes.trim(),
+                    "url": url.trim()
                 }, {
                     headers: {
                         "Authorization" : `Bearer ${token}`

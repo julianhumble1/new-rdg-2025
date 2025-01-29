@@ -13,12 +13,12 @@ const EditProductionForm = ({ productionData, handleEdit }) => {
         { label: productionData.venue.name, value: productionData.venue.id } : 
         { label: "None", value: 0 }
     )
-    const [author, setAuthor] = useState(productionData.author)
-    const [description, setDescription] = useState(productionData.description)
-    const [auditionDate, setAuditionDate] = useState(new Date(productionData.auditionDate))
-    const [sundowners, setSundowners] = useState(productionData.sundowners)
-    const [notConfirmed, setNotConfirmed] = useState(productionData.notConfirmed)
-    const [flyerFile, setFlyerFile] = useState(productionData.flyerFile)
+    const [author, setAuthor] = useState(productionData.author ? productionData.author : "")
+    const [description, setDescription] = useState(productionData.description ? productionData.description : "")
+    const [auditionDate, setAuditionDate] = useState(productionData.auditionDate ? new Date(productionData.auditionDate) : new Date())
+    const [sundowners, setSundowners] = useState(productionData.sundowners ? productionData.sundowners : false)
+    const [notConfirmed, setNotConfirmed] = useState(productionData.notConfirmed ? productionData.notConfirmed : false)
+    const [flyerFile, setFlyerFile] = useState(productionData.flyerFile ? productionData.flyerFile : "")
 
     const [failMessage, setFailMessage] = useState("")
 
