@@ -500,7 +500,27 @@ public class ProductionServiceTest {
             verify(productionRepository, atLeastOnce()).deleteById(1);
         }
 
+        @Test
+        void testDeleteDataAccessExceptionThrowsDatabaseException() {
+            // Arrange
+            when(productionRepository.existsById(anyInt())).thenReturn(true);
+            doThrow(new DataAccessException("Data access exception") {}).when(productionRepository).deleteById(anyInt());
+            // Act & Assert
+            DatabaseException ex = assertThrows(DatabaseException.class, () -> {
+                productionService.deleteProductionById(1);
+            });
+        }
 
+        @Test
+        void testDeleteDataPersistenceExceptionThrowsDatabaseException() {
+            // Arrange
+            when(productionRepository.existsById(anyInt())).thenReturn(true);
+            doThrow(new PersistenceException("Data persistence exception") {}).when(productionRepository).deleteById(anyInt());
+            // Act & Assert
+            DatabaseException ex = assertThrows(DatabaseException.class, () -> {
+                productionService.deleteProductionById(1);
+            });
+        }
 
 
     }

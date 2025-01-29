@@ -83,7 +83,7 @@ public class ProductionService {
             } else {
                 return false;
             }
-        } catch (DataAccessException ex) {
+        } catch (DataAccessException | PersistenceException ex) {
             throw new DatabaseException(ex.getMessage(), ex);
         }
     }
