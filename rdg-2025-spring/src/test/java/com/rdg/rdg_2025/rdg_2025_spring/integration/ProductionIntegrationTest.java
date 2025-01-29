@@ -761,6 +761,18 @@ public class ProductionIntegrationTest {
             assertEquals(false, productions.contains(testExistingProduction));
         }
 
+        @Test
+        void testNonExistentProductionIdResponds404() throws Exception {
+            // Arrange
+            int productionId = testExistingProduction.getId();
+
+            // Act & Assert
+            mockMvc.perform(delete("/productions/" + (productionId - 1))
+                    .header("Authorization", adminToken))
+                    .andExpect(status().isNotFound());
+
+        }
+
 
     }
 }
