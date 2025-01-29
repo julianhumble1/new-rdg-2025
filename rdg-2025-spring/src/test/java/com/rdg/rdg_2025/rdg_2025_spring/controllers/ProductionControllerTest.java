@@ -591,5 +591,15 @@ public class ProductionControllerTest {
                     .andExpect(status().isNotFound());
         }
 
+        @Test
+        @WithMockUser(roles="ADMIN")
+        void testSuccessfulDeletionResponds204() throws Exception {
+            // Arrange
+            when(productionService.deleteProductionById(anyInt())).thenReturn(true);
+            // Act & Assert
+            mockMvc.perform(delete("/productions/1"))
+                    .andExpect(status().isNoContent());
+        }
+
     }
 }

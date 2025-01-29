@@ -88,18 +88,16 @@ public class ProductionController {
     @DeleteMapping("/{productionId}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> deleteProductionById(@PathVariable int productionId) {
-        System.out.println("reached controller");
         try {
             boolean deleted = productionService.deleteProductionById(productionId);
             if (deleted) {
-
+                return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
             } else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponse("No production found with id" + productionId));
             }
         } catch (DatabaseException ex) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
         }
-        return ResponseEntity.ok("ok");
     }
 
 }
