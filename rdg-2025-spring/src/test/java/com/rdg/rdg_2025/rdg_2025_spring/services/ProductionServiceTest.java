@@ -522,6 +522,15 @@ public class ProductionServiceTest {
             });
         }
 
+        @Test
+        void testSuccessfulDeletionReturnsTrue() {
+            // Arrange
+            when(productionRepository.existsById(anyInt())).thenReturn(true);
+            // Act
+            boolean result = productionService.deleteProductionById(1);
+            // Assert
+            assertEquals(true, result);
+        }
 
     }
 }
