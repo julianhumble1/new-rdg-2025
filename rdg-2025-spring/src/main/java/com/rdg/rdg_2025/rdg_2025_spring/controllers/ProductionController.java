@@ -3,6 +3,7 @@ package com.rdg.rdg_2025.rdg_2025_spring.controllers;
 import com.rdg.rdg_2025.rdg_2025_spring.exception.DatabaseException;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Production;
 import com.rdg.rdg_2025.rdg_2025_spring.payload.request.production.ProductionRequest;
+import com.rdg.rdg_2025.rdg_2025_spring.payload.response.MessageResponse;
 import com.rdg.rdg_2025.rdg_2025_spring.payload.response.production.ProductionResponse;
 import com.rdg.rdg_2025.rdg_2025_spring.payload.response.production.ProductionsResponse;
 import com.rdg.rdg_2025.rdg_2025_spring.services.ProductionService;
@@ -89,7 +90,12 @@ public class ProductionController {
     public ResponseEntity<?> deleteProductionById(@PathVariable int productionId) {
         System.out.println("reached controller");
         try {
-            productionService.deleteProductionById(productionId);
+            boolean deleted = productionService.deleteProductionById(productionId);
+            if (deleted) {
+
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponse("No production found with id" + productionId));
+            }
         } catch (DatabaseException ex) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
         }

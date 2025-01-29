@@ -581,5 +581,15 @@ public class ProductionControllerTest {
                     .andExpect(status().isInternalServerError());
         }
 
+        @Test
+        @WithMockUser(roles="ADMIN")
+        void testProductionNotFoundResponds404() throws Exception {
+            // Arrange
+            when(productionService.deleteProductionById(anyInt())).thenReturn(false);
+            // Act & Assert
+            mockMvc.perform(delete("/productions/1"))
+                    .andExpect(status().isNotFound());
+        }
+
     }
 }
