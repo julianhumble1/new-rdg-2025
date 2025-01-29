@@ -6,6 +6,7 @@ import com.rdg.rdg_2025.rdg_2025_spring.models.Venue;
 import com.rdg.rdg_2025.rdg_2025_spring.payload.request.production.ProductionRequest;
 import com.rdg.rdg_2025.rdg_2025_spring.services.ProductionService;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.persistence.PersistenceException;
 import org.junit.jupiter.api.*;
 import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -570,7 +571,15 @@ public class ProductionControllerTest {
                     .andExpect(status().isBadRequest());
         }
 
-
+        @Test
+        @WithMockUser(roles="ADMIN")
+        void testServiceThrowsDatabaseExceptionResponds500() throws Exception {
+            // Arrange
+            when(productionService.deleteProductionById(anyInt())).thenThrow(new DatabaseException("Database exception"));
+            // Act & Assert
+            mockMvc.perform(delete("/productions/1"))
+                    .andExpect(status().isInternalServerError());
+        }
 
     }
 }
