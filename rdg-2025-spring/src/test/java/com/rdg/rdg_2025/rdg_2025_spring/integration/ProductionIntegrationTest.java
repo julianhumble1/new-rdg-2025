@@ -797,6 +797,17 @@ public class ProductionIntegrationTest {
 
         }
 
+        @Test
+        void testMissingTokenResponds403() throws Exception {
+            // Arrange
+            int productionId = testExistingProduction.getId();
+
+            // Act & Assert
+            mockMvc.perform(delete("/productions/" +  testExistingProduction.getId()))
+                    .andExpect(status().isUnauthorized());
+
+        }
+
 
     }
 }
