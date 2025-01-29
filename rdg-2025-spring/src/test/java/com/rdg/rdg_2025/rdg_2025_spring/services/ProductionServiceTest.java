@@ -490,6 +490,16 @@ public class ProductionServiceTest {
             });
         }
 
+        @Test
+        void testProductionExistsThenDeleteIsCalled() {
+            // Arrange
+            when(productionRepository.existsById(anyInt())).thenReturn(true);
+            // Act
+            productionService.deleteProductionById(1);
+            // Assert
+            verify(productionRepository, atLeastOnce()).deleteById(1);
+        }
+
 
 
 

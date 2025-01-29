@@ -42,6 +42,7 @@ public class FestivalController {
         }
     }
 
+
     @GetMapping()
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> getAllFestivals() {

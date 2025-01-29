@@ -78,6 +78,7 @@ public class ProductionService {
     public boolean deleteProductionById(int productionId) {
         try {
             if (productionRepository.existsById(productionId)) {
+                productionRepository.deleteById(productionId);
                 return true;
             } else {
                 return false;

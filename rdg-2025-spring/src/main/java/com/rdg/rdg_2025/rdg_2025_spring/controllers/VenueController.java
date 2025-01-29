@@ -20,7 +20,6 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
-
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/venues")
@@ -32,7 +31,6 @@ public class VenueController {
     @PostMapping()
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> addNewVenue(@Valid @RequestBody VenueRequest newVenueRequest) {
-
         try {
             Venue venue = venueService.addNewVenue(newVenueRequest);
             URI location = URI.create("/venues/" + venue.getId());
@@ -67,10 +65,10 @@ public class VenueController {
         }
     }
 
+
     @PatchMapping("/{venueId}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> updateVenue(@PathVariable int venueId, @Valid @RequestBody VenueRequest updateVenueRequest) {
-
         try {
             Venue updatedVenue = venueService.updateVenue(venueId, updateVenueRequest);
             return ResponseEntity.ok().body(new VenueResponse(updatedVenue));
@@ -81,8 +79,8 @@ public class VenueController {
         } catch (EntityNotFoundException ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
         }
-
     }
+
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
@@ -99,6 +97,4 @@ public class VenueController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
         }
     }
-
-
 }
