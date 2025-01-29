@@ -76,10 +76,14 @@ public class ProductionService {
     }
 
     public boolean deleteProductionById(int productionId) {
-        if (productionRepository.existsById(productionId)) {
-            return true;
-        } else {
-            return false;
+        try {
+            if (productionRepository.existsById(productionId)) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (DataAccessException ex) {
+            throw new DatabaseException(ex.getMessage(), ex);
         }
     }
 

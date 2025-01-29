@@ -480,6 +480,18 @@ public class ProductionServiceTest {
             assertEquals(false, result);
         }
 
+        @Test
+        void testProductionExistsDataAccessExceptionThrowsDatabaseException() {
+            // Arrange
+            when(productionRepository.existsById(anyInt())).thenThrow(new DataAccessException("Data Access Exception"){});
+            // Act & Assert
+            DatabaseException ex = assertThrows(DatabaseException.class, () -> {
+                productionService.deleteProductionById(1);
+            });
+        }
+
+
+
 
     }
 }
