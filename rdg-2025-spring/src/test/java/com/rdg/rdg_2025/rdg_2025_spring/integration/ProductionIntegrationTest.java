@@ -24,6 +24,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -743,6 +744,21 @@ public class ProductionIntegrationTest {
             // Assert
             boolean exists = productionRepository.existsById(productionId);
             assertEquals(false, exists);
+        }
+
+        @Test
+        void testAssociatedVenueNoLongerReferencesProductionFollowingDeletion() throws Exception {
+            // Arrange
+            int productionId = testExistingProduction.getId();
+
+            // Act
+            mockMvc.perform(delete("/productions/" + productionId)
+                    .header("Authorization", adminToken));
+            // Assert
+            productionRepository.flush();
+            Venue managedTestVenue1 = venueRepository.findById(testVenue1.getId()).orElseThrow(() -> new RuntimeException("Venue not found"));
+            List<Production> productions = managedTestVenue1.getProductions();
+            assertEquals(false, productions.contains(testExistingProduction));
         }
 
 

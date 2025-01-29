@@ -24,7 +24,7 @@ public class Production {
     @Column(nullable = false)
     private String name;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JsonManagedReference
     @OnDelete(action = OnDeleteAction.SET_NULL)
     private Venue venue;
