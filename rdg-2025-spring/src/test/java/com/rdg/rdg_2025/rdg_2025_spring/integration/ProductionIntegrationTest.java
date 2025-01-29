@@ -26,6 +26,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -730,6 +731,18 @@ public class ProductionIntegrationTest {
             mockMvc.perform(delete("/productions/" + productionId)
                     .header("Authorization", adminToken))
                     .andExpect(status().isNoContent());
+        }
+
+        @Test
+        void testProductionNoLongerInDatabaseFollowingDeletion() throws Exception {
+            // Arrange
+            int productionId = testExistingProduction.getId();
+            // Act
+            mockMvc.perform(delete("/productions/" + productionId)
+                            .header("Authorization", adminToken));
+            // Assert
+            boolean exists = productionRepository.existsById(productionId);
+            assertEquals(false, exists);
         }
 
 
