@@ -786,25 +786,37 @@ public class ProductionIntegrationTest {
         }
 
         @Test
-        void testBadTokenResponds403() throws Exception {
+        void testBadTokenResponds401() throws Exception {
             // Arrange
             int productionId = testExistingProduction.getId();
 
             // Act & Assert
-            mockMvc.perform(delete("/productions/" +  testExistingProduction.getId())
+            mockMvc.perform(delete("/productions/" +  productionId)
                             .header("Authorization", "badToken"))
                     .andExpect(status().isUnauthorized());
 
         }
 
         @Test
-        void testMissingTokenResponds403() throws Exception {
+        void testMissingTokenResponds401() throws Exception {
             // Arrange
             int productionId = testExistingProduction.getId();
 
             // Act & Assert
-            mockMvc.perform(delete("/productions/" +  testExistingProduction.getId()))
+            mockMvc.perform(delete("/productions/" +  productionId))
                     .andExpect(status().isUnauthorized());
+
+        }
+
+        @Test
+        void testUserTokenResponds403() throws Exception {
+            // Arrange
+            int productionId = testExistingProduction.getId();
+
+            // Act & Assert
+            mockMvc.perform(delete("/productions/" +  productionId)
+                    .header("Authorization", userToken))
+                    .andExpect(status().isForbidden());
 
         }
 
