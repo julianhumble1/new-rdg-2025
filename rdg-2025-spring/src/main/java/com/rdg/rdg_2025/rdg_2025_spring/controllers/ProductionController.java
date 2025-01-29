@@ -84,5 +84,10 @@ public class ProductionController {
         }
     }
 
+    @DeleteMapping("/{productionId}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> deleteProductionById(@PathVariable int productionId) {
+        return ResponseEntity.ok("ok");
+    }
 
 }

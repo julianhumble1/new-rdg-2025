@@ -25,6 +25,7 @@ import java.util.ArrayList;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -553,6 +554,23 @@ public class ProductionControllerTest {
                             ))
                     .andExpect(jsonPath("$.production.name").value("Updated Test Production"));
         }
+
+    }
+
+    @Nested
+    @DisplayName("deleteProductionById controller tests")
+    class DeleteProductionByIdControllerTests {
+
+        @Test
+        @WithMockUser(roles="ADMIN")
+        void testProductionIdNotIntResponds400() throws Exception {
+            // Arrange
+            // Act & Assert
+            mockMvc.perform(delete("/productions/notanint"))
+                    .andExpect(status().isBadRequest());
+        }
+
+
 
     }
 }
