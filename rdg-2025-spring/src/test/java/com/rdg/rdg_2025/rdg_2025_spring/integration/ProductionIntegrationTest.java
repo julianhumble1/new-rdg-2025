@@ -695,4 +695,43 @@ public class ProductionIntegrationTest {
         }
 
     }
+
+    @Nested
+    @DisplayName("DELETE delete production by id integration tests")
+    class DeleteProductionByIdIntegrationTests {
+
+        @Autowired
+        private VenueRepository venueRepository;
+
+        Production testExistingProduction;
+
+        @BeforeEach
+        void beforeEach() {
+            Venue managedTestVenue1 = venueRepository.findById(testVenue1.getId()).orElseThrow(() -> new RuntimeException("Venue not found"));
+
+            testExistingProduction = new Production(
+                    "Test Production",
+                    managedTestVenue1,
+                    "Test Author",
+                    "Test Description",
+                    LocalDateTime.now(),
+                    false,
+                    false,
+                    "Test Flyer File"
+            );
+            productionRepository.save(testExistingProduction);
+        }
+
+        @Test
+        void testSuccessfulDeletionResponds204() throws Exception {
+            // Arrange
+            int productionId = testExistingProduction.getId();
+            // Act & Assert
+            mockMvc.perform(delete("/productions/" + productionId)
+                    .header("Authorization", adminToken))
+                    .andExpect(status().isNoContent());
+        }
+
+
+    }
 }
