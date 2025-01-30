@@ -44,12 +44,10 @@ public class PerformanceService {
         updatePerformanceFromRequest(newPerformanceRequest, venue, production, festival, performance);
 
         try {
-            performanceRepository.save(performance);
+            return performanceRepository.save(performance);
         } catch (DataAccessException | PersistenceException ex) {
             throw new DatabaseException(ex.getMessage(), ex);
         }
-
-        return new Performance();
     }
 
     // PRIVATE HELPER METHODS

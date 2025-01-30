@@ -23,6 +23,7 @@ import org.springframework.dao.DataAccessException;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.*;
@@ -195,6 +196,20 @@ public class PerformanceServiceTest {
             DatabaseException ex = assertThrows(DatabaseException.class, () -> {
                 performanceService.addNewPerformance(testPerformanceRequest);
             });
+        }
+
+        @Test
+        void testSuccessfulSaveReturnsExpectedPerformance() {
+            // Arrange
+            when(venueService.getVenueById(anyInt())).thenReturn(new Venue());
+            when(productionService.getProductionById(anyInt())).thenReturn(new Production());
+            when(festivalService.getFestivalById(anyInt())).thenReturn(new Festival());
+
+            when(performanceRepository.save(any())).thenReturn(testPerformance);
+            // Act
+            Performance actual = performanceService.addNewPerformance(testPerformanceRequest);
+            // Assert
+            assertEquals(testPerformance, actual);
         }
 
 
