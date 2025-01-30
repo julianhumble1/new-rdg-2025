@@ -8,6 +8,7 @@ import com.rdg.rdg_2025.rdg_2025_spring.models.Venue;
 import com.rdg.rdg_2025.rdg_2025_spring.payload.request.performance.PerformanceRequest;
 import com.rdg.rdg_2025.rdg_2025_spring.repository.PerformanceRepository;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.persistence.PersistenceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
@@ -44,7 +45,7 @@ public class PerformanceService {
 
         try {
             performanceRepository.save(performance);
-        } catch (DataAccessException ex) {
+        } catch (DataAccessException | PersistenceException ex) {
             throw new DatabaseException(ex.getMessage(), ex);
         }
 

@@ -8,6 +8,7 @@ import com.rdg.rdg_2025.rdg_2025_spring.models.Venue;
 import com.rdg.rdg_2025.rdg_2025_spring.payload.request.performance.PerformanceRequest;
 import com.rdg.rdg_2025.rdg_2025_spring.repository.PerformanceRepository;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.persistence.PersistenceException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -176,6 +177,20 @@ public class PerformanceServiceTest {
             when(festivalService.getFestivalById(anyInt())).thenReturn(new Festival());
 
             when(performanceRepository.save(any())).thenThrow(new DataAccessException("Data access exception") {});
+            // Act & Assert
+            DatabaseException ex = assertThrows(DatabaseException.class, () -> {
+                performanceService.addNewPerformance(testPerformanceRequest);
+            });
+        }
+
+        @Test
+        void testSavePersistenceExceptionThrowsDatabaseException() {
+            // Arrange
+            when(venueService.getVenueById(anyInt())).thenReturn(new Venue());
+            when(productionService.getProductionById(anyInt())).thenReturn(new Production());
+            when(festivalService.getFestivalById(anyInt())).thenReturn(new Festival());
+
+            when(performanceRepository.save(any())).thenThrow(new PersistenceException());
             // Act & Assert
             DatabaseException ex = assertThrows(DatabaseException.class, () -> {
                 performanceService.addNewPerformance(testPerformanceRequest);
