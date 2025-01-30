@@ -237,6 +237,16 @@ public class FestivalServiceTest {
             assertEquals(testFestival, festival);
         }
 
+        @Test
+        void testFestivalDoesNotExistThrowsEntityNotFoundException() {
+            // Arrange
+            when(festivalRepository.findById(anyInt())).thenReturn(Optional.empty());
+            // Act & Assert
+            EntityNotFoundException ex = assertThrows(EntityNotFoundException.class, () -> {
+                festivalService.getFestivalById(testFestival.getId());
+            });
+        }
+
     }
 
 
