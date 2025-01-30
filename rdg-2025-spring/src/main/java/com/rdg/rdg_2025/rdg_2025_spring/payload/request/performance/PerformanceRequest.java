@@ -1,6 +1,8 @@
 package com.rdg.rdg_2025.rdg_2025_spring.payload.request.performance;
 
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,10 +15,10 @@ import java.time.LocalDateTime;
 @Getter @Setter @NoArgsConstructor @ToString
 public class PerformanceRequest {
 
-    @NotBlank
+    @Min(1)
     int productionId;
 
-    @NotBlank
+    @Min(1)
     int venueId;
 
     int festivalId;
