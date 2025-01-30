@@ -6,6 +6,7 @@ import com.rdg.rdg_2025.rdg_2025_spring.models.Performance;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Production;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Venue;
 import com.rdg.rdg_2025.rdg_2025_spring.services.PerformanceService;
+import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -261,6 +262,22 @@ public class PerformanceControllerTest {
                                             ", \"standardPrice\": \"10.00\", \"concessionPrice\": \"9.00\", \"boxOffice\": \"Test Box Office\" }"
                             ))
                     .andExpect(status().isInternalServerError());
+
+        }
+
+        @Test
+        @WithMockUser(roles="ADMIN")
+        void testServiceEntityNotFoundExceptionResponds404() throws Exception {
+            // Arrange
+            when(performanceService.addNewPerformance(any())).thenThrow(new EntityNotFoundException("entity not found exception"));
+            // Act & Assert
+            mockMvc.perform(post("/performances")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(
+                                    "{\"productionId\": 1, \"venueId\": 1, \"festivalId\": 1, \"time\": \"2025-10-10T10:00:00\", \"description\": \"Test Performance Description\"" +
+                                            ", \"standardPrice\": \"10.00\", \"concessionPrice\": \"9.00\", \"boxOffice\": \"Test Box Office\" }"
+                            ))
+                    .andExpect(status().isNotFound());
 
         }
 
