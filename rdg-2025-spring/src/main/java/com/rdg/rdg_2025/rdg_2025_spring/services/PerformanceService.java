@@ -1,6 +1,7 @@
 package com.rdg.rdg_2025.rdg_2025_spring.services;
 
 import com.rdg.rdg_2025.rdg_2025_spring.exception.DatabaseException;
+import com.rdg.rdg_2025.rdg_2025_spring.models.Festival;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Performance;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Production;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Venue;
@@ -33,6 +34,8 @@ public class PerformanceService {
 
         Production production = retrieveProductionFromService(newPerformanceRequest);
 
+        Festival festival = retrieveFestivalFromService(newPerformanceRequest);
+
         return new Performance();
     }
 
@@ -62,6 +65,20 @@ public class PerformanceService {
         }
 
         return production;
+    }
+
+    private Festival retrieveFestivalFromService(PerformanceRequest performanceRequest) {
+        Festival festival = null;
+        if (performanceRequest.getFestivalId() > 0) {
+            try {
+                festival = festivalService.getFestivalById(performanceRequest.getFestivalId());
+            } catch (EntityNotFoundException ex) {
+                throw new EntityNotFoundException(ex.getMessage(), ex);
+            } catch (DatabaseException ex) {
+                throw new DatabaseException(ex.getMessage(), ex);
+            }
+        }
+        return festival;
     }
 
 

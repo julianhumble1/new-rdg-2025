@@ -143,6 +143,18 @@ public class PerformanceServiceTest {
             verify(festivalService, never()).getFestivalById(anyInt());
         }
 
+        @Test
+        void testNonExistentFestivalIdThrowsEntityNotFoundException() {
+            // Arrange
+            when(venueService.getVenueById(anyInt())).thenReturn(new Venue());
+            when(productionService.getProductionById(anyInt())).thenReturn(new Production());
+            when(festivalService.getFestivalById(anyInt())).thenThrow(new EntityNotFoundException());
+            // Act & Assert
+            EntityNotFoundException ex = assertThrows(EntityNotFoundException.class, () -> {
+               performanceService.addNewPerformance(testPerformanceRequest);
+            });
+        }
+
 
     }
 
