@@ -247,6 +247,16 @@ public class FestivalServiceTest {
             });
         }
 
+        @Test
+        void testDataAccessExceptionThrowsDatabaseException() {
+            // Arrange
+            when(festivalRepository.findById(anyInt())).thenThrow(new DataAccessException("data access exception") {});
+            // Act & Assert
+            DatabaseException ex = assertThrows(DatabaseException.class, () -> {
+                festivalService.getFestivalById(testFestival.getId());
+            });
+        }
+
     }
 
 
