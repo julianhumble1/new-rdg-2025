@@ -111,6 +111,17 @@ public class PerformanceServiceTest {
             });
         }
 
+        @Test
+        void testProductionServiceDatabaseExceptionThrowsDatabaseException() {
+            // Arrange
+            when(venueService.getVenueById(anyInt())).thenReturn(new Venue());
+            when(productionService.getProductionById(anyInt())).thenThrow(new DatabaseException("database exception"));
+            // Act & Assert
+            DatabaseException ex = assertThrows(DatabaseException.class, () -> {
+                performanceService.addNewPerformance(testPerformanceRequest);
+            });
+        }
+
 
     }
 

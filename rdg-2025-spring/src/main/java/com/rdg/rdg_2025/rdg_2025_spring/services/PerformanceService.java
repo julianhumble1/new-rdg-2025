@@ -31,23 +31,17 @@ public class PerformanceService {
     public Performance addNewPerformance(PerformanceRequest newPerformanceRequest) {
         Venue venue = retrieveVenueFromService(newPerformanceRequest);
 
-        Production production = null;
-        try {
-            production = productionService.getProductionById(newPerformanceRequest.getProductionId());
-        } catch (EntityNotFoundException ex) {
-            throw new EntityNotFoundException(ex.getMessage(), ex);
-        }
-
+        Production production = retrieveProductionFromService(newPerformanceRequest);
 
         return new Performance();
     }
 
     // PRIVATE HELPER METHODS
 
-    private Venue retrieveVenueFromService(PerformanceRequest newPerformanceRequest) {
+    private Venue retrieveVenueFromService(PerformanceRequest performanceRequest) {
         Venue venue = null;
         try {
-            venue = venueService.getVenueById(newPerformanceRequest.getVenueId());
+            venue = venueService.getVenueById(performanceRequest.getVenueId());
         } catch (EntityNotFoundException ex) {
             throw new EntityNotFoundException(ex.getMessage(), ex);
         } catch (DatabaseException ex) {
@@ -55,6 +49,19 @@ public class PerformanceService {
         }
 
         return venue;
+    }
+
+    private Production retrieveProductionFromService(PerformanceRequest performanceRequest) {
+        Production production = null;
+        try {
+            production = productionService.getProductionById(performanceRequest.getProductionId());
+        } catch (EntityNotFoundException ex) {
+            throw new EntityNotFoundException(ex.getMessage(), ex);
+        } catch (DatabaseException ex) {
+            throw new DatabaseException(ex.getMessage(), ex);
+        }
+
+        return production;
     }
 
 
