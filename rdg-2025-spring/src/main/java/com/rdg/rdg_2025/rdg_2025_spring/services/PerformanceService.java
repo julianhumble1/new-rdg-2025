@@ -1,5 +1,6 @@
 package com.rdg.rdg_2025.rdg_2025_spring.services;
 
+import com.rdg.rdg_2025.rdg_2025_spring.exception.DatabaseException;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Performance;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Venue;
 import com.rdg.rdg_2025.rdg_2025_spring.payload.request.performance.PerformanceRequest;
@@ -27,14 +28,24 @@ public class PerformanceService {
     // METHODS
 
     public Performance addNewPerformance(PerformanceRequest newPerformanceRequest) {
+        Venue venue = retrieveVenueFromService(newPerformanceRequest);
+
+        return new Performance();
+    }
+
+    // PRIVATE HELPER METHODS
+
+    private Venue retrieveVenueFromService(PerformanceRequest newPerformanceRequest) {
         Venue venue = null;
         try {
             venue = venueService.getVenueById(newPerformanceRequest.getVenueId());
         } catch (EntityNotFoundException ex) {
             throw new EntityNotFoundException(ex.getMessage(), ex);
+        } catch (DatabaseException ex) {
+            throw new DatabaseException(ex.getMessage(), ex);
         }
 
-        return new Performance();
+        return venue;
     }
 
 

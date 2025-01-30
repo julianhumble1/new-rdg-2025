@@ -1,5 +1,6 @@
 package com.rdg.rdg_2025.rdg_2025_spring.services;
 
+import com.rdg.rdg_2025.rdg_2025_spring.exception.DatabaseException;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Festival;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Performance;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Production;
@@ -85,6 +86,16 @@ public class PerformanceServiceTest {
             when(venueService.getVenueById(anyInt())).thenThrow(new EntityNotFoundException());
             // Act & Assert
             EntityNotFoundException ex = assertThrows(EntityNotFoundException.class, () -> {
+                performanceService.addNewPerformance(testPerformanceRequest);
+            });
+        }
+
+        @Test
+        void testVenueServiceDatabaseExceptionThrowsDatabaseException() {
+            // Arrange
+            when(venueService.getVenueById(anyInt())).thenThrow(new DatabaseException("database exception"));
+            // Act & Assert
+            DatabaseException ex = assertThrows(DatabaseException.class, () -> {
                 performanceService.addNewPerformance(testPerformanceRequest);
             });
         }
