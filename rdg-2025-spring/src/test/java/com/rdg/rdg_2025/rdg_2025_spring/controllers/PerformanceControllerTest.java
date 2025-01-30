@@ -1,5 +1,6 @@
 package com.rdg.rdg_2025.rdg_2025_spring.controllers;
 
+import com.rdg.rdg_2025.rdg_2025_spring.exception.DatabaseException;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Festival;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Performance;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Production;
@@ -22,6 +23,8 @@ import org.springframework.web.context.WebApplicationContext;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -223,7 +226,7 @@ public class PerformanceControllerTest {
             mockMvc.perform(post("/performances")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(
-                                    "{\"productionId\": 1, \"venueId\": 1, \"festivalId\": 1, \"time\": \"not a date time\", \"description\": \"Test Performance Description\"" +
+                                    "{\"productionId\": 1, \"venueId\": 1, \"festivalId\": 1, \"time\": \"2025-10-10T10:00:00\", \"description\": \"Test Performance Description\"" +
                                             ", \"standardPrice\": \"not a number\", \"concessionPrice\": \"9.00\", \"boxOffice\": \"Test Box Office\" }"
                             ))
                     .andExpect(status().isBadRequest());
@@ -238,10 +241,26 @@ public class PerformanceControllerTest {
             mockMvc.perform(post("/performances")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(
-                                    "{\"productionId\": 1, \"venueId\": 1, \"festivalId\": 1, \"time\": \"not a date time\", \"description\": \"Test Performance Description\"" +
+                                    "{\"productionId\": 1, \"venueId\": 1, \"festivalId\": 1, \"time\": \"2025-10-10T10:00:00\", \"description\": \"Test Performance Description\"" +
                                             ", \"standardPrice\": \"10.00\", \"concessionPrice\": \"not a number\", \"boxOffice\": \"Test Box Office\" }"
                             ))
                     .andExpect(status().isBadRequest());
+
+        }
+
+        @Test
+        @WithMockUser(roles="ADMIN")
+        void testServiceDatabaseExceptionResponds500() throws Exception {
+            // Arrange
+            when(performanceService.addNewPerformance(any())).thenThrow(new DatabaseException("Database exception"));
+            // Act & Assert
+            mockMvc.perform(post("/performances")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(
+                                    "{\"productionId\": 1, \"venueId\": 1, \"festivalId\": 1, \"time\": \"2025-10-10T10:00:00\", \"description\": \"Test Performance Description\"" +
+                                            ", \"standardPrice\": \"10.00\", \"concessionPrice\": \"9.00\", \"boxOffice\": \"Test Box Office\" }"
+                            ))
+                    .andExpect(status().isInternalServerError());
 
         }
 
