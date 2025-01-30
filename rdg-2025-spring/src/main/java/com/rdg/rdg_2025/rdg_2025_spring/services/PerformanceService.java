@@ -9,6 +9,7 @@ import com.rdg.rdg_2025.rdg_2025_spring.payload.request.performance.PerformanceR
 import com.rdg.rdg_2025.rdg_2025_spring.repository.PerformanceRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -40,6 +41,12 @@ public class PerformanceService {
 
         Performance performance = new Performance();
         updatePerformanceFromRequest(newPerformanceRequest, venue, production, festival, performance);
+
+        try {
+            performanceRepository.save(performance);
+        } catch (DataAccessException ex) {
+            throw new DatabaseException(ex.getMessage(), ex);
+        }
 
         return new Performance();
     }

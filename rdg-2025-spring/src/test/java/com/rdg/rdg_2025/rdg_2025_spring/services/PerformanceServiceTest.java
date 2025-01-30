@@ -17,6 +17,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.dao.DataAccessException;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -161,6 +162,20 @@ public class PerformanceServiceTest {
             when(venueService.getVenueById(anyInt())).thenReturn(new Venue());
             when(productionService.getProductionById(anyInt())).thenReturn(new Production());
             when(festivalService.getFestivalById(anyInt())).thenThrow(new DatabaseException("Database exception"));
+            // Act & Assert
+            DatabaseException ex = assertThrows(DatabaseException.class, () -> {
+                performanceService.addNewPerformance(testPerformanceRequest);
+            });
+        }
+
+        @Test
+        void testSaveDataAccessExceptionThrowsDatabaseException() {
+            // Arrange
+            when(venueService.getVenueById(anyInt())).thenReturn(new Venue());
+            when(productionService.getProductionById(anyInt())).thenReturn(new Production());
+            when(festivalService.getFestivalById(anyInt())).thenReturn(new Festival());
+
+            when(performanceRepository.save(any())).thenThrow(new DataAccessException("Data access exception") {});
             // Act & Assert
             DatabaseException ex = assertThrows(DatabaseException.class, () -> {
                 performanceService.addNewPerformance(testPerformanceRequest);
