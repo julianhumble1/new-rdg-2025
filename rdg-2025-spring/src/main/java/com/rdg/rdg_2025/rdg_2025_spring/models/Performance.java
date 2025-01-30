@@ -35,4 +35,14 @@ public class Performance {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
+    public Performance(Production production, Venue venue, Festival festival, LocalDateTime time, String description, BigDecimal standardPrice, BigDecimal concessionPrice, String boxOffice) {
+        this.production = production;
+        this.venue = venue;
+        this.festival = festival;
+        this.time = time;
+        this.description = description;
+        this.standardPrice = standardPrice;
+        this.concessionPrice = concessionPrice;
+        this.boxOffice = boxOffice;
+    }
 }
