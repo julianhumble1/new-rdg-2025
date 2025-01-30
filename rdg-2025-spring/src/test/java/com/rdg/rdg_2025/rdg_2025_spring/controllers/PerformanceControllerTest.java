@@ -155,6 +155,38 @@ public class PerformanceControllerTest {
 
         }
 
+        @Test
+        @WithMockUser(roles="ADMIN")
+        void testFestivalIdNotIntResponds400() throws Exception {
+            // Arrange
+            // Act & Assert
+            mockMvc.perform(post("/performances")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(
+                                    "{\"productionId\": 1, \"venueId\": 1, \"festivalId\": " + "\"not an int\"" + ", \"time\": \"2025-10-10T10:00:00\", \"description\": \"Test Performance Description\"" +
+                                            ", \"standardPrice\": \"10.00\", \"concessionPrice\": \"9.00\", \"boxOffice\": \"Test Box Office\" }"
+                            ))
+                    .andExpect(status().isBadRequest());
+
+        }
+
+        @Test
+        @WithMockUser(roles="ADMIN")
+        void testTimeNotDateTimeResponds400() throws Exception {
+            // Arrange
+            // Act & Assert
+            mockMvc.perform(post("/performances")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(
+                                    "{\"productionId\": 1, \"venueId\": 1, \"festivalId\": 1, \"time\": \"not a date time\", \"description\": \"Test Performance Description\"" +
+                                            ", \"standardPrice\": \"10.00\", \"concessionPrice\": \"9.00\", \"boxOffice\": \"Test Box Office\" }"
+                            ))
+                    .andExpect(status().isBadRequest());
+
+        }
+
+
+
 
     }
 
