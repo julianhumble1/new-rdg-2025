@@ -11,6 +11,8 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+
 @Service
 public class PerformanceService {
 
@@ -35,6 +37,9 @@ public class PerformanceService {
         Production production = retrieveProductionFromService(newPerformanceRequest);
 
         Festival festival = retrieveFestivalFromService(newPerformanceRequest);
+
+        Performance performance = new Performance();
+        updatePerformanceFromRequest(newPerformanceRequest, venue, production, festival, performance);
 
         return new Performance();
     }
@@ -79,6 +84,22 @@ public class PerformanceService {
             }
         }
         return festival;
+    }
+
+    private Performance updatePerformanceFromRequest(PerformanceRequest performanceRequest,  Venue venue, Production production, Festival festival, Performance performance) {
+        performance.setVenue(venue);
+        performance.setProduction(production);
+        performance.setFestival(festival);
+        performance.setDescription(performanceRequest.getDescription());
+        performance.setStandardPrice(performanceRequest.getStandardPrice());
+        performance.setConcessionPrice(performanceRequest.getConcessionPrice());
+        performance.setBoxOffice(performanceRequest.getBoxOffice());
+        performance.setTime(performanceRequest.getTime());
+        if (performance.getCreatedAt() == null) {
+            performance.setCreatedAt(LocalDateTime.now());
+        }
+        performance.setUpdatedAt(LocalDateTime.now());
+        return performance;
     }
 
 
