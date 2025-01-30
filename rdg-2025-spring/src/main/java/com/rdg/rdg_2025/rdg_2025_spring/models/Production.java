@@ -11,6 +11,8 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name="productions")
@@ -42,6 +44,9 @@ public class Production {
 
     @Column(nullable = false)
     private String slug;
+
+    @OneToMany(mappedBy = "production", cascade = CascadeType.PERSIST)
+    private List<Performance> performances = new ArrayList<>();
 
     public Production(String name, Venue venue, String author, String description, LocalDateTime auditionDate, boolean sundowners, boolean notConfirmed, String flyerFile) {
         this.name = name;

@@ -21,6 +21,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import java.util.Arrays;
 import java.util.Optional;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -307,12 +308,7 @@ public class VenueIntegrationTest {
             festivalRepository.save(testFestival2);
         }
 
-        @AfterEach
-        public void clearDatabase() {
-            productionRepository.deleteAll();
-            festivalRepository.deleteAll();
-            venueRepository.deleteAll();
-        }
+
 
         @Test
         void testSuccessfulDeletionResponds204() throws Exception {
