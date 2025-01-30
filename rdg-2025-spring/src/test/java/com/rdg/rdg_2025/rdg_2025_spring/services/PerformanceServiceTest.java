@@ -100,6 +100,17 @@ public class PerformanceServiceTest {
             });
         }
 
+        @Test
+        void testNonExistentProductionIdProvidedThrowsEntityNotFoundException() {
+            // Arrange
+            when(venueService.getVenueById(anyInt())).thenReturn(new Venue());
+            when(productionService.getProductionById(anyInt())).thenThrow(new EntityNotFoundException());
+            // Act & Assert
+            EntityNotFoundException ex = assertThrows(EntityNotFoundException.class, () -> {
+                performanceService.addNewPerformance(testPerformanceRequest);
+            });
+        }
+
 
     }
 

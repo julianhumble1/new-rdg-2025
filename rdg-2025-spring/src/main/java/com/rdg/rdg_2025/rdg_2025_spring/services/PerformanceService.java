@@ -2,6 +2,7 @@ package com.rdg.rdg_2025.rdg_2025_spring.services;
 
 import com.rdg.rdg_2025.rdg_2025_spring.exception.DatabaseException;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Performance;
+import com.rdg.rdg_2025.rdg_2025_spring.models.Production;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Venue;
 import com.rdg.rdg_2025.rdg_2025_spring.payload.request.performance.PerformanceRequest;
 import com.rdg.rdg_2025.rdg_2025_spring.repository.PerformanceRepository;
@@ -29,6 +30,14 @@ public class PerformanceService {
 
     public Performance addNewPerformance(PerformanceRequest newPerformanceRequest) {
         Venue venue = retrieveVenueFromService(newPerformanceRequest);
+
+        Production production = null;
+        try {
+            production = productionService.getProductionById(newPerformanceRequest.getProductionId());
+        } catch (EntityNotFoundException ex) {
+            throw new EntityNotFoundException(ex.getMessage(), ex);
+        }
+
 
         return new Performance();
     }
