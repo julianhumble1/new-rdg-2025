@@ -23,7 +23,7 @@ import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class PerformanceServiceTest {
@@ -59,8 +59,8 @@ public class PerformanceServiceTest {
                 1,
                 LocalDateTime.MAX,
                 "Test Performance Description",
-                new BigDecimal(10.00),
-                new BigDecimal(9.00),
+                new BigDecimal("10.00"),
+                new BigDecimal("9.00"),
                 "Test Box Office"
         );
         testPerformance = new Performance(
@@ -69,8 +69,8 @@ public class PerformanceServiceTest {
                 new Festival(),
                 LocalDateTime.MAX,
                 "Test Performance Description",
-                new BigDecimal(10.00),
-                new BigDecimal(9.00),
+                new BigDecimal("10.00"),
+                new BigDecimal("9.00"),
                 "Test Box Office"
 
         );
@@ -120,6 +120,27 @@ public class PerformanceServiceTest {
             DatabaseException ex = assertThrows(DatabaseException.class, () -> {
                 performanceService.addNewPerformance(testPerformanceRequest);
             });
+        }
+
+        @Test
+        void testIfNoFestivalProvidedThenNoCallToServiceIsMade() {
+            // Arrange
+            when(venueService.getVenueById(anyInt())).thenReturn(new Venue());
+            when(productionService.getProductionById(anyInt())).thenReturn(new Production());
+            // Act
+            PerformanceRequest noFestivalRequest = new PerformanceRequest(
+                    1,
+                    1,
+                    0,
+                    LocalDateTime.MAX,
+                    "Test Performance Description",
+                    new BigDecimal("10.00"),
+                    new BigDecimal("9.00"),
+                    "Test Box Office"
+            );
+            performanceService.addNewPerformance(noFestivalRequest);
+            // Assert
+            verify(festivalService, never()).getFestivalById(anyInt());
         }
 
 

@@ -53,6 +53,15 @@ public class FestivalService {
         }
     }
 
+    public Festival getFestivalById(int festivalId) {
+        try {
+            return festivalRepository.findById(festivalId)
+                    .orElseThrow(() -> new EntityNotFoundException("No festival with this id: " + festivalId));
+        } catch (DataAccessException ex) {
+            throw new DatabaseException(ex.getMessage(), ex);
+        }
+    }
+
 
     // PRIVATE HELPER METHODS
 
