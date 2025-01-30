@@ -185,7 +185,20 @@ public class PerformanceControllerTest {
 
         }
 
+        @Test
+        @WithMockUser(roles="ADMIN")
+        void testTimeEmptyResponds400() throws Exception {
+            // Arrange
+            // Act & Assert
+            mockMvc.perform(post("/performances")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(
+                                    "{\"productionId\": 1, \"venueId\": 1, \"festivalId\": 1, \"time\": \"\", \"description\": \"Test Performance Description\"" +
+                                            ", \"standardPrice\": \"10.00\", \"concessionPrice\": \"9.00\", \"boxOffice\": \"Test Box Office\" }"
+                            ))
+                    .andExpect(status().isBadRequest());
 
+        }
 
 
     }
