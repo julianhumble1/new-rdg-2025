@@ -297,6 +297,21 @@ public class PerformanceControllerTest {
 
         }
 
+        @Test
+        @WithMockUser(roles="ADMIN")
+        void testSuccessfulAddWithOnlyMandatoryFieldsResponds201() throws Exception {
+            // Arrange
+            when(performanceService.addNewPerformance(any())).thenReturn(testPerformance);
+            // Act & Assert
+            mockMvc.perform(post("/performances")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(
+                                    "{\"productionId\": 1, \"venueId\": 1, \"time\": \"2025-10-10T10:00:00\"}"
+                            ))
+                    .andExpect(status().isCreated());
+
+        }
+
 
     }
 
