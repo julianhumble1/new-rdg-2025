@@ -328,6 +328,22 @@ public class PerformanceControllerTest {
 
         }
 
+        @Test
+        @WithMockUser(roles="ADMIN")
+        void testSuccessfulAddRespondsExpectedPerformanceObject() throws Exception {
+            // Arrange
+            when(performanceService.addNewPerformance(any())).thenReturn(testPerformance);
+            // Act & Assert
+            mockMvc.perform(post("/performances")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(
+                                    "{\"productionId\": 1, \"venueId\": 1, \"festivalId\": 1, \"time\": \"2025-10-10T10:00:00\", \"description\": \"Test Performance Description\"" +
+                                            ", \"standardPrice\": \"10.00\", \"concessionPrice\": \"9.00\", \"boxOffice\": \"Test Box Office\" }"
+                            ))
+                    .andExpect(jsonPath("$.performance.description").value("Test Performance Description"));
+
+        }
+
     }
 
 
