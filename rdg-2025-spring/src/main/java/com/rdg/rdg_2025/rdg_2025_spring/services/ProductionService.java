@@ -116,7 +116,6 @@ public class ProductionService {
 
     private ProductionRequest updateProductionRequestNameIfRepeatPerformance(ProductionRequest productionRequest) {
         int timesPerformed = productionRepository.countByNameStartingWith(productionRequest.getName());
-        System.out.println(timesPerformed);
 
         if (timesPerformed > 0) {
             productionRequest.setName(productionRequest.getName() + " (" + (timesPerformed + 1) + ")");

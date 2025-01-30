@@ -43,11 +43,8 @@ public class PerformanceService {
         Performance performance = new Performance();
         updatePerformanceFromRequest(newPerformanceRequest, venue, production, festival, performance);
 
-        try {
-            return performanceRepository.save(performance);
-        } catch (DataAccessException | PersistenceException ex) {
-            throw new DatabaseException(ex.getMessage(), ex);
-        }
+        return savePerformanceToDatabase(performance);
+
     }
 
     // PRIVATE HELPER METHODS
@@ -106,6 +103,14 @@ public class PerformanceService {
         }
         performance.setUpdatedAt(LocalDateTime.now());
         return performance;
+    }
+
+    private Performance savePerformanceToDatabase(Performance performance) {
+        try {
+            return performanceRepository.save(performance);
+        } catch (DataAccessException | PersistenceException ex) {
+            throw new DatabaseException(ex.getMessage(), ex);
+        }
     }
 
 
