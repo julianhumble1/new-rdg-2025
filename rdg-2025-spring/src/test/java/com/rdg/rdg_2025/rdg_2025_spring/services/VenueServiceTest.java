@@ -260,8 +260,8 @@ public class VenueServiceTest {
     }
 
     @Nested
-    @DisplayName("getVenue service tests")
-    class GetVenueServiceTests {
+    @DisplayName("getVenueById service tests")
+    class GetVenueByIdServiceTests {
 
         @Test
         void testReturnsFoundVenueWhenVenueExists() {

@@ -223,4 +223,21 @@ public class FestivalServiceTest {
 
     }
 
+    @Nested
+    @DisplayName("getFestivalById service tests")
+    class GetFestivalByIdServiceTests {
+
+        @Test
+        void testReturnsFoundFestivalWhenFestivalExists() {
+            // Arrange
+            when(festivalRepository.findById(anyInt())).thenReturn(Optional.of(testFestival));
+            // Act
+            Festival festival = festivalService.getFestivalById(testFestival.getId());
+            // Assert
+            assertEquals(testFestival, festival);
+        }
+
+    }
+
+
 }
