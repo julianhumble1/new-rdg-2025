@@ -63,6 +63,7 @@ public class WebSecurityConfig {
                                 .requestMatchers("/venues/**").permitAll()
                                 .requestMatchers("/productions/**").permitAll()
                                 .requestMatchers("/festivals/**").permitAll()
+                                .requestMatchers("/performances/**").permitAll()
                                 .anyRequest().authenticated()
                 );
 
