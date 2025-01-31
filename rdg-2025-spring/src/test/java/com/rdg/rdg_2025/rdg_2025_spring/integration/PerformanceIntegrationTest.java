@@ -596,5 +596,27 @@ public class PerformanceIntegrationTest {
 
         }
 
+        @Test
+        void testConcessionPriceNotNumberResponds400() throws Exception {
+            // Act & Assert
+            mockMvc.perform(post("/performances")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", adminToken)
+                            .content(
+                                    "{" +
+                                            "\"productionId\": " + testProductionId +  ", " +
+                                            "\"venueId\": " + testVenueId + ", " +
+                                            "\"festivalId\": " + testFestivalId + ", " +
+                                            "\"time\": \"2025-10-10T10:00:00\", " +
+                                            "\"description\": \"Test Performance Description\", " +
+                                            "\"standardPrice\": \"10.00\", " +
+                                            "\"concessionPrice\": \"not a number\", " +
+                                            "\"boxOffice\": \"Test Box Office\" " +
+                                            "}"
+                            ))
+                    .andExpect(status().isBadRequest());
+
+        }
+
     }
 }
