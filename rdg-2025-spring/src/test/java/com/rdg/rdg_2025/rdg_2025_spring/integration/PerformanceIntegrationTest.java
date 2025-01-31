@@ -1,9 +1,6 @@
 package com.rdg.rdg_2025.rdg_2025_spring.integration;
 
-import com.rdg.rdg_2025.rdg_2025_spring.models.Festival;
-import com.rdg.rdg_2025.rdg_2025_spring.models.Production;
-import com.rdg.rdg_2025.rdg_2025_spring.models.User;
-import com.rdg.rdg_2025.rdg_2025_spring.models.Venue;
+import com.rdg.rdg_2025.rdg_2025_spring.models.*;
 import com.rdg.rdg_2025.rdg_2025_spring.repository.*;
 import com.rdg.rdg_2025.rdg_2025_spring.security.jwt.JwtUtils;
 import com.rdg.rdg_2025.rdg_2025_spring.utils.AuthTestUtils;
@@ -22,6 +19,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -142,6 +140,29 @@ public class PerformanceIntegrationTest {
                                             "}"
                             ))
                     .andExpect(status().isCreated());
+        }
+
+        @Test
+        void testPerformanceInDatabaseFollowingSuccessfulAdd(@Autowired PerformanceRepository performanceRepository) throws Exception {
+            // Act
+            mockMvc.perform(post("/performances")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", adminToken)
+                            .content(
+                                    "{" +
+                                            "\"productionId\": " + testProductionId +  ", " +
+                                            "\"venueId\": " + testVenueId + ", " +
+                                            "\"festivalId\": " + testFestivalId + ", " +
+                                            "\"time\": \"2025-10-10T10:00:00\", " +
+                                            "\"description\": \"Test Performance Description\", " +
+                                            "\"standardPrice\": \"10.00\", " +
+                                            "\"concessionPrice\": \"9.00\", " +
+                                            "\"boxOffice\": \"Test Box Office\" " +
+                                            "}"
+                            ));
+            // Assert
+            List<Performance> performanceList = performanceRepository.findAll();
+            assert(!performanceList.isEmpty());
         }
 
     }
