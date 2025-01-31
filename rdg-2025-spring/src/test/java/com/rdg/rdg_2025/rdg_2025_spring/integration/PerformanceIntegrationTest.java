@@ -175,7 +175,7 @@ public class PerformanceIntegrationTest {
         }
 
         @Test
-        void testSuccessfulAddRespondsExpectedPerformanceObject() throws Exception {
+        void testFullDetailsSuccessfulAddRespondsExpectedPerformanceObject() throws Exception {
             // Arrange
 
             // Act & Assert
@@ -202,6 +202,33 @@ public class PerformanceIntegrationTest {
                     .andExpect(jsonPath("$.performance.standardPrice").value(10.00))
                     .andExpect(jsonPath("$.performance.concessionPrice").value(9.00))
                     .andExpect(jsonPath("$.performance.boxOffice").value("Test Box Office"))
+                    .andExpect(jsonPath("$.performance.createdAt").isNotEmpty())
+                    .andExpect(jsonPath("$.performance.updatedAt").isNotEmpty());
+        }
+
+        @Test
+        void testMandatoryFieldOnlyAddRespondsExpectedPerformanceObject() throws Exception {
+            // Arrange
+
+            // Act & Assert
+            mockMvc.perform(post("/performances")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", adminToken)
+                            .content(
+                                    "{" +
+                                            "\"productionId\": " + testProductionId +  ", " +
+                                            "\"venueId\": " + testVenueId + ", " +
+                                            "\"time\": \"2025-10-10T10:00:00\" " +
+                                            "}"
+                            ))
+                    .andExpect(jsonPath("$.performance.production.id").value(testProductionId))
+                    .andExpect(jsonPath("$.performance.venue.id").value(testVenueId))
+                    .andExpect(jsonPath("$.performance.festival").isEmpty())
+                    .andExpect(jsonPath("$.performance.time").value("2025-10-10T10:00:00"))
+                    .andExpect(jsonPath("$.performance.description").isEmpty())
+                    .andExpect(jsonPath("$.performance.standardPrice").isEmpty())
+                    .andExpect(jsonPath("$.performance.concessionPrice").isEmpty())
+                    .andExpect(jsonPath("$.performance.boxOffice").isEmpty())
                     .andExpect(jsonPath("$.performance.createdAt").isNotEmpty())
                     .andExpect(jsonPath("$.performance.updatedAt").isNotEmpty());
         }
