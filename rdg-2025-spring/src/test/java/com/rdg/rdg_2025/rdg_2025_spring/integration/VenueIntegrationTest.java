@@ -81,8 +81,14 @@ public class VenueIntegrationTest {
                     .contentType(MediaType.APPLICATION_JSON)
                     .header("Authorization", adminToken)
                     .content(
-                            "{ \"name\": \"Test Venue\", \"notes\": \"Test Notes\", \"postcode\": \"Test Postcode\", \"address\": \"Test Address\", " +
-                                    "\"town\": \"Test Town\", \"url\": \"www.test.com\" }"
+                            "{ " +
+                                    "\"name\": \"Test Venue\", " +
+                                    "\"notes\": \"Test Notes\", " +
+                                    "\"postcode\": \"Test Postcode\", " +
+                                    "\"address\": \"Test Address\", " +
+                                    "\"town\": \"Test Town\", " +
+                                    "\"url\": \"www.test.com\" " +
+                                    "}"
                     ))
                     .andExpect(status().isCreated());
         }
@@ -93,8 +99,14 @@ public class VenueIntegrationTest {
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", adminToken)
                             .content(
-                                    "{ \"name\": \"Test Venue\", \"notes\": \"\", \"postcode\": \"\", \"address\": \"\", " +
-                                            "\"town\": \"\", \"url\": \"\" }"
+                                    "{ " +
+                                            "\"name\": \"Test Venue\", " +
+                                            "\"notes\": \"\", " +
+                                            "\"postcode\": \"\", " +
+                                            "\"address\": \"\", " +
+                                            "\"town\": \"\", " +
+                                            "\"url\": \"\" " +
+                                            "}"
                             ))
                     .andExpect(status().isCreated());
         }
@@ -105,16 +117,28 @@ public class VenueIntegrationTest {
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", adminToken)
                             .content(
-                                    "{ \"name\": \"Test Venue\", \"notes\": \"\", \"postcode\": \"\", \"address\": \"\", " +
-                                            "\"town\": \"\", \"url\": \"\" }"
+                                    "{ " +
+                                            "\"name\": \"Test Venue\", " +
+                                            "\"notes\": \"\", " +
+                                            "\"postcode\": \"\", " +
+                                            "\"address\": \"\", " +
+                                            "\"town\": \"\", " +
+                                            "\"url\": \"\" " +
+                                            "}"
                             ));
 
             mockMvc.perform(post("/venues")
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", adminToken)
                             .content(
-                                    "{ \"name\": \"Another Test Venue\", \"notes\": \"\", \"postcode\": \"\", \"address\": \"\", " +
-                                            "\"town\": \"\", \"url\": \"\" }"
+                                    "{ " +
+                                            "\"name\": \"Another Test Venue\", " +
+                                            "\"notes\": \"\", " +
+                                            "\"postcode\": \"\", " +
+                                            "\"address\": \"\", " +
+                                            "\"town\": \"\", " +
+                                            "\"url\": \"\" " +
+                                            "}"
                             ))
                             .andExpect(status().isCreated());
         }
@@ -136,8 +160,13 @@ public class VenueIntegrationTest {
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", adminToken)
                             .content(
-                                    "{ \"notes\": \"Test Notes\", \"postcode\": \"Test Postcode\", \"address\": \"Test Address\", " +
-                                            "\"town\": \"Test Town\", \"url\": \"www.test.com\" }"
+                                    "{ " +
+                                            "\"notes\": \"Test Notes\", " +
+                                            "\"postcode\": \"Test Postcode\", " +
+                                            "\"address\": \"Test Address\", " +
+                                            "\"town\": \"Test Town\", " +
+                                            "\"url\": \"www.test.com\" " +
+                                            "}"
                             ))
                     .andExpect(status().isBadRequest());
         }
@@ -148,8 +177,14 @@ public class VenueIntegrationTest {
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", adminToken)
                             .content(
-                                    "{ \"name\": \"\", \"notes\": \"Test Notes\", \"postcode\": \"Test Postcode\", \"address\": \"Test Address\", " +
-                                            "\"town\": \"Test Town\", \"url\": \"www.test.com\" }"
+                                    "{ " +
+                                            "\"name\": \"\", " +
+                                            "\"notes\": \"Test Notes\", " +
+                                            "\"postcode\": \"Test Postcode\", " +
+                                            "\"address\": \"Test Address\", " +
+                                            "\"town\": \"Test Town\", " +
+                                            "\"url\": \"www.test.com\" " +
+                                            "}"
                             ))
                     .andExpect(status().isBadRequest());
         }
@@ -163,8 +198,14 @@ public class VenueIntegrationTest {
                     .contentType(MediaType.APPLICATION_JSON)
                     .header("Authorization", adminToken)
                     .content(
-                            "{ \"name\": \"Test Venue\", \"notes\": \"Test Notes\", \"postcode\": \"Test Postcode\", \"address\": \"Test Address\", " +
-                                    "\"town\": \"Test Town\", \"url\": \"www.test.com\" }"
+                            "{ " +
+                                    "\"name\": \"Test Venue\", " +
+                                    "\"notes\": \"Test Notes\", " +
+                                    "\"postcode\": \"Test Postcode\", " +
+                                    "\"address\": \"Test Address\", " +
+                                    "\"town\": \"Test Town\", " +
+                                    "\"url\": \"www.test.com\" " +
+                                    "}"
                     ))
                     .andExpect(status().isConflict());
         }
@@ -174,8 +215,14 @@ public class VenueIntegrationTest {
             mockMvc.perform(post("/venues")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(
-                                    "{ \"name\": \"Test Venue\", \"notes\": \"Test Notes\", \"postcode\": \"Test Postcode\", \"address\": \"Test Address\", " +
-                                            "\"town\": \"Test Town\", \"url\": \"www.test.com\" }"
+                                    "{ " +
+                                            "\"name\": \"Test Venue\", " +
+                                            "\"notes\": \"Test Notes\", " +
+                                            "\"postcode\": \"Test Postcode\", " +
+                                            "\"address\": \"Test Address\", " +
+                                            "\"town\": \"Test Town\", " +
+                                            "\"url\": \"www.test.com\" " +
+                                            "}"
                             ))
                     .andExpect(status().isUnauthorized());
         }
@@ -186,8 +233,14 @@ public class VenueIntegrationTest {
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", "fake token")
                             .content(
-                                    "{ \"name\": \"Test Venue\", \"notes\": \"Test Notes\", \"postcode\": \"Test Postcode\", \"address\": \"Test Address\", " +
-                                            "\"town\": \"Test Town\", \"url\": \"www.test.com\" }"
+                                    "{ " +
+                                            "\"name\": \"Test Venue\", " +
+                                            "\"notes\": \"Test Notes\", " +
+                                            "\"postcode\": \"Test Postcode\", " +
+                                            "\"address\": \"Test Address\", " +
+                                            "\"town\": \"Test Town\", " +
+                                            "\"url\": \"www.test.com\" " +
+                                            "}"
                             ))
                     .andExpect(status().isUnauthorized());
         }
@@ -198,8 +251,14 @@ public class VenueIntegrationTest {
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", userToken)
                             .content(
-                                    "{ \"name\": \"Test Venue\", \"notes\": \"Test Notes\", \"postcode\": \"Test Postcode\", \"address\": \"Test Address\", " +
-                                            "\"town\": \"Test Town\", \"url\": \"www.test.com\" }"
+                                    "{ " +
+                                            "\"name\": \"Test Venue\", " +
+                                            "\"notes\": \"Test Notes\", " +
+                                            "\"postcode\": \"Test Postcode\", " +
+                                            "\"address\": \"Test Address\", " +
+                                            "\"town\": \"Test Town\", " +
+                                            "\"url\": \"www.test.com\" " +
+                                            "}"
                             ))
                     .andExpect(status().isForbidden());
         }
@@ -543,8 +602,14 @@ public class VenueIntegrationTest {
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", adminToken)
                             .content(
-                                    "{ \"name\": \"Updated Test Venue\", \"notes\": \"Updated Test Notes\", \"postcode\": \"Updated Test Postcode\"," +
-                                            " \"address\": \"Updated Test Address\", \"town\": \"Updated Test Town\", \"url\": \"www.updatedtest.com\" }"
+                                    "{ " +
+                                            "\"name\": \"Updated Test Venue\", " +
+                                            "\"notes\": \"Updated Test Notes\", " +
+                                            "\"postcode\": \"Updated Test Postcode\", " +
+                                            " \"address\": \"Updated Test Address\", " +
+                                            "\"town\": \"Updated Test Town\", " +
+                                            "\"url\": \"www.updatedtest.com\" " +
+                                            "}"
                             ))
                     .andExpect(status().isOk());
 
@@ -558,8 +623,14 @@ public class VenueIntegrationTest {
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", adminToken)
                             .content(
-                                    "{ \"name\": \"Updated Test Venue\", \"notes\": \"Updated Test Notes\", \"postcode\": \"Updated Test Postcode\"," +
-                                            " \"address\": \"Updated Test Address\", \"town\": \"Updated Test Town\", \"url\": \"www.updatedtest.com\" }"
+                                    "{ " +
+                                            "\"name\": \"Updated Test Venue\", " +
+                                            "\"notes\": \"Updated Test Notes\", " +
+                                            "\"postcode\": \"Updated Test Postcode\"," +
+                                            " \"address\": \"Updated Test Address\", " +
+                                            "\"town\": \"Updated Test Town\", " +
+                                            "\"url\": \"www.updatedtest.com\" " +
+                                            "}"
                             ))
                     .andExpect(jsonPath("$.venue.name").value("Updated Test Venue"))
                     .andExpect(jsonPath("$.venue.notes").value("Updated Test Notes"))
@@ -593,8 +664,14 @@ public class VenueIntegrationTest {
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", adminToken)
                             .content(
-                                    "{ \"name\": \"\", \"notes\": \"Updated Test Notes\", \"postcode\": \"Updated Test Postcode\"," +
-                                            " \"address\": \"Updated Test Address\", \"town\": \"Updated Test Town\", \"url\": \"www.updatedtest.com\" }"
+                                    "{ " +
+                                            "\"name\": \"\", " +
+                                            "\"notes\": \"Updated Test Notes\", " +
+                                            "\"postcode\": \"Updated Test Postcode\"," +
+                                            " \"address\": \"Updated Test Address\", " +
+                                            "\"town\": \"Updated Test Town\", " +
+                                            "\"url\": \"www.updatedtest.com\" " +
+                                            "}"
                             ))
                     .andExpect(status().isBadRequest());
 
@@ -608,8 +685,13 @@ public class VenueIntegrationTest {
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", adminToken)
                             .content(
-                                    "{ \"notes\": \"Updated Test Notes\", \"postcode\": \"Updated Test Postcode\"," +
-                                            " \"address\": \"Updated Test Address\", \"town\": \"Updated Test Town\", \"url\": \"www.updatedtest.com\" }"
+                                    "{ " +
+                                            "\"notes\": \"Updated Test Notes\", " +
+                                            "\"postcode\": \"Updated Test Postcode\"," +
+                                            " \"address\": \"Updated Test Address\", " +
+                                            "\"town\": \"Updated Test Town\", " +
+                                            "\"url\": \"www.updatedtest.com\" " +
+                                            "}"
                             ))
                     .andExpect(status().isBadRequest());
 
@@ -623,8 +705,14 @@ public class VenueIntegrationTest {
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", adminToken)
                             .content(
-                                    "{ \"name\": \"Updated Test Venue\", \"notes\": \"Updated Test Notes\", \"postcode\": \"Updated Test Postcode\"," +
-                                            " \"address\": \"Updated Test Address\", \"town\": \"Updated Test Town\", \"url\": \"www.updatedtest.com\" }"
+                                    "{ " +
+                                            "\"name\": \"Updated Test Venue\", " +
+                                            "\"notes\": \"Updated Test Notes\", " +
+                                            "\"postcode\": \"Updated Test Postcode\"," +
+                                            " \"address\": \"Updated Test Address\", " +
+                                            "\"town\": \"Updated Test Town\", " +
+                                            "\"url\": \"www.updatedtest.com\" " +
+                                            "}"
                             ))
                     .andExpect(status().isNotFound());
 
@@ -638,8 +726,14 @@ public class VenueIntegrationTest {
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", adminToken)
                             .content(
-                                    "{ \"name\": \"Updated Test Venue\", \"notes\": \"Updated Test Notes\", \"postcode\": \"Updated Test Postcode\"," +
-                                            " \"address\": \"Updated Test Address\", \"town\": \"Updated Test Town\", \"url\": \"www.updatedtest.com\" }"
+                                    "{ " +
+                                            "\"name\": \"Updated Test Venue\", " +
+                                            "\"notes\": \"Updated Test Notes\", " +
+                                            "\"postcode\": \"Updated Test Postcode\"," +
+                                            " \"address\": \"Updated Test Address\", " +
+                                            "\"town\": \"Updated Test Town\", " +
+                                            "\"url\": \"www.updatedtest.com\" " +
+                                            "}"
                             ))
                     .andExpect(status().isBadRequest());
 
@@ -652,8 +746,13 @@ public class VenueIntegrationTest {
             mockMvc.perform(patch("/venues/" + existingVenue1.getId())
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(
-                                    "{ \"name\": \"Updated Test Venue\", \"notes\": \"Updated Test Notes\", \"postcode\": \"Updated Test Postcode\"," +
-                                            " \"address\": \"Updated Test Address\", \"town\": \"Updated Test Town\", \"url\": \"www.updatedtest.com\" }"
+                                    "{ " +
+                                            "\"name\": \"Updated Test Venue\", " +
+                                            "\"notes\": \"Updated Test Notes\", " +
+                                            "\"postcode\": \"Updated Test Postcode\"," +
+                                            " \"address\": \"Updated Test Address\", " +
+                                            "\"town\": \"Updated Test Town\", " +
+                                            "\"url\": \"www.updatedtest.com\" }"
                             ))
                     .andExpect(status().isUnauthorized());
 
@@ -667,8 +766,14 @@ public class VenueIntegrationTest {
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", "Bad token")
                             .content(
-                                    "{ \"name\": \"Updated Test Venue\", \"notes\": \"Updated Test Notes\", \"postcode\": \"Updated Test Postcode\"," +
-                                            " \"address\": \"Updated Test Address\", \"town\": \"Updated Test Town\", \"url\": \"www.updatedtest.com\" }"
+                                    "{ " +
+                                            "\"name\": \"Updated Test Venue\", " +
+                                            "\"notes\": \"Updated Test Notes\", " +
+                                            "\"postcode\": \"Updated Test Postcode\"," +
+                                            " \"address\": \"Updated Test Address\", " +
+                                            "\"town\": \"Updated Test Town\", " +
+                                            "\"url\": \"www.updatedtest.com\" " +
+                                            "}"
                             ))
                     .andExpect(status().isUnauthorized());
 
@@ -682,8 +787,14 @@ public class VenueIntegrationTest {
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", userToken)
                             .content(
-                                    "{ \"name\": \"Updated Test Venue\", \"notes\": \"Updated Test Notes\", \"postcode\": \"Updated Test Postcode\"," +
-                                            " \"address\": \"Updated Test Address\", \"town\": \"Updated Test Town\", \"url\": \"www.updatedtest.com\" }"
+                                    "{ " +
+                                            "\"name\": \"Updated Test Venue\", " +
+                                            "\"notes\": \"Updated Test Notes\", " +
+                                            "\"postcode\": \"Updated Test Postcode\"," +
+                                            " \"address\": \"Updated Test Address\", " +
+                                            "\"town\": \"Updated Test Town\", " +
+                                            "\"url\": \"www.updatedtest.com\" " +
+                                            "}"
                             ))
                     .andExpect(status().isForbidden());
 
