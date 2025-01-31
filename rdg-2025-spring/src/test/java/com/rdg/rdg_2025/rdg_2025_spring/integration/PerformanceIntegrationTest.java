@@ -122,7 +122,24 @@ public class PerformanceIntegrationTest {
                                             "\"description\": \"Test Performance Description\", " +
                                             "\"standardPrice\": \"10.00\", " +
                                             "\"concessionPrice\": \"9.00\", " +
-                                            "\"boxOffice\": \"Test Box Office\" }"
+                                            "\"boxOffice\": \"Test Box Office\" " +
+                                            "}"
+                            ))
+                    .andExpect(status().isCreated());
+        }
+
+        @Test
+        void testSuccessfulAddWithOnlyMandatoryFieldsResponds201() throws Exception {
+            // Act & Assert
+            mockMvc.perform(post("/performances")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", adminToken)
+                            .content(
+                                    "{" +
+                                            "\"productionId\": " + testProductionId +  ", " +
+                                            "\"venueId\": " + testVenueId + ", " +
+                                            "\"time\": \"2025-10-10T10:00:00\" " +
+                                            "}"
                             ))
                     .andExpect(status().isCreated());
         }
