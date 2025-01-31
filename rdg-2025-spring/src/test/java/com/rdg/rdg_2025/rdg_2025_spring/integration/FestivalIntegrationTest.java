@@ -105,7 +105,12 @@ public class FestivalIntegrationTest {
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", adminToken)
                             .content(
-                                    "{\"name\": \"Test Festival\", \"year\": 2025, \"month\": 1, \"description\": \"Test Description\"}"
+                                    "{" +
+                                            "\"name\": \"Test Festival\", " +
+                                            "\"year\": 2025, " +
+                                            "\"month\": 1, " +
+                                            "\"description\": \"Test Description\"" +
+                                            "}"
                             ))
                     .andExpect(status().isCreated());
         }
@@ -116,7 +121,12 @@ public class FestivalIntegrationTest {
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", adminToken)
                             .content(
-                                    "{\"name\": \"Test Festival\", \"year\": 2025, \"month\": 1, \"description\": \"Test Description\"}"
+                                    "{" +
+                                            "\"name\": \"Test Festival\", " +
+                                            "\"year\": 2025, " +
+                                            "\"month\": 1, " +
+                                            "\"description\": \"Test Description\"" +
+                                            "}"
                             ))
                     .andExpect(jsonPath("$.festival.name").value("Test Festival")
                     );
@@ -132,7 +142,13 @@ public class FestivalIntegrationTest {
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", adminToken)
                             .content(
-                                    "{\"name\": \"Test Festival\",\"venueId\": " + testVenueId + ", \"year\": 2025, \"month\": 1, \"description\": \"Test Description\"}"
+                                    "{" +
+                                            "\"name\": \"Test Festival\", " +
+                                            "\"venueId\": " + testVenueId + ", " +
+                                            "\"year\": 2025, " +
+                                            "\"month\": 1, " +
+                                            "\"description\": \"Test Description\"" +
+                                            "}"
                             ))
                     .andExpect(status().isCreated());
         }
@@ -144,7 +160,10 @@ public class FestivalIntegrationTest {
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", adminToken)
                             .content(
-                                    "{\"name\": \"Test Festival\", \"year\": 2025}"
+                                    "{" +
+                                            "\"name\": \"Test Festival\", " +
+                                            "\"year\": 2025" +
+                                            "}"
                             ))
                     .andExpect(status().isCreated());
         }
@@ -158,7 +177,13 @@ public class FestivalIntegrationTest {
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", adminToken)
                             .content(
-                                    "{\"name\": \"Test Festival\",\"venueId\": " + (testVenueId - 1) + ", \"year\": 2025, \"month\": 1, \"description\": \"Test Description\"}"
+                                    "{" +
+                                            "\"name\": \"Test Festival\", " +
+                                            "\"venueId\": " + (testVenueId - 1) + ", " +
+                                            "\"year\": 2025, " +
+                                            "\"month\": 1, " +
+                                            "\"description\": \"Test Description\"" +
+                                            "}"
                             ))
                     .andExpect(status().isBadRequest());
         }
@@ -170,7 +195,11 @@ public class FestivalIntegrationTest {
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", adminToken)
                             .content(
-                                    "{ \"year\": 2025, \"month\": 1, \"description\": \"Test Description\"}"
+                                    "{ " +
+                                            "\"year\": 2025, " +
+                                            "\"month\": 1, " +
+                                            "\"description\": \"Test Description\"" +
+                                            "}"
                             ))
                     .andExpect(status().isBadRequest());
         }
@@ -182,7 +211,12 @@ public class FestivalIntegrationTest {
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", adminToken)
                             .content(
-                                    "{\"name\": \"\", \"year\": 2025, \"month\": 1, \"description\": \"Test Description\"}"
+                                    "{" +
+                                            "\"name\": \"\", " +
+                                            "\"year\": 2025, " +
+                                            "\"month\": 1, " +
+                                            "\"description\": \"Test Description\"" +
+                                            "}"
                             ))
                     .andExpect(status().isBadRequest());
         }
@@ -195,7 +229,13 @@ public class FestivalIntegrationTest {
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", adminToken)
                             .content(
-                                    "{\"name\": \"Test Festival\",\"venueId\": \"Bad Venue Id\", \"year\": 2025, \"month\": 1, \"description\": \"Test Description\"}"
+                                    "{" +
+                                            "\"name\": \"Test Festival\", " +
+                                            "\"venueId\": \"Bad Venue Id\", " +
+                                            "\"year\": 2025, " +
+                                            "\"month\": 1, " +
+                                            "\"description\": \"Test Description\"" +
+                                            "}"
                             ))
                     .andExpect(status().isBadRequest());
         }
@@ -207,7 +247,11 @@ public class FestivalIntegrationTest {
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", adminToken)
                             .content(
-                                    "{\"name\": \"Test Festival\", \"month\": 1, \"description\": \"Test Description\"}"
+                                    "{" +
+                                            "\"name\": \"Test Festival\", " +
+                                            "\"month\": 1, " +
+                                            "\"description\": \"Test Description\"" +
+                                            "}"
                             ))
                     .andExpect(status().isBadRequest());
         }
@@ -219,7 +263,12 @@ public class FestivalIntegrationTest {
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", adminToken)
                             .content(
-                                    "{\"name\": \"Test Festival\",\"year\": \"\", \"month\": 1, \"description\": \"Test Description\"}"
+                                    "{" +
+                                            "\"name\": \"Test Festival\", " +
+                                            "\"year\": \"\", " +
+                                            "\"month\": 1, " +
+                                            "\"description\": \"Test Description\"" +
+                                            "}"
                             ))
                     .andExpect(status().isBadRequest());
         }
@@ -231,7 +280,12 @@ public class FestivalIntegrationTest {
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", adminToken)
                             .content(
-                                    "{\"name\": \"Test Festival\",\"year\": 2025, \"month\": \"Bad month\", \"description\": \"Test Description\"}"
+                                    "{" +
+                                            "\"name\": \"Test Festival\", " +
+                                            "\"year\": 2025, " +
+                                            "\"month\": \"Bad month\", " +
+                                            "\"description\": \"Test Description\"" +
+                                            "}"
                             ))
                     .andExpect(status().isBadRequest());
         }
@@ -243,7 +297,12 @@ public class FestivalIntegrationTest {
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", adminToken)
                             .content(
-                                    "{\"name\": \"Test Festival\",\"year\": 2025, \"month\": 13, \"description\": \"Test Description\"}"
+                                    "{" +
+                                            "\"name\": \"Test Festival\", " +
+                                            "\"year\": 2025, " +
+                                            "\"month\": 13, " +
+                                            "\"description\": \"Test Description\"" +
+                                            "}"
                             ))
                     .andExpect(status().isBadRequest());
         }
@@ -255,7 +314,12 @@ public class FestivalIntegrationTest {
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", adminToken)
                             .content(
-                                    "{\"name\": \"Test Festival\",\"year\": 2025, \"month\": -1, \"description\": \"Test Description\"}"
+                                    "{" +
+                                            "\"name\": \"Test Festival\", " +
+                                            "\"year\": 2025, " +
+                                            "\"month\": -1, " +
+                                            "\"description\": \"Test Description\"" +
+                                            "}"
                             ))
                     .andExpect(status().isBadRequest());
         }
@@ -266,7 +330,12 @@ public class FestivalIntegrationTest {
             mockMvc.perform(post("/festivals")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(
-                                    "{\"name\": \"Test Festival\", \"year\": 2025, \"month\": 1, \"description\": \"Test Description\"}"
+                                    "{" +
+                                            "\"name\": \"Test Festival\", " +
+                                            "\"year\": 2025, " +
+                                            "\"month\": 1, " +
+                                            "\"description\": \"Test Description\"" +
+                                            "}"
                             ))
                     .andExpect(status().isUnauthorized());
         }
@@ -278,7 +347,12 @@ public class FestivalIntegrationTest {
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", "Bad Token")
                             .content(
-                                    "{\"name\": \"Test Festival\", \"year\": 2025, \"month\": 1, \"description\": \"Test Description\"}"
+                                    "{" +
+                                            "\"name\": \"Test Festival\", " +
+                                            "\"year\": 2025, " +
+                                            "\"month\": 1, " +
+                                            "\"description\": \"Test Description\"" +
+                                            "}"
                             ))
                     .andExpect(status().isUnauthorized());
         }
@@ -290,7 +364,11 @@ public class FestivalIntegrationTest {
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", userToken)
                             .content(
-                                    "{\"name\": \"Test Festival\", \"year\": 2025, \"month\": 1, \"description\": \"Test Description\"}"
+                                    "{" +
+                                            "\"name\": \"Test Festival\", " +
+                                            "\"year\": 2025, \"month\": 1, " +
+                                            "\"description\": \"Test Description\"" +
+                                            "}"
                             ))
                     .andExpect(status().isForbidden());
         }
