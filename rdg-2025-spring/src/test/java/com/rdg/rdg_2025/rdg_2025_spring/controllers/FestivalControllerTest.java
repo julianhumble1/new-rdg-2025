@@ -67,7 +67,13 @@ public class FestivalControllerTest {
             mockMvc.perform(post("/festivals")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(
-                            "{\"name\": \"Test Festival\", \"venueId\": 1, \"year\": 2025, \"month\": 1, \"description\": \"Test Description\"}"
+                            "{" +
+                                    "\"name\": \"Test Festival\"," +
+                                    " \"venueId\": 1, " +
+                                    "\"year\": 2025, " +
+                                    "\"month\": 1, " +
+                                    "\"description\": \"Test Description\"" +
+                                    "}"
                     ))
                     .andExpect(status().isCreated());
         }
@@ -83,7 +89,13 @@ public class FestivalControllerTest {
             mockMvc.perform(post("/festivals")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(
-                                    "{\"name\": \"Test Festival\", \"venueId\": 1, \"year\": 2025, \"month\": 1, \"description\": \"Test Description\"}"
+                                    "{" +
+                                            "\"name\": \"Test Festival\"," +
+                                            " \"venueId\": 1, " +
+                                            "\"year\": 2025, " +
+                                            "\"month\": 1, " +
+                                            "\"description\": \"Test Description\"" +
+                                            "}"
                             ))
                     .andExpect(header().string("Location", "/festivals" + "/" + testFestivalId));
         }
@@ -98,7 +110,13 @@ public class FestivalControllerTest {
             mockMvc.perform(post("/festivals")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(
-                                    "{\"name\": \"Test Festival\", \"venueId\": 1, \"year\": 2025, \"month\": 1, \"description\": \"Test Description\"}"
+                                    "{" +
+                                            "\"name\": \"Test Festival\", " +
+                                            "\"venueId\": 1, " +
+                                            "\"year\": 2025, " +
+                                            "\"month\": 1, " +
+                                            "\"description\": \"Test Description\"" +
+                                            "}"
                             ))
                     .andExpect(jsonPath("$.festival.id").isNotEmpty())
                     .andExpect(jsonPath("$.festival.name").value(testFestival.getName()))
@@ -107,10 +125,7 @@ public class FestivalControllerTest {
                     .andExpect(jsonPath("$.festival.month").value(testFestival.getMonth()))
                     .andExpect(jsonPath("$.festival.description").value(testFestival.getDescription()))
                     .andExpect(jsonPath("$.festival.createdAt").isNotEmpty())
-                    .andExpect(jsonPath("$.festival.updatedAt").isNotEmpty()
-
-
-                    );
+                    .andExpect(jsonPath("$.festival.updatedAt").isNotEmpty());
         }
 
         @Test
@@ -123,7 +138,13 @@ public class FestivalControllerTest {
             mockMvc.perform(post("/festivals")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(
-                                    "{\"name\": \"Test Festival\", \"venueId\": 1, \"year\": 2025, \"month\": 1, \"description\": \"Test Description\"}"
+                                    "{" +
+                                            "\"name\": \"Test Festival\", " +
+                                            "\"venueId\": 1, " +
+                                            "\"year\": 2025, " +
+                                            "\"month\": 1, " +
+                                            "\"description\": \"Test Description\"" +
+                                            "}"
                             ))
                     .andExpect(status().isInternalServerError());
         }
@@ -138,10 +159,15 @@ public class FestivalControllerTest {
             mockMvc.perform(post("/festivals")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(
-                                    "{\"name\": \"Test Festival\", \"venueId\": 1, \"year\": 2025, \"month\": 1, \"description\": \"Test Description\"}"
+                                    "{" +
+                                            "\"name\": \"Test Festival\", " +
+                                            "\"venueId\": 1, " +
+                                            "\"year\": 2025, " +
+                                            "\"month\": 1, " +
+                                            "\"description\": \"Test Description\"}" +
+                                            "}"
                             ))
-                    .andExpect(status().isBadRequest()
-                    );
+                    .andExpect(status().isBadRequest());
         }
 
         @Test
@@ -156,7 +182,13 @@ public class FestivalControllerTest {
             mockMvc.perform(post("/festivals")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(
-                                    "{\"name\": \"Test Festival\", \"venueId\": \"\", \"year\": 2025, \"month\": \"\", \"description\": \"\"}"
+                                    "{" +
+                                            "\"name\": \"Test Festival\", " +
+                                            "\"venueId\": \"\", " +
+                                            "\"year\": 2025, " +
+                                            "\"month\": \"\", " +
+                                            "\"description\": \"\"" +
+                                            "}"
                             ))
                     .andExpect(status().isCreated());
         }
@@ -173,7 +205,10 @@ public class FestivalControllerTest {
             mockMvc.perform(post("/festivals")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(
-                                    "{\"name\": \"Test Festival\", \"year\": 2025}"
+                                    "{" +
+                                            "\"name\": \"Test Festival\", " +
+                                            "\"year\": 2025" +
+                                            "}"
                             ))
                     .andExpect(status().isCreated());
         }
@@ -183,12 +218,17 @@ public class FestivalControllerTest {
         void testEmptyNameResponds400BadRequest() throws Exception {
             // Arrange
 
-
             // Act & Assert
             mockMvc.perform(post("/festivals")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(
-                                    "{\"name\": \"\", \"venueId\": 1, \"year\": 2025, \"month\": 1, \"description\": \"Test Description\"}"
+                                    "{" +
+                                            "\"name\": \"\", " +
+                                            "\"venueId\": 1, " +
+                                            "\"year\": 2025, " +
+                                            "\"month\": 1, " +
+                                            "\"description\": \"Test Description\"" +
+                                            "}"
                             ))
                     .andExpect(status().isBadRequest());
         }
@@ -202,7 +242,12 @@ public class FestivalControllerTest {
             mockMvc.perform(post("/festivals")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(
-                                    "{\"venueId\": 1, \"year\": 2025, \"month\": 1, \"description\": \"Test Description\"}"
+                                    "{" +
+                                            "\"venueId\": 1, " +
+                                            "\"year\": 2025, " +
+                                            "\"month\": 1, " +
+                                            "\"description\": \"Test Description\"" +
+                                            "}"
                             ))
                     .andExpect(status().isBadRequest());
         }
@@ -216,7 +261,13 @@ public class FestivalControllerTest {
             mockMvc.perform(post("/festivals")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(
-                                    "{\"name\": \"Test Festival\", \"venueId\": 1, \"year\": \"\", \"month\": 1, \"description\": \"Test Description\"}"
+                                    "{" +
+                                            "\"name\": \"Test Festival\", " +
+                                            "\"venueId\": 1, " +
+                                            "\"year\": \"\", " +
+                                            "\"month\": 1, " +
+                                            "\"description\": \"Test Description\"" +
+                                            "}"
                             ))
                     .andExpect(status().isBadRequest());
         }
@@ -230,7 +281,12 @@ public class FestivalControllerTest {
             mockMvc.perform(post("/festivals")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(
-                                    "{\"name\": \"Test Festival\", \"venueId\": 1, \"month\": 1, \"description\": \"Test Description\"}"
+                                    "{" +
+                                            "\"name\": \"Test Festival\", " +
+                                            "\"venueId\": 1, " +
+                                            "\"month\": 1, " +
+                                            "\"description\": \"Test Description\"" +
+                                            "}"
                             ))
                     .andExpect(status().isBadRequest());
         }
@@ -244,7 +300,13 @@ public class FestivalControllerTest {
             mockMvc.perform(post("/festivals")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(
-                                    "{\"name\": \"Test Festival\", \"venueId\": 1, \"year\": \"Not an int\", \"month\": 1, \"description\": \"Test Description\"}"
+                                    "{" +
+                                            "\"name\": \"Test Festival\", " +
+                                            "\"venueId\": 1, " +
+                                            "\"year\": \"Not an int\", " +
+                                            "\"month\": 1, " +
+                                            "\"description\": \"Test Description\"" +
+                                            "}"
                             ))
                     .andExpect(status().isBadRequest());
         }
@@ -258,7 +320,13 @@ public class FestivalControllerTest {
             mockMvc.perform(post("/festivals")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(
-                                    "{\"name\": \"Test Festival\", \"venueId\": 1, \"year\": -1, \"month\": 1, \"description\": \"Test Description\"}"
+                                    "{" +
+                                            "\"name\": \"Test Festival\", " +
+                                            "\"venueId\": 1, " +
+                                            "\"year\": -1, " +
+                                            "\"month\": 1, " +
+                                            "\"description\": \"Test Description\"" +
+                                            "}"
                             ))
                     .andExpect(status().isBadRequest());
         }
@@ -272,7 +340,13 @@ public class FestivalControllerTest {
             mockMvc.perform(post("/festivals")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(
-                                    "{\"name\": \"Test Festival\", \"venueId\": \"Bad Venue Id\", \"year\": 2025, \"month\": 1, \"description\": \"Test Description\"}"
+                                    "{" +
+                                            "\"name\": \"Test Festival\", " +
+                                            "\"venueId\": \"Bad Venue Id\", " +
+                                            "\"year\": 2025, " +
+                                            "\"month\": 1, " +
+                                            "\"description\": \"Test Description\"" +
+                                            "}"
                             ))
                     .andExpect(status().isBadRequest());
         }
@@ -286,7 +360,13 @@ public class FestivalControllerTest {
             mockMvc.perform(post("/festivals")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(
-                                    "{\"name\": \"Test Festival\", \"venueId\": 1, \"year\": 2025, \"month\": -1, \"description\": \"Test Description\"}"
+                                    "{" +
+                                            "\"name\": \"Test Festival\", " +
+                                            "\"venueId\": 1, " +
+                                            "\"year\": 2025, " +
+                                            "\"month\": -1, " +
+                                            "\"description\": \"Test Description\"" +
+                                            "}"
                             ))
                     .andExpect(status().isBadRequest());
         }
@@ -300,7 +380,13 @@ public class FestivalControllerTest {
             mockMvc.perform(post("/festivals")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(
-                                    "{\"name\": \"Test Festival\", \"venueId\": 1, \"year\": 2025, \"month\": 13, \"description\": \"Test Description\"}"
+                                    "{" +
+                                            "\"name\": \"Test Festival\", " +
+                                            "\"venueId\": 1, " +
+                                            "\"year\": 2025, " +
+                                            "\"month\": 13, " +
+                                            "\"description\": \"Test Description\"" +
+                                            "}"
                             ))
                     .andExpect(status().isBadRequest());
         }

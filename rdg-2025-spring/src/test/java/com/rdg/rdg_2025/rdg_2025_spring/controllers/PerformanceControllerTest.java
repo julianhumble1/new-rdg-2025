@@ -77,8 +77,16 @@ public class PerformanceControllerTest {
             mockMvc.perform(post("/performances")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(
-                        "{\"productionId\": " + "\"not an int\"" + ", \"venueId\": 1, \"festivalId\": 1, \"time\": \"2025-10-10T10:00:00\", \"description\": \"Test Performance Description\"" +
-                                ", \"standardPrice\": \"10.00\", \"concessionPrice\": \"9.00\", \"boxOffice\": \"Test Box Office\" }"
+                        "{" +
+                                "\"productionId\": \"not an int\", " +
+                                "\"venueId\": 1, " +
+                                "\"festivalId\": 1, " +
+                                "\"time\": \"2025-10-10T10:00:00\", " +
+                                "\"description\": \"Test Performance Description\", " +
+                                "\"standardPrice\": \"10.00\", " +
+                                "\"concessionPrice\": \"9.00\", " +
+                                "\"boxOffice\": \"Test Box Office\" " +
+                                "}"
                     ))
                     .andExpect(status().isBadRequest());
 
@@ -92,8 +100,16 @@ public class PerformanceControllerTest {
             mockMvc.perform(post("/performances")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(
-                                    "{\"productionId\": " + "\"\"" + ", \"venueId\": 1, \"festivalId\": 1, \"time\": \"2025-10-10T10:00:00\", \"description\": \"Test Performance Description\"" +
-                                            ", \"standardPrice\": \"10.00\", \"concessionPrice\": \"9.00\", \"boxOffice\": \"Test Box Office\" }"
+                                    "{" +
+                                            "\"productionId\": \"\", " +
+                                            "\"venueId\": 1, " +
+                                            "\"festivalId\": 1, " +
+                                            "\"time\": \"2025-10-10T10:00:00\", " +
+                                            "\"description\": \"Test Performance Description\", " +
+                                            "\"standardPrice\": \"10.00\", " +
+                                            "\"concessionPrice\": \"9.00\", " +
+                                            "\"boxOffice\": \"Test Box Office\" " +
+                                            "}"
                             ))
                     .andExpect(status().isBadRequest());
 
@@ -107,8 +123,15 @@ public class PerformanceControllerTest {
             mockMvc.perform(post("/performances")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(
-                                    "{\"venueId\": 1, \"festivalId\": 1, \"time\": \"2025-10-10T10:00:00\", \"description\": \"Test Performance Description\"" +
-                                            ", \"standardPrice\": \"10.00\", \"concessionPrice\": \"9.00\", \"boxOffice\": \"Test Box Office\" }"
+                                    "{" +
+                                            "\"venueId\": 1, " +
+                                            "\"festivalId\": 1, " +
+                                            "\"time\": \"2025-10-10T10:00:00\", " +
+                                            "\"description\": \"Test Performance Description\", " +
+                                            "\"standardPrice\": \"10.00\", " +
+                                            "\"concessionPrice\": \"9.00\", " +
+                                            "\"boxOffice\": \"Test Box Office\" " +
+                                            "}"
                             ))
                     .andExpect(status().isBadRequest());
 
@@ -122,8 +145,16 @@ public class PerformanceControllerTest {
             mockMvc.perform(post("/performances")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(
-                                    "{\"productionId\": 1, \"venueId\": " + "\"not an int\"" + ", \"festivalId\": 1, \"time\": \"2025-10-10T10:00:00\", \"description\": \"Test Performance Description\"" +
-                                            ", \"standardPrice\": \"10.00\", \"concessionPrice\": \"9.00\", \"boxOffice\": \"Test Box Office\" }"
+                                    "{" +
+                                            "\"productionId\": 1, " +
+                                            "\"venueId\": \"not an int\", " +
+                                            "\"festivalId\": 1, " +
+                                            "\"time\": \"2025-10-10T10:00:00\", " +
+                                            "\"description\": \"Test Performance Description\", " +
+                                            "\"standardPrice\": \"10.00\", " +
+                                            "\"concessionPrice\": \"9.00\", " +
+                                            "\"boxOffice\": \"Test Box Office\" " +
+                                            "}"
                             ))
                     .andExpect(status().isBadRequest());
 
@@ -137,8 +168,16 @@ public class PerformanceControllerTest {
             mockMvc.perform(post("/performances")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(
-                                    "{\"productionId\": 1, \"venueId\": " + "\"\"" + ", \"festivalId\": 1, \"time\": \"2025-10-10T10:00:00\", \"description\": \"Test Performance Description\"" +
-                                            ", \"standardPrice\": \"10.00\", \"concessionPrice\": \"9.00\", \"boxOffice\": \"Test Box Office\" }"
+                                    "{" +
+                                            "\"productionId\": 1, " +
+                                            "\"venueId\": \"\", " +
+                                            "\"festivalId\": 1, " +
+                                            "\"time\": \"2025-10-10T10:00:00\", " +
+                                            "\"description\": \"Test Performance Description\", " +
+                                            "\"standardPrice\": \"10.00\", " +
+                                            "\"concessionPrice\": \"9.00\", " +
+                                            "\"boxOffice\": \"Test Box Office\" " +
+                                            "}"
                             ))
                     .andExpect(status().isBadRequest());
 
@@ -152,8 +191,15 @@ public class PerformanceControllerTest {
             mockMvc.perform(post("/performances")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(
-                                    "{\"productionId\": 1, \"festivalId\": 1, \"time\": \"2025-10-10T10:00:00\", \"description\": \"Test Performance Description\"" +
-                                            ", \"standardPrice\": \"10.00\", \"concessionPrice\": \"9.00\", \"boxOffice\": \"Test Box Office\" }"
+                                    "{" +
+                                            "\"productionId\": 1, " +
+                                            "\"festivalId\": 1, " +
+                                            "\"time\": \"2025-10-10T10:00:00\", " +
+                                            "\"description\": \"Test Performance Description\", " +
+                                            "\"standardPrice\": \"10.00\", " +
+                                            "\"concessionPrice\": \"9.00\", " +
+                                            "\"boxOffice\": \"Test Box Office\" " +
+                                            "}"
                             ))
                     .andExpect(status().isBadRequest());
 
@@ -167,8 +213,16 @@ public class PerformanceControllerTest {
             mockMvc.perform(post("/performances")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(
-                                    "{\"productionId\": 1, \"venueId\": 1, \"festivalId\": " + "\"not an int\"" + ", \"time\": \"2025-10-10T10:00:00\", \"description\": \"Test Performance Description\"" +
-                                            ", \"standardPrice\": \"10.00\", \"concessionPrice\": \"9.00\", \"boxOffice\": \"Test Box Office\" }"
+                                    "{" +
+                                            "\"productionId\": 1, " +
+                                            "\"venueId\": 1, " +
+                                            "\"festivalId\": \"not an int\", " +
+                                            "\"time\": \"2025-10-10T10:00:00\", " +
+                                            "\"description\": \"Test Performance Description\", " +
+                                            "\"standardPrice\": \"10.00\", " +
+                                            "\"concessionPrice\": \"9.00\", " +
+                                            "\"boxOffice\": \"Test Box Office\" " +
+                                            "}"
                             ))
                     .andExpect(status().isBadRequest());
 
@@ -182,8 +236,16 @@ public class PerformanceControllerTest {
             mockMvc.perform(post("/performances")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(
-                                    "{\"productionId\": 1, \"venueId\": 1, \"festivalId\": 1, \"time\": \"not a date time\", \"description\": \"Test Performance Description\"" +
-                                            ", \"standardPrice\": \"10.00\", \"concessionPrice\": \"9.00\", \"boxOffice\": \"Test Box Office\" }"
+                                    "{" +
+                                            "\"productionId\": 1, " +
+                                            "\"venueId\": 1, " +
+                                            "\"festivalId\": 1, " +
+                                            "\"time\": \"not a date time\", " +
+                                            "\"description\": \"Test Performance Description\", " +
+                                            "\"standardPrice\": \"10.00\", " +
+                                            "\"concessionPrice\": \"9.00\", " +
+                                            "\"boxOffice\": \"Test Box Office\" " +
+                                            "}"
                             ))
                     .andExpect(status().isBadRequest());
 
@@ -197,8 +259,16 @@ public class PerformanceControllerTest {
             mockMvc.perform(post("/performances")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(
-                                    "{\"productionId\": 1, \"venueId\": 1, \"festivalId\": 1, \"time\": \"\", \"description\": \"Test Performance Description\"" +
-                                            ", \"standardPrice\": \"10.00\", \"concessionPrice\": \"9.00\", \"boxOffice\": \"Test Box Office\" }"
+                                    "{" +
+                                            "\"productionId\": 1, " +
+                                            "\"venueId\": 1, " +
+                                            "\"festivalId\": 1, " +
+                                            "\"time\": \"\", " +
+                                            "\"description\": \"Test Performance Description\", " +
+                                            "\"standardPrice\": \"10.00\", " +
+                                            "\"concessionPrice\": \"9.00\", " +
+                                            "\"boxOffice\": \"Test Box Office\" " +
+                                            "}"
                             ))
                     .andExpect(status().isBadRequest());
 
@@ -212,8 +282,15 @@ public class PerformanceControllerTest {
             mockMvc.perform(post("/performances")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(
-                                    "{\"productionId\": 1, \"venueId\": 1, \"festivalId\": 1, \"description\": \"Test Performance Description\"" +
-                                            ", \"standardPrice\": \"10.00\", \"concessionPrice\": \"9.00\", \"boxOffice\": \"Test Box Office\" }"
+                                    "{" +
+                                            "\"productionId\": 1, " +
+                                            "\"venueId\": 1, " +
+                                            "\"festivalId\": 1, " +
+                                            "\"description\": \"Test Performance Description\", " +
+                                            "\"standardPrice\": \"10.00\", " +
+                                            "\"concessionPrice\": \"9.00\", " +
+                                            "\"boxOffice\": \"Test Box Office\" " +
+                                            "}"
                             ))
                     .andExpect(status().isBadRequest());
 
@@ -227,8 +304,16 @@ public class PerformanceControllerTest {
             mockMvc.perform(post("/performances")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(
-                                    "{\"productionId\": 1, \"venueId\": 1, \"festivalId\": 1, \"time\": \"2025-10-10T10:00:00\", \"description\": \"Test Performance Description\"" +
-                                            ", \"standardPrice\": \"not a number\", \"concessionPrice\": \"9.00\", \"boxOffice\": \"Test Box Office\" }"
+                                    "{" +
+                                            "\"productionId\": 1, " +
+                                            "\"venueId\": 1, " +
+                                            "\"festivalId\": 1, " +
+                                            "\"time\": \"2025-10-10T10:00:00\", " +
+                                            "\"description\": \"Test Performance Description\", " +
+                                            "\"standardPrice\": \"not a number\", " +
+                                            "\"concessionPrice\": \"9.00\", " +
+                                            "\"boxOffice\": \"Test Box Office\" " +
+                                            "}"
                             ))
                     .andExpect(status().isBadRequest());
 
@@ -242,8 +327,16 @@ public class PerformanceControllerTest {
             mockMvc.perform(post("/performances")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(
-                                    "{\"productionId\": 1, \"venueId\": 1, \"festivalId\": 1, \"time\": \"2025-10-10T10:00:00\", \"description\": \"Test Performance Description\"" +
-                                            ", \"standardPrice\": \"10.00\", \"concessionPrice\": \"not a number\", \"boxOffice\": \"Test Box Office\" }"
+                                    "{" +
+                                            "\"productionId\": 1, " +
+                                            "\"venueId\": 1, " +
+                                            "\"festivalId\": 1, " +
+                                            "\"time\": \"2025-10-10T10:00:00\", " +
+                                            "\"description\": \"Test Performance Description\", " +
+                                            "\"standardPrice\": \"10.00\", " +
+                                            "\"concessionPrice\": \"not a number\", " +
+                                            "\"boxOffice\": \"Test Box Office\" " +
+                                            "}"
                             ))
                     .andExpect(status().isBadRequest());
 
@@ -258,8 +351,16 @@ public class PerformanceControllerTest {
             mockMvc.perform(post("/performances")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(
-                                    "{\"productionId\": 1, \"venueId\": 1, \"festivalId\": 1, \"time\": \"2025-10-10T10:00:00\", \"description\": \"Test Performance Description\"" +
-                                            ", \"standardPrice\": \"10.00\", \"concessionPrice\": \"9.00\", \"boxOffice\": \"Test Box Office\" }"
+                                    "{" +
+                                            "\"productionId\": 1, " +
+                                            "\"venueId\": 1, " +
+                                            "\"festivalId\": 1, " +
+                                            "\"time\": \"2025-10-10T10:00:00\", " +
+                                            "\"description\": \"Test Performance Description\", " +
+                                            "\"standardPrice\": \"10.00\", " +
+                                            "\"concessionPrice\": \"9.00\", " +
+                                            "\"boxOffice\": \"Test Box Office\" " +
+                                            "}"
                             ))
                     .andExpect(status().isInternalServerError());
 
@@ -274,8 +375,16 @@ public class PerformanceControllerTest {
             mockMvc.perform(post("/performances")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(
-                                    "{\"productionId\": 1, \"venueId\": 1, \"festivalId\": 1, \"time\": \"2025-10-10T10:00:00\", \"description\": \"Test Performance Description\"" +
-                                            ", \"standardPrice\": \"10.00\", \"concessionPrice\": \"9.00\", \"boxOffice\": \"Test Box Office\" }"
+                                    "{" +
+                                            "\"productionId\": 1, " +
+                                            "\"venueId\": 1, " +
+                                            "\"festivalId\": 1, " +
+                                            "\"time\": \"2025-10-10T10:00:00\", " +
+                                            "\"description\": \"Test Performance Description\", " +
+                                            "\"standardPrice\": \"10.00\", " +
+                                            "\"concessionPrice\": \"9.00\", " +
+                                            "\"boxOffice\": \"Test Box Office\" " +
+                                            "}"
                             ))
                     .andExpect(status().isNotFound());
 
@@ -290,8 +399,15 @@ public class PerformanceControllerTest {
             mockMvc.perform(post("/performances")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(
-                                    "{\"productionId\": 1, \"venueId\": 1, \"festivalId\": 1, \"time\": \"2025-10-10T10:00:00\", \"description\": \"Test Performance Description\"" +
-                                            ", \"standardPrice\": \"10.00\", \"concessionPrice\": \"9.00\", \"boxOffice\": \"Test Box Office\" }"
+                                    "{" +
+                                            "\"productionId\": 1, " +
+                                            "\"venueId\": 1, " +
+                                            "\"festivalId\": 1, " +
+                                            "\"time\": \"2025-10-10T10:00:00\", " +
+                                            "\"description\": \"Test Performance Description\", " +
+                                            "\"standardPrice\": \"10.00\", " +
+                                            "\"concessionPrice\": \"9.00\", " +
+                                            "\"boxOffice\": \"Test Box Office\" }"
                             ))
                     .andExpect(status().isCreated());
 
@@ -306,7 +422,11 @@ public class PerformanceControllerTest {
             mockMvc.perform(post("/performances")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(
-                                    "{\"productionId\": 1, \"venueId\": 1, \"time\": \"2025-10-10T10:00:00\"}"
+                                    "{" +
+                                            "\"productionId\": 1, " +
+                                            "\"venueId\": 1, " +
+                                            "\"time\": \"2025-10-10T10:00:00\"" +
+                                            "}"
                             ))
                     .andExpect(status().isCreated());
 
@@ -321,8 +441,16 @@ public class PerformanceControllerTest {
             mockMvc.perform(post("/performances")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(
-                                    "{\"productionId\": 1, \"venueId\": 1, \"festivalId\": 1, \"time\": \"2025-10-10T10:00:00\", \"description\": \"Test Performance Description\"" +
-                                            ", \"standardPrice\": \"10.00\", \"concessionPrice\": \"9.00\", \"boxOffice\": \"Test Box Office\" }"
+                                    "{" +
+                                            "\"productionId\": 1, " +
+                                            "\"venueId\": 1, " +
+                                            "\"festivalId\": 1, " +
+                                            "\"time\": \"2025-10-10T10:00:00\", " +
+                                            "\"description\": \"Test Performance Description\", " +
+                                            "\"standardPrice\": \"10.00\", " +
+                                            "\"concessionPrice\": \"9.00\", " +
+                                            "\"boxOffice\": \"Test Box Office\" " +
+                                            "}"
                             ))
                     .andExpect(header().string("Location", "/performances" + testPerformance.getId()));
 
@@ -337,8 +465,16 @@ public class PerformanceControllerTest {
             mockMvc.perform(post("/performances")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(
-                                    "{\"productionId\": 1, \"venueId\": 1, \"festivalId\": 1, \"time\": \"2025-10-10T10:00:00\", \"description\": \"Test Performance Description\"" +
-                                            ", \"standardPrice\": \"10.00\", \"concessionPrice\": \"9.00\", \"boxOffice\": \"Test Box Office\" }"
+                                    "{" +
+                                            "\"productionId\": 1, " +
+                                            "\"venueId\": 1, " +
+                                            "\"festivalId\": 1, " +
+                                            "\"time\": \"2025-10-10T10:00:00\", " +
+                                            "\"description\": \"Test Performance Description\", " +
+                                            "\"standardPrice\": \"10.00\", " +
+                                            "\"concessionPrice\": \"9.00\", " +
+                                            "\"boxOffice\": \"Test Box Office\" " +
+                                            "}"
                             ))
                     .andExpect(jsonPath("$.performance.description").value("Test Performance Description"));
 
