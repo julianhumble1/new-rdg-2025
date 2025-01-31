@@ -109,8 +109,15 @@ public class ProductionIntegrationTest {
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", adminToken)
                             .content(
-                                    "{ \"name\": \"Test Production\", \"author\": \"Test Author\", \"description\": \"Test Description\", " +
-                                            "\"auditionDate\": \"2025-10-10T10:00:00\", \"sundowners\": false, \"notConfirmed\": false, \"flyerFile\": \"Test Flyer File\" }"
+                                    "{ " +
+                                            "\"name\": \"Test Production\", " +
+                                            "\"author\": \"Test Author\", " +
+                                            "\"description\": \"Test Description\", " +
+                                            "\"auditionDate\": \"2025-10-10T10:00:00\", " +
+                                            "\"sundowners\": false, " +
+                                            "\"notConfirmed\": false, " +
+                                            "\"flyerFile\": \"Test Flyer File\" " +
+                                            "}"
                             ))
                     .andExpect(status().isCreated()
                     );
@@ -122,8 +129,15 @@ public class ProductionIntegrationTest {
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", adminToken)
                             .content(
-                                    "{ \"name\": \"Test Production\", \"author\": \"Test Author\", \"description\": \"Test Description\", " +
-                                            "\"auditionDate\": \"2025-10-10T10:00:00\", \"sundowners\": false, \"notConfirmed\": false, \"flyerFile\": \"Test Flyer File\" }"
+                                    "{ " +
+                                            "\"name\": \"Test Production\", " +
+                                            "\"author\": \"Test Author\", " +
+                                            "\"description\": \"Test Description\", " +
+                                            "\"auditionDate\": \"2025-10-10T10:00:00\", " +
+                                            "\"sundowners\": false, " +
+                                            "\"notConfirmed\": false, " +
+                                            "\"flyerFile\": \"Test Flyer File\" " +
+                                            "}"
                             ))
                     .andExpect(jsonPath("$.production.name").value("Test Production")
                     );
@@ -135,8 +149,16 @@ public class ProductionIntegrationTest {
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", adminToken)
                             .content(
-                                    "{ \"name\": \"Test Production\", \"venueId\": " + testVenue1.getId() + ", \"author\": \"Test Author\", \"description\": \"Test Description\", " +
-                                            "\"auditionDate\": \"2025-10-10T10:00:00\", \"sundowners\": false, \"notConfirmed\": false, \"flyerFile\": \"Test Flyer File\" }"
+                                    "{ " +
+                                            "\"name\": \"Test Production\", " +
+                                            "\"venueId\": " + testVenue1.getId() + ", " +
+                                            "\"author\": \"Test Author\", " +
+                                            "\"description\": \"Test Description\", " +
+                                            "\"auditionDate\": \"2025-10-10T10:00:00\", " +
+                                            "\"sundowners\": false, " +
+                                            "\"notConfirmed\": false, " +
+                                            "\"flyerFile\": \"Test Flyer File\" " +
+                                            "}"
                             ))
                     .andExpect(status().isCreated()
                     );
@@ -170,8 +192,15 @@ public class ProductionIntegrationTest {
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", adminToken)
                             .content(
-                                    "{ \"name\": \"Test Production\", \"author\": \"Test Author\", \"description\": \"Test Description\", " +
-                                            "\"auditionDate\": \"2025-10-10T10:00:00\", \"sundowners\": false, \"notConfirmed\": false, \"flyerFile\": \"Test Flyer File\" }"
+                                    "{ " +
+                                            "\"name\": \"Test Production\", " +
+                                            "\"author\": \"Test Author\", " +
+                                            "\"description\": \"Test Description\", " +
+                                            "\"auditionDate\": \"2025-10-10T10:00:00\", " +
+                                            "\"sundowners\": false, " +
+                                            "\"notConfirmed\": false, " +
+                                            "\"flyerFile\": \"Test Flyer File\" " +
+                                            "}"
                             ))
                     .andExpect(jsonPath("$.production.name").value("Test Production (2)")
                     );
@@ -193,8 +222,15 @@ public class ProductionIntegrationTest {
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", adminToken)
                             .content(
-                                    "{ \"name\": \"Test Production\", \"author\": \"Test Author\", \"description\": \"Test Description\", " +
-                                            "\"auditionDate\": \"2025-10-10T10:00:00\", \"sundowners\": false, \"notConfirmed\": false, \"flyerFile\": \"Test Flyer File\" }"
+                                    "{ " +
+                                            "\"name\": \"Test Production\", " +
+                                            "\"author\": \"Test Author\", " +
+                                            "\"description\": \"Test Description\", " +
+                                            "\"auditionDate\": \"2025-10-10T10:00:00\", " +
+                                            "\"sundowners\": false, " +
+                                            "\"notConfirmed\": false, " +
+                                            "\"flyerFile\": \"Test Flyer File\" " +
+                                            "}"
                             ))
                     .andExpect(jsonPath("$.production.slug").value("test-production-2")
                     );
@@ -206,8 +242,16 @@ public class ProductionIntegrationTest {
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", adminToken)
                             .content(
-                                    "{ \"name\": \"Test Production\", \"venueId\": " + (testVenue1.getId() - 1) + ", \"author\": \"Test Author\", \"description\": \"Test Description\", " +
-                                            "\"auditionDate\": \"2025-10-10T10:00:00\", \"sundowners\": false, \"notConfirmed\": false, \"flyerFile\": \"Test Flyer File\" }"
+                                    "{ " +
+                                            "\"name\": \"Test Production\", " +
+                                            "\"venueId\": " + (testVenue1.getId() - 1) + ", " +
+                                            "\"author\": \"Test Author\", " +
+                                            "\"description\": \"Test Description\", " +
+                                            "\"auditionDate\": \"2025-10-10T10:00:00\", " +
+                                            "\"sundowners\": false, " +
+                                            "\"notConfirmed\": false, " +
+                                            "\"flyerFile\": \"Test Flyer File\" " +
+                                            "}"
                             ))
                     .andExpect(status().isBadRequest()
                     );
@@ -219,8 +263,16 @@ public class ProductionIntegrationTest {
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", adminToken)
                             .content(
-                                    "{ \"name\": \"Test Production\", \"venueId\": \"Bad Venue Id\", \"author\": \"Test Author\", \"description\": \"Test Description\", " +
-                                            "\"auditionDate\": \"2025-10-10T10:00:00\", \"sundowners\": false, \"notConfirmed\": false, \"flyerFile\": \"Test Flyer File\" }"
+                                    "{ " +
+                                            "\"name\": \"Test Production\", " +
+                                            "\"venueId\": \"Bad Venue Id\", " +
+                                            "\"author\": \"Test Author\", " +
+                                            "\"description\": \"Test Description\", " +
+                                            "\"auditionDate\": \"2025-10-10T10:00:00\", " +
+                                            "\"sundowners\": false, " +
+                                            "\"notConfirmed\": false, " +
+                                            "\"flyerFile\": \"Test Flyer File\" " +
+                                            "}"
                             ))
                     .andExpect(status().isBadRequest()
                     );
@@ -232,8 +284,16 @@ public class ProductionIntegrationTest {
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", adminToken)
                             .content(
-                                    "{ \"name\": \"Test Production\", \"venueId\": " + testVenue1.getId() + ", \"author\": \"Test Author\", \"description\": \"Test Description\", " +
-                                            "\"auditionDate\": \"Bad Date\", \"sundowners\": false, \"notConfirmed\": false, \"flyerFile\": \"Test Flyer File\" }"
+                                    "{ " +
+                                            "\"name\": \"Test Production\", " +
+                                            "\"venueId\": " + testVenue1.getId() + ", " +
+                                            "\"author\": \"Test Author\", " +
+                                            "\"description\": \"Test Description\", " +
+                                            "\"auditionDate\": \"Bad Date\", " +
+                                            "\"sundowners\": false, " +
+                                            "\"notConfirmed\": false, " +
+                                            "\"flyerFile\": \"Test Flyer File\" " +
+                                            "}"
                             ))
                     .andExpect(status().isBadRequest()
                     );
@@ -245,8 +305,16 @@ public class ProductionIntegrationTest {
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", adminToken)
                             .content(
-                                    "{ \"name\": \"Test Production\", \"venueId\": " + testVenue1.getId() + ", \"author\": \"Test Author\", \"description\": \"Test Description\", " +
-                                            "\"auditionDate\": \"2025-10-10T10:00:00\", \"sundowners\": \"Bad Boolean\", \"notConfirmed\": false, \"flyerFile\": \"Test Flyer File\" }"
+                                    "{ " +
+                                            "\"name\": \"Test Production\", " +
+                                            "\"venueId\": " + testVenue1.getId() + ", " +
+                                            "\"author\": \"Test Author\", " +
+                                            "\"description\": \"Test Description\", " +
+                                            "\"auditionDate\": \"2025-10-10T10:00:00\", " +
+                                            "\"sundowners\": \"Bad Boolean\", " +
+                                            "\"notConfirmed\": false, " +
+                                            "\"flyerFile\": \"Test Flyer File\" " +
+                                            "}"
                             ))
                     .andExpect(status().isBadRequest()
                     );
@@ -258,8 +326,16 @@ public class ProductionIntegrationTest {
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", adminToken)
                             .content(
-                                    "{ \"name\": \"Test Production\", \"venueId\": " + testVenue1.getId() + ", \"author\": \"Test Author\", \"description\": \"Test Description\", " +
-                                            "\"auditionDate\": \"2025-10-10T10:00:00\", \"sundowners\": false, \"notConfirmed\": \"Bad Boolean\", \"flyerFile\": \"Test Flyer File\" }"
+                                    "{ " +
+                                            "\"name\": \"Test Production\", " +
+                                            "\"venueId\": " + testVenue1.getId() + ", " +
+                                            "\"author\": \"Test Author\", " +
+                                            "\"description\": \"Test Description\", " +
+                                            "\"auditionDate\": \"2025-10-10T10:00:00\", " +
+                                            "\"sundowners\": false, " +
+                                            "\"notConfirmed\": \"Bad Boolean\", " +
+                                            "\"flyerFile\": \"Test Flyer File\" " +
+                                            "}"
                             ))
                     .andExpect(status().isBadRequest()
                     );
@@ -270,8 +346,16 @@ public class ProductionIntegrationTest {
             mockMvc.perform(post("/productions")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(
-                                    "{ \"name\": \"Test Production\", \"venueId\": " + testVenue1.getId() + ", \"author\": \"Test Author\", \"description\": \"Test Description\", " +
-                                            "\"auditionDate\": \"2025-10-10T10:00:00\", \"sundowners\": false, \"notConfirmed\": false, \"flyerFile\": \"Test Flyer File\" }"
+                                    "{ " +
+                                            "\"name\": \"Test Production\", " +
+                                            "\"venueId\": " + testVenue1.getId() + ", " +
+                                            "\"author\": \"Test Author\", " +
+                                            "\"description\": \"Test Description\", " +
+                                            "\"auditionDate\": \"2025-10-10T10:00:00\", " +
+                                            "\"sundowners\": false, " +
+                                            "\"notConfirmed\": false, " +
+                                            "\"flyerFile\": \"Test Flyer File\" " +
+                                            "}"
                             ))
                     .andExpect(status().isUnauthorized()
                     );
@@ -283,8 +367,16 @@ public class ProductionIntegrationTest {
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", "Bad Token")
                             .content(
-                                    "{ \"name\": \"Test Production\", \"venueId\": " + testVenue1.getId() + ", \"author\": \"Test Author\", \"description\": \"Test Description\", " +
-                                            "\"auditionDate\": \"2025-10-10T10:00:00\", \"sundowners\": false, \"notConfirmed\": false, \"flyerFile\": \"Test Flyer File\" }"
+                                    "{ " +
+                                            "\"name\": \"Test Production\", " +
+                                            "\"venueId\": " + testVenue1.getId() + ", " +
+                                            "\"author\": \"Test Author\", " +
+                                            "\"description\": \"Test Description\", " +
+                                            "\"auditionDate\": \"2025-10-10T10:00:00\", " +
+                                            "\"sundowners\": false, " +
+                                            "\"notConfirmed\": false, " +
+                                            "\"flyerFile\": \"Test Flyer File\" " +
+                                            "}"
                             ))
                     .andExpect(status().isUnauthorized()
                     );
@@ -296,8 +388,16 @@ public class ProductionIntegrationTest {
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", userToken)
                             .content(
-                                    "{ \"name\": \"Test Production\", \"venueId\": " + testVenue1.getId() + ", \"author\": \"Test Author\", \"description\": \"Test Description\", " +
-                                            "\"auditionDate\": \"2025-10-10T10:00:00\", \"sundowners\": false, \"notConfirmed\": false, \"flyerFile\": \"Test Flyer File\" }"
+                                    "{ " +
+                                            "\"name\": \"Test Production\", " +
+                                            "\"venueId\": " + testVenue1.getId() + ", " +
+                                            "\"author\": \"Test Author\", " +
+                                            "\"description\": \"Test Description\", " +
+                                            "\"auditionDate\": \"2025-10-10T10:00:00\", " +
+                                            "\"sundowners\": false, " +
+                                            "\"notConfirmed\": false, " +
+                                            "\"flyerFile\": \"Test Flyer File\" " +
+                                            "}"
                             ))
                     .andExpect(status().isForbidden()
                     );
@@ -446,8 +546,16 @@ public class ProductionIntegrationTest {
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", adminToken)
                             .content(
-                                    "{ \"name\": \"Updated Test Production\", \"venueId\": " + managedTestVenue2.getId() +  ", \"author\": \"Updated Test Author\", \"description\": \"Updated Test Description\", " +
-                                            "\"auditionDate\": \"2025-11-10T10:00:00\", \"sundowners\": true, \"notConfirmed\": true, \"flyerFile\": \"Updated Test Flyer File\" }"
+                                    "{ " +
+                                            "\"name\": \"Updated Test Production\", " +
+                                            "\"venueId\": " + managedTestVenue2.getId() +  ", " +
+                                            "\"author\": \"Updated Test Author\", " +
+                                            "\"description\": \"Updated Test Description\", " +
+                                            "\"auditionDate\": \"2025-11-10T10:00:00\", " +
+                                            "\"sundowners\": true, " +
+                                            "\"notConfirmed\": true, " +
+                                            "\"flyerFile\": \"Updated Test Flyer File\" " +
+                                            "}"
                             ))
                     .andExpect(status().isOk());
         }
@@ -462,8 +570,16 @@ public class ProductionIntegrationTest {
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", adminToken)
                             .content(
-                                    "{ \"name\": \"Updated Test Production\", \"venueId\": " + managedTestVenue2.getId() +  ", \"author\": \"Updated Test Author\", \"description\": \"Updated Test Description\", " +
-                                            "\"auditionDate\": \"2025-11-10T10:00:00\", \"sundowners\": true, \"notConfirmed\": true, \"flyerFile\": \"Updated Test Flyer File\" }"
+                                    "{ " +
+                                            "\"name\": \"Updated Test Production\", " +
+                                            "\"venueId\": " + managedTestVenue2.getId() +  ", " +
+                                            "\"author\": \"Updated Test Author\", " +
+                                            "\"description\": \"Updated Test Description\", " +
+                                            "\"auditionDate\": \"2025-11-10T10:00:00\", " +
+                                            "\"sundowners\": true, " +
+                                            "\"notConfirmed\": true, " +
+                                            "\"flyerFile\": \"Updated Test Flyer File\" " +
+                                            "}"
                             ))
                     .andExpect(jsonPath("$.production.name").value("Updated Test Production"))
                     .andExpect(jsonPath("$.production.venue.id").value(managedTestVenue2.getId()))
@@ -527,7 +643,10 @@ public class ProductionIntegrationTest {
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", adminToken)
                             .content(
-                                    "{ \"name\": \"Existing Production\", \"venueId\": " + (managedTestVenue2.getId() + 1) +  "}"
+                                    "{ " +
+                                            "\"name\": \"Existing Production\", " +
+                                            "\"venueId\": " + (managedTestVenue2.getId() + 1) +
+                                            "}"
                             ))
                     .andExpect(status().isNotFound());
         }
@@ -542,7 +661,10 @@ public class ProductionIntegrationTest {
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", adminToken)
                             .content(
-                                    "{ \"name\": \"Existing Production\", \"venueId\": " + managedTestVenue2.getId() +  "}"
+                                    "{ " +
+                                            "\"name\": \"Existing Production\", " +
+                                            "\"venueId\": " + managedTestVenue2.getId() +
+                                            "}"
                             ))
                     .andExpect(status().isNotFound());
         }
@@ -556,8 +678,16 @@ public class ProductionIntegrationTest {
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", adminToken)
                             .content(
-                                    "{ \"name\": \"Updated Test Production\", \"venueId\": " + managedTestVenue2.getId() +  ", \"author\": \"Updated Test Author\", \"description\": \"Updated Test Description\", " +
-                                            "\"auditionDate\": \"2025-11-10T10:00:00\", \"sundowners\": true, \"notConfirmed\": true, \"flyerFile\": \"Updated Test Flyer File\" }"
+                                    "{ " +
+                                            "\"name\": \"Updated Test Production\", " +
+                                            "\"venueId\": " + managedTestVenue2.getId() +  ", " +
+                                            "\"author\": \"Updated Test Author\", " +
+                                            "\"description\": \"Updated Test Description\", " +
+                                            "\"auditionDate\": \"2025-11-10T10:00:00\", " +
+                                            "\"sundowners\": true, " +
+                                            "\"notConfirmed\": true, " +
+                                            "\"flyerFile\": \"Updated Test Flyer File\" " +
+                                            "}"
                             ))
                     .andExpect(status().isBadRequest());
         }
@@ -571,8 +701,16 @@ public class ProductionIntegrationTest {
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", adminToken)
                             .content(
-                                    "{ \"name\": \"Updated Test Production\", \"venueId\": " + managedTestVenue2.getId() +  ", \"author\": \"Updated Test Author\", \"description\": \"Updated Test Description\", " +
-                                            "\"auditionDate\": \"2025-11-10T10:00:00\", \"sundowners\": true, \"notConfirmed\": true, \"flyerFile\": \"Updated Test Flyer File\" }"
+                                    "{ " +
+                                            "\"name\": \"Updated Test Production\", " +
+                                            "\"venueId\": " + managedTestVenue2.getId() +  ", " +
+                                            "\"author\": \"Updated Test Author\", " +
+                                            "\"description\": \"Updated Test Description\", " +
+                                            "\"auditionDate\": \"2025-11-10T10:00:00\", " +
+                                            "\"sundowners\": true, " +
+                                            "\"notConfirmed\": true, " +
+                                            "\"flyerFile\": \"Updated Test Flyer File\" " +
+                                            "}"
                             ))
                     .andExpect(status().isNotFound());
         }
@@ -586,8 +724,16 @@ public class ProductionIntegrationTest {
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", adminToken)
                             .content(
-                                    "{ \"name\": \"Updated Test Production\", \"venueId\": " + "\"not an integer\"" +  ", \"author\": \"Updated Test Author\", \"description\": \"Updated Test Description\", " +
-                                            "\"auditionDate\": \"2025-11-10T10:00:00\", \"sundowners\": true, \"notConfirmed\": true, \"flyerFile\": \"Updated Test Flyer File\" }"
+                                    "{ " +
+                                            "\"name\": \"Updated Test Production\", " +
+                                            "\"venueId\": " + "\"not an integer\"" +  ", " +
+                                            "\"author\": \"Updated Test Author\", " +
+                                            "\"description\": \"Updated Test Description\", " +
+                                            "\"auditionDate\": \"2025-11-10T10:00:00\", " +
+                                            "\"sundowners\": true, " +
+                                            "\"notConfirmed\": true, " +
+                                            "\"flyerFile\": \"Updated Test Flyer File\" " +
+                                            "}"
                             ))
                     .andExpect(status().isBadRequest());
         }
@@ -601,8 +747,16 @@ public class ProductionIntegrationTest {
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", adminToken)
                             .content(
-                                    "{ \"name\": \"Updated Test Production\", \"venueId\": " + managedTestVenue2.getId() +  ", \"author\": \"Updated Test Author\", \"description\": \"Updated Test Description\", " +
-                                            "\"auditionDate\": \"not a date\", \"sundowners\": true, \"notConfirmed\": true, \"flyerFile\": \"Updated Test Flyer File\" }"
+                                    "{ " +
+                                            "\"name\": \"Updated Test Production\", " +
+                                            "\"venueId\": " + managedTestVenue2.getId() +  ", " +
+                                            "\"author\": \"Updated Test Author\", " +
+                                            "\"description\": \"Updated Test Description\", " +
+                                            "\"auditionDate\": \"not a date\", " +
+                                            "\"sundowners\": true, " +
+                                            "\"notConfirmed\": true, " +
+                                            "\"flyerFile\": \"Updated Test Flyer File\" " +
+                                            "}"
                             ))
                     .andExpect(status().isBadRequest());
         }
@@ -616,8 +770,16 @@ public class ProductionIntegrationTest {
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", adminToken)
                             .content(
-                                    "{ \"name\": \"Updated Test Production\", \"venueId\": " + managedTestVenue2.getId() +  ", \"author\": \"Updated Test Author\", \"description\": \"Updated Test Description\", " +
-                                            "\"auditionDate\": \"2025-11-10T10:00:00\", \"sundowners\": \"not a boolean\", \"notConfirmed\": true, \"flyerFile\": \"Updated Test Flyer File\" }"
+                                    "{ " +
+                                            "\"name\": \"Updated Test Production\", " +
+                                            "\"venueId\": " + managedTestVenue2.getId() +  ", " +
+                                            "\"author\": \"Updated Test Author\", " +
+                                            "\"description\": \"Updated Test Description\", " +
+                                            "\"auditionDate\": \"2025-11-10T10:00:00\", " +
+                                            "\"sundowners\": \"not a boolean\", " +
+                                            "\"notConfirmed\": true, " +
+                                            "\"flyerFile\": \"Updated Test Flyer File\" " +
+                                            "}"
                             ))
                     .andExpect(status().isBadRequest());
         }
@@ -631,8 +793,16 @@ public class ProductionIntegrationTest {
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", adminToken)
                             .content(
-                                    "{ \"name\": \"Updated Test Production\", \"venueId\": " + managedTestVenue2.getId() +  ", \"author\": \"Updated Test Author\", \"description\": \"Updated Test Description\", " +
-                                            "\"auditionDate\": \"2025-11-10T10:00:00\", \"sundowners\": true, \"notConfirmed\": \"not a boolean\", \"flyerFile\": \"Updated Test Flyer File\" }"
+                                    "{ " +
+                                            "\"name\": \"Updated Test Production\", " +
+                                            "\"venueId\": " + managedTestVenue2.getId() +  ", " +
+                                            "\"author\": \"Updated Test Author\", " +
+                                            "\"description\": \"Updated Test Description\", " +
+                                            "\"auditionDate\": \"2025-11-10T10:00:00\", " +
+                                            "\"sundowners\": true, " +
+                                            "\"notConfirmed\": \"not a boolean\", " +
+                                            "\"flyerFile\": \"Updated Test Flyer File\" " +
+                                            "}"
                             ))
                     .andExpect(status().isBadRequest());
         }
@@ -646,8 +816,16 @@ public class ProductionIntegrationTest {
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", adminToken)
                             .content(
-                                    "{ \"name\": \"\", \"venueId\": " + managedTestVenue2.getId() +  ", \"author\": \"Updated Test Author\", \"description\": \"Updated Test Description\", " +
-                                            "\"auditionDate\": \"2025-11-10T10:00:00\", \"sundowners\": true, \"notConfirmed\": true, \"flyerFile\": \"Updated Test Flyer File\" }"
+                                    "{ " +
+                                            "\"name\": \"\", " +
+                                            "\"venueId\": " + managedTestVenue2.getId() +  ", " +
+                                            "\"author\": \"Updated Test Author\", " +
+                                            "\"description\": \"Updated Test Description\", " +
+                                            "\"auditionDate\": \"2025-11-10T10:00:00\", " +
+                                            "\"sundowners\": true, " +
+                                            "\"notConfirmed\": true, " +
+                                            "\"flyerFile\": \"Updated Test Flyer File\" " +
+                                            "}"
                             ))
                     .andExpect(status().isBadRequest());
         }
@@ -661,8 +839,15 @@ public class ProductionIntegrationTest {
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", adminToken)
                             .content(
-                                    "{ \"venueId\": " + managedTestVenue2.getId() +  ", \"author\": \"Updated Test Author\", \"description\": \"Updated Test Description\", " +
-                                            "\"auditionDate\": \"2025-11-10T10:00:00\", \"sundowners\": true, \"notConfirmed\": true, \"flyerFile\": \"Updated Test Flyer File\" }"
+                                    "{ " +
+                                            "\"venueId\": " + managedTestVenue2.getId() +  ", " +
+                                            "\"author\": \"Updated Test Author\", " +
+                                            "\"description\": \"Updated Test Description\", " +
+                                            "\"auditionDate\": \"2025-11-10T10:00:00\", " +
+                                            "\"sundowners\": true, " +
+                                            "\"notConfirmed\": true, " +
+                                            "\"flyerFile\": \"Updated Test Flyer File\" " +
+                                            "}"
                             ))
                     .andExpect(status().isBadRequest());
         }
@@ -676,8 +861,16 @@ public class ProductionIntegrationTest {
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", userToken)
                             .content(
-                                    "{ \"name\": \"Updated Test Production\", \"venueId\": " + managedTestVenue2.getId() +  ", \"author\": \"Updated Test Author\", \"description\": \"Updated Test Description\", " +
-                                            "\"auditionDate\": \"2025-11-10T10:00:00\", \"sundowners\": true, \"notConfirmed\": true, \"flyerFile\": \"Updated Test Flyer File\" }"
+                                    "{ " +
+                                            "\"name\": \"Updated Test Production\", " +
+                                            "\"venueId\": " + managedTestVenue2.getId() +  ", " +
+                                            "\"author\": \"Updated Test Author\", " +
+                                            "\"description\": \"Updated Test Description\", " +
+                                            "\"auditionDate\": \"2025-11-10T10:00:00\", " +
+                                            "\"sundowners\": true, " +
+                                            "\"notConfirmed\": true, " +
+                                            "\"flyerFile\": \"Updated Test Flyer File\" " +
+                                            "}"
                             ))
                     .andExpect(status().isForbidden());
         }
@@ -690,8 +883,16 @@ public class ProductionIntegrationTest {
             mockMvc.perform(patch("/productions/" + testExistingProduction.getId())
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(
-                                    "{ \"name\": \"Updated Test Production\", \"venueId\": " + managedTestVenue2.getId() +  ", \"author\": \"Updated Test Author\", \"description\": \"Updated Test Description\", " +
-                                            "\"auditionDate\": \"2025-11-10T10:00:00\", \"sundowners\": true, \"notConfirmed\": true, \"flyerFile\": \"Updated Test Flyer File\" }"
+                                    "{ " +
+                                            "\"name\": \"Updated Test Production\", " +
+                                            "\"venueId\": " + managedTestVenue2.getId() +  ", " +
+                                            "\"author\": \"Updated Test Author\", " +
+                                            "\"description\": \"Updated Test Description\", " +
+                                            "\"auditionDate\": \"2025-11-10T10:00:00\", " +
+                                            "\"sundowners\": true, " +
+                                            "\"notConfirmed\": true, " +
+                                            "\"flyerFile\": \"Updated Test Flyer File\" " +
+                                            "}"
                             ))
                     .andExpect(status().isUnauthorized());
         }
