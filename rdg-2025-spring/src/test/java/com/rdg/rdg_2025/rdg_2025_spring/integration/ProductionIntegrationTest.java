@@ -93,12 +93,6 @@ public class ProductionIntegrationTest {
         venueRepository.deleteAll();
     }
 
-    @BeforeEach
-    public void setup() {productionRepository.deleteAll();}
-
-    @AfterEach
-    public void cleanup() {productionRepository.deleteAll();}
-
     @Nested
     @DisplayName("POST add new production integration tests")
     class AddNewProductionIntegrationTests {
@@ -121,6 +115,34 @@ public class ProductionIntegrationTest {
                             ))
                     .andExpect(status().isCreated()
                     );
+        }
+
+        @Test
+        void testProductionInDatabaseFollowingSuccessfulAdd() throws Exception {
+            // Arrange
+            List<Production> productions = productionRepository.findAll();
+            int startingLength = productions.size();
+
+            // Act
+            mockMvc.perform(post("/productions")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", adminToken)
+                            .content(
+                                    "{ " +
+                                            "\"name\": \"Test Production\", " +
+                                            "\"author\": \"Test Author\", " +
+                                            "\"description\": \"Test Description\", " +
+                                            "\"auditionDate\": \"2025-10-10T10:00:00\", " +
+                                            "\"sundowners\": false, " +
+                                            "\"notConfirmed\": false, " +
+                                            "\"flyerFile\": \"Test Flyer File\" " +
+                                            "}"
+                            ))
+                    .andExpect(status().isCreated()
+                    );
+            productions = productionRepository.findAll();
+            // Assert
+            assertEquals(startingLength + 1, productions.size());
         }
 
         @Test

@@ -1,6 +1,7 @@
 package com.rdg.rdg_2025.rdg_2025_spring.integration;
 
 import com.rdg.rdg_2025.rdg_2025_spring.models.Festival;
+import com.rdg.rdg_2025.rdg_2025_spring.models.Production;
 import com.rdg.rdg_2025.rdg_2025_spring.models.User;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Venue;
 import com.rdg.rdg_2025.rdg_2025_spring.repository.FestivalRepository;
@@ -22,6 +23,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -88,11 +92,6 @@ public class FestivalIntegrationTest {
         venueRepository.deleteAll();
     }
 
-    @BeforeEach
-    public void setup() {festivalRepository.deleteAll();}
-
-    @AfterEach
-    public void cleanup() {festivalRepository.deleteAll();}
 
     @Nested
     @DisplayName("POST add new festival integration tests")
@@ -151,6 +150,31 @@ public class FestivalIntegrationTest {
                                             "}"
                             ))
                     .andExpect(status().isCreated());
+        }
+
+        @Test
+        void testProductionInDatabaseFollowingSuccessfulAdd() throws Exception {
+            // Arrange
+            int testVenueId = testVenue1.getId();
+            List<Festival> festivals = festivalRepository.findAll();
+            int startingLength = festivals.size();
+            // Act
+            mockMvc.perform(post("/festivals")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .header("Authorization", adminToken)
+                    .content(
+                            "{" +
+                                    "\"name\": \"Test Festival\", " +
+                                    "\"venueId\": " + testVenueId + ", " +
+                                    "\"year\": 2025, " +
+                                    "\"month\": 1, " +
+                                    "\"description\": \"Test Description\"" +
+                                    "}"
+                    ));
+            festivals = festivalRepository.findAll();
+            // Assert
+            assertEquals(startingLength + 1, festivals.size());
+
         }
 
         @Test

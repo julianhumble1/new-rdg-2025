@@ -21,6 +21,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -29,6 +31,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Transactional
 @ActiveProfiles("test")
 public class PerformanceIntegrationTest {
+
+    @Autowired
+    private PerformanceRepository performanceRepository;
 
     @Autowired
     private MockMvc mockMvc;
@@ -143,7 +148,11 @@ public class PerformanceIntegrationTest {
         }
 
         @Test
-        void testPerformanceInDatabaseFollowingSuccessfulAdd(@Autowired PerformanceRepository performanceRepository) throws Exception {
+        void testPerformanceInDatabaseFollowingSuccessfulAdd() throws Exception {
+            // Arrange
+            List<Performance> performanceList = performanceRepository.findAll();
+            int startingLength = performanceList.size();
+
             // Act
             mockMvc.perform(post("/performances")
                             .contentType(MediaType.APPLICATION_JSON)
@@ -161,8 +170,8 @@ public class PerformanceIntegrationTest {
                                             "}"
                             ));
             // Assert
-            List<Performance> performanceList = performanceRepository.findAll();
-            assert(!performanceList.isEmpty());
+            performanceList = performanceRepository.findAll();
+            assertEquals(startingLength + 1, performanceList.size());
         }
 
     }

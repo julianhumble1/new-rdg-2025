@@ -69,14 +69,8 @@ public class VenueControllerTest {
             mockMvc.perform(post("/venues")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(
-                            "{ " +
-                                    "\"name\": \"Test Venue\", " +
-                                    "\"notes\": \"Test Notes\", " +
-                                    "\"postcode\": \"Test Postcode\", " +
-                                    "\"address\": \"Test Address\", " +
-                                    "\"town\": \"Test Town\", " +
-                                    "\"url\": \"www.test.com\" " +
-                                    "}"
+                            "{ \"name\": \"Test Venue\", \"notes\": \"Test Notes\", \"postcode\": \"Test Postcode\", \"address\": \"Test Address\", " +
+                                    "\"town\": \"Test Town\", \"url\": \"www.test.com\" }"
                     ))
                     .andExpect(status().isCreated()
                     );
@@ -94,14 +88,8 @@ public class VenueControllerTest {
             mockMvc.perform(post("/venues")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(
-                                    "{ " +
-                                            "\"name\": \"Test Venue\", " +
-                                            "\"notes\": \"Test Notes\", " +
-                                            "\"postcode\": \"Test Postcode\", " +
-                                            "\"address\": \"Test Address\", " +
-                                            "\"town\": \"Test Town\", " +
-                                            "\"url\": \"www.test.com\" " +
-                                            "}"
+                                    "{ \"name\": \"Test Venue\", \"notes\": \"Test Notes\", \"postcode\": \"Test Postcode\", \"address\": \"Test Address\", " +
+                                            "\"town\": \"Test Town\", \"url\": \"www.test.com\" }"
                             ))
                     .andExpect(header().string("Location", "/venues/" + testVenueId)
                     );
@@ -118,14 +106,8 @@ public class VenueControllerTest {
             mockMvc.perform(post("/venues")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(
-                                    "{ " +
-                                            "\"name\": \"Test Venue\", " +
-                                            "\"notes\": \"Test Notes\", " +
-                                            "\"postcode\": \"Test Postcode\", " +
-                                            "\"address\": \"Test Address\", " +
-                                            "\"town\": \"Test Town\", " +
-                                            "\"url\": \"www.test.com\" " +
-                                            "}"
+                                    "{ \"name\": \"Test Venue\", \"notes\": \"Test Notes\", \"postcode\": \"Test Postcode\", \"address\": \"Test Address\", " +
+                                            "\"town\": \"Test Town\", \"url\": \"www.test.com\" }"
                             ))
                             .andExpect(jsonPath("$.venue.id").isNotEmpty())
                             .andExpect(jsonPath("$.venue.name").value(testVenue.getName()))
@@ -152,14 +134,8 @@ public class VenueControllerTest {
             mockMvc.perform(post("/venues")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(
-                                    "{ " +
-                                            "\"name\": \"Test Venue\", " +
-                                            "\"notes\": \"Test Notes\", " +
-                                            "\"postcode\": \"Test Postcode\", " +
-                                            "\"address\": \"Test Address\", " +
-                                            "\"town\": \"Test Town\", " +
-                                            "\"url\": \"www.test.com\" " +
-                                            "}"
+                                    "{ \"name\": \"Test Venue\", \"notes\": \"Test Notes\", \"postcode\": \"Test Postcode\", \"address\": \"Test Address\", " +
+                                            "\"town\": \"Test Town\", \"url\": \"www.test.com\" }"
                             ))
                     .andExpect(status().isConflict()
                     );
@@ -176,14 +152,8 @@ public class VenueControllerTest {
             mockMvc.perform(post("/venues")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(
-                                    "{ " +
-                                            "\"name\": \"Test Venue\", " +
-                                            "\"notes\": \"Test Notes\", " +
-                                            "\"postcode\": \"Test Postcode\", " +
-                                            "\"address\": \"Test Address\", " +
-                                            "\"town\": \"Test Town\", " +
-                                            "\"url\": \"www.test.com\" " +
-                                            "}"
+                                    "{ \"name\": \"Test Venue\", \"notes\": \"Test Notes\", \"postcode\": \"Test Postcode\", \"address\": \"Test Address\", " +
+                                            "\"town\": \"Test Town\", \"url\": \"www.test.com\" }"
                             ))
                     .andExpect(status().isInternalServerError()
                     );
@@ -197,14 +167,8 @@ public class VenueControllerTest {
             mockMvc.perform(post("/venues")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(
-                                    "{ " +
-                                            "\"name\": \"\", " +
-                                            "\"notes\": \"Test Notes\", " +
-                                            "\"postcode\": \"Test Postcode\", " +
-                                            "\"address\": \"Test Address\", " +
-                                            "\"town\": \"Test Town\", " +
-                                            "\"url\": \"www.test.com\" " +
-                                            "}"
+                                    "{ \"name\": \"\", \"notes\": \"Test Notes\", \"postcode\": \"Test Postcode\", \"address\": \"Test Address\", " +
+                                            "\"town\": \"Test Town\", \"url\": \"www.test.com\" }"
                             ))
                     .andExpect(status().isBadRequest()
                     );
@@ -218,13 +182,8 @@ public class VenueControllerTest {
             mockMvc.perform(post("/venues")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(
-                                    "{ " +
-                                            "\"notes\": \"Test Notes\", " +
-                                            "\"postcode\": \"Test Postcode\", " +
-                                            "\"address\": \"Test Address\", " +
-                                            "\"town\": \"Test Town\", " +
-                                            "\"url\": \"www.test.com\" " +
-                                            "}"
+                                    "{ \"notes\": \"Test Notes\", \"postcode\": \"Test Postcode\", \"address\": \"Test Address\", " +
+                                            "\"town\": \"Test Town\", \"url\": \"www.test.com\" }"
                             ))
                     .andExpect(status().isBadRequest()
                     );
@@ -258,13 +217,8 @@ public class VenueControllerTest {
             mockMvc.perform(post("/venues")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(
-                                    "{ \"name\": \"Test Venue\", " +
-                                            "\"notes\": \"\", " +
-                                            "\"postcode\": \"\", " +
-                                            "\"address\": \"\", " +
-                                            "\"town\": \"\", " +
-                                            "\"url\": \"\" " +
-                                            "}"
+                                    "{ \"name\": \"Test Venue\", \"notes\": \"\", \"postcode\": \"\", \"address\": \"\", " +
+                                            "\"town\": \"\", \"url\": \"\" }"
                             ))
                     .andExpect(status().isCreated()
                     );
@@ -318,7 +272,7 @@ public class VenueControllerTest {
 
     @Nested
     @DisplayName("deleteVenueById Controller Tests")
-    class DeleteVenueByIdControllerTests {
+    class DeleteVenueByControllerTests {
 
         @Test
         @WithMockUser(roles = "ADMIN")
@@ -457,15 +411,8 @@ public class VenueControllerTest {
             mockMvc.perform(patch("/venues/1")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(
-                            "{ " +
-                                    "\"name\": \"Updated Test Venue\", " +
-                                    "\"notes\": \"Updated Test Notes\", " +
-                                    "\"postcode\": \"Updated Test Postcode\", " +
-                                    "\"address\": \"Updated Test Address\", " +
-                                    "\"town\": \"Updated Test Town\", " +
-                                    "\"url\": \"www.updatedtest.com\" " +
-                                    "}"
-                    ))
+                    "{ \"name\": \"Updated Test Venue\", \"notes\": \"Updated Test Notes\", \"postcode\": \"Updated Test Postcode\", \"address\": \"Updated Test Address\", " +
+                            "\"town\": \"Updated Test Town\", \"url\": \"www.updatedtest.com\" }"))
                     .andExpect(status().isOk());
         }
 
@@ -479,15 +426,8 @@ public class VenueControllerTest {
             mockMvc.perform(patch("/venues/1")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(
-                                    "{ " +
-                                            "\"name\": \"Updated Test Venue\", " +
-                                            "\"notes\": \"Updated Test Notes\", " +
-                                            "\"postcode\": \"Updated Test Postcode\", " +
-                                            "\"address\": \"Updated Test Address\", " +
-                                            "\"town\": \"Updated Test Town\", " +
-                                            "\"url\": \"www.updatedtest.com\" " +
-                                            "}"
-                            ))
+                                    "{ \"name\": \"Updated Test Venue\", \"notes\": \"Updated Test Notes\", \"postcode\": \"Updated Test Postcode\", \"address\": \"Updated Test Address\", " +
+                                            "\"town\": \"Updated Test Town\", \"url\": \"www.updatedtest.com\" }"))
                     .andExpect(jsonPath("$.venue.name").value("Test Venue"));
         }
 
@@ -500,15 +440,8 @@ public class VenueControllerTest {
             mockMvc.perform(patch("/venues/1")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(
-                                    "{ " +
-                                            "\"name\": \"Updated Test Venue\", " +
-                                            "\"notes\": \"Updated Test Notes\", " +
-                                            "\"postcode\": \"Updated Test Postcode\", " +
-                                            "\"address\": \"Updated Test Address\", " +
-                                            "\"town\": \"Updated Test Town\", " +
-                                            "\"url\": \"www.updatedtest.com\" " +
-                                            "}"
-                            ))
+                                    "{ \"name\": \"Updated Test Venue\", \"notes\": \"Updated Test Notes\", \"postcode\": \"Updated Test Postcode\", \"address\": \"Updated Test Address\", " +
+                                            "\"town\": \"Updated Test Town\", \"url\": \"www.updatedtest.com\" }"))
                     .andExpect(status().isInternalServerError());
         }
 
@@ -522,15 +455,8 @@ public class VenueControllerTest {
             mockMvc.perform(patch("/venues/1")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(
-                                    "{ " +
-                                            "\"name\": \"Updated Test Venue\", " +
-                                            "\"notes\": \"Updated Test Notes\", " +
-                                            "\"postcode\": \"Updated Test Postcode\", " +
-                                            "\"address\": \"Updated Test Address\", " +
-                                            "\"town\": \"Updated Test Town\", " +
-                                            "\"url\": \"www.updatedtest.com\" " +
-                                            "}"
-                            ))
+                                    "{ \"name\": \"Updated Test Venue\", \"notes\": \"Updated Test Notes\", \"postcode\": \"Updated Test Postcode\", \"address\": \"Updated Test Address\", " +
+                                            "\"town\": \"Updated Test Town\", \"url\": \"www.updatedtest.com\" }"))
                     .andExpect(status().isConflict());
         }
 
@@ -544,15 +470,8 @@ public class VenueControllerTest {
             mockMvc.perform(patch("/venues/1")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(
-                                    "{ " +
-                                            "\"name\": \"Updated Test Venue\", " +
-                                            "\"notes\": \"Updated Test Notes\", " +
-                                            "\"postcode\": \"Updated Test Postcode\", " +
-                                            "\"address\": \"Updated Test Address\", " +
-                                            "\"town\": \"Updated Test Town\", " +
-                                            "\"url\": \"www.updatedtest.com\" " +
-                                            "}"
-                            ))
+                                    "{ \"name\": \"Updated Test Venue\", \"notes\": \"Updated Test Notes\", \"postcode\": \"Updated Test Postcode\", \"address\": \"Updated Test Address\", " +
+                                            "\"town\": \"Updated Test Town\", \"url\": \"www.updatedtest.com\" }"))
                     .andExpect(status().isNotFound());
         }
 
@@ -565,15 +484,8 @@ public class VenueControllerTest {
             mockMvc.perform(patch("/venues/badVenueId")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(
-                                    "{ " +
-                                            "\"name\": \"Updated Test Venue\", " +
-                                            "\"notes\": \"Updated Test Notes\", " +
-                                            "\"postcode\": \"Updated Test Postcode\", " +
-                                            "\"address\": \"Updated Test Address\", " +
-                                            "\"town\": \"Updated Test Town\", " +
-                                            "\"url\": \"www.updatedtest.com\" " +
-                                            "}"
-                            ))
+                                    "{ \"name\": \"Updated Test Venue\", \"notes\": \"Updated Test Notes\", \"postcode\": \"Updated Test Postcode\", \"address\": \"Updated Test Address\", " +
+                                            "\"town\": \"Updated Test Town\", \"url\": \"www.updatedtest.com\" }"))
                     .andExpect(status().isBadRequest());
         }
 
@@ -586,15 +498,8 @@ public class VenueControllerTest {
             mockMvc.perform(patch("/venues/1")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(
-                                    "{ " +
-                                            "\"name\": \"\", " +
-                                            "\"notes\": \"Updated Test Notes\", " +
-                                            "\"postcode\": \"Updated Test Postcode\", " +
-                                            "\"address\": \"Updated Test Address\", " +
-                                            "\"town\": \"Updated Test Town\", " +
-                                            "\"url\": \"www.updatedtest.com\" " +
-                                            "}"
-                            ))
+                                    "{ \"name\": \"\", \"notes\": \"Updated Test Notes\", \"postcode\": \"Updated Test Postcode\", \"address\": \"Updated Test Address\", " +
+                                            "\"town\": \"Updated Test Town\", \"url\": \"www.updatedtest.com\" }"))
                     .andExpect(status().isBadRequest());
         }
 
@@ -607,14 +512,8 @@ public class VenueControllerTest {
             mockMvc.perform(patch("/venues/1")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(
-                                    "{" +
-                                            "\"notes\": \"Updated Test Notes\", " +
-                                            "\"postcode\": \"Updated Test Postcode\", " +
-                                            "\"address\": \"Updated Test Address\", " +
-                                            "\"town\": \"Updated Test Town\", " +
-                                            "\"url\": \"www.updatedtest.com\" " +
-                                            "}"
-                            ))
+                                    "{\"notes\": \"Updated Test Notes\", \"postcode\": \"Updated Test Postcode\", \"address\": \"Updated Test Address\", " +
+                                            "\"town\": \"Updated Test Town\", \"url\": \"www.updatedtest.com\" }"))
                     .andExpect(status().isBadRequest());
         }
 

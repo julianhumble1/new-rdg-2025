@@ -68,8 +68,8 @@ public class FestivalControllerTest {
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(
                             "{" +
-                                    "\"name\": \"Test Festival\", " +
-                                    "\"venueId\": 1, " +
+                                    "\"name\": \"Test Festival\"," +
+                                    " \"venueId\": 1, " +
                                     "\"year\": 2025, " +
                                     "\"month\": 1, " +
                                     "\"description\": \"Test Description\"" +
@@ -90,8 +90,8 @@ public class FestivalControllerTest {
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(
                                     "{" +
-                                            "\"name\": \"Test Festival\", " +
-                                            "\"venueId\": 1, " +
+                                            "\"name\": \"Test Festival\"," +
+                                            " \"venueId\": 1, " +
                                             "\"year\": 2025, " +
                                             "\"month\": 1, " +
                                             "\"description\": \"Test Description\"" +
@@ -164,7 +164,7 @@ public class FestivalControllerTest {
                                             "\"venueId\": 1, " +
                                             "\"year\": 2025, " +
                                             "\"month\": 1, " +
-                                            "\"description\": \"Test Description\"}" +
+                                            "\"description\": \"Test Description\"" +
                                             "}"
                             ))
                     .andExpect(status().isBadRequest());

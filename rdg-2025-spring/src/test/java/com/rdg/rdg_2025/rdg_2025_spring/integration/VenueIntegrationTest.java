@@ -20,8 +20,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -91,6 +93,33 @@ public class VenueIntegrationTest {
                                     "}"
                     ))
                     .andExpect(status().isCreated());
+        }
+
+        @Test
+        void testVenueInDatabaseFollowingSuccessfulAdd() throws Exception {
+            // Arrange
+            List<Venue> venues = venueRepository.findAll();
+            int startingLength = venues.size();
+
+            // Act
+            mockMvc.perform(post("/venues")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", adminToken)
+                            .content(
+                                    "{ " +
+                                            "\"name\": \"Test Venue\", " +
+                                            "\"notes\": \"Test Notes\", " +
+                                            "\"postcode\": \"Test Postcode\", " +
+                                            "\"address\": \"Test Address\", " +
+                                            "\"town\": \"Test Town\", " +
+                                            "\"url\": \"www.test.com\" " +
+                                            "}"
+                            ))
+                    .andExpect(status().isCreated());
+
+            venues = venueRepository.findAll();
+            // Assert
+            assertEquals(startingLength + 1, venues.size());
         }
 
         @Test
