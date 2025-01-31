@@ -531,5 +531,27 @@ public class PerformanceIntegrationTest {
 
         }
 
+        @Test
+        void testTimeEmptyResponds400() throws Exception {
+            // Act & Assert
+            mockMvc.perform(post("/performances")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", adminToken)
+                            .content(
+                                    "{" +
+                                            "\"productionId\": " + testProductionId +  ", " +
+                                            "\"venueId\": " + testVenueId + ", " +
+                                            "\"festivalId\": " + testFestivalId + ", " +
+                                            "\"time\": \"\", " +
+                                            "\"description\": \"Test Performance Description\", " +
+                                            "\"standardPrice\": \"10.00\", " +
+                                            "\"concessionPrice\": \"9.00\", " +
+                                            "\"boxOffice\": \"Test Box Office\" " +
+                                            "}"
+                            ))
+                    .andExpect(status().isBadRequest());
+
+        }
+
     }
 }
