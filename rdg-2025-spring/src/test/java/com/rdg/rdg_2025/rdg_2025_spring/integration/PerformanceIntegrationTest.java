@@ -22,8 +22,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -172,6 +172,38 @@ public class PerformanceIntegrationTest {
             // Assert
             performanceList = performanceRepository.findAll();
             assertEquals(startingLength + 1, performanceList.size());
+        }
+
+        @Test
+        void testSuccessfulAddRespondsExpectedPerformanceObject() throws Exception {
+            // Arrange
+
+            // Act & Assert
+            mockMvc.perform(post("/performances")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .header("Authorization", adminToken)
+                    .content(
+                            "{" +
+                                    "\"productionId\": " + testProductionId +  ", " +
+                                    "\"venueId\": " + testVenueId + ", " +
+                                    "\"festivalId\": " + testFestivalId + ", " +
+                                    "\"time\": \"2025-10-10T10:00:00\", " +
+                                    "\"description\": \"Test Performance Description\", " +
+                                    "\"standardPrice\": \"10.00\", " +
+                                    "\"concessionPrice\": \"9.00\", " +
+                                    "\"boxOffice\": \"Test Box Office\" " +
+                                    "}"
+                    ))
+                    .andExpect(jsonPath("$.performance.production.id").value(testProductionId))
+                    .andExpect(jsonPath("$.performance.venue.id").value(testVenueId))
+                    .andExpect(jsonPath("$.performance.festival.id").value(testFestivalId))
+                    .andExpect(jsonPath("$.performance.time").value("2025-10-10T10:00:00"))
+                    .andExpect(jsonPath("$.performance.description").value("Test Performance Description"))
+                    .andExpect(jsonPath("$.performance.standardPrice").value(10.00))
+                    .andExpect(jsonPath("$.performance.concessionPrice").value(9.00))
+                    .andExpect(jsonPath("$.performance.boxOffice").value("Test Box Office"))
+                    .andExpect(jsonPath("$.performance.createdAt").isNotEmpty())
+                    .andExpect(jsonPath("$.performance.updatedAt").isNotEmpty());
         }
 
     }
