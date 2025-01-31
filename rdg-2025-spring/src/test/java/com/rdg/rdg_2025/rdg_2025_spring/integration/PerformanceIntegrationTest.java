@@ -599,5 +599,25 @@ public class PerformanceIntegrationTest {
                     .andExpect(status().isUnauthorized());
         }
 
+        @Test
+        void testMissingTokenResponds401() throws Exception {
+            // Act & Assert
+            mockMvc.perform(post("/performances")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(
+                                    "{" +
+                                            "\"productionId\": " + testProductionId +  ", " +
+                                            "\"venueId\": " + testVenueId + ", " +
+                                            "\"festivalId\": " + testFestivalId + ", " +
+                                            "\"time\": \"2025-10-10T10:00:00\", " +
+                                            "\"description\": \"Test Performance Description\", " +
+                                            "\"standardPrice\": \"10.00\", " +
+                                            "\"concessionPrice\": \"9.00\", " +
+                                            "\"boxOffice\": \"Test Box Office\" " +
+                                            "}"
+                            ))
+                    .andExpect(status().isUnauthorized());
+        }
+
     }
 }
