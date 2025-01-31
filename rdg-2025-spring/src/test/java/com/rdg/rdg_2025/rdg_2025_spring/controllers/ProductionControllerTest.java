@@ -76,8 +76,16 @@ public class ProductionControllerTest {
             mockMvc.perform(post("/productions")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(
-                            "{ \"name\": \"Test Production\", \"venueId\": \"1\", \"author\": \"Test Author\", \"description\": \"Test Description\", " +
-                                    "\"auditionDate\": \"2025-10-10T10:00:00\", \"sundowners\": false, \"notConfirmed\": false, \"flyerFile\": \"Test Flyer File\" }"
+                            "{" +
+                                    "\"name\": \"Test Production\", " +
+                                    "\"venueId\": \"1\", " +
+                                    "\"author\": \"Test Author\", " +
+                                    "\"description\": \"Test Description\", " +
+                                    "\"auditionDate\": \"2025-10-10T10:00:00\", " +
+                                    "\"sundowners\": false, " +
+                                    "\"notConfirmed\": false, " +
+                                    "\"flyerFile\": \"Test Flyer File\" " +
+                                    "}"
                     ))
                     .andExpect(status().isCreated()
                     );
@@ -94,8 +102,16 @@ public class ProductionControllerTest {
             mockMvc.perform(post("/productions")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(
-                                    "{ \"name\": \"Test Production\", \"venueId\": \"1\", \"author\": \"Test Author\", \"description\": \"Test Description\", " +
-                                            "\"auditionDate\": \"2025-10-10T10:00:00\", \"sundowners\": false, \"notConfirmed\": false, \"flyerFile\": \"Test Flyer File\" }"
+                                    "{" +
+                                            "\"name\": \"Test Production\", " +
+                                            "\"venueId\": \"1\", " +
+                                            "\"author\": \"Test Author\", " +
+                                            "\"description\": \"Test Description\", " +
+                                            "\"auditionDate\": \"2025-10-10T10:00:00\", " +
+                                            "\"sundowners\": false, " +
+                                            "\"notConfirmed\": false, " +
+                                            "\"flyerFile\": \"Test Flyer File\" " +
+                                            "}"
                             ))
                     .andExpect(header().string("Location", "/productions" + "/" + testProductionId)
 
@@ -114,8 +130,16 @@ public class ProductionControllerTest {
             mockMvc.perform(post("/productions")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(
-                                    "{ \"name\": \"Test Production\", \"venueId\": \"1\", \"author\": \"Test Author\", \"description\": \"Test Description\", " +
-                                            "\"auditionDate\": \"2025-10-10T10:00:00\", \"sundowners\": false, \"notConfirmed\": false, \"flyerFile\": \"Test Flyer File\" }"
+                                    "{" +
+                                            "\"name\": \"Test Production\", " +
+                                            "\"venueId\": \"1\", " +
+                                            "\"author\": \"Test Author\", " +
+                                            "\"description\": \"Test Description\", " +
+                                            "\"auditionDate\": \"2025-10-10T10:00:00\", " +
+                                            "\"sundowners\": false, " +
+                                            "\"notConfirmed\": false, " +
+                                            "\"flyerFile\": \"Test Flyer File\" " +
+                                            "}"
                             ))
                     .andExpect(jsonPath("$.production.id").isNotEmpty())
                     .andExpect(jsonPath("$.production.name").value(testProduction.getName()))
@@ -143,8 +167,16 @@ public class ProductionControllerTest {
             mockMvc.perform(post("/productions")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(
-                                    "{ \"name\": \"Test Production\", \"venueId\": \"1\", \"author\": \"Test Author\", \"description\": \"Test Description\", " +
-                                            "\"auditionDate\": \"2025-10-10T10:00:00\", \"sundowners\": false, \"notConfirmed\": false, \"flyerFile\": \"Test Flyer File\" }"
+                                    "{" +
+                                            "\"name\": \"Test Production\", " +
+                                            "\"venueId\": \"1\", " +
+                                            "\"author\": \"Test Author\", " +
+                                            "\"description\": \"Test Description\", " +
+                                            "\"auditionDate\": \"2025-10-10T10:00:00\", " +
+                                            "\"sundowners\": false, " +
+                                            "\"notConfirmed\": false, " +
+                                            "\"flyerFile\": \"Test Flyer File\" " +
+                                            "}"
                             ))
                     .andExpect(status().isConflict()
                     );
@@ -160,8 +192,16 @@ public class ProductionControllerTest {
             mockMvc.perform(post("/productions")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(
-                                    "{ \"name\": \"Test Production\", \"venueId\": \"1\", \"author\": \"Test Author\", \"description\": \"Test Description\", " +
-                                            "\"auditionDate\": \"2025-10-10T10:00:00\", \"sundowners\": false, \"notConfirmed\": false, \"flyerFile\": \"Test Flyer File\" }"
+                                    "{" +
+                                            "\"name\": \"Test Production\", " +
+                                            "\"venueId\": \"1\", " +
+                                            "\"author\": \"Test Author\", " +
+                                            "\"description\": \"Test Description\", " +
+                                            "\"auditionDate\": \"2025-10-10T10:00:00\", " +
+                                            "\"sundowners\": false, " +
+                                            "\"notConfirmed\": false, " +
+                                            "\"flyerFile\": \"Test Flyer File\" " +
+                                            "}"
                             ))
                     .andExpect(status().isInternalServerError()
                     );
@@ -177,8 +217,16 @@ public class ProductionControllerTest {
             mockMvc.perform(post("/productions")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(
-                                    "{ \"name\": \"Test Production\", \"venueId\": \"1\", \"author\": \"Test Author\", \"description\": \"Test Description\", " +
-                                            "\"auditionDate\": \"2025-10-10T10:00:00\", \"sundowners\": false, \"notConfirmed\": false, \"flyerFile\": \"Test Flyer File\" }"
+                                    "{" +
+                                            "\"name\": \"Test Production\", " +
+                                            "\"venueId\": \"1\", " +
+                                            "\"author\": \"Test Author\", " +
+                                            "\"description\": \"Test Description\", " +
+                                            "\"auditionDate\": \"2025-10-10T10:00:00\", " +
+                                            "\"sundowners\": false, " +
+                                            "\"notConfirmed\": false, " +
+                                            "\"flyerFile\": \"Test Flyer File\" " +
+                                            "}"
                             ))
                     .andExpect(status().isBadRequest()
                     );
@@ -200,8 +248,16 @@ public class ProductionControllerTest {
             mockMvc.perform(post("/productions")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(
-                                    "{ \"name\": \"Test Production\", \"venueId\": \"\", \"author\": \"\", \"description\": \"\", " +
-                                            "\"auditionDate\": \"\", \"sundowners\": \"\", \"notConfirmed\": \"\", \"flyerFile\": \"\"}"
+                                    "{" +
+                                            "\"name\": \"Test Production\", " +
+                                            "\"venueId\": \"\", " +
+                                            "\"author\": \"\", " +
+                                            "\"description\": \"\", " +
+                                            "\"auditionDate\": \"\", " +
+                                            "\"sundowners\": \"\", " +
+                                            "\"notConfirmed\": \"\", " +
+                                            "\"flyerFile\": \"\"" +
+                                            "}"
                             ))
                     .andExpect(status().isCreated()
                     );
@@ -232,13 +288,20 @@ public class ProductionControllerTest {
 
         @Test
         @WithMockUser(roles="ADMIN")
-        void testEmptyNameReturns400BadRequest() throws Exception{
+        void testMissingNameReturns400BadRequest() throws Exception{
             // Act & Assert
             mockMvc.perform(post("/productions")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(
-                                    "{\"venueId\": \"1\", \"author\": \"Test Author\", \"description\": \"Test Description\", " +
-                                            "\"auditionDate\": \"2025-10-10T10:00:00\", \"sundowners\": false, \"notConfirmed\": false, \"flyerFile\": \"Test Flyer File\" }"
+                                    "{" +
+                                            "\"venueId\": \"1\", " +
+                                            "\"author\": \"Test Author\", " +
+                                            "\"description\": \"Test Description\", " +
+                                            "\"auditionDate\": \"2025-10-10T10:00:00\", " +
+                                            "\"sundowners\": false, " +
+                                            "\"notConfirmed\": false, " +
+                                            "\"flyerFile\": \"Test Flyer File\" " +
+                                            "}"
                             ))
                     .andExpect(status().isBadRequest()
                     );
@@ -246,13 +309,21 @@ public class ProductionControllerTest {
 
         @Test
         @WithMockUser(roles="ADMIN")
-        void testMissingNameReturns400BadRequest() throws Exception{
+        void testEmptyNameReturns400BadRequest() throws Exception{
             // Act & Assert
             mockMvc.perform(post("/productions")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(
-                                    "{\"name\":\"\", \"venueId\": \"1\", \"author\": \"Test Author\", \"description\": \"Test Description\", " +
-                                            "\"auditionDate\": \"2025-10-10T10:00:00\", \"sundowners\": false, \"notConfirmed\": false, \"flyerFile\": \"Test Flyer File\" }"
+                                    "{" +
+                                            "\"name\":\"\", " +
+                                            "\"venueId\": \"1\", " +
+                                            "\"author\": \"Test Author\", " +
+                                            "\"description\": \"Test Description\", " +
+                                            "\"auditionDate\": \"2025-10-10T10:00:00\", " +
+                                            "\"sundowners\": false, " +
+                                            "\"notConfirmed\": false, " +
+                                            "\"flyerFile\": \"Test Flyer File\" " +
+                                            "}"
                             ))
                     .andExpect(status().isBadRequest()
                     );
@@ -265,8 +336,16 @@ public class ProductionControllerTest {
             mockMvc.perform(post("/productions")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(
-                                    "{\"name\":\"Test Production\", \"venueId\": \"Bad Venue Id\", \"author\": \"Test Author\", \"description\": \"Test Description\", " +
-                                            "\"auditionDate\": \"2025-10-10T10:00:00\", \"sundowners\": false, \"notConfirmed\": false, \"flyerFile\": \"Test Flyer File\" }"
+                                    "{" +
+                                            "\"name\":\"Test Production\", " +
+                                            "\"venueId\": \"Bad Venue Id\", " +
+                                            "\"author\": \"Test Author\", " +
+                                            "\"description\": \"Test Description\", " +
+                                            "\"auditionDate\": \"2025-10-10T10:00:00\", " +
+                                            "\"sundowners\": false, " +
+                                            "\"notConfirmed\": false, " +
+                                            "\"flyerFile\": \"Test Flyer File\" " +
+                                            "}"
                             ))
                     .andExpect(status().isBadRequest()
                     );
@@ -279,11 +358,18 @@ public class ProductionControllerTest {
             mockMvc.perform(post("/productions")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(
-                                    "{\"name\":\"Test Production\", \"venueId\": \"1\", \"author\": \"Test Author\", \"description\": \"Test Description\", " +
-                                            "\"auditionDate\": \"Bad Date\", \"sundowners\": false, \"notConfirmed\": false, \"flyerFile\": \"Test Flyer File\" }"
+                                    "{" +
+                                            "\"name\":\"Test Production\", " +
+                                            "\"venueId\": \"1\", " +
+                                            "\"author\": \"Test Author\", " +
+                                            "\"description\": \"Test Description\", " +
+                                            "\"auditionDate\": \"Bad Date\", " +
+                                            "\"sundowners\": false, " +
+                                            "\"notConfirmed\": false, " +
+                                            "\"flyerFile\": \"Test Flyer File\" " +
+                                            "}"
                             ))
-                    .andExpect(status().isBadRequest()
-                    );
+                    .andExpect(status().isBadRequest());
         }
 
         @Test
@@ -293,8 +379,16 @@ public class ProductionControllerTest {
             mockMvc.perform(post("/productions")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(
-                                    "{\"name\":\"Test Production\", \"venueId\": \"1\", \"author\": \"Test Author\", \"description\": \"Test Description\", " +
-                                            "\"auditionDate\": \"2025-10-10T10:00:00\", \"sundowners\": \"Bad Boolean\", \"notConfirmed\": false, \"flyerFile\": \"Test Flyer File\" }"
+                                    "{" +
+                                            "\"name\":\"Test Production\", " +
+                                            "\"venueId\": \"1\", " +
+                                            "\"author\": \"Test Author\", " +
+                                            "\"description\": \"Test Description\", " +
+                                            "\"auditionDate\": \"2025-10-10T10:00:00\", " +
+                                            "\"sundowners\": \"Bad Boolean\", " +
+                                            "\"notConfirmed\": false, " +
+                                            "\"flyerFile\": \"Test Flyer File\" " +
+                                            "}"
                             ))
                     .andExpect(status().isBadRequest()
                     );
@@ -307,8 +401,16 @@ public class ProductionControllerTest {
             mockMvc.perform(post("/productions")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(
-                                    "{\"name\":\"Test Production\", \"venueId\": \"1\", \"author\": \"Test Author\", \"description\": \"Test Description\", " +
-                                            "\"auditionDate\": \"2025-10-10T10:00:00\", \"sundowners\": false, \"notConfirmed\": \"Bad Boolean\", \"flyerFile\": \"Test Flyer File\" }"
+                                    "{" +
+                                            "\"name\":\"Test Production\", " +
+                                            "\"venueId\": \"1\", " +
+                                            "\"author\": \"Test Author\", " +
+                                            "\"description\": \"Test Description\", " +
+                                            "\"auditionDate\": \"2025-10-10T10:00:00\", " +
+                                            "\"sundowners\": false, " +
+                                            "\"notConfirmed\": \"Bad Boolean\", " +
+                                            "\"flyerFile\": \"Test Flyer File\" " +
+                                            "}"
                             ))
                     .andExpect(status().isBadRequest()
                     );
@@ -414,8 +516,16 @@ public class ProductionControllerTest {
             mockMvc.perform(patch("/productions/1")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(
-                            "{ \"name\": \"Updated Test Production\", \"venueId\": \"Not an integer\", \"author\": \"Updated Test Author\", \"description\": \"Updated Test Description\", " +
-                                    "\"auditionDate\": \"2025-11-10T10:00:00\", \"sundowners\": true, \"notConfirmed\": true, \"flyerFile\": \"Updated Test Flyer File\" }"
+                            "{" +
+                                    "\"name\": \"Updated Test Production\", " +
+                                    "\"venueId\": \"Not an integer\", " +
+                                    "\"author\": \"Updated Test Author\", " +
+                                    "\"description\": \"Updated Test Description\", " +
+                                    "\"auditionDate\": \"2025-11-10T10:00:00\", " +
+                                    "\"sundowners\": true, " +
+                                    "\"notConfirmed\": true, " +
+                                    "\"flyerFile\": \"Updated Test Flyer File\" " +
+                                    "}"
                     ))
                     .andExpect(status().isBadRequest());
 
@@ -431,8 +541,16 @@ public class ProductionControllerTest {
             mockMvc.perform(patch("/productions/1")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(
-                                    "{ \"name\": \"Updated Test Production\", \"venueId\": \"1\", \"author\": \"Updated Test Author\", \"description\": \"Updated Test Description\", " +
-                                            "\"auditionDate\": \"Not a date\", \"sundowners\": true, \"notConfirmed\": true, \"flyerFile\": \"Updated Test Flyer File\" }"
+                                    "{" +
+                                            "\"name\": \"Updated Test Production\", " +
+                                            "\"venueId\": \"1\", " +
+                                            "\"author\": \"Updated Test Author\", " +
+                                            "\"description\": \"Updated Test Description\", " +
+                                            "\"auditionDate\": \"Not a date\", " +
+                                            "\"sundowners\": true, " +
+                                            "\"notConfirmed\": true, " +
+                                            "\"flyerFile\": \"Updated Test Flyer File\" " +
+                                            "}"
                             ))
                     .andExpect(status().isBadRequest());
 
@@ -448,8 +566,16 @@ public class ProductionControllerTest {
             mockMvc.perform(patch("/productions/1")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(
-                                    "{ \"name\": \"Updated Test Production\", \"venueId\": \"1\", \"author\": \"Updated Test Author\", \"description\": \"Updated Test Description\", " +
-                                            "\"auditionDate\": \"2025-11-10T10:00:00\", \"sundowners\": \"Not a boolean\", \"notConfirmed\": true, \"flyerFile\": \"Updated Test Flyer File\" }"
+                                    "{ " +
+                                            "\"name\": \"Updated Test Production\", " +
+                                            "\"venueId\": \"1\", " +
+                                            "\"author\": \"Updated Test Author\", " +
+                                            "\"description\": \"Updated Test Description\", " +
+                                            "\"auditionDate\": \"2025-11-10T10:00:00\", " +
+                                            "\"sundowners\": \"Not a boolean\", " +
+                                            "\"notConfirmed\": true, " +
+                                            "\"flyerFile\": \"Updated Test Flyer File\" " +
+                                            "}"
                             ))
                     .andExpect(status().isBadRequest());
         }
@@ -463,8 +589,16 @@ public class ProductionControllerTest {
             mockMvc.perform(patch("/productions/1")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(
-                                    "{ \"name\": \"Updated Test Production\", \"venueId\": \"1\", \"author\": \"Updated Test Author\", \"description\": \"Updated Test Description\", " +
-                                            "\"auditionDate\": \"2025-11-10T10:00:00\", \"sundowners\": true, \"notConfirmed\": \"Not a boolean\", \"flyerFile\": \"Updated Test Flyer File\" }"
+                                    "{ " +
+                                            "\"name\": \"Updated Test Production\", " +
+                                            "\"venueId\": \"1\", " +
+                                            "\"author\": \"Updated Test Author\", " +
+                                            "\"description\": \"Updated Test Description\", " +
+                                            "\"auditionDate\": \"2025-11-10T10:00:00\", " +
+                                            "\"sundowners\": true, " +
+                                            "\"notConfirmed\": \"Not a boolean\", " +
+                                            "\"flyerFile\": \"Updated Test Flyer File\" " +
+                                            "}"
                             ))
                     .andExpect(status().isBadRequest());
         }
@@ -478,8 +612,16 @@ public class ProductionControllerTest {
             mockMvc.perform(patch("/productions/1")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(
-                                    "{ \"name\": \"Updated Test Production\", \"venueId\": \"1\", \"author\": \"Updated Test Author\", \"description\": \"Updated Test Description\", " +
-                                            "\"auditionDate\": \"2025-11-10T10:00:00\", \"sundowners\": true, \"notConfirmed\": true, \"flyerFile\": \"Updated Test Flyer File\" }"
+                                    "{ " +
+                                            "\"name\": \"Updated Test Production\", " +
+                                            "\"venueId\": \"1\", " +
+                                            "\"author\": \"Updated Test Author\", " +
+                                            "\"description\": \"Updated Test Description\", " +
+                                            "\"auditionDate\": \"2025-11-10T10:00:00\", " +
+                                            "\"sundowners\": true, " +
+                                            "\"notConfirmed\": true, " +
+                                            "\"flyerFile\": \"Updated Test Flyer File\" " +
+                                            "}"
                             ))
                     .andExpect(status().isInternalServerError());
         }
@@ -493,8 +635,16 @@ public class ProductionControllerTest {
             mockMvc.perform(patch("/productions/1")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(
-                                    "{ \"name\": \"Updated Test Production\", \"venueId\": \"1\", \"author\": \"Updated Test Author\", \"description\": \"Updated Test Description\", " +
-                                            "\"auditionDate\": \"2025-11-10T10:00:00\", \"sundowners\": true, \"notConfirmed\": true, \"flyerFile\": \"Updated Test Flyer File\" }"
+                                    "{ " +
+                                            "\"name\": \"Updated Test Production\", " +
+                                            "\"venueId\": \"1\", " +
+                                            "\"author\": \"Updated Test Author\", " +
+                                            "\"description\": \"Updated Test Description\", " +
+                                            "\"auditionDate\": \"2025-11-10T10:00:00\", " +
+                                            "\"sundowners\": true, " +
+                                            "\"notConfirmed\": true, " +
+                                            "\"flyerFile\": \"Updated Test Flyer File\" " +
+                                            "}"
                             ))
                     .andExpect(status().isNotFound());
         }
@@ -508,8 +658,16 @@ public class ProductionControllerTest {
             mockMvc.perform(patch("/productions/1")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(
-                                    "{ \"name\": \"Updated Test Production\", \"venueId\": \"1\", \"author\": \"Updated Test Author\", \"description\": \"Updated Test Description\", " +
-                                            "\"auditionDate\": \"2025-11-10T10:00:00\", \"sundowners\": true, \"notConfirmed\": true, \"flyerFile\": \"Updated Test Flyer File\" }"
+                                    "{ " +
+                                            "\"name\": \"Updated Test Production\", " +
+                                            "\"venueId\": \"1\", " +
+                                            "\"author\": \"Updated Test Author\", " +
+                                            "\"description\": \"Updated Test Description\", " +
+                                            "\"auditionDate\": \"2025-11-10T10:00:00\", " +
+                                            "\"sundowners\": true, " +
+                                            "\"notConfirmed\": true, " +
+                                            "\"flyerFile\": \"Updated Test Flyer File\" " +
+                                            "}"
                             ))
                     .andExpect(status().isConflict());
         }
@@ -523,8 +681,16 @@ public class ProductionControllerTest {
             mockMvc.perform(patch("/productions/1")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(
-                                    "{ \"name\": \"Updated Test Production\", \"venueId\": \"1\", \"author\": \"Updated Test Author\", \"description\": \"Updated Test Description\", " +
-                                            "\"auditionDate\": \"2025-11-10T10:00:00\", \"sundowners\": true, \"notConfirmed\": true, \"flyerFile\": \"Updated Test Flyer File\" }"
+                                    "{ " +
+                                            "\"name\": \"Updated Test Production\", " +
+                                            "\"venueId\": \"1\", " +
+                                            "\"author\": \"Updated Test Author\", " +
+                                            "\"description\": \"Updated Test Description\", " +
+                                            "\"auditionDate\": \"2025-11-10T10:00:00\", " +
+                                            "\"sundowners\": true, " +
+                                            "\"notConfirmed\": true, " +
+                                            "\"flyerFile\": \"Updated Test Flyer File\" " +
+                                            "}"
                             ))
                     .andExpect(status().isOk());
         }
@@ -548,8 +714,16 @@ public class ProductionControllerTest {
             mockMvc.perform(patch("/productions/1")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(
-                                    "{ \"name\": \"Updated Test Production\", \"venueId\": \"1\", \"author\": \"Updated Test Author\", \"description\": \"Updated Test Description\", " +
-                                            "\"auditionDate\": \"2025-11-10T10:00:00\", \"sundowners\": true, \"notConfirmed\": true, \"flyerFile\": \"Updated Test Flyer File\" }"
+                                    "{ " +
+                                            "\"name\": \"Updated Test Production\", " +
+                                            "\"venueId\": \"1\", " +
+                                            "\"author\": \"Updated Test Author\", " +
+                                            "\"description\": \"Updated Test Description\", " +
+                                            "\"auditionDate\": \"2025-11-10T10:00:00\", " +
+                                            "\"sundowners\": true, " +
+                                            "\"notConfirmed\": true, " +
+                                            "\"flyerFile\": \"Updated Test Flyer File\" " +
+                                            "}"
                             ))
                     .andExpect(jsonPath("$.production.name").value("Updated Test Production"));
         }
