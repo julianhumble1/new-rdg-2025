@@ -26,9 +26,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-/**
- * The type Performance integration test.
- */
 @SpringBootTest
 @AutoConfigureMockMvc
 @Transactional
@@ -48,34 +45,16 @@ public class PerformanceIntegrationTest {
     private static String userToken;
 
     private Venue testVenue;
-    /**
-     * The Test venue id.
-     */
     int testVenueId;
 
     private Production testProduction;
-    /**
-     * The Test production id.
-     */
     int testProductionId;
 
     private Festival testFestival;
-    /**
-     * The Test festival id.
-     */
     int testFestivalId;
 
     private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
 
-    /**
-     * Sets users and tokens.
-     *
-     * @param userRepository        the user repository
-     * @param roleRepository        the role repository
-     * @param passwordEncoder       the password encoder
-     * @param authenticationManager the authentication manager
-     * @param jwtUtils              the jwt utils
-     */
     @BeforeAll
     public static void setupUsersAndTokens(@Autowired UserRepository userRepository,
                                            @Autowired RoleRepository roleRepository,
@@ -98,13 +77,6 @@ public class PerformanceIntegrationTest {
         userToken = "Bearer " + jwtUtils.generateJwtToken(userAuthentication);
     }
 
-    /**
-     * Populate database.
-     *
-     * @param venueRepository      the venue repository
-     * @param productionRepository the production repository
-     * @param festivalRepository   the festival repository
-     */
     @BeforeEach
     public void populateDatabase(@Autowired VenueRepository venueRepository,
                                  @Autowired ProductionRepository productionRepository,
@@ -134,18 +106,10 @@ public class PerformanceIntegrationTest {
 
     }
 
-    /**
-     * The type Post add new performance integration tests.
-     */
     @Nested
     @DisplayName("POST add new performance integration tests")
     class PostAddNewPerformanceIntegrationTests {
 
-        /**
-         * Test successful add with all fields responds 201.
-         *
-         * @throws Exception the exception
-         */
         @Test
         void testSuccessfulAddWithAllFieldsResponds201() throws Exception {
             // Act & Assert
@@ -167,11 +131,6 @@ public class PerformanceIntegrationTest {
                     .andExpect(status().isCreated());
         }
 
-        /**
-         * Test successful add with only mandatory fields responds 201.
-         *
-         * @throws Exception the exception
-         */
         @Test
         void testSuccessfulAddWithOnlyMandatoryFieldsResponds201() throws Exception {
             // Act & Assert
@@ -188,11 +147,6 @@ public class PerformanceIntegrationTest {
                     .andExpect(status().isCreated());
         }
 
-        /**
-         * Test performance in database following successful add.
-         *
-         * @throws Exception the exception
-         */
         @Test
         void testPerformanceInDatabaseFollowingSuccessfulAdd() throws Exception {
             // Arrange
@@ -220,11 +174,6 @@ public class PerformanceIntegrationTest {
             assertEquals(startingLength + 1, performanceList.size());
         }
 
-        /**
-         * Test full details successful add responds expected performance object.
-         *
-         * @throws Exception the exception
-         */
         @Test
         void testFullDetailsSuccessfulAddRespondsExpectedPerformanceObject() throws Exception {
             // Arrange
@@ -257,11 +206,6 @@ public class PerformanceIntegrationTest {
                     .andExpect(jsonPath("$.performance.updatedAt").isNotEmpty());
         }
 
-        /**
-         * Test mandatory field only add responds expected performance object.
-         *
-         * @throws Exception the exception
-         */
         @Test
         void testMandatoryFieldOnlyAddRespondsExpectedPerformanceObject() throws Exception {
             // Arrange
@@ -289,11 +233,6 @@ public class PerformanceIntegrationTest {
                     .andExpect(jsonPath("$.performance.updatedAt").isNotEmpty());
         }
 
-        /**
-         * Test non existent festival id responds 404.
-         *
-         * @throws Exception the exception
-         */
         @Test
         void testNonExistentFestivalIdResponds404() throws Exception {
             // Act & Assert
@@ -616,6 +555,27 @@ public class PerformanceIntegrationTest {
                             ))
                     .andExpect(status().isBadRequest());
 
+        }
+
+        @Test
+        void testUserTokenResponds403() throws Exception {
+            // Act & Assert
+            mockMvc.perform(post("/performances")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", userToken)
+                            .content(
+                                    "{" +
+                                            "\"productionId\": " + testProductionId +  ", " +
+                                            "\"venueId\": " + testVenueId + ", " +
+                                            "\"festivalId\": " + testFestivalId + ", " +
+                                            "\"time\": \"2025-10-10T10:00:00\", " +
+                                            "\"description\": \"Test Performance Description\", " +
+                                            "\"standardPrice\": \"10.00\", " +
+                                            "\"concessionPrice\": \"9.00\", " +
+                                            "\"boxOffice\": \"Test Box Office\" " +
+                                            "}"
+                            ))
+                    .andExpect(status().isForbidden());
         }
 
     }
