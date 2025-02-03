@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom"
-import DateHelper from "../../utils/DateHelper.js"
+import { format } from "date-fns"
 
 const VenueRow = ({ venueData, handleDelete }) => {
 
@@ -13,7 +13,7 @@ const VenueRow = ({ venueData, handleDelete }) => {
             <div className="col-span-2 p-1"> {venueData.address} </div>
             <div className="col-span-1 p-1"> {venueData.town} </div>
             <div className="col-span-1 p-1"> {venueData.postcode} </div>
-            <div className="col-span-2 p-1"> {DateHelper.formatDatabaseDateForDisplay(venueData.createdAt)} </div>
+            <div className="col-span-2 p-1"> {format(new Date(venueData.createdAt), "dd-MM-yyyy")} </div>
             <div className="col-span-2 p-1"> {venueData.notes} </div>
             <div className="col-span-2 p-1 flex flex-row gap-2">
                 <Link className="underline text-blue-500 hover:text-blue-700" to={`/venues/${venueData.id}?edit=true`}>Edit</Link>

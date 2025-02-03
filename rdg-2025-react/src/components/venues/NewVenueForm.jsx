@@ -1,5 +1,7 @@
 import { useState } from "react"
 import VenueService from "../../services/VenueService.js"
+import SuccessMessage from "../modals/SuccessMessage.jsx"
+import ErrorMessage from "../modals/ErrorMessage.jsx"
 
 const NewVenueForm = () => {
 
@@ -11,17 +13,17 @@ const NewVenueForm = () => {
     const [url, setUrl] = useState("")
 
     const [successMessage, setSuccessMessage] = useState("")
-    const [failMessage, setFailMessage] = useState("")
+    const [errorMessage, setErrorMessage] = useState("")
 
     const handleSubmit = async (event) => {
         event.preventDefault()
         try {
             const response = await VenueService.createNewVenue(name, address, town, postcode, notes, url)
             setSuccessMessage(`Successfully created '${response.data.venue.name}!'`)
-            setFailMessage("")
+            setErrorMessage("")
         } catch (e) {
             setSuccessMessage("")
-            setFailMessage(e.message)
+            setErrorMessage(e.message)
         }
     }
 
@@ -65,16 +67,9 @@ const NewVenueForm = () => {
                 <input placeholder="www.theglobe.com" className="border p-1" value={url} onChange={(e) => setUrl(e.target.value)}/>
             </div>
             <button className={`bg-green-300 px-3 py-1 w-fit rounded hover:bg-green-600 ${!name && "cursor-not-allowed"}`} >Submit</button>
-            {successMessage && 
-                <div className="text-green-500">
-                    {successMessage}
-                </div>
-            }
-            {failMessage && 
-                <div className="text-red-500">
-                    Failed to add venue: {failMessage}
-                </div>
-            }
+
+            <SuccessMessage message={successMessage} />
+            <ErrorMessage message={errorMessage} />
         </form>
     </>)
 }

@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react"
-import VenueService from "../../services/VenueService.js"
 import Select from "react-select"
 import DatePicker from "react-datepicker"
 import "react-datepicker/dist/react-datepicker.css";
+import FetchValueOptionsHelper from "../../utils/FetchValueOptionsHelper.js";
+import ErrorMessage from "../modals/ErrorMessage.jsx";
 
 const EditProductionForm = ({ productionData, handleEdit }) => {
 
@@ -20,18 +21,14 @@ const EditProductionForm = ({ productionData, handleEdit }) => {
     const [notConfirmed, setNotConfirmed] = useState(productionData.notConfirmed ? productionData.notConfirmed : false)
     const [flyerFile, setFlyerFile] = useState(productionData.flyerFile ? productionData.flyerFile : "")
 
-    const [failMessage, setFailMessage] = useState("")
-
+    const [errorMessage, setErrorMessage] = useState("")
 
     useEffect(() => {
         const getVenues = async () => {
             try {
-                const response = await VenueService.getAllVenues()
-                const venueList = response.data.venues
-                const formattedVenueList = venueList.map((venue) => ({ "value": venue.id, "label": venue.name }))
-                setVenueOptions(formattedVenueList)
+                setVenueOptions(await FetchValueOptionsHelper.fetchVenueOptions())
             } catch (e) {
-                setFailMessage(e.message)
+                setErrorMessage(e.message)
             }
         }
         getVenues()
@@ -93,6 +90,8 @@ const EditProductionForm = ({ productionData, handleEdit }) => {
             </div>
 
             <button className={`bg-green-300 px-3 py-1 w-fit rounded hover:bg-green-600 ${!name && "cursor-not-allowed"}`} >Submit</button>
+
+            <ErrorMessage message={errorMessage} />
 
         </form>
     )

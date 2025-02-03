@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react"
 import Select from "react-select";
-import VenueService from "../../services/VenueService.js";
 import FestivalService from "../../services/FestivalService.js";
+import FetchValueOptionsHelper from "../../utils/FetchValueOptionsHelper.js";
+import MonthDateUtils from "../../utils/MonthDateUtils.js";
+import SuccessMessage from "../modals/SuccessMessage.jsx"
+import ErrorMessage from "../modals/ErrorMessage.jsx";
 
 const NewFestivalForm = () => {
 
@@ -13,64 +16,36 @@ const NewFestivalForm = () => {
     const [month, setMonth] = useState({value: 1, label: "January"})
     const [description, setDescription] = useState("")
 
-    const [successMessage, setSuccessMessage] = useState("")
-    const [failMessage, setFailMessage] = useState("")
-
     const [venueOptions, setVenueOptions] = useState([])
-
     const [yearOptions, setYearOptions] = useState([])
 
-    const monthOptions = [
-        { value: 1, label: "January" },
-        { value: 2, label: "February" },
-        { value: 3, label: "March" },
-        { value: 4, label: "April" },
-        { value: 5, label: "May" },
-        { value: 6, label: "June" },
-        { value: 7, label: "July" },
-        { value: 8, label: "August" },
-        { value: 9, label: "September" },
-        { value: 10, label: "October" },
-        { value: 11, label: "November" },
-        { value: 12, label: "December" }
-    ];
+    const [successMessage, setSuccessMessage] = useState("")
+    const [errorMessage, setErrorMessage] = useState("")
 
     const handleSubmit = async (event) => {
         event.preventDefault()
-
         try {
             const response = await FestivalService.createNewFestival(
                 name, venue.value, year.value, month.value, description
             )
-            setFailMessage("")
             setSuccessMessage(`Successfully created '${response.data.festival.name}'!`)
+            setErrorMessage("")
         } catch (e) {
             setSuccessMessage("")
-            setFailMessage(e.message)
+            setErrorMessage(e.message)
         }
     }
 
-
     useEffect(() => {
-        const getVenues = async () => {
+        const getVenueOptions = async () => {
             try {
-                const response = await VenueService.getAllVenues()
-                const venueList = response.data.venues
-                const formattedVenueList = venueList.map((venue) => ({ "value": venue.id, "label": venue.name }))
-                setVenueOptions(formattedVenueList)
+                setVenueOptions(await FetchValueOptionsHelper.fetchVenueOptions())
             } catch (e) {
-                setFailMessage(e.message)
+                setErrorMessage(e.message)
             }
         }
-        getVenues()
-    }, [])
-    
-    useEffect(() => {
-        const yearsArray = [];
-        for (let i = 0; i < 10; i++) {
-            yearsArray.push({"value": currentYear + 1, "label": currentYear + i})
-        }
-        setYearOptions(yearsArray)
+        getVenueOptions()
+        setYearOptions(MonthDateUtils.getYearsArray)
     }, [])
 
 
@@ -99,7 +74,7 @@ const NewFestivalForm = () => {
                 <div className="italic">
                     Month
                 </div>
-                <Select options={monthOptions} onChange={setMonth} className="w-fit" isClearable value={month} />
+                <Select options={MonthDateUtils.monthOptions} onChange={setMonth} className="w-fit" isClearable value={month} />
             </div>
 
             <div>
@@ -109,16 +84,9 @@ const NewFestivalForm = () => {
                 <input placeholder="A drama festival" className="border p-1" value={description} onChange={(e) => setDescription(e.target.value)} />
             </div>
             <button className={`bg-green-300 px-3 py-1 w-fit rounded hover:bg-green-600 ${!name && "cursor-not-allowed"}`} >Submit</button>
-            {successMessage && 
-                <div className="text-green-500">
-                    {successMessage}
-                </div>
-            }
-            {failMessage && 
-                <div className="text-red-500">
-                    Failed to add production: {failMessage}
-                </div>
-            }
+            
+            <SuccessMessage message={successMessage} />
+            <ErrorMessage message={errorMessage} />
         
         
         </form>

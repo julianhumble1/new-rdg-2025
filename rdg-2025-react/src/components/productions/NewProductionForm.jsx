@@ -3,8 +3,10 @@ import DatePicker from "react-datepicker"
 import Select from "react-select";
 import { format } from 'date-fns';
 import "react-datepicker/dist/react-datepicker.css";
-import VenueService from "../../services/VenueService.js";
 import ProductionService from "../../services/ProductionService.js";
+import FetchValueOptionsHelper from "../../utils/FetchValueOptionsHelper.js";
+import SuccessMessage from "../modals/SuccessMessage.jsx";
+import ErrorMessage from "../modals/ErrorMessage.jsx";
 
 const NewProductionForm = () => {
 
@@ -18,7 +20,7 @@ const NewProductionForm = () => {
     const [flyerFile, setFlyerFile] = useState("")
 
     const [successMessage, setSuccessMessage] = useState("")
-    const [failMessage, setFailMessage] = useState("")
+    const [errorMessage, setErrorMessage] = useState("")
 
     const [venueOptions, setVenueOptions] = useState([])
 
@@ -37,31 +39,27 @@ const NewProductionForm = () => {
                 notConfirmed,
                 flyerFile
             )
-            console.log(response)
             setSuccessMessage(`Successfully created '${response.data.production.name}'!`)
-            setFailMessage("")
+            setErrorMessage("")
         } catch (e) {
             setSuccessMessage("")
-            setFailMessage(e.message)
+            setErrorMessage(e.message)
         }
 
     }
 
     useEffect(() => {
-        const getVenues = async () => {
+        const getVenueOptions = async () => {
             try {
-                const response = await VenueService.getAllVenues()
-                const venueList = response.data.venues
-                const formattedVenueList = venueList.map((venue) => ({ "value": venue.id, "label": venue.name }))
-                setVenueOptions(formattedVenueList)
+                setVenueOptions(FetchValueOptionsHelper.fetchVenueOptions())
             } catch (e) {
-                setFailMessage(e.message)
+                setErrorMessage(e.message)
             }
         }
-        getVenues()
+        getVenueOptions()
     }, [])
 
-  return (<>
+    return (<>
         <div>Add a New Production</div>
         <form onSubmit={handleSubmit} className="m-3 p-2 mt-1 border border-black rounded flex flex-col gap-2 w-1/2">
             <div>
@@ -117,16 +115,9 @@ const NewProductionForm = () => {
                 <input placeholder="oliver-flyer.pdf" className="border p-1" value={flyerFile} onChange={(e) => setFlyerFile(e.target.value)} />
             </div>
             <button className={`bg-green-300 px-3 py-1 w-fit rounded hover:bg-green-600 ${!name && "cursor-not-allowed"}`} >Submit</button>
-            {successMessage && 
-                <div className="text-green-500">
-                    {successMessage}
-                </div>
-            }
-            {failMessage && 
-                <div className="text-red-500">
-                    Failed to add production: {failMessage}
-                </div>
-            }
+
+            <SuccessMessage message={successMessage} />
+            <ErrorMessage message={errorMessage} />
         </form>
     </>)
 }

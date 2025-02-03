@@ -1,11 +1,13 @@
 import { useState, useEffect, useCallback } from "react";
 import { Link, useParams, useSearchParams, useNavigate } from "react-router-dom"
 import ProductionService from "../../services/ProductionService.js";
-import DateHelper from "../../utils/DateHelper.js";
 import EditProductionForm from "./EditProductionForm.jsx";
 import { format } from 'date-fns';
 import ConfirmDeleteModal from "../modals/ConfirmDeleteModal.jsx";
 import PerformanceRow from "../performances/PerformanceRow.jsx";
+import ErrorMessage from "../modals/ErrorMessage.jsx";
+import SuccessMessage from "../modals/SuccessMessage.jsx";
+import PerformancesTable from "../performances/PerformancesTable.jsx";
 
 const ProductionPage = () => {
 
@@ -16,14 +18,10 @@ const ProductionPage = () => {
     const [productionData, setProductionData] = useState(null);
     const [performances, setPerformances] = useState([])
 
-    const [fetchError, setFetchError] = useState("")
-
     const [editMode, setEditMode] = useState(searchParams.get("edit"))
 
     const [successMessage, setSuccessMessage] = useState("")
-    const [failMessage, setFailMessage] = useState("")
-
-    const [deleteError, setDeleteError] = useState("")
+    const [errorMessage, setErrorMessage] = useState("")
 
     const [showConfirmDelete, setShowConfirmDelete] = useState(false);
 
@@ -32,11 +30,15 @@ const ProductionPage = () => {
             const response = await ProductionService.getProductionById(productionId);
             setProductionData(response.data.production)
             setPerformances(response.data.performances)
-            console.log(response)
         } catch (e) {
-            setFailMessage(e.message)
+            setErrorMessage(e.message)
         }
     }, [productionId])
+
+    useEffect(() => {
+        fetchProductionData()
+    }, [fetchProductionData])
+
 
     const handleDelete = () => {
         setShowConfirmDelete(true)
@@ -48,13 +50,9 @@ const ProductionPage = () => {
             setShowConfirmDelete(false)
             navigate("/productions")
         } catch (e) {
-            setDeleteError(e.message)
+            setErrorMessage(e.message)
         }
     }
-
-    useEffect(() => {
-        fetchProductionData()
-    }, [fetchProductionData])
 
     const handleEdit = async (event, productionId, name, venueId, author, description, auditionDate, sundowners, notConfirmed, flyerFile) => {
         event.preventDefault()
@@ -70,35 +68,30 @@ const ProductionPage = () => {
                 notConfirmed,
                 flyerFile
             )
-            console.log(response)
             setSuccessMessage("Successfully Edited!")
-            setFailMessage("")
+            setErrorMessage("")
             fetchProductionData()
             setEditMode(false)
         } catch (e) {
             setSuccessMessage("")
-            setFetchError(e.message)
+            setErrorMessage(e.message)
         }
     }
 
     return (
         <div>
+
             {showConfirmDelete &&
                 <ConfirmDeleteModal setShowConfirmDelete={setShowConfirmDelete} itemToDelete={productionData} handleConfirmDelete={ handleConfirmDelete } />
             }
+            <SuccessMessage message={successMessage} />
+            <ErrorMessage message={errorMessage} />
+
+
             <div className="font-bold text-xl p-3 ">
                 Production {productionId}: 
             </div>
-            {fetchError &&
-              <div>
-                  {fetchError}
-                </div>
-            }
-            {deleteError && 
-                <div>
-                    {deleteError}
-                </div>
-            }
+
             {(productionData && !editMode) && <>
                 <div className="flex flex-row bg-gray-300 m-2 p-1 rounded w-2/3 justify-between">
                     <div>
@@ -110,9 +103,9 @@ const ProductionPage = () => {
                                 <Link className="text-blue-500 hover:text-blue-700 hover:underline" to={`/venues/${productionData.venue.id}`}>{productionData.venue.name}</Link>
                             }
                         </div>
-                        <div>Audition Date: {productionData.auditionDate? DateHelper.formatDatabaseDateForDisplay(productionData.auditionDate) : "" }</div>
-                        <div>Created: {DateHelper.formatDatabaseDateForDisplay(productionData.createdAt)} </div>
-                        <div>Updated: {DateHelper.formatDatabaseDateForDisplay(productionData.updatedAt)}</div>
+                        <div>Audition Date: {productionData.auditionDate? format(new Date(productionData.auditionDate), "MMMM d, yyyy, h:mm a") : "" }</div>
+                        <div>Created: {format(new Date(productionData.createdAt), "dd-MM-yyyy")} </div>
+                        <div>Updated: {format(new Date(productionData.updatedAt), "dd-MM-yyyy")}</div>
                     </div>
                     {successMessage && 
                     <div className="text-green-500">
@@ -128,24 +121,7 @@ const ProductionPage = () => {
                         </button>
                     </div>
                 </div>
-                {performances.length > 0 ? 
-                    <div className="mx-3 w-2/3">
-                        <div className="text-lg font-bold">
-                            Performances:
-                        </div>
-                        <div className="grid grid-cols-4 bg-slate-400 italic font-bold">
-                            <div className="col-span-1 p-1">Date & Time</div>
-                            <div className="col-span-1 p-1">Venue</div>
-                            <div className="col-span-1 p-1">Festival</div>
-                            <div className="col-span-1 p-1">Description</div>
-                        </div>
-                        {performances.map((performance) => (<PerformanceRow key={performance.id } performanceData={performance}/>)) }
-                    </div>
-                    :
-                    <div className="mx-3 font-bold">
-                        No performances to display
-                    </div>
-                }
+                
                 
             </>}
             {(productionData && editMode) &&
@@ -158,16 +134,17 @@ const ProductionPage = () => {
                         </button>
                     </div>
 
-                    {failMessage && 
+                    {errorMessage && 
                     <div className="text-red-500">
-                        Failed to edit venue: {failMessage}
+                        Failed to edit venue: {errorMessage}
                     </div>
                 }
                 </div>
 
-
-
             }
+
+            <PerformancesTable performances={performances} />
+
         </div>
     )
 }

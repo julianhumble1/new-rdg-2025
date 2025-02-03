@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import { useState } from "react";
 import Cookies from "js-cookie";
 import UserService from "../services/UserService.js";

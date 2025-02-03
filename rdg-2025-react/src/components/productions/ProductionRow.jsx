@@ -1,5 +1,5 @@
-import DateHelper from "../../utils/DateHelper.js"
 import { Link } from "react-router-dom"
+import { format } from "date-fns"
 
 const ProductionRow = ({ productionData, handleDelete }) => {
 
@@ -17,7 +17,7 @@ const ProductionRow = ({ productionData, handleDelete }) => {
       <div className="col-span-2 p-1"> {productionData.description} </div>
       <div className="col-span-1 p-1"> {productionData.sundowners ? "Yes" : "No"} </div>
       <div className="col-span-2 p-1"> {productionData.author} </div>
-      <div className="col-span-1 p-1"> {DateHelper.formatDatabaseDateForDisplay(productionData.createdAt)} </div>
+      <div className="col-span-1 p-1"> {format(new Date(productionData.createdAt), "dd-MM-yyyy")} </div>
       <div className="flex flex-row gap-3">
           <Link className="underline text-blue-500 hover:text-blue-700 my-auto" to={`/productions/${productionData.id}?edit=true`}>Edit</Link>
           <button className="underline text-blue-500 hover:text-blue-700" onClick={() => handleDelete(productionData)}>Delete</button>
