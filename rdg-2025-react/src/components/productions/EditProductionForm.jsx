@@ -24,18 +24,18 @@ const EditProductionForm = ({ productionData, handleEdit }) => {
 
 
     useEffect(() => {
-            const getVenues = async () => {
-                try {
-                    const response = await VenueService.getAllVenues()
-                    const venueList = response.data.venues
-                    const formattedVenueList = venueList.map((venue) => ({ "value": venue.id, "label": venue.name }))
-                    setVenueOptions(formattedVenueList)
-                } catch (e) {
-                    setFailMessage(e.message)
-                }
+        const getVenues = async () => {
+            try {
+                const response = await VenueService.getAllVenues()
+                const venueList = response.data.venues
+                const formattedVenueList = venueList.map((venue) => ({ "value": venue.id, "label": venue.name }))
+                setVenueOptions(formattedVenueList)
+            } catch (e) {
+                setFailMessage(e.message)
             }
-            getVenues()
-        }, [])
+        }
+        getVenues()
+    }, [])
 
     return (
         <form className="flex flex-col gap-2" onSubmit={(event) => handleEdit(event, productionData.id, name, venue ? venue.value : null, author, description, auditionDate, sundowners, notConfirmed, flyerFile)}>
