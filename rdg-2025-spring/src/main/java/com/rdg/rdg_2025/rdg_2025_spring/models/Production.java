@@ -46,7 +46,7 @@ public class Production {
     @Column(nullable = false)
     private String slug;
 
-    @OneToMany(mappedBy = "production", cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "production", cascade = CascadeType.ALL)
     @JsonBackReference
     private List<Performance> performances = new ArrayList<>();
 
