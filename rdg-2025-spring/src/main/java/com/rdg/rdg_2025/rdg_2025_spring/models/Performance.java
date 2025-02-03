@@ -1,5 +1,6 @@
 package com.rdg.rdg_2025.rdg_2025_spring.models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,12 +19,15 @@ public class Performance {
     private int id;
 
     @ManyToOne
+    @JsonManagedReference
     private Production production;
 
     @ManyToOne
+    @JsonManagedReference
     private Venue venue;
 
     @ManyToOne
+    @JsonManagedReference
     private Festival festival;
 
     private String description;

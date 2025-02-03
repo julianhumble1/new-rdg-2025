@@ -46,6 +46,7 @@ public class Festival {
     private LocalDateTime updatedAt;
 
     @OneToMany(mappedBy = "festival", cascade = CascadeType.PERSIST)
+    @JsonBackReference
     private List<Performance> performances = new ArrayList<>();
 
     public Festival(String name, Venue venue, int year, int month, String description) {

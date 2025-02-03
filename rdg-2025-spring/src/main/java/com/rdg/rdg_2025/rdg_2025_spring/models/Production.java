@@ -1,5 +1,6 @@
 package com.rdg.rdg_2025.rdg_2025_spring.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.rdg.rdg_2025.rdg_2025_spring.helpers.SlugUtils;
 import jakarta.persistence.*;
@@ -46,6 +47,7 @@ public class Production {
     private String slug;
 
     @OneToMany(mappedBy = "production", cascade = CascadeType.PERSIST)
+    @JsonBackReference
     private List<Performance> performances = new ArrayList<>();
 
     public Production(String name, Venue venue, String author, String description, LocalDateTime auditionDate, boolean sundowners, boolean notConfirmed, String flyerFile) {

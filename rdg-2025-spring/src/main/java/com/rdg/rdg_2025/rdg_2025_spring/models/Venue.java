@@ -47,6 +47,7 @@ public class Venue {
     private List<Festival> festivals = new ArrayList<>();
 
     @OneToMany(mappedBy = "venue", cascade = CascadeType.PERSIST)
+    @JsonBackReference
     private List<Performance> performances = new ArrayList<>();
 
     public Venue(String name, String notes, String postcode, String address, String town, String url) {
