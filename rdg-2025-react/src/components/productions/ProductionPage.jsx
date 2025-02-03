@@ -5,6 +5,7 @@ import DateHelper from "../../utils/DateHelper.js";
 import EditProductionForm from "./EditProductionForm.jsx";
 import { format } from 'date-fns';
 import ConfirmDeleteModal from "../modals/ConfirmDeleteModal.jsx";
+import PerformanceRow from "../performances/PerformanceRow.jsx";
 
 const ProductionPage = () => {
 
@@ -13,6 +14,7 @@ const ProductionPage = () => {
     const navigate = useNavigate();
 
     const [productionData, setProductionData] = useState(null);
+    const [performances, setPerformances] = useState([])
 
     const [fetchError, setFetchError] = useState("")
 
@@ -29,6 +31,8 @@ const ProductionPage = () => {
         try {
             const response = await ProductionService.getProductionById(productionId);
             setProductionData(response.data.production)
+            setPerformances(response.data.performances)
+            console.log(response)
         } catch (e) {
             setFailMessage(e.message)
         }
@@ -95,7 +99,7 @@ const ProductionPage = () => {
                     {deleteError}
                 </div>
             }
-            {(productionData && !editMode) &&
+            {(productionData && !editMode) && <>
                 <div className="flex flex-row bg-gray-300 m-2 p-1 rounded w-2/3 justify-between">
                     <div>
                         <div className="font-bold"> {productionData.name}</div>
@@ -124,8 +128,26 @@ const ProductionPage = () => {
                         </button>
                     </div>
                 </div>
-
-            }
+                {performances.length > 0 ? 
+                    <div className="mx-3 w-2/3">
+                        <div className="text-lg font-bold">
+                            Performances:
+                        </div>
+                        <div className="grid grid-cols-4 bg-slate-400 italic font-bold">
+                            <div className="col-span-1 p-1">Date & Time</div>
+                            <div className="col-span-1 p-1">Venue</div>
+                            <div className="col-span-1 p-1">Festival</div>
+                            <div className="col-span-1 p-1">Description</div>
+                        </div>
+                        {performances.map((performance) => (<PerformanceRow key={performance.id } performanceData={performance}/>)) }
+                    </div>
+                    :
+                    <div className="mx-3 font-bold">
+                        No performances to display
+                    </div>
+                }
+                
+            </>}
             {(productionData && editMode) &&
                 <div className="flex flex-row bg-gray-300 m-2 p-1 rounded w-2/3 justify-between">
                     <EditProductionForm productionData={productionData} handleEdit={handleEdit} />

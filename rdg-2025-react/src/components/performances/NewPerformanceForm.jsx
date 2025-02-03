@@ -45,14 +45,13 @@ const NewPerformanceForm = () => {
             const response = await PerformanceService.addNewPerformance(
                 production.value,
                 venue.value,
-                festival.value ? festival.value : "",
+                festival ? festival.value : "",
                 performanceTime,
                 description,
                 standardPrice,
                 concessionPrice, 
                 boxOffice
             )
-            console.log(response)
             navigate(`/productions/${production.value}`)
         } catch (e) {
             setFailMessage(e.message)
