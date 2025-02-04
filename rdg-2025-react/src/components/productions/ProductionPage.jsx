@@ -100,7 +100,9 @@ const ProductionPage = () => {
                         <div>Sundowners: {productionData.sundowners ? "Yes" : "No"}</div>
                         <div>Description: {productionData.description}</div>
                         <div>Venue: {productionData.venue &&
-                                <Link className="text-blue-500 hover:text-blue-700 hover:underline" to={`/venues/${productionData.venue.id}`}>{productionData.venue.name}</Link>
+                            <Link className="text-blue-500 hover:text-blue-700 hover:underline" to={`/venues/${productionData.venue.id}`}>
+                                {productionData.venue.name}
+                            </Link>
                             }
                         </div>
                         <div>Audition Date: {productionData.auditionDate? format(new Date(productionData.auditionDate), "MMMM d, yyyy, h:mm a") : "" }</div>

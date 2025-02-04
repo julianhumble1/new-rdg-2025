@@ -17,7 +17,6 @@ const Login = ({ loggedIn, setLoggedIn}) => {
         event.preventDefault();
         try {
             const responseData = await UserService.login(username, password)
-            console.log(responseData)
             const mainRole = RoleHelper.determineMainRole(responseData.roles)
             Cookies.set("token", responseData.token, { expires: 7 })
             Cookies.set("role", mainRole, { expires: 7 })
@@ -26,7 +25,6 @@ const Login = ({ loggedIn, setLoggedIn}) => {
             navigate("/dashboard")
 
         } catch (error) {
-            console.log(error)
             setFailedLoginAttempt(true)
         }
     }

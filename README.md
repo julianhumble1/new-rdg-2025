@@ -53,6 +53,9 @@ The following is a list of entities and their corresponding routes that have bee
 * POST ("/festivals") - create new festival
 * GET ("/festivals") - get all festivals
 
+**Performances**
+* POST ("/performances") - add new performance
+
 As well as the above, there are also /signup and /signin routes, although signing up has no associated front end interface as this application does not require users to be able to sign up. Many of the existing routes require an admin token to carry out.
 
 ### Testing
@@ -67,7 +70,7 @@ I have also chosen at this stage not to test the front-end application, as my fo
 
 ### Going forward
 
-There is still a long way to go with this project. Full CRUD operations for productions and festivals are required, as well as introducing performances and people (and their different credits).
+There is still a long way to go with this project. Further CRUD operations for festivals and performances are required, as well as introducing people (and their different credits).
 
 Once the back-end is complete, I will host the MySQL instance online (probably GCP) and upload the existing data (which I currently have as csv files on my computer), and test that the Spring application interacts with the production database as expected. I anticipate there will be some teething issues here as I integrate with existing data, although I have done everything I can to ensure the application will work with the data.
 
@@ -104,3 +107,7 @@ At that stage, I will then add more styling to the front end using TailwindCSS, 
 ![post festival diagram](./images/post-festival-diagram.jpg)
 
 ![get festivals diagram](./images/get-festivals-diagram.jpg)
+
+### Performances
+
+![post performance diagram](./images/post-performance-diagram.jpg)

@@ -19,7 +19,7 @@ const PerformancesTable = ({ performances }) => {
         )
         
     } else {
-        return <div className="font-bold">No performances to display</div>
+        return <div className="font-bold m-3">No performances to display</div>
     }
 
 }
