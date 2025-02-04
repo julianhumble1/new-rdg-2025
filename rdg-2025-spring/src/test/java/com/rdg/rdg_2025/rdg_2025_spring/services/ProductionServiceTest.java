@@ -494,6 +494,7 @@ public class ProductionServiceTest {
         void testProductionExistsThenDeleteIsCalled() {
             // Arrange
             when(productionRepository.existsById(anyInt())).thenReturn(true);
+            when(productionRepository.findById(anyInt())).thenReturn(Optional.of(testProduction));
             // Act
             productionService.deleteProductionById(1);
             // Assert
@@ -501,9 +502,21 @@ public class ProductionServiceTest {
         }
 
         @Test
+        void testProductionExistsThenRemoveProductionFromVenueIsCalled() {
+            // Arrange
+            when(productionRepository.existsById(anyInt())).thenReturn(true);
+            when(productionRepository.findById(anyInt())).thenReturn(Optional.of(testProduction));
+            // Act
+            productionService.deleteProductionById(1);
+            // Assert
+            verify(venueService, atLeastOnce()).removeProductionFromVenueProductionList(any());
+        }
+
+        @Test
         void testDeleteDataAccessExceptionThrowsDatabaseException() {
             // Arrange
             when(productionRepository.existsById(anyInt())).thenReturn(true);
+            when(productionRepository.findById(anyInt())).thenReturn(Optional.of(testProduction));
             doThrow(new DataAccessException("Data access exception") {}).when(productionRepository).deleteById(anyInt());
             // Act & Assert
             DatabaseException ex = assertThrows(DatabaseException.class, () -> {
@@ -515,6 +528,7 @@ public class ProductionServiceTest {
         void testDeleteDataPersistenceExceptionThrowsDatabaseException() {
             // Arrange
             when(productionRepository.existsById(anyInt())).thenReturn(true);
+            when(productionRepository.findById(anyInt())).thenReturn(Optional.of(testProduction));
             doThrow(new PersistenceException("Data persistence exception") {}).when(productionRepository).deleteById(anyInt());
             // Act & Assert
             DatabaseException ex = assertThrows(DatabaseException.class, () -> {
@@ -526,6 +540,7 @@ public class ProductionServiceTest {
         void testSuccessfulDeletionReturnsTrue() {
             // Arrange
             when(productionRepository.existsById(anyInt())).thenReturn(true);
+            when(productionRepository.findById(anyInt())).thenReturn(Optional.of(testProduction));
             // Act
             boolean result = productionService.deleteProductionById(1);
             // Assert
