@@ -548,4 +548,21 @@ public class ProductionServiceTest {
         }
 
     }
+
+    @Nested
+    @DisplayName("setProductionVenueToNull service tests")
+    class SetProductionVenueToNullServiceTests {
+
+        @Test
+        void testSaveProductionIsCalled() {
+            // Arrange
+
+            // Act
+            productionService.setProductionVenueFieldToNull(testProduction);
+            // Assert
+            verify(productionRepository, atLeastOnce()).save(testProduction);
+        }
+
+    }
+
 }

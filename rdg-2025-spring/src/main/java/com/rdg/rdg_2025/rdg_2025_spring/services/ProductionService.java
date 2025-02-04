@@ -28,7 +28,7 @@ public class ProductionService {
 
     private VenueService venueService;
 
-    // METHODS
+    // CRUD METHODS
 
     public Production addNewProduction(ProductionRequest productionRequest) {
 
@@ -88,6 +88,13 @@ public class ProductionService {
         } catch (DataAccessException | PersistenceException ex) {
             throw new DatabaseException(ex.getMessage(), ex);
         }
+    }
+
+    // ADDITIONAL METHODS
+
+    public void setProductionVenueFieldToNull(Production production) {
+        production.setVenue(null);
+        saveProductionToDatabase(production);
     }
 
     // PRIVATE HELPER METHODS
