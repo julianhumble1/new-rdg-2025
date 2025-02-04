@@ -1,6 +1,7 @@
 package com.rdg.rdg_2025.rdg_2025_spring.services;
 
 import com.rdg.rdg_2025.rdg_2025_spring.exception.DatabaseException;
+import com.rdg.rdg_2025.rdg_2025_spring.models.Festival;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Production;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Venue;
 import com.rdg.rdg_2025.rdg_2025_spring.payload.request.venue.VenueRequest;
@@ -336,10 +337,29 @@ public class VenueServiceTest {
             // Arrange
             when(venueRepository.existsById(any())).thenReturn(true);
             when(venueRepository.findById(anyInt())).thenReturn(Optional.of(testVenue1));
+
             // Act
             venueService.deleteVenueById(1);
             // Assert
             verify(festivalService, never()).setFestivalVenueFieldToNull(any());
+        }
+
+        @Test
+        void testIfVenueHasOneFestivalThenServiceIsCalledOnce() {
+            // Arrange
+            Festival festival = new Festival();
+            List<Festival> festivalList = new ArrayList<>();
+            festivalList.add(festival);
+            testVenue1.setFestivals(festivalList);
+
+            when(venueRepository.existsById(any())).thenReturn(true);
+            when(venueRepository.findById(anyInt())).thenReturn(Optional.of(testVenue1));
+
+            // Act
+            venueService.deleteVenueById(1);
+            // Assert
+            verify(festivalService, times(1)).setFestivalVenueFieldToNull(any());
+
         }
     }
 
