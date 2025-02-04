@@ -381,6 +381,26 @@ public class VenueServiceTest {
             verify(festivalService, times(2)).setFestivalVenueFieldToNull(any());
 
         }
+
+        @Test
+        void testFestivalServiceThrowsDatabaseExceptionThenThrowsDatabaseException() {
+            // Arrange
+            Festival festival = new Festival();
+            List<Festival> festivalList = new ArrayList<>();
+            festivalList.add(festival);
+            testVenue1.setFestivals(festivalList);
+
+            when(venueRepository.existsById(any())).thenReturn(true);
+            when(venueRepository.findById(anyInt())).thenReturn(Optional.of(testVenue1));
+
+            doThrow(new DatabaseException("database exception")).when(festivalService).setFestivalVenueFieldToNull(any());
+
+            // Act & Assert
+            DatabaseException ex = assertThrows(DatabaseException.class, () -> {
+                venueService.deleteVenueById(1);
+            });
+
+        }
     }
 
     @Nested
