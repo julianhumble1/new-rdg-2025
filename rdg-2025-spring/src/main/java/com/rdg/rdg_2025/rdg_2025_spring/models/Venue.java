@@ -46,7 +46,7 @@ public class Venue {
     @JsonBackReference
     private List<Festival> festivals = new ArrayList<>();
 
-    @OneToMany(mappedBy = "venue", cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "venue", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     @JsonBackReference
     private List<Performance> performances = new ArrayList<>();
 
