@@ -28,7 +28,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class FestivalServiceTest {
@@ -258,5 +258,18 @@ public class FestivalServiceTest {
 
     }
 
+    @Nested
+    @DisplayName("setFestivalVenueFieldToNull service tests")
+    class SetFestivalVenueFieldToNullServiceTests {
+
+        @Test
+        void testSaveFestivalIsCalled() {
+            // Arrange
+            // Act
+            festivalService.setFestivalVenueFieldToNull(testFestival);
+            // Assert
+            verify(festivalRepository, atLeastOnce()).save(testFestival);
+        }
+    }
 
 }

@@ -27,9 +27,8 @@ public class Festival {
     @NotBlank
     private String name;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JsonManagedReference
-    @OnDelete(action = OnDeleteAction.SET_NULL)
     private Venue venue;
 
     @Min(1)

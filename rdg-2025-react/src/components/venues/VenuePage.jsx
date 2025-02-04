@@ -1,8 +1,6 @@
 import { useNavigate, useParams, useSearchParams } from "react-router-dom"
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import VenueService from "../../services/VenueService.js";
-import ProductionRow from "../productions/ProductionRow.jsx";
-import FestivalRow from "../festivals/FestivalRow.jsx";
 import EditVenueForm from "./EditVenueForm.jsx";
 import ConfirmDeleteModal from "../modals/ConfirmDeleteModal.jsx";
 import { format } from "date-fns";
@@ -30,7 +28,7 @@ const VenuePage = () => {
     const [successMessage, setSuccessMessage] = useState("")
     const [errorMessage, setErrorMessage] = useState("")
 
-    const fetchVenueData = async () => {
+    const fetchVenueData = useCallback(async () => {
         try {
             const response = await VenueService.getVenueById(venueId)
             setVenueData(response.data.venue)
@@ -39,11 +37,11 @@ const VenuePage = () => {
         } catch (e) {
             setErrorMessage(e.message)
         }
-    }
+    }, [venueId])
 
     useEffect(() => {
         fetchVenueData()
-    }, []) 
+    }, [fetchVenueData]) 
 
     const handleDelete = (item) => {
         setItemToDelete(item)

@@ -19,16 +19,16 @@ import java.util.List;
 @Service
 public class ProductionService {
 
-    @Autowired
     private ProductionRepository productionRepository;
+    private VenueService venueService;
 
-    public ProductionService(VenueService venueService) {
+    @Autowired
+    public ProductionService(ProductionRepository productionRepository, VenueService venueService) {
+        this.productionRepository = productionRepository;
         this.venueService = venueService;
     }
 
-    private VenueService venueService;
-
-    // METHODS
+    // CRUD METHODS
 
     public Production addNewProduction(ProductionRequest productionRequest) {
 
@@ -78,6 +78,8 @@ public class ProductionService {
     public boolean deleteProductionById(int productionId) {
         try {
             if (productionRepository.existsById(productionId)) {
+                Production production = getProductionById(productionId);
+                venueService.removeProductionFromVenueProductionList(production);
                 productionRepository.deleteById(productionId);
                 return true;
             } else {
@@ -86,6 +88,13 @@ public class ProductionService {
         } catch (DataAccessException | PersistenceException ex) {
             throw new DatabaseException(ex.getMessage(), ex);
         }
+    }
+
+    // ADDITIONAL METHODS
+
+    public void setProductionVenueFieldToNull(Production production) {
+        production.setVenue(null);
+        saveProductionToDatabase(production);
     }
 
     // PRIVATE HELPER METHODS

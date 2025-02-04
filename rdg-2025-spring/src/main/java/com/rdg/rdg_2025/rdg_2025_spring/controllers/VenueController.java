@@ -91,8 +91,11 @@ public class VenueController {
                 return ResponseEntity.noContent().build();
             } else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                        new MessageResponse("Could not delete as venue does not exist"));
+                        new MessageResponse("Could not delete as venue does not exist")
+                );
             }
+        } catch (DataIntegrityViolationException ex) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
         } catch (DatabaseException ex) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
         }

@@ -1,11 +1,14 @@
 package com.rdg.rdg_2025.rdg_2025_spring.services;
 
 import com.rdg.rdg_2025.rdg_2025_spring.exception.DatabaseException;
+import com.rdg.rdg_2025.rdg_2025_spring.models.Festival;
+import com.rdg.rdg_2025.rdg_2025_spring.models.Production;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Venue;
 import com.rdg.rdg_2025.rdg_2025_spring.payload.request.venue.VenueRequest;
 import com.rdg.rdg_2025.rdg_2025_spring.repository.VenueRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.PersistenceException;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -16,24 +19,27 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.time.LocalDateTime;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class VenueServiceTest {
 
     @InjectMocks
     private VenueService venueService;
+
+    @Mock
+    private ProductionService productionService;
+
+    @Mock
+    private FestivalService festivalService;
 
     @Mock
     private VenueRepository venueRepository;
@@ -209,6 +215,7 @@ public class VenueServiceTest {
         void testSuccessfulDeletionReturnsTrue() {
             // Arrange
             when(venueRepository.existsById(any())).thenReturn(true);
+            when(venueRepository.findById(anyInt())).thenReturn(Optional.of(testVenue1));
             // Act
             boolean result = venueService.deleteVenueById(1);
             // Assert
@@ -229,6 +236,8 @@ public class VenueServiceTest {
         void testDeleteDataAccessExceptionThrowsDatabaseException() {
             // Arrange
             when(venueRepository.existsById(any())).thenReturn(true);
+            when(venueRepository.findById(anyInt())).thenReturn(Optional.of(testVenue1));
+
             doThrow(new DataAccessException("Data access exception") {}).when(venueRepository).deleteById(anyInt());
             // Act & Assert
             DatabaseException ex = assertThrows(DatabaseException.class, () -> {
@@ -240,6 +249,8 @@ public class VenueServiceTest {
         void testDeletePersistenceExceptionThrowsDatabaseException() {
             // Arrange
             when(venueRepository.existsById(any())).thenReturn(true);
+            when(venueRepository.findById(anyInt())).thenReturn(Optional.of(testVenue1));
+
             doThrow(new PersistenceException("Data persistence exception") {}).when(venueRepository).deleteById(anyInt());
             // Act & Assert
             DatabaseException ex = assertThrows(DatabaseException.class, () -> {
@@ -255,6 +266,139 @@ public class VenueServiceTest {
             boolean result = venueService.deleteVenueById(1);
             // Assert
             assertEquals(false, result);
+
+        }
+
+        @Test
+        void testVenueHasNoProductionsThenProductionServiceIsNotCalled() {
+            // Arrange
+            when(venueRepository.existsById(any())).thenReturn(true);
+            when(venueRepository.findById(anyInt())).thenReturn(Optional.of(testVenue1));
+            // Act
+            venueService.deleteVenueById(1);
+            // Assert
+            verify(productionService, never()).setProductionVenueFieldToNull(any());
+        }
+
+        @Test
+        void testIfVenueHasOneProductionThenProductionServiceIsCalledOnce() {
+            // Arrange
+            Production production = new Production();
+            List<Production> productionList = new ArrayList<>();
+            productionList.add(production);
+            testVenue1.setProductions(productionList);
+            when(venueRepository.existsById(any())).thenReturn(true);
+            when(venueRepository.findById(anyInt())).thenReturn(Optional.of(testVenue1));
+
+            // Act
+            venueService.deleteVenueById(1);
+            // Assert
+            verify(productionService, times(1)).setProductionVenueFieldToNull(any());
+        }
+
+        @Test
+        void testIfVenueHasMultipleProductionsThenProductionServiceIsCalledMultipleTimes() {
+            // Arrange
+            Production production1 = new Production();
+            Production production2 = new Production();
+            List<Production> productionList = new ArrayList<>();
+            productionList.add(production1);
+            productionList.add(production2);
+            testVenue1.setProductions(productionList);
+            when(venueRepository.existsById(any())).thenReturn(true);
+            when(venueRepository.findById(anyInt())).thenReturn(Optional.of(testVenue1));
+
+            // Act
+            venueService.deleteVenueById(1);
+            // Assert
+            verify(productionService, times(2)).setProductionVenueFieldToNull(any());
+        }
+
+        @Test
+        void testIfProductionServiceThrowsDatabaseExceptionThenThrowsDatabaseException() {
+            // Arrange
+            Production production = new Production();
+            List<Production> productionList = new ArrayList<>();
+            productionList.add(production);
+            testVenue1.setProductions(productionList);
+            when(venueRepository.existsById(any())).thenReturn(true);
+            when(venueRepository.findById(anyInt())).thenReturn(Optional.of(testVenue1));
+
+            doThrow(new DatabaseException("database exception")).when(productionService).setProductionVenueFieldToNull(any());
+
+            // Act & Assert
+            DatabaseException ex = assertThrows(DatabaseException.class, () -> {
+                venueService.deleteVenueById(1);
+            });
+        }
+
+        @Test
+        void testIfVenueHasNoFestivalsThenFestivalServiceNotCalled() {
+            // Arrange
+            when(venueRepository.existsById(any())).thenReturn(true);
+            when(venueRepository.findById(anyInt())).thenReturn(Optional.of(testVenue1));
+
+            // Act
+            venueService.deleteVenueById(1);
+            // Assert
+            verify(festivalService, never()).setFestivalVenueFieldToNull(any());
+        }
+
+        @Test
+        void testIfVenueHasOneFestivalThenServiceIsCalledOnce() {
+            // Arrange
+            Festival festival = new Festival();
+            List<Festival> festivalList = new ArrayList<>();
+            festivalList.add(festival);
+            testVenue1.setFestivals(festivalList);
+
+            when(venueRepository.existsById(any())).thenReturn(true);
+            when(venueRepository.findById(anyInt())).thenReturn(Optional.of(testVenue1));
+
+            // Act
+            venueService.deleteVenueById(1);
+            // Assert
+            verify(festivalService, times(1)).setFestivalVenueFieldToNull(any());
+
+        }
+
+        @Test
+        void testIfVenueHasMultipleFestivalsThenServiceIsCalledMultipleTimes() {
+            // Arrange
+            Festival festival1 = new Festival();
+            Festival festival2 = new Festival();
+            List<Festival> festivalList = new ArrayList<>();
+            festivalList.add(festival1);
+            festivalList.add(festival2);
+            testVenue1.setFestivals(festivalList);
+
+            when(venueRepository.existsById(any())).thenReturn(true);
+            when(venueRepository.findById(anyInt())).thenReturn(Optional.of(testVenue1));
+
+            // Act
+            venueService.deleteVenueById(1);
+            // Assert
+            verify(festivalService, times(2)).setFestivalVenueFieldToNull(any());
+
+        }
+
+        @Test
+        void testFestivalServiceThrowsDatabaseExceptionThenThrowsDatabaseException() {
+            // Arrange
+            Festival festival = new Festival();
+            List<Festival> festivalList = new ArrayList<>();
+            festivalList.add(festival);
+            testVenue1.setFestivals(festivalList);
+
+            when(venueRepository.existsById(any())).thenReturn(true);
+            when(venueRepository.findById(anyInt())).thenReturn(Optional.of(testVenue1));
+
+            doThrow(new DatabaseException("database exception")).when(festivalService).setFestivalVenueFieldToNull(any());
+
+            // Act & Assert
+            DatabaseException ex = assertThrows(DatabaseException.class, () -> {
+                venueService.deleteVenueById(1);
+            });
 
         }
     }
@@ -411,4 +555,64 @@ public class VenueServiceTest {
 
     }
 
+    @Nested
+    @DisplayName("removeProductionFromVenueList service tests")
+    class RemoveProductionFromVenueListServiceTests {
+
+        private Venue testVenue;
+        private Production testProduction;
+
+        @BeforeEach
+        void beforeEach() {
+            testVenue = new Venue("Test Venue", "Test Notes", "Test Postcode", "Test Address", "Test Town", "www.test.com");
+
+            testProduction = new Production(
+                    "Test Production",
+                    testVenue,
+                    "Test Author",
+                    "Test Description",
+                    LocalDateTime.now(),
+                    false,
+                    false,
+                    "Test File String"
+            );
+            List<Production> productions = new ArrayList<>();
+            productions.add(testProduction);
+            testVenue.setProductions(productions);
+        }
+
+        @Test
+        void testIfProductionHasNoAssociatedVenueSaveIsNotCalled() {
+            // Arrange
+            Production noVenueProduction = new Production();
+            // Act
+            venueService.removeProductionFromVenueProductionList(noVenueProduction);
+            // Assert
+            verify(venueRepository, never()).save(any(Venue.class));
+        }
+
+        @Test
+        void testProductionListReducesLengthByOneAfterMethodCall() {
+            // Arrange
+            int productionListStartingLength = testVenue.getProductions().size();
+            when(venueRepository.findById(anyInt())).thenReturn(Optional.of(testVenue));
+            when(venueRepository.save(any())).thenReturn(testVenue);
+            // Act
+            venueService.removeProductionFromVenueProductionList(testProduction);
+            // Assert
+            assertEquals(productionListStartingLength -1, testVenue.getProductions().size());
+        }
+
+        @Test
+        void testUpdatedVenueIsSavedToDatabase() {
+            // Arrange
+            when(venueRepository.findById(anyInt())).thenReturn(Optional.of(testVenue));
+            when(venueRepository.save(any())).thenReturn(testVenue);
+            // Act
+            venueService.removeProductionFromVenueProductionList(testProduction);
+            // Assert
+            verify(venueRepository, atLeastOnce()).save(any());
+        }
+
+    }
 }

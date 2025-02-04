@@ -2,6 +2,8 @@ package com.rdg.rdg_2025.rdg_2025_spring.services;
 
 import com.rdg.rdg_2025.rdg_2025_spring.exception.DatabaseException;
 import com.rdg.rdg_2025.rdg_2025_spring.helpers.SlugUtils;
+import com.rdg.rdg_2025.rdg_2025_spring.models.Festival;
+import com.rdg.rdg_2025.rdg_2025_spring.models.Production;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Venue;
 import com.rdg.rdg_2025.rdg_2025_spring.payload.request.venue.VenueRequest;
 import com.rdg.rdg_2025.rdg_2025_spring.repository.VenueRepository;
@@ -9,6 +11,7 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.PersistenceException;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
@@ -19,8 +22,19 @@ import java.util.List;
 @Service
 public class VenueService {
 
+    private VenueRepository venueRepository;
+
+    private ProductionService productionService;
+    private FestivalService festivalService;
+
     @Autowired
-    VenueRepository venueRepository;
+    public VenueService(VenueRepository venueRepository, @Lazy ProductionService productionService, @Lazy FestivalService festivalService) {
+        this.venueRepository = venueRepository;
+        this.productionService = productionService;
+        this.festivalService = festivalService;
+    }
+
+    // CRUD METHODS
 
     public Venue addNewVenue(VenueRequest newVenueRequest) {
 
@@ -56,15 +70,25 @@ public class VenueService {
     }
 
     public boolean deleteVenueById(int venueId) {
-        try {
-            if (venueRepository.existsById(venueId)) {
-                venueRepository.deleteById(venueId);
-                return true;
-            } else {
-                return false;
-            }
-        } catch (DataAccessException | PersistenceException ex) {
-            throw new DatabaseException(ex.getMessage());
+
+        if ( checkVenueExists(venueId) ) {
+            setAssociatedProductionVenuesToNull(venueId);
+            setAssociatedFestivalVenuesToNull(venueId);
+            return deleteVenueInDatabase(venueId);
+        } else {
+            return false;
+        }
+    }
+
+    // ADDITIONAL METHODS
+
+    public void removeProductionFromVenueProductionList(Production production) {
+        if (production.getVenue() != null) {
+            Venue venue = getVenueById(production.getVenue().getId());
+            List<Production> productionList = venue.getProductions();
+            productionList.remove(production);
+            venue.setProductions(productionList);
+            saveVenueToDatabase(venue);
         }
     }
 
@@ -96,6 +120,44 @@ public class VenueService {
         } catch (DataAccessException | PersistenceException ex) {
             throw new DatabaseException(ex.getMessage());
         }
+    }
+
+    private boolean checkVenueExists(int venueId) {
+        try {
+            return venueRepository.existsById(venueId);
+        } catch (DataAccessException ex) {
+            throw new DatabaseException(ex.getMessage(), ex);
+        }
+    }
+
+    private boolean deleteVenueInDatabase(int venueId) {
+        try {
+            venueRepository.deleteById(venueId);
+            return true;
+        } catch (DataAccessException | PersistenceException ex) {
+            throw new DatabaseException(ex.getMessage());
+        }
+    }
+
+    private void setAssociatedProductionVenuesToNull(int venueId) {
+        List<Production> productionList = getVenueById(venueId).getProductions();
+        try {
+            productionList.forEach((production) -> productionService.setProductionVenueFieldToNull(production));
+        } catch (DataIntegrityViolationException ex) {
+            throw new DataIntegrityViolationException(ex.getMessage(), ex);
+        } catch (DatabaseException ex) {
+            throw new DatabaseException(ex.getMessage(), ex);
+        }
+    }
+
+    private void setAssociatedFestivalVenuesToNull(int venueId) {
+        List<Festival> festivalList = getVenueById(venueId).getFestivals();
+        try {
+            festivalList.forEach((festival) -> festivalService.setFestivalVenueFieldToNull(festival));
+        } catch (DatabaseException ex) {
+            throw new DatabaseException(ex.getMessage(), ex);
+        }
+
     }
 
 }

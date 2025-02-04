@@ -304,6 +304,16 @@ public class VenueControllerTest {
                     .andExpect(status().isInternalServerError());
         }
 
+        @Test
+        @WithMockUser(roles = "ADMIN")
+        void testDataIntegrityViolationExceptionResponds409() throws Exception {
+            // Arrange
+            when(venueService.deleteVenueById(anyInt())).thenThrow(new DataIntegrityViolationException("data integrity"));
+            // Act & Assert
+            mockMvc.perform(delete("/venues/1"))
+                    .andExpect(status().isConflict());
+        }
+
     }
 
     @Nested
