@@ -291,6 +291,24 @@ public class VenueServiceTest {
             // Assert
             verify(productionService, times(1)).setProductionVenueFieldToNull(any());
         }
+
+        @Test
+        void testIfVenueHasMultipleProductionsThenProductionServiceIsCalledMultipleTimes() {
+            // Arrange
+            Production production1 = new Production();
+            Production production2 = new Production();
+            List<Production> productionList = new ArrayList<>();
+            productionList.add(production1);
+            productionList.add(production2);
+            testVenue1.setProductions(productionList);
+            when(venueRepository.existsById(any())).thenReturn(true);
+            when(venueRepository.findById(anyInt())).thenReturn(Optional.of(testVenue1));
+
+            // Act
+            venueService.deleteVenueById(1);
+            // Assert
+            verify(productionService, times(2)).setProductionVenueFieldToNull(any());
+        }
     }
 
     @Nested
