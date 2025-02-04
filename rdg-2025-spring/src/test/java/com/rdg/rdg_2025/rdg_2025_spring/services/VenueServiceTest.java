@@ -1,6 +1,7 @@
 package com.rdg.rdg_2025.rdg_2025_spring.services;
 
 import com.rdg.rdg_2025.rdg_2025_spring.exception.DatabaseException;
+import com.rdg.rdg_2025.rdg_2025_spring.models.Production;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Venue;
 import com.rdg.rdg_2025.rdg_2025_spring.payload.request.venue.VenueRequest;
 import com.rdg.rdg_2025.rdg_2025_spring.repository.VenueRepository;
@@ -26,8 +27,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class VenueServiceTest {
@@ -411,4 +411,19 @@ public class VenueServiceTest {
 
     }
 
+    @Nested
+    @DisplayName("removeProductionFromVenueList service tests")
+    class RemoveProductionFromVenueListServiceTests {
+
+        @Test
+        void testIfProductionHasNoAssociatedVenueVenueSaveIsNotCalled() {
+            // Arrange
+            Production production = new Production();
+            // Act
+            venueService.removeProductionFromVenueProductionList(production);
+            // Assert
+            verify(venueRepository, never()).save(any(Venue.class));
+        }
+
+    }
 }

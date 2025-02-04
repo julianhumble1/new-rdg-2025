@@ -2,6 +2,7 @@ package com.rdg.rdg_2025.rdg_2025_spring.services;
 
 import com.rdg.rdg_2025.rdg_2025_spring.exception.DatabaseException;
 import com.rdg.rdg_2025.rdg_2025_spring.helpers.SlugUtils;
+import com.rdg.rdg_2025.rdg_2025_spring.models.Production;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Venue;
 import com.rdg.rdg_2025.rdg_2025_spring.payload.request.venue.VenueRequest;
 import com.rdg.rdg_2025.rdg_2025_spring.repository.VenueRepository;
@@ -21,6 +22,8 @@ public class VenueService {
 
     @Autowired
     VenueRepository venueRepository;
+
+    // CRUD METHODS
 
     public Venue addNewVenue(VenueRequest newVenueRequest) {
 
@@ -65,6 +68,18 @@ public class VenueService {
             }
         } catch (DataAccessException | PersistenceException ex) {
             throw new DatabaseException(ex.getMessage());
+        }
+    }
+
+    // ADDITIONAL METHODS
+
+    public void removeProductionFromVenueProductionList(Production production) {
+        if (production.getVenue() != null) {
+            Venue venue = getVenueById(production.getVenue().getId());
+            List<Production> productionList = venue.getProductions();
+            productionList.remove(production);
+            venue.setProductions(productionList);
+            saveVenueToDatabase(venue);
         }
     }
 

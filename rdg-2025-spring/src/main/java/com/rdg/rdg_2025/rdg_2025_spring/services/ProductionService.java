@@ -78,6 +78,8 @@ public class ProductionService {
     public boolean deleteProductionById(int productionId) {
         try {
             if (productionRepository.existsById(productionId)) {
+                Production production = getProductionById(productionId);
+                venueService.removeProductionFromVenueProductionList(production);
                 productionRepository.deleteById(productionId);
                 return true;
             } else {
