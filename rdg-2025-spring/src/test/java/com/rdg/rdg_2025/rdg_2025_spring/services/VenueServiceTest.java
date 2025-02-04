@@ -361,6 +361,26 @@ public class VenueServiceTest {
             verify(festivalService, times(1)).setFestivalVenueFieldToNull(any());
 
         }
+
+        @Test
+        void testIfVenueHasMultipleFestivalsThenServiceIsCalledMultipleTimes() {
+            // Arrange
+            Festival festival1 = new Festival();
+            Festival festival2 = new Festival();
+            List<Festival> festivalList = new ArrayList<>();
+            festivalList.add(festival1);
+            festivalList.add(festival2);
+            testVenue1.setFestivals(festivalList);
+
+            when(venueRepository.existsById(any())).thenReturn(true);
+            when(venueRepository.findById(anyInt())).thenReturn(Optional.of(testVenue1));
+
+            // Act
+            venueService.deleteVenueById(1);
+            // Assert
+            verify(festivalService, times(2)).setFestivalVenueFieldToNull(any());
+
+        }
     }
 
     @Nested
