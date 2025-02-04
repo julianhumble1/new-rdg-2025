@@ -35,6 +35,9 @@ public class VenueServiceTest {
     private VenueService venueService;
 
     @Mock
+    private ProductionService productions;
+
+    @Mock
     private VenueRepository venueRepository;
 
     @Nested
@@ -208,6 +211,7 @@ public class VenueServiceTest {
         void testSuccessfulDeletionReturnsTrue() {
             // Arrange
             when(venueRepository.existsById(any())).thenReturn(true);
+            when(venueRepository.findById(anyInt())).thenReturn(Optional.of(testVenue1));
             // Act
             boolean result = venueService.deleteVenueById(1);
             // Assert
@@ -228,6 +232,8 @@ public class VenueServiceTest {
         void testDeleteDataAccessExceptionThrowsDatabaseException() {
             // Arrange
             when(venueRepository.existsById(any())).thenReturn(true);
+            when(venueRepository.findById(anyInt())).thenReturn(Optional.of(testVenue1));
+
             doThrow(new DataAccessException("Data access exception") {}).when(venueRepository).deleteById(anyInt());
             // Act & Assert
             DatabaseException ex = assertThrows(DatabaseException.class, () -> {
@@ -239,6 +245,8 @@ public class VenueServiceTest {
         void testDeletePersistenceExceptionThrowsDatabaseException() {
             // Arrange
             when(venueRepository.existsById(any())).thenReturn(true);
+            when(venueRepository.findById(anyInt())).thenReturn(Optional.of(testVenue1));
+
             doThrow(new PersistenceException("Data persistence exception") {}).when(venueRepository).deleteById(anyInt());
             // Act & Assert
             DatabaseException ex = assertThrows(DatabaseException.class, () -> {

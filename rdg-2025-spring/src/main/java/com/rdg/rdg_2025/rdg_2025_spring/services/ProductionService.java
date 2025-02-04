@@ -19,14 +19,14 @@ import java.util.List;
 @Service
 public class ProductionService {
 
-    @Autowired
     private ProductionRepository productionRepository;
+    private VenueService venueService;
 
-    public ProductionService(VenueService venueService) {
+    @Autowired
+    public ProductionService(ProductionRepository productionRepository, VenueService venueService) {
+        this.productionRepository = productionRepository;
         this.venueService = venueService;
     }
-
-    private VenueService venueService;
 
     // CRUD METHODS
 

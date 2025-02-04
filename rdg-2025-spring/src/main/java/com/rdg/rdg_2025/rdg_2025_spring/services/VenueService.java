@@ -10,6 +10,7 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.PersistenceException;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
@@ -20,8 +21,14 @@ import java.util.List;
 @Service
 public class VenueService {
 
+    private VenueRepository venueRepository;
+    private ProductionService productionService;
+
     @Autowired
-    VenueRepository venueRepository;
+    public VenueService(VenueRepository venueRepository, @Lazy ProductionService productionService) {
+        this.venueRepository = venueRepository;
+        this.productionService = productionService;
+    }
 
     // CRUD METHODS
 
@@ -61,6 +68,8 @@ public class VenueService {
     public boolean deleteVenueById(int venueId) {
         try {
             if (venueRepository.existsById(venueId)) {
+                List<Production> productionList = getVenueById(venueId).getProductions();
+                productionList.forEach((production) -> productionService.setProductionVenueFieldToNull(production));
                 venueRepository.deleteById(venueId);
                 return true;
             } else {
