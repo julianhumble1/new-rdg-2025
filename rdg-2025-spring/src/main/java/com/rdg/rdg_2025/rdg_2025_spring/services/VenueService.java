@@ -2,6 +2,7 @@ package com.rdg.rdg_2025.rdg_2025_spring.services;
 
 import com.rdg.rdg_2025.rdg_2025_spring.exception.DatabaseException;
 import com.rdg.rdg_2025.rdg_2025_spring.helpers.SlugUtils;
+import com.rdg.rdg_2025.rdg_2025_spring.models.Festival;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Production;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Venue;
 import com.rdg.rdg_2025.rdg_2025_spring.payload.request.venue.VenueRequest;
@@ -22,12 +23,15 @@ import java.util.List;
 public class VenueService {
 
     private VenueRepository venueRepository;
+
     private ProductionService productionService;
+    private FestivalService festivalService;
 
     @Autowired
-    public VenueService(VenueRepository venueRepository, @Lazy ProductionService productionService) {
+    public VenueService(VenueRepository venueRepository, @Lazy ProductionService productionService, @Lazy FestivalService festivalService) {
         this.venueRepository = venueRepository;
         this.productionService = productionService;
+        this.festivalService = festivalService;
     }
 
     // CRUD METHODS
@@ -69,6 +73,7 @@ public class VenueService {
 
         if ( checkVenueExists(venueId) ) {
             setAssociatedProductionVenuesToNull(venueId);
+            setAssociatedFestivalVenuesToNull(venueId);
             return deleteVenueInDatabase(venueId);
         } else {
             return false;
@@ -125,17 +130,6 @@ public class VenueService {
         }
     }
 
-    private void setAssociatedProductionVenuesToNull(int venueId) {
-        List<Production> productionList = getVenueById(venueId).getProductions();
-        try {
-            productionList.forEach((production) -> productionService.setProductionVenueFieldToNull(production));
-        } catch (DataIntegrityViolationException ex) {
-            throw new DataIntegrityViolationException(ex.getMessage());
-        } catch (DataAccessException | PersistenceException ex) {
-            throw new DatabaseException(ex.getMessage());
-        }
-    }
-
     private boolean deleteVenueInDatabase(int venueId) {
         try {
             venueRepository.deleteById(venueId);
@@ -143,6 +137,27 @@ public class VenueService {
         } catch (DataAccessException | PersistenceException ex) {
             throw new DatabaseException(ex.getMessage());
         }
+    }
+
+    private void setAssociatedProductionVenuesToNull(int venueId) {
+        List<Production> productionList = getVenueById(venueId).getProductions();
+        try {
+            productionList.forEach((production) -> productionService.setProductionVenueFieldToNull(production));
+        } catch (DataIntegrityViolationException ex) {
+            throw new DataIntegrityViolationException(ex.getMessage(), ex);
+        } catch (DatabaseException ex) {
+            throw new DatabaseException(ex.getMessage(), ex);
+        }
+    }
+
+    private void setAssociatedFestivalVenuesToNull(int venueId) {
+        List<Festival> festivalList = getVenueById(venueId).getFestivals();
+        try {
+            festivalList.forEach((festival) -> festivalService.setFestivalVenueFieldToNull(festival));
+        } catch (DatabaseException ex) {
+            throw new DatabaseException(ex.getMessage(), ex);
+        }
+
     }
 
 }

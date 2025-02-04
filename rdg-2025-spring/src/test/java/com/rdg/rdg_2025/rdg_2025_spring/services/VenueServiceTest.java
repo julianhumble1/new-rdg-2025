@@ -38,6 +38,9 @@ public class VenueServiceTest {
     private ProductionService productionService;
 
     @Mock
+    private FestivalService festivalService;
+
+    @Mock
     private VenueRepository venueRepository;
 
     @Nested
@@ -308,6 +311,35 @@ public class VenueServiceTest {
             venueService.deleteVenueById(1);
             // Assert
             verify(productionService, times(2)).setProductionVenueFieldToNull(any());
+        }
+
+        @Test
+        void testIfProductionServiceThrowsDatabaseExceptionThenThrowsDatabaseException() {
+            // Arrange
+            Production production = new Production();
+            List<Production> productionList = new ArrayList<>();
+            productionList.add(production);
+            testVenue1.setProductions(productionList);
+            when(venueRepository.existsById(any())).thenReturn(true);
+            when(venueRepository.findById(anyInt())).thenReturn(Optional.of(testVenue1));
+
+            doThrow(new DatabaseException("database exception")).when(productionService).setProductionVenueFieldToNull(any());
+
+            // Act & Assert
+            DatabaseException ex = assertThrows(DatabaseException.class, () -> {
+                venueService.deleteVenueById(1);
+            });
+        }
+
+        @Test
+        void testIfVenueHasNoFestivalsThenFestivalServiceNotCalled() {
+            // Arrange
+            when(venueRepository.existsById(any())).thenReturn(true);
+            when(venueRepository.findById(anyInt())).thenReturn(Optional.of(testVenue1));
+            // Act
+            venueService.deleteVenueById(1);
+            // Assert
+            verify(festivalService, never()).setFestivalVenueFieldToNull(any());
         }
     }
 
