@@ -556,7 +556,6 @@ public class ProductionServiceTest {
         @Test
         void testSaveProductionIsCalled() {
             // Arrange
-
             // Act
             productionService.setProductionVenueFieldToNull(testProduction);
             // Assert

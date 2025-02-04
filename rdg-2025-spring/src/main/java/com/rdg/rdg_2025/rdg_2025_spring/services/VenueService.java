@@ -69,16 +69,10 @@ public class VenueService {
 
         if ( checkVenueExists(venueId) ) {
             setAssociatedProductionVenuesToNull(venueId);
-            try {
-                venueRepository.deleteById(venueId);
-                return true;
-            } catch (DataAccessException | PersistenceException ex) {
-                throw new DatabaseException(ex.getMessage());
-            }
+            return deleteVenueInDatabase(venueId);
         } else {
             return false;
         }
-
     }
 
     // ADDITIONAL METHODS
@@ -137,6 +131,15 @@ public class VenueService {
             productionList.forEach((production) -> productionService.setProductionVenueFieldToNull(production));
         } catch (DataIntegrityViolationException ex) {
             throw new DataIntegrityViolationException(ex.getMessage());
+        } catch (DataAccessException | PersistenceException ex) {
+            throw new DatabaseException(ex.getMessage());
+        }
+    }
+
+    private boolean deleteVenueInDatabase(int venueId) {
+        try {
+            venueRepository.deleteById(venueId);
+            return true;
         } catch (DataAccessException | PersistenceException ex) {
             throw new DatabaseException(ex.getMessage());
         }

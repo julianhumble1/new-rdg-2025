@@ -25,7 +25,7 @@ public class FestivalService {
 
     private VenueService venueService;
 
-    // METHODS
+    // CRUD METHODS
 
     public Festival addNewFestival(NewFestivalRequest newFestivalRequest) {
 
@@ -60,6 +60,12 @@ public class FestivalService {
         }
     }
 
+    // ADDITIONAL METHODS
+
+    public void setFestivalVenueFieldToNull(Festival festival) {
+        festival.setVenue(null);
+        saveFestivalToDatabase(festival);
+    }
 
     // PRIVATE HELPER METHODS
 
