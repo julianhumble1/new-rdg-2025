@@ -66,18 +66,19 @@ public class VenueService {
     }
 
     public boolean deleteVenueById(int venueId) {
-        try {
-            if (venueRepository.existsById(venueId)) {
-                List<Production> productionList = getVenueById(venueId).getProductions();
-                productionList.forEach((production) -> productionService.setProductionVenueFieldToNull(production));
+
+        if ( checkVenueExists(venueId) ) {
+            setAssociatedProductionVenuesToNull(venueId);
+            try {
                 venueRepository.deleteById(venueId);
                 return true;
-            } else {
-                return false;
+            } catch (DataAccessException | PersistenceException ex) {
+                throw new DatabaseException(ex.getMessage());
             }
-        } catch (DataAccessException | PersistenceException ex) {
-            throw new DatabaseException(ex.getMessage());
+        } else {
+            return false;
         }
+
     }
 
     // ADDITIONAL METHODS
@@ -116,6 +117,25 @@ public class VenueService {
         try {
             return venueRepository.save(venue);
         } catch (DataIntegrityViolationException | ConstraintViolationException ex) {
+            throw new DataIntegrityViolationException(ex.getMessage());
+        } catch (DataAccessException | PersistenceException ex) {
+            throw new DatabaseException(ex.getMessage());
+        }
+    }
+
+    private boolean checkVenueExists(int venueId) {
+        try {
+            return venueRepository.existsById(venueId);
+        } catch (DataAccessException ex) {
+            throw new DatabaseException(ex.getMessage(), ex);
+        }
+    }
+
+    private void setAssociatedProductionVenuesToNull(int venueId) {
+        List<Production> productionList = getVenueById(venueId).getProductions();
+        try {
+            productionList.forEach((production) -> productionService.setProductionVenueFieldToNull(production));
+        } catch (DataIntegrityViolationException ex) {
             throw new DataIntegrityViolationException(ex.getMessage());
         } catch (DataAccessException | PersistenceException ex) {
             throw new DatabaseException(ex.getMessage());

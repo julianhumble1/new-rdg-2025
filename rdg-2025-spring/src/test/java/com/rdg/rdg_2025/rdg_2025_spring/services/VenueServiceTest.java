@@ -35,7 +35,7 @@ public class VenueServiceTest {
     private VenueService venueService;
 
     @Mock
-    private ProductionService productions;
+    private ProductionService productionService;
 
     @Mock
     private VenueRepository venueRepository;
@@ -263,6 +263,33 @@ public class VenueServiceTest {
             // Assert
             assertEquals(false, result);
 
+        }
+
+        @Test
+        void testVenueHasNoProductionsThenProductionServiceIsNotCalled() {
+            // Arrange
+            when(venueRepository.existsById(any())).thenReturn(true);
+            when(venueRepository.findById(anyInt())).thenReturn(Optional.of(testVenue1));
+            // Act
+            venueService.deleteVenueById(1);
+            // Assert
+            verify(productionService, never()).setProductionVenueFieldToNull(any());
+        }
+
+        @Test
+        void testIfVenueHasOneProductionThenProductionServiceIsCalledOnce() {
+            // Arrange
+            Production production = new Production();
+            List<Production> productionList = new ArrayList<>();
+            productionList.add(production);
+            testVenue1.setProductions(productionList);
+            when(venueRepository.existsById(any())).thenReturn(true);
+            when(venueRepository.findById(anyInt())).thenReturn(Optional.of(testVenue1));
+
+            // Act
+            venueService.deleteVenueById(1);
+            // Assert
+            verify(productionService, times(1)).setProductionVenueFieldToNull(any());
         }
     }
 
