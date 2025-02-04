@@ -51,7 +51,7 @@ const NewProductionForm = () => {
     useEffect(() => {
         const getVenueOptions = async () => {
             try {
-                setVenueOptions(FetchValueOptionsHelper.fetchVenueOptions())
+                setVenueOptions(await FetchValueOptionsHelper.fetchVenueOptions())
             } catch (e) {
                 setErrorMessage(e.message)
             }
