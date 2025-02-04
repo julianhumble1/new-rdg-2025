@@ -7,6 +7,7 @@ import com.rdg.rdg_2025.rdg_2025_spring.payload.request.venue.VenueRequest;
 import com.rdg.rdg_2025.rdg_2025_spring.repository.VenueRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.PersistenceException;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -17,10 +18,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.time.LocalDateTime;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -415,14 +414,59 @@ public class VenueServiceTest {
     @DisplayName("removeProductionFromVenueList service tests")
     class RemoveProductionFromVenueListServiceTests {
 
+        private Venue testVenue;
+        private Production testProduction;
+
+        @BeforeEach
+        void beforeEach() {
+            testVenue = new Venue("Test Venue", "Test Notes", "Test Postcode", "Test Address", "Test Town", "www.test.com");
+
+            testProduction = new Production(
+                    "Test Production",
+                    testVenue,
+                    "Test Author",
+                    "Test Description",
+                    LocalDateTime.now(),
+                    false,
+                    false,
+                    "Test File String"
+            );
+            List<Production> productions = new ArrayList<>();
+            productions.add(testProduction);
+            testVenue.setProductions(productions);
+        }
+
         @Test
-        void testIfProductionHasNoAssociatedVenueVenueSaveIsNotCalled() {
+        void testIfProductionHasNoAssociatedVenueSaveIsNotCalled() {
             // Arrange
-            Production production = new Production();
+            Production noVenueProduction = new Production();
             // Act
-            venueService.removeProductionFromVenueProductionList(production);
+            venueService.removeProductionFromVenueProductionList(noVenueProduction);
             // Assert
             verify(venueRepository, never()).save(any(Venue.class));
+        }
+
+        @Test
+        void testProductionListReducesLengthByOneAfterMethodCall() {
+            // Arrange
+            int productionListStartingLength = testVenue.getProductions().size();
+            when(venueRepository.findById(anyInt())).thenReturn(Optional.of(testVenue));
+            when(venueRepository.save(any())).thenReturn(testVenue);
+            // Act
+            venueService.removeProductionFromVenueProductionList(testProduction);
+            // Assert
+            assertEquals(productionListStartingLength -1, testVenue.getProductions().size());
+        }
+
+        @Test
+        void testUpdatedVenueIsSavedToDatabase() {
+            // Arrange
+            when(venueRepository.findById(anyInt())).thenReturn(Optional.of(testVenue));
+            when(venueRepository.save(any())).thenReturn(testVenue);
+            // Act
+            venueService.removeProductionFromVenueProductionList(testProduction);
+            // Assert
+            verify(venueRepository, atLeastOnce()).save(any());
         }
 
     }
