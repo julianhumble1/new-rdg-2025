@@ -54,7 +54,6 @@ public class FestivalController {
 
     @GetMapping("/{festivalId}")
     public ResponseEntity<?> getFestivalById(@PathVariable int festivalId) {
-
         try {
             Festival festival = festivalService.getFestivalById(festivalId);
             return ResponseEntity.ok(new FestivalResponse(festival));

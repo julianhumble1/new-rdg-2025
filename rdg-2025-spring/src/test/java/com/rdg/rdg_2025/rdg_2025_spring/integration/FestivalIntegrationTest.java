@@ -457,4 +457,30 @@ public class FestivalIntegrationTest {
 
 
     }
+
+    @Nested
+    @DisplayName("GET get festival by id integration tests")
+    class GetFestivalByIdIntegrationTests {
+
+        @Autowired
+        private VenueRepository venueRepository;
+
+        private Festival testFestival;
+
+        @BeforeEach
+        void beforeEach() {
+            Venue managedTestVenue1 = venueRepository.findById(testVenue1.getId()).orElseThrow(() -> new RuntimeException("Venue not found"));
+
+            testFestival = new Festival("Test Festival", managedTestVenue1, 2025, 1, "Test Description");
+            festivalRepository.save(testFestival);
+        }
+
+        @Test
+        void testSuccessfulGetResponds200() throws Exception {
+            // Act & Assert
+            mockMvc.perform(get("/festivals/" + testFestival.getId()))
+                    .andExpect(status().isOk());
+        }
+
+    }
 }
