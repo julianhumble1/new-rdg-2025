@@ -52,4 +52,18 @@ public class FestivalController {
         }
     }
 
+    @GetMapping("/{festivalId}")
+    public ResponseEntity<?> getFestivalById(@PathVariable int festivalId) {
+
+        try {
+            Festival festival = festivalService.getFestivalById(festivalId);
+        } catch (EntityNotFoundException ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+        } catch (DatabaseException ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
+        }
+
+        return ResponseEntity.ok().build();
+    }
+
 }
