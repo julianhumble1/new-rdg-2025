@@ -491,8 +491,14 @@ public class FestivalIntegrationTest {
                     .andExpect(jsonPath("$.festival.year").value(2025))
                     .andExpect(jsonPath("$.festival.month").value(1))
                     .andExpect(jsonPath("$.festival.description").value("Test Description"))
-                    .andExpect(jsonPath("$.festival.venue.name").value("Test Venue 1"))
-            ;
+                    .andExpect(jsonPath("$.festival.venue.name").value("Test Venue 1"));
+        }
+
+        @Test
+        void testNonExistentFestivalIdResponds404() throws Exception {
+            // Act & Assert
+            mockMvc.perform(get("/festivals/" + (testFestival.getId() + 1)))
+                    .andExpect(status().isNotFound());
         }
 
     }
