@@ -20,7 +20,7 @@ const VenuesTable = ({ venues, handleDelete }) => {
             </div>
         )
     } else {
-        return <div className="font-bold m-2">No venues to display</div>
+        return <div className="font-bold m-3">No venues to display</div>
     }
   
 }

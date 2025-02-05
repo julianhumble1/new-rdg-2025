@@ -50,6 +50,7 @@ const VenuePage = () => {
 
     const handleConfirmDelete = async (item) => {
         try {
+            // check whether item to delete is a production or venue
             if (item.postcode == null) {
                 const response = await ProductionService.deleteProduction(item.id)
                 fetchVenueData()

@@ -109,11 +109,7 @@ const ProductionPage = () => {
                         <div>Created: {format(new Date(productionData.createdAt), "dd-MM-yyyy")} </div>
                         <div>Updated: {format(new Date(productionData.updatedAt), "dd-MM-yyyy")}</div>
                     </div>
-                    {successMessage && 
-                    <div className="text-green-500">
-                        {successMessage}
-                    </div>
-                }
+                    <SuccessMessage message={successMessage} />
                     <div className="flex flex-row gap-3 items-start ">
                         <button className="text-blue-500 hover:text-blue-700 hover:underline pr-2" onClick={() => setEditMode(true)}>
                             Edit
@@ -136,11 +132,7 @@ const ProductionPage = () => {
                         </button>
                     </div>
 
-                    {errorMessage && 
-                    <div className="text-red-500">
-                        Failed to edit venue: {errorMessage}
-                    </div>
-                }
+                    <ErrorMessage message={errorMessage} />
                 </div>
 
             }

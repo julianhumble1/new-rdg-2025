@@ -8,8 +8,9 @@ const PerformancesTable = ({ performances }) => {
                 <div className="text-lg font-bold">
                     Performances:
                 </div>
-                <div className="grid grid-cols-4 bg-slate-400 italic font-bold">
+                <div className="grid grid-cols-5 bg-slate-400 italic font-bold">
                     <div className="col-span-1 p-1">Date & Time</div>
+                    <div className="col-span-1 p-1">Production</div>
                     <div className="col-span-1 p-1">Venue</div>
                     <div className="col-span-1 p-1">Festival</div>
                     <div className="col-span-1 p-1">Description</div>

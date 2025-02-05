@@ -60,4 +60,14 @@ export default class FestivalService {
 
     }
 
+    static getFestivalById = async (festivalId) => {
+    
+        try {
+            const response = await axios.get(`http://localhost:8080/festivals/${festivalId}`)
+            return response
+        } catch (e) {
+            throw new Error(e.message)
+        }
+    }
+
 }

@@ -20,7 +20,7 @@ const ProductionsTable = ({ productions, handleDelete }) => {
             </div>
         )
     } else {
-        return <div className="font-bold">No productions to display</div>
+        return <div className="font-bold m-3">No productions to display</div>
     }
 
 }
