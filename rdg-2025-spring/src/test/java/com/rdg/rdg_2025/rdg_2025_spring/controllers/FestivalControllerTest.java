@@ -469,5 +469,14 @@ public class FestivalControllerTest {
                     .andExpect(status().isBadRequest());
         }
 
+        @Test
+        void testSuccessfulGetResponds200() throws Exception {
+            // Arrange
+            when(festivalService.getFestivalById(anyInt())).thenReturn(testFestival);
+            // Act & Assert
+            mockMvc.perform(get("/festivals/1"))
+                    .andExpect(status().isOk());
+        }
+
     }
 }
