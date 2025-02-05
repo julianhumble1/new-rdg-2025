@@ -478,5 +478,14 @@ public class FestivalControllerTest {
                     .andExpect(status().isOk());
         }
 
+        @Test
+        void testSuccessfulGetRespondsExpectedFestivalObject() throws Exception {
+            // Arrange
+            when(festivalService.getFestivalById(anyInt())).thenReturn(testFestival);
+            // Act & Assert
+            mockMvc.perform(get("/festivals/1"))
+                    .andExpect(jsonPath("$.festival.name").value("Test Festival"));
+        }
+
     }
 }

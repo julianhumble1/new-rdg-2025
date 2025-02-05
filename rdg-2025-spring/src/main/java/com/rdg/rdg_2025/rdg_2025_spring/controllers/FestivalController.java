@@ -57,13 +57,12 @@ public class FestivalController {
 
         try {
             Festival festival = festivalService.getFestivalById(festivalId);
+            return ResponseEntity.ok(new FestivalResponse(festival));
         } catch (EntityNotFoundException ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
         } catch (DatabaseException ex) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
         }
-
-        return ResponseEntity.ok().build();
     }
 
 }
