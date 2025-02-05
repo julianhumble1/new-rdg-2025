@@ -461,5 +461,13 @@ public class FestivalControllerTest {
                     .andExpect(status().isInternalServerError());
         }
 
+        @Test
+        void testVenueIdNotIntResponds400() throws Exception {
+            // Arrange
+            // Act & Assert
+            mockMvc.perform(get("/festivals/notanint"))
+                    .andExpect(status().isBadRequest());
+        }
+
     }
 }
