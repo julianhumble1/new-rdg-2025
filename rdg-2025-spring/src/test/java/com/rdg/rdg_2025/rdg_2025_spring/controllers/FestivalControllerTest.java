@@ -23,6 +23,7 @@ import org.springframework.web.context.WebApplicationContext;
 import java.util.ArrayList;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -438,4 +439,18 @@ public class FestivalControllerTest {
 
     }
 
+    @Nested
+    @DisplayName("getFestivalById controller tests")
+    class GetFestivalByIdControllerTests {
+
+        @Test
+        void testEntityNotFoundExceptionResponds404() throws Exception {
+            // Arrange
+            when(festivalService.getFestivalById(anyInt())).thenThrow(new EntityNotFoundException());
+            // Act & Assert
+            mockMvc.perform(get("/festivals/1"))
+                    .andExpect(status().isNotFound());
+        }
+
+    }
 }
