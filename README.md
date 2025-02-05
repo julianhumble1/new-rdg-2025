@@ -52,6 +52,7 @@ The following is a list of entities and their corresponding routes that have bee
 **Festivals**
 * POST ("/festivals") - create new festival
 * GET ("/festivals") - get all festivals
+* GET ("/festivals") - get specific festival
 
 **Performances**
 * POST ("/performances") - add new performance
@@ -107,6 +108,8 @@ At that stage, I will then add more styling to the front end using TailwindCSS, 
 ![post festival diagram](./images/post-festival-diagram.jpg)
 
 ![get festivals diagram](./images/get-festivals-diagram.jpg)
+
+![get festival diagram](./images/get-festival-diagram.jpg)
 
 ### Performances
 
