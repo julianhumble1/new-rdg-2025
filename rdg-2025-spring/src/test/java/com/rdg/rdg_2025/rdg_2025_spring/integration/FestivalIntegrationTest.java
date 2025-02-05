@@ -501,5 +501,12 @@ public class FestivalIntegrationTest {
                     .andExpect(status().isNotFound());
         }
 
+        @Test
+        void testInvalidVenueIdResponds400() throws Exception {
+            // Act & Assert
+            mockMvc.perform(get("/festivals/notanint"))
+                    .andExpect(status().isBadRequest());
+        }
+
     }
 }
