@@ -482,5 +482,18 @@ public class FestivalIntegrationTest {
                     .andExpect(status().isOk());
         }
 
+        @Test
+        void testSuccessfulGetRespondsExpectedFestivalObject() throws Exception {
+            // Act & Assert
+            mockMvc.perform(get("/festivals/" + testFestival.getId()))
+                    .andExpect(jsonPath("$.festival.name").value("Test Festival"))
+                    .andExpect(jsonPath("$.festival.id").value(testFestival.getId()))
+                    .andExpect(jsonPath("$.festival.year").value(2025))
+                    .andExpect(jsonPath("$.festival.month").value(1))
+                    .andExpect(jsonPath("$.festival.description").value("Test Description"))
+                    .andExpect(jsonPath("$.festival.venue.name").value("Test Venue 1"))
+            ;
+        }
+
     }
 }
