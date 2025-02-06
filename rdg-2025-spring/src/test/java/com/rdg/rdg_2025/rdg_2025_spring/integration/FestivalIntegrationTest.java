@@ -590,6 +590,15 @@ public class FestivalIntegrationTest {
                     .andExpect(status().isNotFound());
         }
 
+        @Test
+        void testFestivalIdNotIntResponds400() throws Exception {
+            // Arrange
+            // Act & Assert
+            mockMvc.perform(delete("/festivals/" + "not an integer" )
+                            .header("Authorization", adminToken))
+                    .andExpect(status().isBadRequest());
+        }
+
 
     }
 }
