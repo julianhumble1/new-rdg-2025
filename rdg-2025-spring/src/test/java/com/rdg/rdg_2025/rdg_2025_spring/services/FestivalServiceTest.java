@@ -329,5 +329,17 @@ public class FestivalServiceTest {
             });
         }
 
+        @Test
+        void testDeleteThrowsPersistenceExceptionThrowsDatabaseException() {
+            // Arrange
+            when(festivalRepository.findById(anyInt())).thenReturn(Optional.of(testFestival));
+            doThrow(new PersistenceException("persistence exception")).when(festivalRepository).delete(any());
+
+            // Act & Assert
+            assertThrows(DatabaseException.class, () -> {
+                festivalService.deleteFestivalById(1);
+            });
+        }
+
     }
 }

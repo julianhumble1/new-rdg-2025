@@ -69,7 +69,7 @@ public class FestivalService {
             return true;
         } catch (EntityNotFoundException ex) {
             return false;
-        } catch (DataAccessException ex) {
+        } catch (DataAccessException | PersistenceException ex) {
             throw new DatabaseException(ex.getMessage(), ex);
         }
     }
