@@ -599,6 +599,15 @@ public class FestivalIntegrationTest {
                     .andExpect(status().isBadRequest());
         }
 
+        @Test
+        void testUserTokenResponds403() throws Exception {
+            // Arrange
+            // Act & Assert
+            mockMvc.perform(delete("/festivals/" + testExistingFestival.getId() )
+                            .header("Authorization", userToken))
+                    .andExpect(status().isForbidden());
+        }
+
 
     }
 }
