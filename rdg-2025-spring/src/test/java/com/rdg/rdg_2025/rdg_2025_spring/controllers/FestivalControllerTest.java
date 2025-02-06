@@ -509,5 +509,14 @@ public class FestivalControllerTest {
                     .andExpect(status().isNotFound());
         }
 
+        @Test
+        void testDatabaseExceptionResponds500() throws Exception {
+            // Arrange
+            when(festivalService.deleteFestivalById(anyInt())).thenThrow(new DatabaseException("database exception"));
+            // Act & Assert
+            mockMvc.perform(delete("/festivals/1"))
+                    .andExpect(status().isInternalServerError());
+        }
+
     }
 }
