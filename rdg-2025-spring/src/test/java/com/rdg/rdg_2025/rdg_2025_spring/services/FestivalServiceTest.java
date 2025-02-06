@@ -282,7 +282,7 @@ public class FestivalServiceTest {
         @Test
         void testIfFestivalIsNotInDatabaseThenReturnsFalse() {
             // Arrange
-            when(festivalRepository.findById(anyInt())).thenThrow(new EntityNotFoundException("Festival does not exist"));
+            when(festivalRepository.findById(anyInt())).thenReturn(Optional.empty());
             // Act
             boolean result = festivalService.deleteFestivalById(1);
             // Assert
@@ -433,6 +433,16 @@ public class FestivalServiceTest {
             when(festivalRepository.findById(anyInt())).thenThrow(new DataAccessException("data access exception") {});
             // Act & Assert
             assertThrows(DatabaseException.class, () -> {
+                festivalService.updateFestival(1, testUpdateFestivalRequest);
+            });
+        }
+
+        @Test
+        void testFestivalDoesNotExistThrowsEntityNotFoundException() {
+            // Arrange
+            when(festivalRepository.findById(anyInt())).thenReturn(Optional.empty());
+            // Act & Assert
+            assertThrows(EntityNotFoundException.class, () -> {
                 festivalService.updateFestival(1, testUpdateFestivalRequest);
             });
         }

@@ -90,7 +90,7 @@ public class FestivalService {
         return new Festival();
     }
 
-    // ADDITIONAL METHODS
+    // ADDITIONAL PUBLIC METHODS
 
     public void setFestivalVenueFieldToNull(Festival festival) {
         festival.setVenue(null);
