@@ -351,6 +351,21 @@ public class FestivalServiceTest {
         }
 
         @Test
+        void testFestivalServiceThrowsDatabaseExceptionThrowsDatabaseException() {
+            // Arrange
+            List<Performance> performanceList = new ArrayList<>();
+            Performance testPerformance = new Performance();
+            performanceList.add(testPerformance);
+            testFestival.setPerformances(performanceList);
+            when(festivalRepository.findById(anyInt())).thenReturn(Optional.of(testFestival));
+            doThrow(new DatabaseException("database exception")).when(performanceService).setPerformanceFestivalFieldToNull(any());
+            // Act & Assert
+            assertThrows(DatabaseException.class, () -> {
+               festivalService.deleteFestivalById(1);
+            });
+        }
+
+        @Test
         void testFestivalExistsThenDeleteFestivalIsCalled() {
             // Arrange
             when(festivalRepository.findById(anyInt())).thenReturn(Optional.of(testFestival));
