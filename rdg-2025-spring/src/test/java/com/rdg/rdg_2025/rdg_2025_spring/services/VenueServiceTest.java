@@ -659,5 +659,16 @@ public class VenueServiceTest {
             assertEquals(festivalListStartingLength - 1, testVenue.getFestivals().size());
         }
 
+        @Test
+        void testUpdatedVenueIsSavedToDatabase() {
+            // Arrange
+            when(venueRepository.save(any())).thenReturn(testVenue);
+
+            // Act
+            venueService.removeFestivalFromVenueFestivalList(testFestival);
+            // Assert
+            verify(venueRepository, atLeastOnce()).save(any());
+        }
+
     }
 }
