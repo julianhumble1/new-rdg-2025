@@ -24,8 +24,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.*;
@@ -339,6 +338,16 @@ public class FestivalServiceTest {
             assertThrows(DatabaseException.class, () -> {
                 festivalService.deleteFestivalById(1);
             });
+        }
+
+        @Test
+        void testSuccessfulDeletionReturnsTrue() {
+            // Arrange
+            when(festivalRepository.findById(anyInt())).thenReturn(Optional.of(testFestival));
+            // Act
+            boolean result = festivalService.deleteFestivalById(1);
+            // Assert
+            assertTrue(result);
         }
 
     }
