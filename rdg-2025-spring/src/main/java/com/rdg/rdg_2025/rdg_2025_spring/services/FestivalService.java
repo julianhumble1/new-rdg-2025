@@ -38,13 +38,8 @@ public class FestivalService {
 
         Venue venue = getVenueFromService(festivalRequest);
 
-        Festival festival = new Festival(
-                festivalRequest.getName(),
-                venue,
-                festivalRequest.getYear(),
-                festivalRequest.getMonth(),
-                festivalRequest.getDescription()
-        );
+        Festival festival = new Festival();
+        updateFestivalFromRequest(festivalRequest, festival, venue);
 
         return saveFestivalToDatabase(festival);
 
