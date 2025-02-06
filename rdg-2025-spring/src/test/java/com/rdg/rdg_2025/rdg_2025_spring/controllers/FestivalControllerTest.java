@@ -495,10 +495,18 @@ public class FestivalControllerTest {
         @Test
         void testFestivalIdNotIntResponds400() throws Exception {
             // Arrange
-
             // Act & Assert
             mockMvc.perform(delete("/festivals/notanint"))
                     .andExpect(status().isBadRequest());
+        }
+
+        @Test
+        void testEntityNotFoundExceptionResponds404() throws Exception {
+            // Arrange
+            when(festivalService.deleteFestivalById(anyInt())).thenThrow(new EntityNotFoundException());
+            // Act & Assert
+            mockMvc.perform(delete("/festivals/1"))
+                    .andExpect(status().isNotFound());
         }
 
     }

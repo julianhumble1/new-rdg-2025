@@ -66,6 +66,11 @@ public class FestivalController {
 
     @DeleteMapping("/{festivalId}")
     public ResponseEntity<?> deleteFestivalById(@PathVariable int festivalId) {
+        try {
+            festivalService.deleteFestivalById(festivalId);
+        } catch (EntityNotFoundException ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+        }
         return ResponseEntity.ok().build();
     }
 
