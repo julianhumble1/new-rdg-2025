@@ -2,6 +2,7 @@ package com.rdg.rdg_2025.rdg_2025_spring.services;
 
 import com.rdg.rdg_2025.rdg_2025_spring.exception.DatabaseException;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Festival;
+import com.rdg.rdg_2025.rdg_2025_spring.models.Performance;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Venue;
 import com.rdg.rdg_2025.rdg_2025_spring.payload.request.festival.NewFestivalRequest;
 import com.rdg.rdg_2025.rdg_2025_spring.repository.FestivalRepository;
@@ -317,6 +318,20 @@ public class FestivalServiceTest {
             festivalService.deleteFestivalById(1);
             // Assert
             verify(performanceService, never()).setPerformanceFestivalFieldToNull(any());
+        }
+
+        @Test
+        void testFestivalHasOnePerformancesThenPerformanceServiceCalledOnce() {
+            // Arrange
+            List<Performance> performanceList = new ArrayList<>();
+            Performance testPerformance = new Performance();
+            performanceList.add(testPerformance);
+            testFestival.setPerformances(performanceList);
+            when(festivalRepository.findById(anyInt())).thenReturn(Optional.of(testFestival));
+            // Act
+            festivalService.deleteFestivalById(1);
+            // Assert
+            verify(performanceService, times(1)).setPerformanceFestivalFieldToNull(any());
         }
 
         @Test
