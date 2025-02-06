@@ -62,19 +62,15 @@ public class FestivalService {
 
     public boolean deleteFestivalById(int festivalId) {
 
-        boolean exists;
-
         try {
-            exists = festivalRepository.existsById(festivalId);
-        } catch (DataAccessException ex) {
-            throw new DatabaseException(ex.getMessage(), ex);
-        }
-
-        if (exists) {
+            Festival festival = getFestivalById(festivalId);
+            venueService.removeFestivalFromVenueFestivalList(festival);
             return true;
-        } else {
+        } catch (EntityNotFoundException ex) {
             return false;
         }
+
+
     }
 
     // ADDITIONAL METHODS

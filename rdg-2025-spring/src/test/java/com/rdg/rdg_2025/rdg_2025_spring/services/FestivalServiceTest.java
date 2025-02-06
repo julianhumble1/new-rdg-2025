@@ -279,7 +279,7 @@ public class FestivalServiceTest {
         @Test
         void testIfFestivalIsNotInDatabaseThenReturnsFalse() {
             // Arrange
-            when(festivalRepository.existsById(anyInt())).thenReturn(false);
+            when(festivalRepository.findById(anyInt())).thenThrow(new EntityNotFoundException("Festival does not exist"));
             // Act
             boolean result = festivalService.deleteFestivalById(1);
             // Assert
@@ -287,27 +287,25 @@ public class FestivalServiceTest {
         }
 
         @Test
-        void testFestivalExistsCheckDataAccessExceptionThrowsDatabaseException() {
+        void testGetFestivalDatabaseExceptionThrowsDatabaseException() {
 
             // Arrange
-            when(festivalRepository.existsById(anyInt())).thenThrow(new DataAccessException("data access exception") {
-            });
+            when(festivalRepository.findById(anyInt())).thenThrow(new DatabaseException("database exception"));
             // Act & Assert
             assertThrows(DatabaseException.class, () -> {
                 festivalService.deleteFestivalById(1);
             });
         }
 
-//        @Test
-//        void testFestivalExistsThenRemoveFromVenueFestivalListIsCalled() {
-//            // Arrange
-//            when(festivalRepository.existsById(anyInt())).thenReturn(true);
-//            when(festivalRepository.findById(anyInt())).thenReturn(Optional.of(testFestival));
-//            // Act
-//            festivalService.deleteFestivalById(1);
-//            // Assert
-//            verify(venueService, times(1)).removeFestivalFromVenueFestivalList(any());
-//        }
+        @Test
+        void testFestivalExistsThenRemoveFromVenueFestivalListIsCalled() {
+            // Arrange
+            when(festivalRepository.findById(anyInt())).thenReturn(Optional.of(testFestival));
+            // Act
+            festivalService.deleteFestivalById(1);
+            // Assert
+            verify(venueService, times(1)).removeFestivalFromVenueFestivalList(any());
+        }
 
 
     }
