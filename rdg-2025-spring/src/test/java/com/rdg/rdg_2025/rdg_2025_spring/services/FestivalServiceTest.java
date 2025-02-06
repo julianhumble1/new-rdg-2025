@@ -307,6 +307,16 @@ public class FestivalServiceTest {
             verify(venueService, times(1)).removeFestivalFromVenueFestivalList(any());
         }
 
+        @Test
+        void testFestivalExistsThenDeleteFestivalIsCalled() {
+            // Arrange
+            when(festivalRepository.findById(anyInt())).thenReturn(Optional.of(testFestival));
+            // Act
+            festivalService.deleteFestivalById(1);
+            // Assert
+            verify(festivalRepository, times(1)).delete(any());
+        }
+
 
     }
 }

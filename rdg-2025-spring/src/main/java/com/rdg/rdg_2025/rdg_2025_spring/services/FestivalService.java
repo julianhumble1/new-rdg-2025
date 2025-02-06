@@ -65,6 +65,7 @@ public class FestivalService {
         try {
             Festival festival = getFestivalById(festivalId);
             venueService.removeFestivalFromVenueFestivalList(festival);
+            festivalRepository.delete(festival);
             return true;
         } catch (EntityNotFoundException ex) {
             return false;
