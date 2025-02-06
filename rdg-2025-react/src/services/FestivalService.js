@@ -4,7 +4,6 @@ import Cookies from "js-cookie"
 export default class FestivalService {
 
     static createNewFestival = async (name, venueId, year, month, description) => {
-        console.log("venue id: " +  venueId)
 
         const token = Cookies.get("token")
 
@@ -68,6 +67,23 @@ export default class FestivalService {
         } catch (e) {
             throw new Error(e.message)
         }
+    }
+
+    static deleteFestivalById = async (festivalId) => {
+    
+        const token = Cookies.get("token")
+
+        try {
+            const response = await axios.delete(`http://localhost:8080/festivals/${festivalId}`,{
+                    headers: {
+                        "Authorization": `Bearer ${token}`
+                    }
+            })
+            return response
+        } catch (e) {
+            throw new Error(e.message)
+        }
+            
     }
 
 }

@@ -1,4 +1,5 @@
 import { XMarkIcon, TrashIcon } from "@heroicons/react/16/solid"
+import SpecificDeleteMessage from "./SpecificDeleteMessage.jsx"
 
 const ConfirmDeleteModal = ({ setShowConfirmDelete, itemToDelete, handleConfirmDelete }) => {
   return (
@@ -11,9 +12,7 @@ const ConfirmDeleteModal = ({ setShowConfirmDelete, itemToDelete, handleConfirmD
         <div className="my-8 text-center">
           <TrashIcon className="h-16 w-16 mx-auto text-red-500"/>
           <h4 className="text-gray-800 text-lg font-semibold mt-4">Are you sure you want to delete &apos;{itemToDelete.name }&apos;?</h4>
-          <p className="text-sm text-gray-600 mt-4">
-            This action can not be undone.
-          </p>
+          <SpecificDeleteMessage itemToDelete={itemToDelete} />
         </div>
 
         <div className="flex flex-col space-y-2">
