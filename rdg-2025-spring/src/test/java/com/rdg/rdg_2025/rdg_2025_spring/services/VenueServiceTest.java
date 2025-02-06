@@ -648,5 +648,16 @@ public class VenueServiceTest {
             verify(venueRepository, never()).save(any());
         }
 
+        @Test
+        void testFestivalListReducesLengthByOneAfterMethodCall() {
+            // Arrange
+            int festivalListStartingLength = testVenue.getFestivals().size();
+            when(venueRepository.save(any())).thenReturn(testVenue);
+            // Act
+            venueService.removeFestivalFromVenueFestivalList(testFestival);
+            // Assert
+            assertEquals(festivalListStartingLength - 1, testVenue.getFestivals().size());
+        }
+
     }
 }
