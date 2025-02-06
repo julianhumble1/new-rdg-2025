@@ -10,7 +10,7 @@ import lombok.ToString;
 
 
 @Getter @Setter @NoArgsConstructor @ToString
-public class NewFestivalRequest {
+public class FestivalRequest {
 
     @NotBlank
     private String name;
@@ -26,7 +26,7 @@ public class NewFestivalRequest {
 
     private String description;
 
-    public NewFestivalRequest(String name, int venueId, int year, int month, String description) {
+    public FestivalRequest(String name, int venueId, int year, int month, String description) {
         this.name = name;
         this.venueId = venueId;
         this.year = year;

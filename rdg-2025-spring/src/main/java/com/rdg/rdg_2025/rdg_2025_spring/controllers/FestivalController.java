@@ -2,7 +2,7 @@ package com.rdg.rdg_2025.rdg_2025_spring.controllers;
 
 import com.rdg.rdg_2025.rdg_2025_spring.exception.DatabaseException;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Festival;
-import com.rdg.rdg_2025.rdg_2025_spring.payload.request.festival.NewFestivalRequest;
+import com.rdg.rdg_2025.rdg_2025_spring.payload.request.festival.FestivalRequest;
 import com.rdg.rdg_2025.rdg_2025_spring.payload.response.festival.FestivalResponse;
 import com.rdg.rdg_2025.rdg_2025_spring.payload.response.festival.FestivalsResponse;
 import com.rdg.rdg_2025.rdg_2025_spring.services.FestivalService;
@@ -28,9 +28,9 @@ public class FestivalController {
 
     @PostMapping()
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> createNewFestival(@Valid @RequestBody NewFestivalRequest newFestivalRequest) {
+    public ResponseEntity<?> createNewFestival(@Valid @RequestBody FestivalRequest festivalRequest) {
         try {
-            Festival festival = festivalService.addNewFestival(newFestivalRequest);
+            Festival festival = festivalService.addNewFestival(festivalRequest);
             URI location = URI.create("/festivals/" + festival.getId());
             return ResponseEntity.created(location).body(new FestivalResponse(festival));
         } catch (DatabaseException ex) {

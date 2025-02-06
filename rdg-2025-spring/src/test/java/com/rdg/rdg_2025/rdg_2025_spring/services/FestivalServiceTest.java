@@ -4,7 +4,7 @@ import com.rdg.rdg_2025.rdg_2025_spring.exception.DatabaseException;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Festival;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Performance;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Venue;
-import com.rdg.rdg_2025.rdg_2025_spring.payload.request.festival.NewFestivalRequest;
+import com.rdg.rdg_2025.rdg_2025_spring.payload.request.festival.FestivalRequest;
 import com.rdg.rdg_2025.rdg_2025_spring.repository.FestivalRepository;
 import com.rdg.rdg_2025.rdg_2025_spring.repository.VenueRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -47,7 +47,7 @@ public class FestivalServiceTest {
     @InjectMocks
     FestivalService festivalService;
 
-    private NewFestivalRequest testNewFestivalRequest = new NewFestivalRequest(
+    private FestivalRequest testFestivalRequest = new FestivalRequest(
             "Test Festival", 1, 2025, 4, "Test Description"
     );
 
@@ -71,7 +71,7 @@ public class FestivalServiceTest {
 
             // Act & Assert
             EntityNotFoundException ex = assertThrows(EntityNotFoundException.class, () -> {
-                festivalService.addNewFestival(testNewFestivalRequest);
+                festivalService.addNewFestival(testFestivalRequest);
             });
         }
 
@@ -84,7 +84,7 @@ public class FestivalServiceTest {
             when(festivalRepository.save(any(Festival.class))).thenReturn(testFestival);
 
             // Act
-            Festival result = festivalService.addNewFestival(testNewFestivalRequest);
+            Festival result = festivalService.addNewFestival(testFestivalRequest);
             // Assert
             assertEquals(testFestival, result);
 
@@ -93,7 +93,7 @@ public class FestivalServiceTest {
         @Test
         void testNewFestivalWithOnlyNameAndYearReturnsFestivalObject() {
             // Arrange
-            NewFestivalRequest onlyNameAndYearFestivalRequest = new NewFestivalRequest(
+            FestivalRequest onlyNameAndYearFestivalRequest = new FestivalRequest(
                     "Test Festival", 0, 2025, 0, "Test Description"
             );
 
@@ -116,7 +116,7 @@ public class FestivalServiceTest {
             when(venueService.getVenueById(1)).thenThrow(new DatabaseException("Database Error") {});
             // Act & Assert
             DatabaseException ex = assertThrows(DatabaseException.class, () ->
-                    festivalService.addNewFestival(testNewFestivalRequest)
+                    festivalService.addNewFestival(testFestivalRequest)
             );
         }
 
@@ -132,7 +132,7 @@ public class FestivalServiceTest {
 
             // Act & Assert
             DatabaseException ex = assertThrows(DatabaseException.class, () ->
-                festivalService.addNewFestival(testNewFestivalRequest)
+                festivalService.addNewFestival(testFestivalRequest)
             );
 
         }
@@ -149,7 +149,7 @@ public class FestivalServiceTest {
 
             // Act & Assert
             DatabaseException ex = assertThrows(DatabaseException.class, () ->
-                    festivalService.addNewFestival(testNewFestivalRequest)
+                    festivalService.addNewFestival(testFestivalRequest)
             );
 
         }
@@ -290,10 +290,9 @@ public class FestivalServiceTest {
         }
 
         @Test
-        void testGetFestivalDatabaseExceptionThrowsDatabaseException() {
-
+        void testGetFestivalDataAccessExceptionThrowsDatabaseException() {
             // Arrange
-            when(festivalRepository.findById(anyInt())).thenThrow(new DatabaseException("database exception"));
+            when(festivalRepository.findById(anyInt())).thenThrow(new DataAccessException("database exception"){});
             // Act & Assert
             assertThrows(DatabaseException.class, () -> {
                 festivalService.deleteFestivalById(1);
@@ -408,6 +407,36 @@ public class FestivalServiceTest {
             // Assert
             assertTrue(result);
         }
+
+    }
+
+    @Nested
+    @DisplayName("updateFestival service tests")
+    class UpdateFestivalServiceTests {
+
+        private FestivalRequest testUpdateFestivalRequest;
+
+        @BeforeEach
+        void beforeEach() {
+            testUpdateFestivalRequest = new FestivalRequest(
+                    "Updated Festival Name",
+                    2,
+                    2026,
+                    2,
+                    "Updated Festival Description"
+            );
+        }
+
+        @Test
+        void testGetFestivalDataAccessExceptionThrowsDatabaseException() {
+            // Arrange
+            when(festivalRepository.findById(anyInt())).thenThrow(new DataAccessException("data access exception") {});
+            // Act & Assert
+            assertThrows(DatabaseException.class, () -> {
+                festivalService.updateFestival(1, testUpdateFestivalRequest);
+            });
+        }
+
 
     }
 }

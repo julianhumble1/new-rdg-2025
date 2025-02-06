@@ -3,7 +3,7 @@ package com.rdg.rdg_2025.rdg_2025_spring.controllers;
 import com.rdg.rdg_2025.rdg_2025_spring.exception.DatabaseException;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Festival;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Venue;
-import com.rdg.rdg_2025.rdg_2025_spring.payload.request.festival.NewFestivalRequest;
+import com.rdg.rdg_2025.rdg_2025_spring.payload.request.festival.FestivalRequest;
 import com.rdg.rdg_2025.rdg_2025_spring.services.FestivalService;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
@@ -61,7 +61,7 @@ public class FestivalControllerTest {
         @WithMockUser(roles="ADMIN")
         void test201StatusWhenServiceSuccessfullySavesFestival() throws Exception {
             // Arrange
-            when(festivalService.addNewFestival(any(NewFestivalRequest.class))).thenReturn(testFestival);
+            when(festivalService.addNewFestival(any(FestivalRequest.class))).thenReturn(testFestival);
 
             // Act & Assert
             mockMvc.perform(post("/festivals")
@@ -82,7 +82,7 @@ public class FestivalControllerTest {
         @WithMockUser(roles="ADMIN")
         void testExpectedURIWhenServiceSuccessfullySavesFestival() throws Exception {
             // Arrange
-            when(festivalService.addNewFestival(any(NewFestivalRequest.class))).thenReturn(testFestival);
+            when(festivalService.addNewFestival(any(FestivalRequest.class))).thenReturn(testFestival);
             int testFestivalId = testFestival.getId();
 
             // Act & Assert
@@ -104,7 +104,7 @@ public class FestivalControllerTest {
         @WithMockUser(roles="ADMIN")
         void testExpectedReturnedFestivalWhenServiceSuccessfullySavesFestival() throws Exception{
             // Arrange
-            when(festivalService.addNewFestival(any(NewFestivalRequest.class))).thenReturn(testFestival);
+            when(festivalService.addNewFestival(any(FestivalRequest.class))).thenReturn(testFestival);
 
             // Act & Assert
             mockMvc.perform(post("/festivals")
@@ -132,7 +132,7 @@ public class FestivalControllerTest {
         @WithMockUser(roles="ADMIN")
         void testDatabaseExceptionResponds500() throws Exception {
             // Arrange
-            when(festivalService.addNewFestival(any(NewFestivalRequest.class))).thenThrow(new DatabaseException("Database Error"));
+            when(festivalService.addNewFestival(any(FestivalRequest.class))).thenThrow(new DatabaseException("Database Error"));
 
             // Act & Assert
             mockMvc.perform(post("/festivals")
@@ -153,7 +153,7 @@ public class FestivalControllerTest {
         @WithMockUser(roles="ADMIN")
         void testInvalidVenueIdReturns400BadRequest() throws Exception{
             // Arrange
-            when(festivalService.addNewFestival(any(NewFestivalRequest.class))).thenThrow(new EntityNotFoundException("Invalid venue id"));
+            when(festivalService.addNewFestival(any(FestivalRequest.class))).thenThrow(new EntityNotFoundException("Invalid venue id"));
 
             // Act & Assert
             mockMvc.perform(post("/festivals")
@@ -176,7 +176,7 @@ public class FestivalControllerTest {
             // Arrange
             Festival onlyNameAndYearFestival = new Festival("Test Festival", null, 2025, 0, null);
 
-            when(festivalService.addNewFestival(any(NewFestivalRequest.class))).thenReturn(onlyNameAndYearFestival);
+            when(festivalService.addNewFestival(any(FestivalRequest.class))).thenReturn(onlyNameAndYearFestival);
 
             // Act & Assert
             mockMvc.perform(post("/festivals")
@@ -199,7 +199,7 @@ public class FestivalControllerTest {
             // Arrange
             Festival onlyNameAndYearFestival = new Festival("Test Festival", null, 2025, 0, null);
 
-            when(festivalService.addNewFestival(any(NewFestivalRequest.class))).thenReturn(onlyNameAndYearFestival);
+            when(festivalService.addNewFestival(any(FestivalRequest.class))).thenReturn(onlyNameAndYearFestival);
 
             // Act & Assert
             mockMvc.perform(post("/festivals")

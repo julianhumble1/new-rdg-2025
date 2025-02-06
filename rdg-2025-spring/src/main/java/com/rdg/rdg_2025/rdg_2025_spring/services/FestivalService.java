@@ -4,7 +4,7 @@ import com.rdg.rdg_2025.rdg_2025_spring.exception.DatabaseException;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Festival;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Performance;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Venue;
-import com.rdg.rdg_2025.rdg_2025_spring.payload.request.festival.NewFestivalRequest;
+import com.rdg.rdg_2025.rdg_2025_spring.payload.request.festival.FestivalRequest;
 import com.rdg.rdg_2025.rdg_2025_spring.repository.FestivalRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.PersistenceException;
@@ -33,16 +33,16 @@ public class FestivalService {
 
     // CRUD METHODS
 
-    public Festival addNewFestival(NewFestivalRequest newFestivalRequest) {
+    public Festival addNewFestival(FestivalRequest festivalRequest) {
 
-        Venue venue = getVenueFromService(newFestivalRequest);
+        Venue venue = getVenueFromService(festivalRequest);
 
         Festival festival = new Festival(
-                newFestivalRequest.getName(),
+                festivalRequest.getName(),
                 venue,
-                newFestivalRequest.getYear(),
-                newFestivalRequest.getMonth(),
-                newFestivalRequest.getDescription()
+                festivalRequest.getYear(),
+                festivalRequest.getMonth(),
+                festivalRequest.getDescription()
         );
 
         return saveFestivalToDatabase(festival);
@@ -84,6 +84,12 @@ public class FestivalService {
         }
     }
 
+    public Festival updateFestival(int festivalId, FestivalRequest festivalRequest) {
+
+        Festival festival = getFestivalById(festivalId);
+        return new Festival();
+    }
+
     // ADDITIONAL METHODS
 
     public void setFestivalVenueFieldToNull(Festival festival) {
@@ -93,11 +99,11 @@ public class FestivalService {
 
     // PRIVATE HELPER METHODS
 
-    private Venue getVenueFromService(NewFestivalRequest newFestivalRequest) {
+    private Venue getVenueFromService(FestivalRequest festivalRequest) {
         Venue venue = null;
-        if (newFestivalRequest.getVenueId() > 0) {
+        if (festivalRequest.getVenueId() > 0) {
             try {
-                venue = venueService.getVenueById(newFestivalRequest.getVenueId());
+                venue = venueService.getVenueById(festivalRequest.getVenueId());
             } catch (EntityNotFoundException ex) {
                 throw new EntityNotFoundException(ex.getMessage(), ex);
             } catch (DatabaseException ex) {
