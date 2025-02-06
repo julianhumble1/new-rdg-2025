@@ -317,6 +317,17 @@ public class FestivalServiceTest {
             verify(festivalRepository, times(1)).delete(any());
         }
 
+        @Test
+        void testDeleteThrowsDataAccessExceptionThrowsDatabaseException() {
+            // Arrange
+            when(festivalRepository.findById(anyInt())).thenReturn(Optional.of(testFestival));
+            doThrow(new DataAccessException("data access exception") {}).when(festivalRepository).delete(any());
+
+            // Act & Assert
+            assertThrows(DatabaseException.class, () -> {
+                festivalService.deleteFestivalById(1);
+            });
+        }
 
     }
 }
