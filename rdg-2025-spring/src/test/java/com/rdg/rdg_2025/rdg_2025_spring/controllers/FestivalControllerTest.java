@@ -25,8 +25,7 @@ import java.util.ArrayList;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(FestivalController.class)
@@ -485,6 +484,21 @@ public class FestivalControllerTest {
             // Act & Assert
             mockMvc.perform(get("/festivals/1"))
                     .andExpect(jsonPath("$.festival.name").value("Test Festival"));
+        }
+
+    }
+
+    @Nested
+    @DisplayName("deleteFestivalById controller tests")
+    class DeleteFestivalByIdControllerTests {
+
+        @Test
+        void testFestivalIdNotIntResponds400() throws Exception {
+            // Arrange
+
+            // Act & Assert
+            mockMvc.perform(delete("/festivals/notanint"))
+                    .andExpect(status().isBadRequest());
         }
 
     }

@@ -64,4 +64,9 @@ public class FestivalController {
         }
     }
 
+    @DeleteMapping("/{festivalId}")
+    public ResponseEntity<?> deleteFestivalById(@PathVariable int festivalId) {
+        return ResponseEntity.ok().build();
+    }
+
 }
