@@ -78,4 +78,10 @@ public class FestivalController {
         }
     }
 
+    @PatchMapping("/{festivalId}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> updateFestival(@PathVariable int festivalId, @Valid @RequestBody FestivalRequest festivalRequest) {
+        return ResponseEntity.ok().build();
+    }
+
 }

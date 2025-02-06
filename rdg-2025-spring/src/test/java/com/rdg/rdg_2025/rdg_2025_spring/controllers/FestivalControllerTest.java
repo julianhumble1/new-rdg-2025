@@ -528,4 +528,29 @@ public class FestivalControllerTest {
         }
 
     }
+
+    @Nested
+    @DisplayName("updateFestival controller tests")
+    class UpdateFestivalControllerTests {
+
+        @Test
+        void testFestivalIdNotIntResponds400() throws Exception {
+            // Arrange
+            // Act & Assert
+            mockMvc.perform(patch("/festivals/notanint")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(
+                            "{" +
+                                    "\"name\": \"Updated Test Festival\"," +
+                                    " \"venueId\": 2, " +
+                                    "\"year\": 2026, " +
+                                    "\"month\": 2, " +
+                                    "\"description\": \"Updated Test Description\"" +
+                                    "}"
+                    )).
+                    andExpect(status().isBadRequest());
+
+        }
+
+    }
 }
