@@ -495,6 +495,18 @@ public class FestivalServiceTest {
             });
         }
 
+        @Test
+        void testSaveThrowsPersistenceExceptionThrowsDatabaseException() {
+            // Arrange
+            when(festivalRepository.findById(anyInt())).thenReturn(Optional.of(testFestival));
+            when(venueService.getVenueById(anyInt())).thenReturn(new Venue());
+            when(festivalRepository.save(any())).thenThrow(new PersistenceException());
+            // Act & Assert
+            assertThrows(DatabaseException.class, () -> {
+                festivalService.updateFestival(1, testUpdateFestivalRequest);
+            });
+        }
+
 
     }
 }
