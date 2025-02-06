@@ -335,6 +335,22 @@ public class FestivalServiceTest {
         }
 
         @Test
+        void testFestivalHasMultiplePerformancesThenPerformanceServiceCalledMultipleTimes() {
+            // Arrange
+            List<Performance> performanceList = new ArrayList<>();
+            Performance testPerformance1 = new Performance();
+            Performance testPerformance2 = new Performance();
+            performanceList.add(testPerformance1);
+            performanceList.add(testPerformance2);
+            testFestival.setPerformances(performanceList);
+            when(festivalRepository.findById(anyInt())).thenReturn(Optional.of(testFestival));
+            // Act
+            festivalService.deleteFestivalById(1);
+            // Assert
+            verify(performanceService, times(2)).setPerformanceFestivalFieldToNull(any());
+        }
+
+        @Test
         void testFestivalExistsThenDeleteFestivalIsCalled() {
             // Arrange
             when(festivalRepository.findById(anyInt())).thenReturn(Optional.of(testFestival));
