@@ -40,6 +40,9 @@ public class FestivalServiceTest {
     @Mock
     VenueService venueService;
 
+    @Mock
+    PerformanceService performanceService;
+
     @InjectMocks
     FestivalService festivalService;
 
@@ -304,6 +307,16 @@ public class FestivalServiceTest {
             festivalService.deleteFestivalById(1);
             // Assert
             verify(venueService, times(1)).removeFestivalFromVenueFestivalList(any());
+        }
+
+        @Test
+        void testFestivalHasNoPerformancesThenNoPerformanceServiceCall() {
+            // Arrange
+            when(festivalRepository.findById(anyInt())).thenReturn(Optional.of(testFestival));
+            // Act
+            festivalService.deleteFestivalById(1);
+            // Assert
+            verify(performanceService, never()).setPerformanceFestivalFieldToNull(any());
         }
 
         @Test

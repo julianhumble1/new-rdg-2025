@@ -2,6 +2,7 @@ package com.rdg.rdg_2025.rdg_2025_spring.services;
 
 import com.rdg.rdg_2025.rdg_2025_spring.exception.DatabaseException;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Festival;
+import com.rdg.rdg_2025.rdg_2025_spring.models.Performance;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Venue;
 import com.rdg.rdg_2025.rdg_2025_spring.payload.request.festival.NewFestivalRequest;
 import com.rdg.rdg_2025.rdg_2025_spring.repository.FestivalRepository;
@@ -16,14 +17,18 @@ import java.util.List;
 @Service
 public class FestivalService {
 
-    @Autowired
     FestivalRepository festivalRepository;
 
-    public FestivalService(VenueService venueService) {
-        this.venueService = venueService;
-    }
-
     private VenueService venueService;
+    private PerformanceService performanceService;
+
+    @Autowired
+    public FestivalService(FestivalRepository festivalRepository, VenueService venueService, PerformanceService performanceService) {
+
+        this.festivalRepository = festivalRepository;
+        this.venueService = venueService;
+        this.performanceService = performanceService;
+    }
 
     // CRUD METHODS
 
@@ -65,6 +70,10 @@ public class FestivalService {
         try {
             Festival festival = getFestivalById(festivalId);
             venueService.removeFestivalFromVenueFestivalList(festival);
+            List<Performance> performances = festival.getPerformances();
+            performances.forEach((performance) -> {
+                performanceService.setPerformanceFestivalFieldToNull(performance);
+            });
             festivalRepository.delete(festival);
             return true;
         } catch (EntityNotFoundException ex) {
