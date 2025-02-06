@@ -13,6 +13,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -92,6 +93,7 @@ public class FestivalService {
 
         Festival festival = getFestivalById(festivalId);
         Venue venue = getVenueFromService(festivalRequest);
+        updateFestivalFromRequest(festivalRequest, festival, venue);
         return saveFestivalToDatabase(festival);
     }
 
@@ -124,6 +126,18 @@ public class FestivalService {
         } catch (DataAccessException | PersistenceException ex) {
             throw new DatabaseException(ex.getMessage());
         }
+    }
+
+    private void updateFestivalFromRequest(FestivalRequest festivalRequest, Festival festival, Venue venue) {
+        festival.setName(festivalRequest.getName());
+        festival.setVenue(venue);
+        festival.setYear(festivalRequest.getYear());
+        festival.setMonth(festivalRequest.getMonth());
+        festival.setDescription(festivalRequest.getDescription());
+        if (festival.getCreatedAt() == null) {
+            festival.setCreatedAt(LocalDateTime.now());
+        }
+        festival.setUpdatedAt(LocalDateTime.now());
     }
 
 }
