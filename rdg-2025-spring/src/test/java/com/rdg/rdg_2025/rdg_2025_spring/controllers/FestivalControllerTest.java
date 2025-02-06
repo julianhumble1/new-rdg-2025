@@ -605,5 +605,23 @@ public class FestivalControllerTest {
                     andExpect(status().isBadRequest());
         }
 
+        @Test
+        void testYearNotIntResponds400() throws Exception {
+            // Arrange
+            // Act & Assert
+            mockMvc.perform(patch("/festivals/1")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(
+                                    "{" +
+                                            "\"name\": \"Updated Test Festival\"," +
+                                            " \"venueId\": 2, " +
+                                            "\"year\": \"not an integer\", " +
+                                            "\"month\": 2, " +
+                                            "\"description\": \"Updated Test Description\"" +
+                                            "}"
+                            )).
+                    andExpect(status().isBadRequest());
+        }
+
     }
 }
