@@ -447,6 +447,17 @@ public class FestivalServiceTest {
             });
         }
 
+        @Test
+        void testVenueServiceThrowsDatabaseExceptionThrowsDatabaseException() {
+            // Arrange
+            when(festivalRepository.findById(anyInt())).thenReturn(Optional.of(testFestival));
+            when(venueService.getVenueById(anyInt())).thenThrow(new DatabaseException("database exception"));
+            // Act & Assert
+            assertThrows(DatabaseException.class, () -> {
+                festivalService.updateFestival(1, testUpdateFestivalRequest);
+            });
+        }
+
 
     }
 }

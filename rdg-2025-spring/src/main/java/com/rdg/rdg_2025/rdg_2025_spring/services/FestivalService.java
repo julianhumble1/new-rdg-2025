@@ -71,10 +71,7 @@ public class FestivalService {
         try {
             Festival festival = getFestivalById(festivalId);
             venueService.removeFestivalFromVenueFestivalList(festival);
-            List<Performance> performances = festival.getPerformances();
-            performances.forEach((performance) -> {
-                performanceService.setPerformanceFestivalFieldToNull(performance);
-            });
+            setAssociatedPerformancesFestivalToNull(festival);
             festivalRepository.delete(festival);
             return true;
         } catch (EntityNotFoundException ex) {
@@ -84,9 +81,17 @@ public class FestivalService {
         }
     }
 
+    private void setAssociatedPerformancesFestivalToNull(Festival festival) {
+        List<Performance> performances = festival.getPerformances();
+        performances.forEach((performance) -> {
+            performanceService.setPerformanceFestivalFieldToNull(performance);
+        });
+    }
+
     public Festival updateFestival(int festivalId, FestivalRequest festivalRequest) {
 
         Festival festival = getFestivalById(festivalId);
+        Venue venue = getVenueFromService(festivalRequest);
         return new Festival();
     }
 
