@@ -1,15 +1,11 @@
 package com.rdg.rdg_2025.rdg_2025_spring.integration;
 
-import com.rdg.rdg_2025.rdg_2025_spring.models.Festival;
-import com.rdg.rdg_2025.rdg_2025_spring.models.Production;
-import com.rdg.rdg_2025.rdg_2025_spring.models.User;
-import com.rdg.rdg_2025.rdg_2025_spring.models.Venue;
-import com.rdg.rdg_2025.rdg_2025_spring.repository.FestivalRepository;
-import com.rdg.rdg_2025.rdg_2025_spring.repository.RoleRepository;
-import com.rdg.rdg_2025.rdg_2025_spring.repository.UserRepository;
-import com.rdg.rdg_2025.rdg_2025_spring.repository.VenueRepository;
+import com.rdg.rdg_2025.rdg_2025_spring.models.*;
+import com.rdg.rdg_2025.rdg_2025_spring.repository.*;
 import com.rdg.rdg_2025.rdg_2025_spring.security.jwt.JwtUtils;
 import com.rdg.rdg_2025.rdg_2025_spring.utils.AuthTestUtils;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +19,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -516,6 +514,15 @@ public class FestivalIntegrationTest {
         @Autowired
         private VenueRepository venueRepository;
 
+        @Autowired
+        private PerformanceRepository performanceRepository;
+
+        @Autowired
+        private ProductionRepository productionRepository;
+
+        @Autowired
+        private EntityManager entityManager;
+
         Festival testExistingFestival;
 
         @BeforeEach
@@ -624,7 +631,6 @@ public class FestivalIntegrationTest {
             mockMvc.perform(delete("/festivals/" + testExistingFestival.getId() ))
                     .andExpect(status().isUnauthorized());
         }
-
 
     }
 }

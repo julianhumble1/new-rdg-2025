@@ -47,6 +47,13 @@ public class PerformanceService {
 
     }
 
+    // ADDITIONAL PUBLIC METHODS
+
+    public void setPerformanceFestivalFieldToNull(Performance performance) {
+        performance.setFestival(null);
+        savePerformanceToDatabase(performance);
+    }
+
     // PRIVATE HELPER METHODS
 
     private Venue retrieveVenueFromService(PerformanceRequest performanceRequest) {

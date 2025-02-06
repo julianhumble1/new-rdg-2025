@@ -215,6 +215,22 @@ public class PerformanceServiceTest {
 
     }
 
+    @Nested
+    @DisplayName("setPerformanceFestivalFieldToNull service tests")
+    class SetPerformanceFestivalFieldToNullServiceTests {
+
+        @Test
+        void testSavePerformanceIsCalled() {
+            // Arrange
+
+            // Act
+            performanceService.setPerformanceFestivalFieldToNull(testPerformance);
+            // Assert
+            verify(performanceRepository, times(1)).save(any());
+        }
+
+
+    }
 
 
 }
