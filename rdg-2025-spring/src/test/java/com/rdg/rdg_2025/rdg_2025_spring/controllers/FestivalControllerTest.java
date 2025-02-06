@@ -754,5 +754,22 @@ public class FestivalControllerTest {
 
         }
 
+        @Test
+        void testSuccessfulUpdateWithOnlyMandatoryFieldsResponds200() throws Exception {
+            // Arrange
+            when(festivalService.updateFestival(anyInt(), any())).thenReturn(testFestival);
+            // Act & Assert
+            mockMvc.perform(patch("/festivals/1")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(
+                                    "{" +
+                                            "\"name\": \"Updated Test Festival\"," +
+                                            "\"year\": 2026 " +
+                                            "}"
+                            )).
+                    andExpect(status().isOk());
+
+        }
+
     }
 }
