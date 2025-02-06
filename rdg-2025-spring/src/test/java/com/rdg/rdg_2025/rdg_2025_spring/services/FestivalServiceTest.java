@@ -458,6 +458,17 @@ public class FestivalServiceTest {
             });
         }
 
+        @Test
+        void testVenueServiceThrowsEntityNotFoundExceptionThrowsEntityNotFoundException() {
+            // Arrange
+            when(festivalRepository.findById(anyInt())).thenReturn(Optional.of(testFestival));
+            when(venueService.getVenueById(anyInt())).thenThrow(new EntityNotFoundException());
+            // Act & Assert
+            assertThrows(EntityNotFoundException.class, () -> {
+                festivalService.updateFestival(1, testUpdateFestivalRequest);
+            });
+        }
+
 
     }
 }
