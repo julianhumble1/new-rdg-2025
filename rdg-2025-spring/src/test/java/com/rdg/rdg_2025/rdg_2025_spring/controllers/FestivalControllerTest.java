@@ -659,7 +659,7 @@ public class FestivalControllerTest {
         }
 
         @Test
-        void testMonthBelowOneResponds400() throws Exception {
+        void testMonthBelowZeroResponds400() throws Exception {
             // Arrange
             // Act & Assert
             mockMvc.perform(patch("/festivals/1")
@@ -670,6 +670,24 @@ public class FestivalControllerTest {
                                             " \"venueId\": 2, " +
                                             "\"year\": 2026, " +
                                             "\"month\": -1, " +
+                                            "\"description\": \"Updated Test Description\"" +
+                                            "}"
+                            )).
+                    andExpect(status().isBadRequest());
+        }
+
+        @Test
+        void testMonthAboveTwelveResponds400() throws Exception {
+            // Arrange
+            // Act & Assert
+            mockMvc.perform(patch("/festivals/1")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(
+                                    "{" +
+                                            "\"name\": \"Updated Test Festival\"," +
+                                            " \"venueId\": 2, " +
+                                            "\"year\": 2026, " +
+                                            "\"month\": 13, " +
                                             "\"description\": \"Updated Test Description\"" +
                                             "}"
                             )).
