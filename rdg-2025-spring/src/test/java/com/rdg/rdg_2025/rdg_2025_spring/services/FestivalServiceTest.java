@@ -469,6 +469,21 @@ public class FestivalServiceTest {
             });
         }
 
+        @Test
+        void testNoVenueProvidedThenNoVenueServiceCallIsMade() {
+            // Arrange
+            FestivalRequest noVenueRequest = testUpdateFestivalRequest;
+            noVenueRequest.setVenueId(0);
+            System.out.println(noVenueRequest);
+
+            when(festivalRepository.findById(anyInt())).thenReturn(Optional.of(testFestival));
+
+            // Act
+            festivalService.updateFestival(1, noVenueRequest);
+            // Assert
+            verify(venueService, never()).getVenueById(anyInt());
+        }
+
 
     }
 }
