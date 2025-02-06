@@ -92,6 +92,16 @@ public class VenueService {
         }
     }
 
+    public void removeFestivalFromVenueFestivalList(Festival festival) {
+        if (festival.getVenue() != null) {
+            Venue venue = festival.getVenue();
+            List<Festival> festivalList = venue.getFestivals();
+            festivalList.remove(festival);
+            venue.setFestivals(festivalList);
+            saveVenueToDatabase(venue);
+        }
+    }
+
     // PRIVATE HELPER METHODS
 
     private Venue updateVenueFromRequest(VenueRequest venueRequest, Venue venue) {

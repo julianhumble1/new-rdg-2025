@@ -296,9 +296,18 @@ public class FestivalServiceTest {
             assertThrows(DatabaseException.class, () -> {
                 festivalService.deleteFestivalById(1);
             });
-
-
         }
+
+//        @Test
+//        void testFestivalExistsThenRemoveFromVenueFestivalListIsCalled() {
+//            // Arrange
+//            when(festivalRepository.existsById(anyInt())).thenReturn(true);
+//            when(festivalRepository.findById(anyInt())).thenReturn(Optional.of(testFestival));
+//            // Act
+//            festivalService.deleteFestivalById(1);
+//            // Assert
+//            verify(venueService, times(1)).removeFestivalFromVenueFestivalList(any());
+//        }
 
 
     }

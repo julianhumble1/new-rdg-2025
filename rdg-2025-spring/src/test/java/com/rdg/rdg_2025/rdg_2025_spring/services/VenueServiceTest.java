@@ -615,4 +615,38 @@ public class VenueServiceTest {
         }
 
     }
+
+    @Nested
+    class RemoveFestivalFromVenueListServiceTests {
+
+        private Venue testVenue;
+        private Festival testFestival;
+
+        @BeforeEach
+        void beforeEach() {
+            testVenue = new Venue("Test Venue", "Test Notes", "Test Postcode", "Test Address", "Test Town", "www.test.com");
+
+            testFestival = new Festival(
+                    "Test Festival",
+                    testVenue,
+                    2025,
+                    1,
+                    "Test Description"
+            );
+            List<Festival> festivalList = new ArrayList<>();
+            festivalList.add(testFestival);
+            testVenue.setFestivals(festivalList);
+        }
+
+        @Test
+        void testIfFestivalHasNoAssociatedVenueThenSaveIsNotCalled() {
+            // Arrange
+            Festival noVenueFestival = new Festival();
+            // Act
+            venueService.removeFestivalFromVenueFestivalList(noVenueFestival);
+            // Assert
+            verify(venueRepository, never()).save(any());
+        }
+
+    }
 }
