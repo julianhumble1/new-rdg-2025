@@ -191,7 +191,7 @@ public class FestivalIntegrationTest {
         }
 
         @Test
-        void testInvalidVenueIdResponds400BadRequest() throws Exception {
+        void testInvalidVenueIdResponds404BadRequest() throws Exception {
             // Arrange
             int testVenueId = testVenue1.getId();
             // Act & Assert
@@ -207,7 +207,7 @@ public class FestivalIntegrationTest {
                                             "\"description\": \"Test Description\"" +
                                             "}"
                             ))
-                    .andExpect(status().isBadRequest());
+                    .andExpect(status().isNotFound());
         }
 
         @Test

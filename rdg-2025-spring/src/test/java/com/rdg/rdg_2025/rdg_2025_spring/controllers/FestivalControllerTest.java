@@ -151,7 +151,7 @@ public class FestivalControllerTest {
 
         @Test
         @WithMockUser(roles="ADMIN")
-        void testInvalidVenueIdReturns400BadRequest() throws Exception{
+        void testInvalidVenueIdReturns404() throws Exception{
             // Arrange
             when(festivalService.addNewFestival(any(FestivalRequest.class))).thenThrow(new EntityNotFoundException("Invalid venue id"));
 
@@ -167,7 +167,7 @@ public class FestivalControllerTest {
                                             "\"description\": \"Test Description\"" +
                                             "}"
                             ))
-                    .andExpect(status().isBadRequest());
+                    .andExpect(status().isNotFound());
         }
 
         @Test
@@ -731,6 +731,26 @@ public class FestivalControllerTest {
                                             "}"
                             )).
                     andExpect(status().isNotFound());
+
+        }
+
+        @Test
+        void testSuccessfulUpdateWithAllFieldsResponds200() throws Exception {
+            // Arrange
+            when(festivalService.updateFestival(anyInt(), any())).thenReturn(testFestival);
+            // Act & Assert
+            mockMvc.perform(patch("/festivals/1")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(
+                                    "{" +
+                                            "\"name\": \"Updated Test Festival\"," +
+                                            "\"venueId\": 2, " +
+                                            "\"year\": 2026, " +
+                                            "\"month\": 2, " +
+                                            "\"description\": \"Updated Test Description\"" +
+                                            "}"
+                            )).
+                    andExpect(status().isOk());
 
         }
 
