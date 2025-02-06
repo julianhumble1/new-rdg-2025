@@ -25,8 +25,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -552,6 +551,17 @@ public class FestivalIntegrationTest {
             // Assert
             boolean exists = festivalRepository.existsById(testExistingFestival.getId());
             assertFalse(exists);
+        }
+
+        @Test
+        void testAssociatedVenueStillInDatabaseFollowingDeletion() throws Exception {
+            // Arrange
+            // Act
+            mockMvc.perform(delete("/festivals/" + testExistingFestival.getId())
+                    .header("Authorization", adminToken));
+            // Assert
+            boolean exists = venueRepository.existsById(testVenue1.getId());
+            assertTrue(exists);
         }
 
 
