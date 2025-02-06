@@ -568,7 +568,23 @@ public class FestivalControllerTest {
                                             "}"
                             )).
                     andExpect(status().isBadRequest());
+        }
 
+        @Test
+        void testNameMissingResponds400() throws Exception {
+            // Arrange
+            // Act & Assert
+            mockMvc.perform(patch("/festivals/1")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(
+                                    "{" +
+                                            " \"venueId\": 2, " +
+                                            "\"year\": 2026, " +
+                                            "\"month\": 2, " +
+                                            "\"description\": \"Updated Test Description\"" +
+                                            "}"
+                            )).
+                    andExpect(status().isBadRequest());
         }
 
     }
