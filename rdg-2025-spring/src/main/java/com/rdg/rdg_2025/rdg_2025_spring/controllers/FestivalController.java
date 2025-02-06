@@ -82,14 +82,14 @@ public class FestivalController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> updateFestival(@PathVariable int festivalId, @Valid @RequestBody FestivalRequest festivalRequest) {
         try {
-            festivalService.updateFestival(festivalId, festivalRequest);
+            Festival festival = festivalService.updateFestival(festivalId, festivalRequest);
+            return ResponseEntity.ok(new FestivalResponse(festival));
         } catch (DatabaseException ex) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
         } catch (EntityNotFoundException ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
         }
 
-        return ResponseEntity.ok().build();
     }
 
 }
