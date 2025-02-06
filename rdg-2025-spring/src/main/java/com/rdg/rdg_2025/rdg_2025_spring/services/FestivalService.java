@@ -9,6 +9,7 @@ import com.rdg.rdg_2025.rdg_2025_spring.repository.FestivalRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.PersistenceException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +24,7 @@ public class FestivalService {
     private PerformanceService performanceService;
 
     @Autowired
-    public FestivalService(FestivalRepository festivalRepository, VenueService venueService, PerformanceService performanceService) {
+    public FestivalService(FestivalRepository festivalRepository, @Lazy VenueService venueService,@Lazy PerformanceService performanceService) {
 
         this.festivalRepository = festivalRepository;
         this.venueService = venueService;

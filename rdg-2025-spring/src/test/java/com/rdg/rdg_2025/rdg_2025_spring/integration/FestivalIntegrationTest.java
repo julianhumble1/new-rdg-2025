@@ -22,6 +22,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -575,7 +576,7 @@ public class FestivalIntegrationTest {
         }
 
         @Test
-        void testAssociatedNoLongerReferencesFestivalFollowingDeletion() throws Exception {
+        void testAssociatedVenueNoLongerReferencesFestivalFollowingDeletion() throws Exception {
             // Arrange
             // Act
             mockMvc.perform(delete("/festivals/" + testExistingFestival.getId())
@@ -586,6 +587,41 @@ public class FestivalIntegrationTest {
 
             List<Festival> festivalList = managedTestVenue1.getFestivals();
             assertFalse(festivalList.contains(testExistingFestival));
+        }
+
+        @Test
+        void testAssociatedPerformanceStillInDatabaseFollowingDeletion() throws Exception {
+            // Arrange
+            Production production = new Production(
+                    "Test Production",
+                    testVenue1,
+                    "Test Author",
+                    "Test Description",
+                    LocalDateTime.now(),
+                    false,
+                    false,
+                    "Test File String"
+            );
+            productionRepository.save(production);
+
+            Performance performance = new Performance(
+                    production,
+                    testVenue1,
+                    testExistingFestival,
+                    LocalDateTime.now(),
+                    "Test Description",
+                    BigDecimal.TEN,
+                    BigDecimal.TEN,
+                    "box office"
+            );
+            performanceRepository.save(performance);
+            // Act
+            mockMvc.perform(delete("/festivals/" + testExistingFestival.getId())
+                    .header("Authorization", adminToken));
+            // Assert
+            boolean exists = performanceRepository.existsById(performance.getId());
+            assertTrue(exists);
+
         }
 
         @Test

@@ -44,7 +44,7 @@ public class Festival {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    @OneToMany(mappedBy = "festival", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "festival", cascade = CascadeType.PERSIST)
     @JsonBackReference
     private List<Performance> performances = new ArrayList<>();
 
