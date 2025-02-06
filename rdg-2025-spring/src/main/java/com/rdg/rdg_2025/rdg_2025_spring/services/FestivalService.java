@@ -92,7 +92,7 @@ public class FestivalService {
 
         Festival festival = getFestivalById(festivalId);
         Venue venue = getVenueFromService(festivalRequest);
-        return new Festival();
+        return saveFestivalToDatabase(festival);
     }
 
     // ADDITIONAL PUBLIC METHODS

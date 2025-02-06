@@ -474,7 +474,6 @@ public class FestivalServiceTest {
             // Arrange
             FestivalRequest noVenueRequest = testUpdateFestivalRequest;
             noVenueRequest.setVenueId(0);
-            System.out.println(noVenueRequest);
 
             when(festivalRepository.findById(anyInt())).thenReturn(Optional.of(testFestival));
 
@@ -482,6 +481,18 @@ public class FestivalServiceTest {
             festivalService.updateFestival(1, noVenueRequest);
             // Assert
             verify(venueService, never()).getVenueById(anyInt());
+        }
+
+        @Test
+        void testSaveThrowsDataAccessExceptionThrowsDatabaseException() {
+            // Arrange
+            when(festivalRepository.findById(anyInt())).thenReturn(Optional.of(testFestival));
+            when(venueService.getVenueById(anyInt())).thenReturn(new Venue());
+            when(festivalRepository.save(any())).thenThrow(new DataAccessException("data access exception") {});
+            // Act & Assert
+            assertThrows(DatabaseException.class, () -> {
+                festivalService.updateFestival(1, testUpdateFestivalRequest);
+            });
         }
 
 
