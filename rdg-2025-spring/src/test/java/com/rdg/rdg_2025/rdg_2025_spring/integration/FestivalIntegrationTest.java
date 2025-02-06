@@ -617,6 +617,14 @@ public class FestivalIntegrationTest {
                     .andExpect(status().isUnauthorized());
         }
 
+        @Test
+        void testMissingTokenResponds401() throws Exception {
+            // Arrange
+            // Act & Assert
+            mockMvc.perform(delete("/festivals/" + testExistingFestival.getId() ))
+                    .andExpect(status().isUnauthorized());
+        }
+
 
     }
 }
