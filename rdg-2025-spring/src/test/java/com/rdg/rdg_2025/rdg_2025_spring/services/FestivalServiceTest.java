@@ -272,4 +272,20 @@ public class FestivalServiceTest {
         }
     }
 
+    @Nested
+    @DisplayName("deleteFestivalById service tests")
+    class DeleteFestivalByIdServiceTests {
+
+        @Test
+        void testIfFestivalIsNotInDatabaseThenReturnsFalse() {
+            // Arrange
+            when(festivalRepository.existsById(anyInt())).thenReturn(false);
+            // Act
+            boolean result = festivalService.deleteFestivalById(testFestival.getId());
+            // Assert
+            assertEquals(false, result);
+        }
+
+
+    }
 }

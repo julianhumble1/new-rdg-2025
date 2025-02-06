@@ -60,6 +60,14 @@ public class FestivalService {
         }
     }
 
+    public boolean deleteFestivalById(int festivalId) {
+        if (festivalRepository.existsById(festivalId)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     // ADDITIONAL METHODS
 
     public void setFestivalVenueFieldToNull(Festival festival) {
