@@ -581,6 +581,15 @@ public class FestivalIntegrationTest {
             assertFalse(festivalList.contains(testExistingFestival));
         }
 
+        @Test
+        void testNonExistentFestivalIdResponds404() throws Exception {
+            // Arrange
+            // Act & Assert
+            mockMvc.perform(delete("/festivals/" + (testExistingFestival.getId() - 1) )
+                            .header("Authorization", adminToken))
+                    .andExpect(status().isNotFound());
+        }
+
 
     }
 }
