@@ -549,6 +549,8 @@ public class FestivalIntegrationTest {
             mockMvc.perform(delete("/festivals/" + testExistingFestival.getId())
                             .header("Authorization", adminToken));
             // Assert
+            festivalRepository.flush();
+
             boolean exists = festivalRepository.existsById(testExistingFestival.getId());
             assertFalse(exists);
         }
@@ -560,8 +562,23 @@ public class FestivalIntegrationTest {
             mockMvc.perform(delete("/festivals/" + testExistingFestival.getId())
                     .header("Authorization", adminToken));
             // Assert
+            festivalRepository.flush();
             boolean exists = venueRepository.existsById(testVenue1.getId());
             assertTrue(exists);
+        }
+
+        @Test
+        void testAssociatedNoLongerReferencesFestivalFollowingDeletion() throws Exception {
+            // Arrange
+            // Act
+            mockMvc.perform(delete("/festivals/" + testExistingFestival.getId())
+                    .header("Authorization", adminToken));
+            // Assert
+            festivalRepository.flush();
+            Venue managedTestVenue1 = venueRepository.findById(testVenue1.getId()).orElseThrow(() -> new RuntimeException("Venue not found"));
+
+            List<Festival> festivalList = managedTestVenue1.getFestivals();
+            assertFalse(festivalList.contains(testExistingFestival));
         }
 
 
