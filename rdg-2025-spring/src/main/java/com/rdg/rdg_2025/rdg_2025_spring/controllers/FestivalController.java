@@ -65,6 +65,7 @@ public class FestivalController {
     }
 
     @DeleteMapping("/{festivalId}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> deleteFestivalById(@PathVariable int festivalId) {
         try {
             if (festivalService.deleteFestivalById(festivalId)) {

@@ -26,8 +26,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -507,6 +506,42 @@ public class FestivalIntegrationTest {
             mockMvc.perform(get("/festivals/notanint"))
                     .andExpect(status().isBadRequest());
         }
+
+    }
+
+    @Nested
+    @DisplayName("DELETE delete festival by id integration tests")
+    class DeleteFestivalByIdIntegrationTests {
+
+        @Autowired
+        private VenueRepository venueRepository;
+
+        Festival testExistingFestival;
+
+        @BeforeEach
+        void beforeEach() {
+            Venue managedTestVenue1 = venueRepository.findById(testVenue1.getId()).orElseThrow(() -> new RuntimeException("Venue not found"));
+
+            testExistingFestival = new Festival(
+                    "Existing Festival",
+                    managedTestVenue1,
+                    2025,
+                    1,
+                    "Existing Festival Description"
+            );
+
+            festivalRepository.save(testExistingFestival);
+        }
+
+        @Test
+        void testSuccessfulDeletionResponds204() throws Exception {
+            // Arrange
+            // Act & Assert
+            mockMvc.perform(delete("/festivals/" + testExistingFestival.getId())
+                    .header("Authorization", adminToken))
+                    .andExpect(status().isNoContent());
+        }
+
 
     }
 }
