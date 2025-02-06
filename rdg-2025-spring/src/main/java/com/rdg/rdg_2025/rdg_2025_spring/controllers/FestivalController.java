@@ -81,6 +81,12 @@ public class FestivalController {
     @PatchMapping("/{festivalId}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> updateFestival(@PathVariable int festivalId, @Valid @RequestBody FestivalRequest festivalRequest) {
+        try {
+            festivalService.updateFestival(festivalId, festivalRequest);
+        } catch (DatabaseException ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
+        }
+
         return ResponseEntity.ok().build();
     }
 
