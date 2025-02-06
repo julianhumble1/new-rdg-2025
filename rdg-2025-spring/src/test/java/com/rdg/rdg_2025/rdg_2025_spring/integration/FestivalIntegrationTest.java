@@ -669,4 +669,49 @@ public class FestivalIntegrationTest {
         }
 
     }
+
+    @Nested
+    @DisplayName("PATCH update festival integration tests")
+    class UpdateFestivalIntegrationTests {
+
+        private Festival existingFestival;
+        int existingFestivalId;
+
+        @Autowired
+        VenueRepository venueRepository;
+
+        Venue managedTestVenue2;
+
+        @BeforeEach
+        void beforeEach() {
+            Venue managedTestVenue1 = venueRepository.findById(testVenue1.getId()).orElseThrow(() -> new RuntimeException("Venue not found"));
+
+            existingFestival = new Festival("Test Festival", managedTestVenue1, 2025, 1, "Test Description");
+            festivalRepository.save(existingFestival);
+            existingFestivalId = existingFestival.getId();
+
+            managedTestVenue2 = venueRepository.findById(testVenue2.getId()).orElseThrow(() -> new RuntimeException("no venue with this id"));
+        }
+
+        @Test
+        void testSuccessfulUpdateResponds200() throws Exception {
+            // Arrange
+            // Act & Assert
+            mockMvc.perform(patch("/festivals/" + existingFestivalId)
+                            .header("Authorization", adminToken)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(
+                                    "{" +
+                                            "\"name\": \"Updated Test Festival\"," +
+                                            "\"venueId\": "+ managedTestVenue2.getId() +", " +
+                                            "\"year\": 2026, " +
+                                            "\"month\": 2, " +
+                                            "\"description\": \"Updated Test Description\"" +
+                                            "}"
+                            ))
+                    .andExpect(status().isOk());
+
+        }
+
+    }
 }
