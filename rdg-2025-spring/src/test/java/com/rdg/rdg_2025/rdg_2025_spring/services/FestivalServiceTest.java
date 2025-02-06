@@ -281,9 +281,23 @@ public class FestivalServiceTest {
             // Arrange
             when(festivalRepository.existsById(anyInt())).thenReturn(false);
             // Act
-            boolean result = festivalService.deleteFestivalById(testFestival.getId());
+            boolean result = festivalService.deleteFestivalById(1);
             // Assert
             assertEquals(false, result);
+        }
+
+        @Test
+        void testFestivalExistsCheckDataAccessExceptionThrowsDatabaseException() {
+
+            // Arrange
+            when(festivalRepository.existsById(anyInt())).thenThrow(new DataAccessException("data access exception") {
+            });
+            // Act & Assert
+            assertThrows(DatabaseException.class, () -> {
+                festivalService.deleteFestivalById(1);
+            });
+
+
         }
 
 

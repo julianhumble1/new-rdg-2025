@@ -61,7 +61,16 @@ public class FestivalService {
     }
 
     public boolean deleteFestivalById(int festivalId) {
-        if (festivalRepository.existsById(festivalId)) {
+
+        boolean exists;
+
+        try {
+            exists = festivalRepository.existsById(festivalId);
+        } catch (DataAccessException ex) {
+            throw new DatabaseException(ex.getMessage(), ex);
+        }
+
+        if (exists) {
             return true;
         } else {
             return false;
