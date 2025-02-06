@@ -501,9 +501,9 @@ public class FestivalControllerTest {
         }
 
         @Test
-        void testEntityNotFoundExceptionResponds404() throws Exception {
+        void testServiceReturnsFalseResponds404() throws Exception {
             // Arrange
-            when(festivalService.deleteFestivalById(anyInt())).thenThrow(new EntityNotFoundException());
+            when(festivalService.deleteFestivalById(anyInt())).thenReturn(false);
             // Act & Assert
             mockMvc.perform(delete("/festivals/1"))
                     .andExpect(status().isNotFound());
@@ -516,6 +516,15 @@ public class FestivalControllerTest {
             // Act & Assert
             mockMvc.perform(delete("/festivals/1"))
                     .andExpect(status().isInternalServerError());
+        }
+
+        @Test
+        void testServiceReturnsTrueResponds204() throws Exception {
+            // Arrange
+            when(festivalService.deleteFestivalById(anyInt())).thenReturn(true);
+            // Act & Assert
+            mockMvc.perform(delete("/festivals/1"))
+                    .andExpect(status().isNoContent());
         }
 
     }

@@ -67,13 +67,14 @@ public class FestivalController {
     @DeleteMapping("/{festivalId}")
     public ResponseEntity<?> deleteFestivalById(@PathVariable int festivalId) {
         try {
-            festivalService.deleteFestivalById(festivalId);
-        } catch (EntityNotFoundException ex) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+            if (festivalService.deleteFestivalById(festivalId)) {
+                return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No festival with id: " + festivalId);
+            }
         } catch (DatabaseException ex) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
         }
-        return ResponseEntity.ok().build();
     }
 
 }
