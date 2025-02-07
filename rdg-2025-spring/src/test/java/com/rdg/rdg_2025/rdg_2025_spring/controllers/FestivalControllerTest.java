@@ -547,8 +547,8 @@ public class FestivalControllerTest {
                                     "\"month\": 2, " +
                                     "\"description\": \"Updated Test Description\"" +
                                     "}"
-                    )).
-                    andExpect(status().isBadRequest());
+                        ))
+                    .andExpect(status().isBadRequest());
 
         }
 
@@ -566,8 +566,8 @@ public class FestivalControllerTest {
                                             "\"month\": 2, " +
                                             "\"description\": \"Updated Test Description\"" +
                                             "}"
-                            )).
-                    andExpect(status().isBadRequest());
+                            ))
+                    .andExpect(status().isBadRequest());
         }
 
         @Test
@@ -583,8 +583,8 @@ public class FestivalControllerTest {
                                             "\"month\": 2, " +
                                             "\"description\": \"Updated Test Description\"" +
                                             "}"
-                            )).
-                    andExpect(status().isBadRequest());
+                            ))
+                    .andExpect(status().isBadRequest());
         }
 
         @Test
@@ -601,8 +601,8 @@ public class FestivalControllerTest {
                                             "\"month\": 2, " +
                                             "\"description\": \"Updated Test Description\"" +
                                             "}"
-                            )).
-                    andExpect(status().isBadRequest());
+                            ))
+                    .andExpect(status().isBadRequest());
         }
 
         @Test
@@ -619,8 +619,8 @@ public class FestivalControllerTest {
                                             "\"month\": 2, " +
                                             "\"description\": \"Updated Test Description\"" +
                                             "}"
-                            )).
-                    andExpect(status().isBadRequest());
+                            ))
+                    .andExpect(status().isBadRequest());
         }
 
         @Test
@@ -637,8 +637,8 @@ public class FestivalControllerTest {
                                             "\"month\": 2, " +
                                             "\"description\": \"Updated Test Description\"" +
                                             "}"
-                            )).
-                    andExpect(status().isBadRequest());
+                            ))
+                    .andExpect(status().isBadRequest());
         }
 
         @Test
@@ -654,8 +654,8 @@ public class FestivalControllerTest {
                                             "\"month\": 2, " +
                                             "\"description\": \"Updated Test Description\"" +
                                             "}"
-                            )).
-                    andExpect(status().isBadRequest());
+                            ))
+                    .andExpect(status().isBadRequest());
         }
 
         @Test
@@ -672,8 +672,8 @@ public class FestivalControllerTest {
                                             "\"month\": -1, " +
                                             "\"description\": \"Updated Test Description\"" +
                                             "}"
-                            )).
-                    andExpect(status().isBadRequest());
+                            ))
+                    .andExpect(status().isBadRequest());
         }
 
         @Test
@@ -690,8 +690,8 @@ public class FestivalControllerTest {
                                             "\"month\": 13, " +
                                             "\"description\": \"Updated Test Description\"" +
                                             "}"
-                            )).
-                    andExpect(status().isBadRequest());
+                            ))
+                    .andExpect(status().isBadRequest());
         }
 
         @Test
@@ -709,8 +709,8 @@ public class FestivalControllerTest {
                                             "\"month\": 2, " +
                                             "\"description\": \"Updated Test Description\"" +
                                             "}"
-                            )).
-                    andExpect(status().isInternalServerError());
+                            ))
+                    .andExpect(status().isInternalServerError());
 
         }
 
@@ -729,8 +729,8 @@ public class FestivalControllerTest {
                                             "\"month\": 2, " +
                                             "\"description\": \"Updated Test Description\"" +
                                             "}"
-                            )).
-                    andExpect(status().isNotFound());
+                            ))
+                    .andExpect(status().isNotFound());
 
         }
 
@@ -749,8 +749,8 @@ public class FestivalControllerTest {
                                             "\"month\": 2, " +
                                             "\"description\": \"Updated Test Description\"" +
                                             "}"
-                            )).
-                    andExpect(status().isOk());
+                            ))
+                    .andExpect(status().isOk());
 
         }
 
@@ -766,8 +766,8 @@ public class FestivalControllerTest {
                                             "\"name\": \"Updated Test Festival\"," +
                                             "\"year\": 2026 " +
                                             "}"
-                            )).
-                    andExpect(status().isOk());
+                            ))
+                    .andExpect(status().isOk());
 
         }
 
@@ -786,8 +786,8 @@ public class FestivalControllerTest {
                                             "\"month\": 2, " +
                                             "\"description\": \"Updated Test Description\"" +
                                             "}"
-                            )).
-                    andExpect(jsonPath("$.festival.name").value("Test Festival"));
+                            ))
+                    .andExpect(jsonPath("$.festival.name").value("Test Festival"));
 
         }
 
