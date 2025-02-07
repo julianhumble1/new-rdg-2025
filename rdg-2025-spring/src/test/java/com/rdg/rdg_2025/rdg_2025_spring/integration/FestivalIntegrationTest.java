@@ -779,5 +779,25 @@ public class FestivalIntegrationTest {
 
         }
 
+        @Test
+        void testNonExistentFestivalIdResponds404() throws Exception {
+            // Arrange
+            // Act & Assert
+            mockMvc.perform(patch("/festivals/" + (existingFestivalId + 1))
+                            .header("Authorization", adminToken)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(
+                                    "{" +
+                                            "\"name\": \"Updated Test Festival\"," +
+                                            "\"venueId\": "+ managedTestVenue2.getId() +", " +
+                                            "\"year\": 2026, " +
+                                            "\"month\": 2, " +
+                                            "\"description\": \"Updated Test Description\"" +
+                                            "}"
+                            ))
+                    .andExpect(status().isNotFound());
+
+        }
+
     }
 }
