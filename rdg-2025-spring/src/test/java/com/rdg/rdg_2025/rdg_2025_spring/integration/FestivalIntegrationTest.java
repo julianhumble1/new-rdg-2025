@@ -820,7 +820,7 @@ public class FestivalIntegrationTest {
         }
 
         @Test
-        void testNameEmptyResponds200() throws Exception {
+        void testNameEmptyResponds400() throws Exception {
             // Arrange
             // Act & Assert
             mockMvc.perform(patch("/festivals/" + existingFestivalId)
@@ -829,6 +829,25 @@ public class FestivalIntegrationTest {
                             .content(
                                     "{" +
                                             "\"name\": \"\"," +
+                                            " \"venueId\": 2, " +
+                                            "\"year\": 2026, " +
+                                            "\"month\": 2, " +
+                                            "\"description\": \"Updated Test Description\"" +
+                                            "}"
+                            ))
+                    .andExpect(status().isBadRequest());
+
+        }
+
+        @Test
+        void testNameMissingResponds400() throws Exception {
+            // Arrange
+            // Act & Assert
+            mockMvc.perform(patch("/festivals/" + existingFestivalId)
+                            .header("Authorization", adminToken)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(
+                                    "{" +
                                             " \"venueId\": 2, " +
                                             "\"year\": 2026, " +
                                             "\"month\": 2, " +
