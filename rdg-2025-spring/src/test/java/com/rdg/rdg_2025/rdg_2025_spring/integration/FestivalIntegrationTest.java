@@ -680,17 +680,18 @@ public class FestivalIntegrationTest {
         @Autowired
         VenueRepository venueRepository;
 
+        Venue managedTestVenue1;
         Venue managedTestVenue2;
 
         @BeforeEach
         void beforeEach() {
-            Venue managedTestVenue1 = venueRepository.findById(testVenue1.getId()).orElseThrow(() -> new RuntimeException("Venue not found"));
+            managedTestVenue1 = venueRepository.findById(testVenue1.getId()).orElseThrow(() -> new RuntimeException("Venue not found"));
+            managedTestVenue2 = venueRepository.findById(testVenue2.getId()).orElseThrow(() -> new RuntimeException("no venue with this id"));
 
             existingFestival = new Festival("Test Festival", managedTestVenue1, 2025, 1, "Test Description");
             festivalRepository.save(existingFestival);
             existingFestivalId = existingFestival.getId();
 
-            managedTestVenue2 = venueRepository.findById(testVenue2.getId()).orElseThrow(() -> new RuntimeException("no venue with this id"));
         }
 
         @Test
