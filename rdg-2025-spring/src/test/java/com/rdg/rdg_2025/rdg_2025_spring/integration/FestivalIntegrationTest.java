@@ -957,6 +957,26 @@ public class FestivalIntegrationTest {
 
         }
 
+        @Test
+        void testMonthAboveTwelveResponds400() throws Exception {
+            // Arrange
+            // Act & Assert
+            mockMvc.perform(patch("/festivals/" + existingFestivalId)
+                            .header("Authorization", adminToken)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(
+                                    "{" +
+                                            "\"name\": \"Updated Test Festival\"," +
+                                            " \"venueId\": 2, " +
+                                            "\"year\": 2026, " +
+                                            "\"month\": 13, " +
+                                            "\"description\": \"Updated Test Description\"" +
+                                            "}"
+                            ))
+                    .andExpect(status().isBadRequest());
+
+        }
+
 
     }
 }
