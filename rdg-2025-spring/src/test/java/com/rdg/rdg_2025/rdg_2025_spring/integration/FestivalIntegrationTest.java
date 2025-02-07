@@ -741,7 +741,6 @@ public class FestivalIntegrationTest {
         @Test
         void testFestivalInDatabaseHasBeenUpdated() throws Exception {
             // Arrange
-
             // Act
             mockMvc.perform(patch("/festivals/" + existingFestivalId)
                             .header("Authorization", adminToken)
@@ -758,6 +757,26 @@ public class FestivalIntegrationTest {
             // Assert
             Festival festival = festivalRepository.findById(existingFestivalId).orElseThrow(() -> new RuntimeException("festival can't be found"));
             assertEquals("Updated Test Festival", festival.getName());
+        }
+
+        @Test
+        void testNonExistentVenueIdResponds404() throws Exception {
+            // Arrange
+            // Act & Assert
+            mockMvc.perform(patch("/festivals/" + existingFestivalId)
+                    .header("Authorization", adminToken)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(
+                            "{" +
+                                    "\"name\": \"Updated Test Festival\"," +
+                                    "\"venueId\": "+ (managedTestVenue2.getId() + 1) +", " +
+                                    "\"year\": 2026, " +
+                                    "\"month\": 2, " +
+                                    "\"description\": \"Updated Test Description\"" +
+                                    "}"
+                    ))
+                    .andExpect(status().isNotFound());
+
         }
 
     }
