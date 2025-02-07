@@ -918,6 +918,25 @@ public class FestivalIntegrationTest {
 
         }
 
+        @Test
+        void testYearMissingResponds400() throws Exception {
+            // Arrange
+            // Act & Assert
+            mockMvc.perform(patch("/festivals/" + existingFestivalId)
+                            .header("Authorization", adminToken)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(
+                                    "{" +
+                                            "\"name\": \"Updated Test Festival\"," +
+                                            " \"venueId\": 2, " +
+                                            "\"month\": 2, " +
+                                            "\"description\": \"Updated Test Description\"" +
+                                            "}"
+                            ))
+                    .andExpect(status().isBadRequest());
+
+        }
+
 
     }
 }
