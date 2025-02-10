@@ -17,7 +17,7 @@ import VenuePage from "./components/venues/VenuePage.jsx"
 import ProductionPage from "./components/productions/ProductionPage.jsx"
 import NewPerformanceForm from "./components/performances/NewPerformanceForm.jsx"
 import FestivalPage from "./components/festivals/FestivalPage.jsx"
-import AltHeader from "./components/header/Header.jsx"
+import AltLogin from "./components/AltLogin.jsx"
 
 
 function App() {
@@ -42,7 +42,7 @@ function App() {
         </Route>
         <Route path="/login"
           element={
-            <Login
+            <AltLogin
               loggedIn={loggedIn}
               setLoggedIn={setLoggedIn}
             />
