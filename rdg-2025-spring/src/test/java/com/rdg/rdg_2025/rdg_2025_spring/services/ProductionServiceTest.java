@@ -41,32 +41,40 @@ public class ProductionServiceTest {
     @InjectMocks
     private ProductionService productionService;
 
-    private ProductionRequest testProductionRequest = new ProductionRequest(
-            "Test Production",
-            1,
-            "Test Author",
-            "Test Description",
-            LocalDateTime.now(),
-            false,
-            false,
-            "Test File String"
-    );
+    private ProductionRequest testProductionRequest;
 
-    private Production testProduction = new Production(
-            "Test Production",
-            new Venue(),
-            "Test Author",
-            "Test Description",
-            LocalDateTime.now(),
-            false,
-            false,
-            "Test File String"
-    );
+    private Production testProduction;
+
+    @BeforeEach
+    void setupMocks() {
+        MockitoAnnotations.openMocks(this);
+    }
 
     @BeforeEach
     void setup() {
-        MockitoAnnotations.openMocks(this);
+        testProductionRequest = new ProductionRequest(
+                "Test Production",
+                1,
+                "Test Author",
+                "Test Description",
+                LocalDateTime.now(),
+                false,
+                false,
+                "Test File String"
+        );
+
+        testProduction = new Production(
+                "Test Production",
+                new Venue(),
+                "Test Author",
+                "Test Description",
+                LocalDateTime.now(),
+                false,
+                false,
+                "Test File String"
+        );
     }
+
 
     @Nested
     @DisplayName("addNewProduction service tests")

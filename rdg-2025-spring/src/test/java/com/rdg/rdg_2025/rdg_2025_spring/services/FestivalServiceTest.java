@@ -47,17 +47,23 @@ public class FestivalServiceTest {
     @InjectMocks
     FestivalService festivalService;
 
-    private FestivalRequest testFestivalRequest = new FestivalRequest(
-            "Test Festival", 1, 2025, 4, "Test Description"
-    );
+    private FestivalRequest testFestivalRequest;
 
-    private Festival testFestival = new Festival(
-            "Test Festival", new Venue(), 2025, 4, "Test Description"
-    );
+    private Festival testFestival;
+
+    @BeforeEach
+    void setupMocks() {
+        MockitoAnnotations.openMocks(this);
+    }
 
     @BeforeEach
     void setup() {
-        MockitoAnnotations.openMocks(this);
+        testFestivalRequest = new FestivalRequest(
+                "Test Festival", 1, 2025, 4, "Test Description"
+        );
+        testFestival = new Festival(
+                "Test Festival", new Venue(), 2025, 4, "Test Description"
+        );
     }
 
     @Nested
