@@ -17,6 +17,7 @@ import VenuePage from "./components/venues/VenuePage.jsx"
 import ProductionPage from "./components/productions/ProductionPage.jsx"
 import NewPerformanceForm from "./components/performances/NewPerformanceForm.jsx"
 import FestivalPage from "./components/festivals/FestivalPage.jsx"
+import AltHeader from "./components/header/Header.jsx"
 
 
 function App() {

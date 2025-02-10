@@ -1,6 +1,12 @@
+import AltHeader from "./header/Header.jsx";
+
 const Home = () => {
+
     return (<>
-        <div className="text-green-500 text-xl">Home</div>
+      Home
+
+      {/* <AltHeader /> */}
+
     </>)
 }
 
