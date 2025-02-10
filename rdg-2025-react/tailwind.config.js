@@ -8,7 +8,11 @@ export default {
     flowbite.content(),
   ],
   theme: {
-    extend: {},
+    extend: { 
+      fontFamily: {
+        'merriweather': ['Merriweather', 'serif'],
+      },
+    },
   },
   plugins: [flowbite.plugin()],
 }

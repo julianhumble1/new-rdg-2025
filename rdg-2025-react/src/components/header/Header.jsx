@@ -27,9 +27,8 @@ const AltHeader = ({loggedIn, setLoggedIn}) => {
     }
 
 
-
     return (
-        <Navbar fluid rounded className="bg-sky-900 mt-3">
+        <Navbar fluid className="bg-sky-900 mt-3">
             <NavbarBrand href="/home">
                 <img src="/src/assets/new_logo_transparent.png" className="mr-3 h-6 sm:h-9" alt="Flowbite React Logo" />
                 <span className="self-center whitespace-nowrap text-xl font-semibold text-white">Runnymede Drama Group</span>
@@ -38,7 +37,7 @@ const AltHeader = ({loggedIn, setLoggedIn}) => {
             <NavbarCollapse>
                 <NavbarLink href="/home" className="text-white" active={url.includes("home")}> Home </NavbarLink>
                 {loggedIn &&
-                    <NavbarLink href="/dashboard" className="text-white" active={url.includes("dashboard")} >Dashboard</NavbarLink>
+                    <NavbarLink href="/dashboard" className="text-white active:text-red-500" active={url.includes("dashboard")} >Dashboard</NavbarLink>
                 }
                 {!loggedIn ? 
                     <NavbarLink href="/login" className="text-white" active={url.includes("login")} >Login</NavbarLink>

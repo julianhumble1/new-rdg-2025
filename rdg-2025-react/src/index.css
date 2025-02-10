@@ -1,3 +1,21 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body {
+  font-family: "Roboto", sans-serif; /* Change 'Roboto' to your desired font */
+}
+
+/* You can also apply different fonts to specific elements */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Merriweather", serif;
+}
+
+p {
+  font-family: "Manrope", sans-serif;
+}
