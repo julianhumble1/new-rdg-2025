@@ -43,14 +43,17 @@ public class FestivalControllerTest {
     @Autowired
     private WebApplicationContext context;
 
+    private Festival testFestival;
+
+
     @BeforeEach
     public void setup() {
         mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
+        testFestival = new Festival(
+                "Test Festival", new Venue(), 2025, 1, "Test Description"
+        );
     }
 
-    private Festival testFestival = new Festival(
-            "Test Festival", new Venue(), 2025, 1, "Test Description"
-    );
 
 
     @Nested

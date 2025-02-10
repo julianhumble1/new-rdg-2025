@@ -44,23 +44,27 @@ public class ProductionControllerTest {
     @Autowired
     private WebApplicationContext context;
 
+    private Production testProduction;
+    private DateTimeFormatter formatter;
+
     @BeforeEach
     public void setup() {
+
         mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
+
+        formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+        testProduction = new Production(
+                "Test Production",
+                new Venue(),
+                "Test Author",
+                "Test Description",
+                LocalDateTime.parse("2025-10-10T10:00:00", formatter),
+                false,
+                false,
+                "Test File String"
+        );
+
     }
-
-    private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
-
-    private Production testProduction = new Production(
-            "Test Production",
-            new Venue(),
-            "Test Author",
-            "Test Description",
-            LocalDateTime.parse("2025-10-10T10:00:00", formatter),
-            false,
-            false,
-            "Test File String"
-    );
 
     @Nested
     @DisplayName("addNewProduction controller tests")

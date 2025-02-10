@@ -49,9 +49,14 @@ public class VenueControllerTest {
     @Autowired
     private WebApplicationContext context;
 
+    private Venue testVenue;
+
     @BeforeEach
     public void setup() {
         mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
+
+        testVenue = new Venue("Test Venue", "Test Notes", "Test Postcode", "Test Address", "Test Town", "www.test.com");
+
     }
 
     @Nested
@@ -62,7 +67,6 @@ public class VenueControllerTest {
         @WithMockUser(roles="ADMIN")
         void test201StatusWhenServiceSuccessfullySavesVenue() throws Exception{
             // Arrange
-            Venue testVenue = new Venue("Test Venue", "Test Notes", "Test Postcode", "Test Address", "Test Town", "www.test.com");
             when(venueService.addNewVenue(any(VenueRequest.class))).thenReturn(testVenue);
 
             // Act & Assert
@@ -80,7 +84,6 @@ public class VenueControllerTest {
         @WithMockUser(roles="ADMIN")
         void testExpectedUriWhenSuccessfullySavesVenue() throws Exception{
             // Arrange
-            Venue testVenue = new Venue("Test Venue", "Test Notes", "Test Postcode", "Test Address", "Test Town", "www.test.com");
             int testVenueId = testVenue.getId();
             when(venueService.addNewVenue(any(VenueRequest.class))).thenReturn(testVenue);
 
@@ -99,7 +102,6 @@ public class VenueControllerTest {
         @WithMockUser(roles="ADMIN")
         void testReturnedVenueWhenServiceSuccessfullySavesVenue() throws Exception{
             // Arrange
-            Venue testVenue = new Venue("Test Venue", "Test Notes", "Test Postcode", "Test Address", "Test Town", "www.test.com");
             when(venueService.addNewVenue(any(VenueRequest.class))).thenReturn(testVenue);
 
             // Act & Assert
@@ -127,7 +129,6 @@ public class VenueControllerTest {
         @WithMockUser(roles="ADMIN")
         void testDataIntegrityViolationExceptionReturns409Error() throws Exception{
             // Arrange
-            Venue testVenue = new Venue("Test Venue", "Test Notes", "Test Postcode", "Test Address", "Test Town", "www.test.com");
             when(venueService.addNewVenue(any(VenueRequest.class))).thenThrow(new DataIntegrityViolationException("Data integrity violation"));
 
             // Act & Assert
@@ -145,7 +146,6 @@ public class VenueControllerTest {
         @WithMockUser(roles="ADMIN")
         void testDataBaseExceptionReturns500Error() throws Exception{
             // Arrange
-            Venue testVenue = new Venue("Test Venue", "Test Notes", "Test Postcode", "Test Address", "Test Town", "www.test.com");
             when(venueService.addNewVenue(any(VenueRequest.class))).thenThrow(new DatabaseException("Database Error"));
 
             // Act & Assert
@@ -246,7 +246,6 @@ public class VenueControllerTest {
         @WithMockUser(roles="ADMIN")
         void testSuccessfulGetResponseContainsVenue() throws Exception {
             // Arrange
-            Venue testVenue = new Venue("Test Venue", null, null, null, null, null);
             ArrayList<Venue> venues = new ArrayList<>();
             venues.add(testVenue);
 
@@ -323,7 +322,6 @@ public class VenueControllerTest {
         @Test
         void testSuccessfulGetReturns200Code() throws Exception {
             // Arrange
-            Venue testVenue = new Venue("Test Venue", null, null, null, null, null);
             when(venueService.getVenueById(anyInt())).thenReturn(testVenue);
             // Act & Assert
             mockMvc.perform(get("/venues/1"))
@@ -333,7 +331,6 @@ public class VenueControllerTest {
         @Test
         void testSuccessfulGetReturnsVenueObject() throws Exception {
             // Arrange
-            Venue testVenue = new Venue("Test Venue", null, null, null, null, null);
             when(venueService.getVenueById(anyInt())).thenReturn(testVenue);
             // Act & Assert
             mockMvc.perform(get("/venues/1"))
@@ -361,7 +358,6 @@ public class VenueControllerTest {
         @Test
         void testSuccessfulGetVenueReturnsProductionsArray() throws Exception {
             // Arrange
-            Venue testVenue = new Venue("Test Venue", null, null, null, null, null);
             when(venueService.getVenueById(anyInt())).thenReturn(testVenue);
             // Act & Assert
             mockMvc.perform(get("/venues/1"))
@@ -371,7 +367,6 @@ public class VenueControllerTest {
         @Test
         void testSuccessfulGetVenueReturnsExpectedProductionsInArray() throws Exception {
             // Arrange
-            Venue testVenue = new Venue("Test Venue", null, null, null, null, null);
             when(venueService.getVenueById(anyInt())).thenReturn(testVenue);
             Production testProduction = new Production(
                     "Test Production", testVenue, null, null, null, false, false, null
@@ -385,7 +380,6 @@ public class VenueControllerTest {
         @Test
         void testSuccessfulGetVenueReturnsFestivalsArray() throws Exception {
             // Arrange
-            Venue testVenue = new Venue("Test Venue", null, null, null, null, null);
             when(venueService.getVenueById(anyInt())).thenReturn(testVenue);
             // Act & Assert
             mockMvc.perform(get("/venues/1"))
@@ -395,7 +389,6 @@ public class VenueControllerTest {
         @Test
         void testSuccessfulGetVenueReturnsExpectedFestivalsInArray() throws Exception {
             // Arrange
-            Venue testVenue = new Venue("Test Venue", null, null, null, null, null);
             when(venueService.getVenueById(anyInt())).thenReturn(testVenue);
             Festival testFestival = new Festival("Test Festival", testVenue, 2025, 1, null);
             testVenue.setFestivals(Arrays.asList(testFestival));
