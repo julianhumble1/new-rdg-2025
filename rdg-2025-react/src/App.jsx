@@ -17,9 +17,9 @@ import VenuePage from "./components/venues/VenuePage.jsx"
 import ProductionPage from "./components/productions/ProductionPage.jsx"
 import NewPerformanceForm from "./components/performances/NewPerformanceForm.jsx"
 import FestivalPage from "./components/festivals/FestivalPage.jsx"
-import AltAdminDashboard from "./components/dashboards/AltAdminDashboard.jsx"
+import AltAllVenuesList from "./components/venues/AltAllVenuesList.jsx"
 
-
+ 
 function App() {
 
   const [loggedIn, setLoggedIn] = useState(false)
@@ -50,10 +50,10 @@ function App() {
         </Route>
         <Route path="/dashboard" element={<Dashboard  />} />
         <Route path="/user-dashboard" element={<UserDashboard  />} />
-        <Route path="/admin-dashboard" element={<AltAdminDashboard />} />
+        <Route path="/admin-dashboard" element={<AdminDashboard />} />
 
         <Route path="/venues/new" element={<NewVenueForm />} />
-        <Route path="/venues" element={<AllVenuesList />} />
+        <Route path="/venues" element={<AltAllVenuesList />} />
         <Route path="/venues/:id" element={<VenuePage />} />
 
         <Route path="/productions/new" element={<NewProductionForm />} />
