@@ -86,4 +86,30 @@ export default class FestivalService {
             
     }
 
+    static updateFestival = async (festivalId, name, venueId, year, month, description) => {
+
+        const token = Cookies.get("token")
+
+        try {
+            const response = await axios.patch(`http://localhost:8080/festivals/${festivalId}`,
+                {
+                    "name": name.trim(),
+                    venueId: venueId,
+                    year: year,
+                    month: month,
+                    description: description.trim()
+                }, {
+                    headers: {
+                        "Authorization" : `Bearer ${token}`
+                    }
+                }
+
+            )
+            return response;
+        } catch (e) {
+            throw new Error(e.message)
+        }
+
+    }
+
 }
