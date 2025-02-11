@@ -1,9 +1,12 @@
-import { Table } from 'flowbite-react'
+import { Label, TextInput } from 'flowbite-react'
 import { useState, useEffect } from 'react';
 import VenueService from '../../services/VenueService.js';
-import { format } from 'date-fns';
-import { Link } from 'react-router-dom';
 import ConfirmDeleteModal from '../modals/ConfirmDeleteModal.jsx';
+import SuccessMessage from "../modals/SuccessMessage.jsx"
+import ErrorMessage from "../modals/ErrorMessage.jsx"
+import AltVenueRow from './AltVenueRow.jsx';
+import AltVenueTable from './AltVenueTable.jsx';
+import { MagnifyingGlassIcon } from '@heroicons/react/16/solid';
 
 const AltAllVenuesList = () => {
 
@@ -13,7 +16,9 @@ const AltAllVenuesList = () => {
     const [venueToDelete, setVenueToDelete] = useState(null);
 
     const [successMessage, setSuccessMessage] = useState("")
-    const [errorMessage, setErrorMessage] = useState("")
+	const [errorMessage, setErrorMessage] = useState("")
+	
+	const [nameSearch, setNameSearch] = useState("")
 
     const handleDelete = (venue) => {
         setShowConfirmDelete(true)
@@ -46,58 +51,32 @@ const AltAllVenuesList = () => {
     }, [])
 
 
-	return (
+	return (<>
 		
-		<div className='overflow-x-auto'>
+		<div >
 		  	{showConfirmDelete &&
 			  	<ConfirmDeleteModal setShowConfirmDelete={setShowConfirmDelete} itemToDelete={venueToDelete} handleConfirmDelete={ handleConfirmDelete } />
-		  	}
-        	<Table hoverable className='border p-2'>
-          		<Table.Head className='text-lg'>
-					<Table.HeadCell>Venue</Table.HeadCell>
-					<Table.HeadCell>Address</Table.HeadCell>
-					<Table.HeadCell>Town</Table.HeadCell>
-					<Table.HeadCell>Postcode</Table.HeadCell>
-					<Table.HeadCell>Date Created</Table.HeadCell>
-					<Table.HeadCell>Actions</Table.HeadCell>
-					<Table.HeadCell>
-					<span className="sr-only">Edit</span>
-					</Table.HeadCell>
-				</Table.Head>
-				<Table.Body className="divide-y">
-					
-					{venues.map((venue, index) => (
-						<Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800" key={index}>
-							<Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white ">
-								<Link to={`/venues/${venue.id}`} className='hover:underline' >
-									{venue.name}
-								</Link>
-							</Table.Cell>
-							<Table.Cell >
-								{venue.address}
-							</Table.Cell>
-							<Table.Cell >
-								{venue.town}
-							</Table.Cell>
-							<Table.Cell >
-								{venue.postcode}
-							</Table.Cell>
-							<Table.Cell >
-								{format(new Date(venue.createdAt), "dd-MM-yyyy")} 
-							</Table.Cell>
-							<Table.Cell>
-								<div className='flex gap-2'>
-									<Link className="font-medium text-cyan-600 hover:underline dark:text-cyan-500" to={`/venues/${venue.id}?edit=true`}>
-										Edit
-									</Link>
-									<button className="font-medium text-cyan-600 hover:underline dark:text-cyan-500" onClick={() => handleDelete(venue)}>Delete</button>
-								</div>
-							</Table.Cell>
-						</Table.Row>
-					))} 
-				</Table.Body>
-        	</Table>
+			}
+			<SuccessMessage message={successMessage} />
+			<ErrorMessage message={errorMessage} />
+			<div className='grid lg:grid-cols-6 grid-cols-1'>
+				<div className="col-span-1 rounded bg-gray-50 m-2 border-4 border-sky-900 border-opacity-80 max-h-screen">
+					<div className='flex flex-col'>
+						<div className='font-bold lg:text-center m-2'>
+							Filters
+						</div>
+						<div className="m-2">
+							<Label value="Search" />
+						</div>
+						<TextInput icon={MagnifyingGlassIcon} placeholder="Venue Name" className='m-2 mt-0' value={nameSearch} onChange={(e) => setNameSearch(e.target.value)} />
+					</div>
+				</div>
+				<span className='col-span-5 p-2 pl-0 overflow-x-auto'>
+					<AltVenueTable venues={venues} handleDelete={handleDelete} nameSearch={nameSearch} />
+				</span>
+			</div>
       	</div>
+	</>
     )
 }
 
