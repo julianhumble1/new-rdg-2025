@@ -1,14 +1,14 @@
-import { useNavigate, useParams, useSearchParams } from "react-router-dom"
-import { useState, useEffect, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
+import { useParams, useSearchParams, useNavigate, Link } from "react-router-dom";
+import ProductionService from "../../services/ProductionService.js";
 import VenueService from "../../services/VenueService.js";
+import ProductionsTable from "../productions/ProductionsTable.jsx";
+import FestivalsTable from "../festivals/FestivalsTable.jsx";
+import VenueHighlight from "./VenueHighlight.jsx";
 import EditVenueForm from "./EditVenueForm.jsx";
 import ConfirmDeleteModal from "../modals/ConfirmDeleteModal.jsx";
-import { format } from "date-fns";
 import SuccessMessage from "../modals/SuccessMessage.jsx";
 import ErrorMessage from "../modals/ErrorMessage.jsx";
-import FestivalsTable from "../festivals/FestivalsTable.jsx"
-import ProductionService from "../../services/ProductionService.js";
-import ProductionsTable from "../productions/ProductionsTable.jsx";
 
 const VenuePage = () => {
 
@@ -80,59 +80,29 @@ const VenuePage = () => {
         }
     }
 
-    return (<>
-        {showConfirmDelete &&
-            <ConfirmDeleteModal setShowConfirmDelete={setShowConfirmDelete} itemToDelete={itemToDelete} handleConfirmDelete={ handleConfirmDelete } />
-        }
 
-        <div className="font-bold text-xl p-3 ">
-            Venue {venueId}: 
+    return (
+        <div>
+            {showConfirmDelete &&
+                <ConfirmDeleteModal setShowConfirmDelete={setShowConfirmDelete} itemToDelete={itemToDelete} handleConfirmDelete={ handleConfirmDelete } />
+            }
+            <SuccessMessage message={successMessage} />
+            <ErrorMessage message={errorMessage} />
+            <div className="flex w-full justify-center">
+                {(venueData && !editMode) &&
+                    <VenueHighlight venueData={venueData} setEditMode={setEditMode} handleDelete={handleDelete} />
+                }
+                {(venueData && editMode) &&
+                    <EditVenueForm venueData={venueData} handleEdit={handleEditVenue} setEditMode={setEditMode} />
+                }
+            </div>
+            <div className="flex flex-col gap-1">
+                <ProductionsTable productions={productions} handleDelete={handleDelete} />
+                <FestivalsTable festivals={festivals} />
+            </div>
+            
         </div>
-        
-        <SuccessMessage message={successMessage} />
-        <ErrorMessage message={errorMessage} />
-
-        {(venueData && !editMode) &&
-            <div className="flex flex-row bg-gray-300 m-2 p-1 rounded w-2/3 justify-between">
-                <div>
-                    <div className="font-bold"> {venueData.name}</div>
-                    <div>Address: {venueData.address}</div>
-                    <div>Town/City: {venueData.town}</div>
-                    <div>Postcode: {venueData.postcode}</div>
-                    <div>Notes: {venueData.notes}</div>
-                    <div>URL: {venueData.url}</div>
-                    <div>Created: {format(new Date(venueData.createdAt), "dd-MM-yyyy")}</div>
-                    <div>Updated: {format(new Date(venueData.updatedAt), "dd-MM-yyyy")}</div>
-                </div>
-                <div className="flex flex-row gap-3 items-start ">
-                    <button className="text-blue-500 hover:text-blue-700 hover:underline" onClick={() => setEditMode(true)}>
-                        Edit
-                    </button>
-                    <button className="text-blue-500 hover:text-blue-700 hover:underline" onClick={() => handleDelete(venueData)}>
-                        Delete
-                    </button>
-                </div>
-            </div>
-        }
-
-        {(venueData && editMode) && 
-            <div className="flex flex-row bg-gray-300 m-2 p-1 rounded w-2/3 justify-between">
-                <div>
-                    <EditVenueForm venueData={venueData} handleEdit={handleEditVenue} />
-                </div>
-                
-                <div className="flex flex-row gap-3 items-start ">
-                    <button className="text-blue-500 hover:text-blue-700 hover:underline" onClick={() => setEditMode(false)}>
-                        Cancel Edit Mode
-                    </button>
-                </div>
-            </div>
-        }
-
-        <ProductionsTable productions={productions} handleDelete={handleDelete} />
-
-        <FestivalsTable festivals={festivals} />
-    </>)
+    )
 }
 
 export default VenuePage

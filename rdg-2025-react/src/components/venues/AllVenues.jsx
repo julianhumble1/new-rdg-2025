@@ -4,11 +4,11 @@ import VenueService from '../../services/VenueService.js';
 import ConfirmDeleteModal from '../modals/ConfirmDeleteModal.jsx';
 import SuccessMessage from "../modals/SuccessMessage.jsx"
 import ErrorMessage from "../modals/ErrorMessage.jsx"
-import AltVenueRow from './AltVenueRow.jsx';
-import AltVenueTable from './AltVenueTable.jsx';
+
+import AltVenueTable from './AllVenuesTable.jsx';
 import { MagnifyingGlassIcon } from '@heroicons/react/16/solid';
 
-const AltAllVenuesList = () => {
+const AllVenues = () => {
 
     const [venues, setVenues] = useState([])
 
@@ -60,7 +60,7 @@ const AltAllVenuesList = () => {
 			<SuccessMessage message={successMessage} />
 			<ErrorMessage message={errorMessage} />
 			<div className='grid lg:grid-cols-6 grid-cols-1'>
-				<div className="col-span-1 rounded bg-gray-50 m-2 border-4 border-sky-900 border-opacity-80 max-h-screen">
+				<div className="col-span-1 rounded bg-gray-50 m-2 border-4 border-sky-900 border-opacity-30 max-h-screen">
 					<div className='flex flex-col'>
 						<div className='font-bold lg:text-center m-2'>
 							Filters
@@ -80,4 +80,4 @@ const AltAllVenuesList = () => {
     )
 }
 
-export default AltAllVenuesList
+export default AllVenues
