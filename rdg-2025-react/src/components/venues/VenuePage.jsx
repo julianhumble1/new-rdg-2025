@@ -2,7 +2,6 @@ import { useState, useCallback, useEffect } from "react";
 import { useParams, useSearchParams, useNavigate, Link } from "react-router-dom";
 import ProductionService from "../../services/ProductionService.js";
 import VenueService from "../../services/VenueService.js";
-import ProductionsTable from "../productions/ProductionsTable.jsx";
 import FestivalsTable from "../festivals/FestivalsTable.jsx";
 import VenueHighlight from "./VenueHighlight.jsx";
 import EditVenueForm from "./EditVenueForm.jsx";
