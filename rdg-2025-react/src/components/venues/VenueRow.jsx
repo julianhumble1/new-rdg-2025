@@ -8,11 +8,7 @@ const VenueRow = ({ venue, handleDelete, nameSearch }) => {
     const [hide, setHide] = useState(false)
 
     useEffect(() => {
-        if (venue.name.toLowerCase().includes(nameSearch.toLowerCase())) {
-            setHide(false) 
-        } else {
-            setHide(true)
-        }
+        setHide(!(venue.name.toLowerCase().includes(nameSearch.toLowerCase())))
     }, [nameSearch, venue])
 
     return (
@@ -36,10 +32,10 @@ const VenueRow = ({ venue, handleDelete, nameSearch }) => {
             </Table.Cell>
             <Table.Cell>
                 <div className='flex gap-2'>
-                    <Link className="font-medium text-cyan-600 hover:underline dark:text-cyan-500" to={`/venues/${venue.id}?edit=true`}>
+                    <Link className="text-medium text-black hover:underline font-bold text-end" to={`/venues/${venue.id}?edit=true`}>
                         Edit
                     </Link>
-                    <button className="font-medium text-cyan-600 hover:underline dark:text-cyan-500" onClick={() => handleDelete(venue)}>Delete</button>
+                    <button className="text-medium text-black hover:underline font-bold text-end" onClick={() => handleDelete(venue)}>Delete</button>
                 </div>
             </Table.Cell>
         </Table.Row>

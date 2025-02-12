@@ -15,7 +15,7 @@ const EditVenueForm = ({ venueData, handleEdit, setEditMode }) => {
             <form className="flex flex-col gap-2 max-w-md" onSubmit={(event) => handleEdit(event, venueData.id, name, address, town, postcode, notes, url)}>
                 <div>
                     <div className="mb-2 block">
-                        <Label value="Name (required)" />
+                        <Label value="Venue Name (required)" />
                     </div>
                     <TextInput placeholder="The Globe" required value={name} onChange={(e) => setName(e.target.value)}/>
                 </div>

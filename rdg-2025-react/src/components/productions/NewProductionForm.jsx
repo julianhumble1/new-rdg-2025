@@ -72,7 +72,7 @@ const NewProductionForm = () => {
                 <div className="italic">
                     Venue
                 </div>
-              <Select options={venueOptions} onChange={setVenue} className="w-fit" isClearable/>
+                <Select options={venueOptions} onChange={setVenue} className="w-fit" isClearable/>
             </div>
             <div>
                 <div className="italic">
@@ -90,7 +90,7 @@ const NewProductionForm = () => {
                 <div className="italic">
                     Audition Date
                 </div>
-              <DatePicker className="border rounded p-1" selected={auditionDate} onChange={(date) => setAuditionDate(date)} dateFormat="dd/MM/yyyy" isClearable/>
+                <DatePicker className="border rounded p-1" selected={auditionDate} onChange={(date) => setAuditionDate(date)} dateFormat="dd/MM/yyyy" isClearable/>
             </div>
             <div className=" flex gap-2">
                 <div className="italic">
