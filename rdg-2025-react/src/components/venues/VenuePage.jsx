@@ -9,6 +9,7 @@ import EditVenueForm from "./EditVenueForm.jsx";
 import ConfirmDeleteModal from "../modals/ConfirmDeleteModal.jsx";
 import SuccessMessage from "../modals/SuccessMessage.jsx";
 import ErrorMessage from "../modals/ErrorMessage.jsx";
+import AltProductionsTable from "../productions/ProductionsTable.jsx";
 
 const VenuePage = () => {
 
@@ -96,8 +97,15 @@ const VenuePage = () => {
                     <EditVenueForm venueData={venueData} handleEdit={handleEditVenue} setEditMode={setEditMode} />
                 }
             </div>
-            <div className="flex flex-col gap-1">
-                <ProductionsTable productions={productions} handleDelete={handleDelete} />
+            <div className="flex flex-col gap-1 m-3">
+                <div>
+                    <div className="text-lg font-bold">
+                        Productions at this venue:
+                    </div>
+                    <div className="m-2 overflow-auto">
+                        <AltProductionsTable productions={productions} handleDelete={handleDelete} nameSearch={""} venueSearch={""} sundownersSearch={false} className="m-2 "/>
+                    </div>
+                </div>
                 <FestivalsTable festivals={festivals} />
             </div>
             
