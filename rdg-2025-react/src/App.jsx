@@ -17,7 +17,7 @@ import VenuePage from "./components/venues/VenuePage.jsx"
 import ProductionPage from "./components/productions/ProductionPage.jsx"
 import NewPerformanceForm from "./components/performances/NewPerformanceForm.jsx"
 import FestivalPage from "./components/festivals/FestivalPage.jsx"
-import AltNewProductionForm from "./components/productions/AltNewProductionForm.jsx"
+
  
 function App() {
 
@@ -55,7 +55,7 @@ function App() {
         <Route path="/venues" element={<AllVenues />} />
         <Route path="/venues/:id" element={<VenuePage />} />
 
-        <Route path="/productions/new" element={<AltNewProductionForm />} />
+        <Route path="/productions/new" element={<NewProductionForm />} />
         <Route path="/productions" element={<AllProductionsList />} />
         <Route path="/productions/:id" element={<ProductionPage />} />
 
