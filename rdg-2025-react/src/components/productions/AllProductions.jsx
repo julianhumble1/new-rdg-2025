@@ -59,7 +59,7 @@ const AllProductions = () => {
             <SuccessMessage message={successMessage} />
 			<ErrorMessage message={errorMessage} />
             <div className='grid lg:grid-cols-6 grid-cols-1'>
-				<div className="col-span-1 rounded m-2 border bg-slate-200 max-h-screen drop-shadow-md">
+				<div className="col-span-1 rounded m-2 border bg-slate-200 max-h-fit drop-shadow-md lg:pb-6">
 					<div className='flex flex-col'>
 						<div className='font-bold lg:text-center m-2'>
 							Filters

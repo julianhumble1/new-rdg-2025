@@ -6,6 +6,8 @@ import { Label, Textarea, TextInput, Checkbox } from "flowbite-react"
 import Select from "react-select"
 import DatePicker from "react-datepicker"
 import { Link, useNavigate } from "react-router-dom"
+import SuccessMessage from "../modals/SuccessMessage.jsx"
+import ErrorMessage from "../modals/ErrorMessage.jsx"
 
 const NewProductionForm = () => {
 
@@ -24,6 +26,8 @@ const NewProductionForm = () => {
     const [errorMessage, setErrorMessage] = useState("")
 
     const [venueOptions, setVenueOptions] = useState([])
+
+    const [descriptionLength, setDescriptionLength] = useState(0)
 
     const handleSubmit = async (event) => {
         event.preventDefault()
@@ -63,6 +67,8 @@ const NewProductionForm = () => {
 
     return (
         <div className="bg-sky-900 bg-opacity-35 lg:w-1/2 md:w-2/3 rounded p-4 m-2 flex flex-col gap-2 shadow-md">
+            <SuccessMessage message={successMessage} />
+            <ErrorMessage message={errorMessage} />
             <form className="flex flex-col gap-2 max-w-md" onSubmit={handleSubmit}>
                 <div>
                     <div className="mb-2 block italic">
@@ -84,9 +90,9 @@ const NewProductionForm = () => {
                 </div>
                 <div>
                     <div className="mb-2 block italic">
-                        <Label value="Description" />
+                        <Label value={`Description (max 2000 characters, current: ${descriptionLength})`} />
                     </div>
-                    <Textarea placeholder="A tale of a young orphan... " value={description} onChange={(e) => setDescription(e.target.value)} rows={4} />
+                    <Textarea placeholder="A tale of a young orphan... " value={description} onChange={(e) => setDescription(e.target.value)} onBlur={(e) => setDescriptionLength(e.target.value.length)} rows={4} />
                 </div>
                 <div className="grid grid-cols-2">
                     <div>

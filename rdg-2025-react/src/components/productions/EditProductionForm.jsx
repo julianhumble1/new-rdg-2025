@@ -23,6 +23,8 @@ const EditProductionForm = ({ productionData, handleEdit, setEditMode }) => {
 
     const [errorMessage, setErrorMessage] = useState("")
 
+    const [descriptionLength, setDescriptionLength] = useState(productionData.description ? productionData.description.length : 0)
+
     useEffect(() => {
         const getVenues = async () => {
             try {
@@ -58,9 +60,9 @@ const EditProductionForm = ({ productionData, handleEdit, setEditMode }) => {
                 </div>
                 <div>
                     <div className="mb-2 block italic">
-                        <Label value="Description" />
+                        <Label value={`Description (max 2000 characters, current: ${descriptionLength})`} />
                     </div>
-                    <Textarea placeholder="A tale of a young orphan... " value={description} onChange={(e) => setDescription(e.target.value)} rows={4} />
+                    <Textarea placeholder="A tale of a young orphan... " value={description} onChange={(e) => setDescription(e.target.value)} onBlur={(e) => setDescriptionLength(e.target.value.length)} rows={4} />
                 </div>
                 <div className="grid grid-cols-2">
                     <div>
