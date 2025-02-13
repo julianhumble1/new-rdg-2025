@@ -38,6 +38,7 @@ public class Festival {
     @Min(0)
     private int month;
 
+    @Column(length = 2000)
     private String description;
 
     @Column(nullable = false)
