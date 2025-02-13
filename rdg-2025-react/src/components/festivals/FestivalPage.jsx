@@ -45,7 +45,7 @@ const FestivalPage = () => {
 
     const handleConfirmDelete = async () => {
         try {
-            const response = await FestivalService.deleteFestivalById(festivalData.id)
+            await FestivalService.deleteFestivalById(festivalData.id)
             navigate("/festivals")
         } catch (e) {
             setErrorMessage(e.message)
