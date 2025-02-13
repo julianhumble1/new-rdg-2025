@@ -11,6 +11,8 @@ import ErrorMessage from "../modals/ErrorMessage.jsx";
 import ProductionsTable from "../productions/ProductionsTable.jsx";
 import { Tabs } from "flowbite-react";
 import { FilmIcon, ScaleIcon } from "@heroicons/react/16/solid";
+import FestivalService from "../../services/FestivalService.js";
+import AltFestivalsTable from "../festivals/FestivalsTable.jsx";
 
 const VenuePage = () => {
 
@@ -52,11 +54,17 @@ const VenuePage = () => {
 
     const handleConfirmDelete = async (item) => {
         try {
-            // check whether item to delete is a production or venue
-            if (item.postcode == null) {
-                const response = await ProductionService.deleteProduction(item.id)
+            // check whether item to delete is a production, festival or venue
+            if (item.postcode == null && item.year == null) {
+                // Production
+                await ProductionService.deleteProduction(item.id)
+                fetchVenueData()
+            } else if (item.postcode == null) {
+                // Festival
+                await FestivalService.deleteFestivalById(item.id)
                 fetchVenueData()
             } else {
+                // Venue
                 await VenueService.deleteVenue(item.id)
                 navigate("/venues")
             }
@@ -98,26 +106,11 @@ const VenuePage = () => {
                     <EditVenueForm venueData={venueData} handleEdit={handleEditVenue} setEditMode={setEditMode} />
                 }
             </div>
-            {/* <div className="flex flex-col gap-1 m-3">
-                {productions.length > 0 ?
-                    <div>
-                        <div className="text-lg font-bold ml-3">
-                            Productions at this venue:
-                        </div>
-                        <div className="m-2 overflow-auto">
-                            <AltProductionsTable productions={productions} handleDelete={handleDelete} nameSearch={""} venueSearch={""} sundownersSearch={false} className="m-2 "/>
-                        </div>
-                    </div>
-                    :
-                    <div className="text-md font-bold ml-3">No productions at this venue</div>
-                }
-                <FestivalsTable festivals={festivals} />
-            </div> */}
             <Tabs variant="underline" className="m-3">
                 <Tabs.Item active title="Productions" icon={ScaleIcon}>
                     {productions.length > 0 ?
                         <div className="m-2 overflow-auto">
-                            <ProductionsTable productions={productions} handleDelete={handleDelete} nameSearch={""} venueSearch={""} sundownersSearch={false} className="m-2 "/>
+                            <ProductionsTable productions={productions} handleDelete={handleDelete} nameSearch={""} venueSearch={""} sundownersSearch={false}/>
                         </div>
                         :
                         <div className="text-md font-bold ml-3">No productions at this venue</div>
@@ -125,17 +118,12 @@ const VenuePage = () => {
                 </Tabs.Item>
                 <Tabs.Item title="Festivals" icon={FilmIcon}>
                     {festivals.length > 0 ?
-                    <div>
-                        <div className="text-lg font-bold ml-3">
-                            Festivals at this venue:
-                        </div>
                         <div className="m-2 overflow-auto">
-                           <FestivalsTable festivals={festivals} />
+                           <AltFestivalsTable festivals={festivals} handleDelete={handleDelete} nameSearch={""} venueSearch={""} />
                         </div>
-                    </div>
-                    :
-                    <div className="text-md font-bold ml-3">No festivals at this venue</div>
-                }
+                        :
+                        <div className="text-md font-bold ml-3">No festivals at this venue</div>
+                    }
                 </Tabs.Item>
             </Tabs>
             

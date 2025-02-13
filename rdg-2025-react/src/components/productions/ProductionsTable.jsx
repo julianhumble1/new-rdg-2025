@@ -4,7 +4,7 @@ import ProductionRow from "./ProductionRow.jsx"
 const ProductionsTable = ({ productions, handleDelete, nameSearch, venueSearch, sundownersSearch }) => {
     if (productions.length > 0) {
         return (
-            <Table hoverable className='border p-2 overflow-auto max-w-screen'>
+            <Table hoverable className='border overflow-auto max-w-screen'>
                 <Table.Head className='text-lg'>
                     <Table.HeadCell>Production</Table.HeadCell>
                     <Table.HeadCell>Venue</Table.HeadCell>
