@@ -109,7 +109,7 @@ const NewProductionForm = () => {
                             <Checkbox checked={sundowners} onChange={(e) => setSundowners(e.target.checked)} />
                         </div>
                         <div className="col-span-1 flex justify-center gap-2">
-                            <Label htmlFor="sundowners" className="flex italic">
+                            <Label className="flex italic">
                                 Not Confirmed?
                             </Label>
                             <Checkbox checked={notConfirmed} onChange={(e) => setNotConfirmed(e.target.checked)} />

@@ -34,7 +34,7 @@ const ProductionRow = ({ production, handleDelete, nameSearch, venueSearch, sund
                         {production.venue.name}
                     </Link> : ""}
             </Table.Cell>
-            <Table.Cell >
+            <Table.Cell className='truncate max-w-md'>
                 {production.description} 
             </Table.Cell>
             <Table.Cell >

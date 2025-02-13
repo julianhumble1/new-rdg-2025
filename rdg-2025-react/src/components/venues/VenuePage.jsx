@@ -8,7 +8,9 @@ import EditVenueForm from "./EditVenueForm.jsx";
 import ConfirmDeleteModal from "../modals/ConfirmDeleteModal.jsx";
 import SuccessMessage from "../modals/SuccessMessage.jsx";
 import ErrorMessage from "../modals/ErrorMessage.jsx";
-import AltProductionsTable from "../productions/ProductionsTable.jsx";
+import ProductionsTable from "../productions/ProductionsTable.jsx";
+import { Tabs } from "flowbite-react";
+import { FilmIcon, ScaleIcon } from "@heroicons/react/16/solid";
 
 const VenuePage = () => {
 
@@ -96,17 +98,46 @@ const VenuePage = () => {
                     <EditVenueForm venueData={venueData} handleEdit={handleEditVenue} setEditMode={setEditMode} />
                 }
             </div>
-            <div className="flex flex-col gap-1 m-3">
-                <div>
-                    <div className="text-lg font-bold">
-                        Productions at this venue:
+            {/* <div className="flex flex-col gap-1 m-3">
+                {productions.length > 0 ?
+                    <div>
+                        <div className="text-lg font-bold ml-3">
+                            Productions at this venue:
+                        </div>
+                        <div className="m-2 overflow-auto">
+                            <AltProductionsTable productions={productions} handleDelete={handleDelete} nameSearch={""} venueSearch={""} sundownersSearch={false} className="m-2 "/>
+                        </div>
                     </div>
-                    <div className="m-2 overflow-auto">
-                        <AltProductionsTable productions={productions} handleDelete={handleDelete} nameSearch={""} venueSearch={""} sundownersSearch={false} className="m-2 "/>
-                    </div>
-                </div>
+                    :
+                    <div className="text-md font-bold ml-3">No productions at this venue</div>
+                }
                 <FestivalsTable festivals={festivals} />
-            </div>
+            </div> */}
+            <Tabs variant="underline" className="m-3">
+                <Tabs.Item active title="Productions" icon={ScaleIcon}>
+                    {productions.length > 0 ?
+                        <div className="m-2 overflow-auto">
+                            <ProductionsTable productions={productions} handleDelete={handleDelete} nameSearch={""} venueSearch={""} sundownersSearch={false} className="m-2 "/>
+                        </div>
+                        :
+                        <div className="text-md font-bold ml-3">No productions at this venue</div>
+                    }
+                </Tabs.Item>
+                <Tabs.Item title="Festivals" icon={FilmIcon}>
+                    {festivals.length > 0 ?
+                    <div>
+                        <div className="text-lg font-bold ml-3">
+                            Festivals at this venue:
+                        </div>
+                        <div className="m-2 overflow-auto">
+                           <FestivalsTable festivals={festivals} />
+                        </div>
+                    </div>
+                    :
+                    <div className="text-md font-bold ml-3">No festivals at this venue</div>
+                }
+                </Tabs.Item>
+            </Tabs>
             
         </div>
     )
