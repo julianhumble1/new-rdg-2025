@@ -1,28 +1,24 @@
 import PerformanceRow from "./PerformanceRow.jsx"
 
-const PerformancesTable = ({ performances }) => {
-    
-    if (performances.length > 0) {
-        return (
-            <div className="mx-3 w-2/3">
-                <div className="text-lg font-bold">
-                    Performances:
-                </div>
-                <div className="grid grid-cols-5 bg-slate-400 italic font-bold">
-                    <div className="col-span-1 p-1">Date & Time</div>
-                    <div className="col-span-1 p-1">Production</div>
-                    <div className="col-span-1 p-1">Venue</div>
-                    <div className="col-span-1 p-1">Festival</div>
-                    <div className="col-span-1 p-1">Description</div>
-                </div>
-                {performances.map((performance, index) => (<PerformanceRow key={ index } performanceData={performance}/>)) }
-            </div>
-        )
-        
-    } else {
-        return <div className="font-bold m-3">No performances to display</div>
-    }
+const PerformanceTable = ({ performances }) => {
 
+    if (performances.length > 0) return (
+        <div className="col-span-2 flex flex-col md:rounded-r hover:bg-opacity-50 bg-sky-900 bg-opacity-35 h-full md:h-[30rem] w-full p-4">
+            <div className="font-bold text-lg" >
+                Performances
+            </div>
+            <div className="bg-white m-2 rounded overflow-auto ">
+                {performances.map((performance, index) => (
+                    <PerformanceRow key={index} performanceData={performance} />
+                ))}
+
+            </div>
+        </div>
+    )
+
+    return (
+        <div>No Performances</div>
+    )
 }
 
-export default PerformancesTable
+export default PerformanceTable

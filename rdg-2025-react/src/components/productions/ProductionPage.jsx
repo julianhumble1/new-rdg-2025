@@ -8,7 +8,6 @@ import EditProductionForm from "./EditProductionForm.jsx";
 import { format } from "date-fns";
 import ProductionHighlight from "./ProductionHighlight.jsx";
 import PerformancesTable from "../performances/PerformancesTable.jsx";
-import AltPerformanceTable from "../performances/AltPerformanceTable.jsx";
 
 const ProductionPage = () => {
 
@@ -92,7 +91,7 @@ const ProductionPage = () => {
                 {(productionData && !editMode && performances.length > 0) &&
                     <div className="grid md:grid-cols-5 grid-cols-1 w-full lg:w-1/2 md:w-2/3 md:shadow-md min-h-[26rem]">
                         <ProductionHighlight productionData={productionData} setEditMode={setEditMode} handleDelete={handleDelete} />
-                        <AltPerformanceTable performances={performances}/>
+                        <PerformancesTable performances={performances}/>
                     </div>
                 }
                 {(productionData && !editMode && performances.length === 0) &&
@@ -105,7 +104,6 @@ const ProductionPage = () => {
                 }
             </div>
         
-            {/* <PerformancesTable performances={performances} /> */}
         </div>
     )
 }
