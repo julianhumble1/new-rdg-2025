@@ -5,6 +5,7 @@ import FetchValueOptionsHelper from "../../utils/FetchValueOptionsHelper.js"
 import { Label, Textarea, TextInput, Checkbox } from "flowbite-react"
 import Select from "react-select"
 import DatePicker from "react-datepicker"
+import "react-datepicker/dist/react-datepicker.css";
 import { Link, useNavigate } from "react-router-dom"
 import SuccessMessage from "../modals/SuccessMessage.jsx"
 import ErrorMessage from "../modals/ErrorMessage.jsx"

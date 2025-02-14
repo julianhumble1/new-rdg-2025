@@ -27,9 +27,7 @@ const ProductionsTable = ({ productions, handleDelete, nameSearch, venueSearch, 
             <div className="w-full text-center text-bold">
                 No productions to display.
             </div>
-
         )
-
     }
 }
 

@@ -2,6 +2,7 @@ import { useState } from "react"
 import VenueService from "../../services/VenueService.js"
 import { Link, useNavigate } from "react-router-dom"
 import { Label, TextInput, Textarea } from "flowbite-react"
+import ErrorMessage from "../modals/ErrorMessage.jsx"
 
 const NewVenueForm = () => {
     const navigate = useNavigate()
@@ -13,7 +14,6 @@ const NewVenueForm = () => {
     const [notes, setNotes] = useState("")
     const [url, setUrl] = useState("")
 
-    const [successMessage, setSuccessMessage] = useState("")
     const [errorMessage, setErrorMessage] = useState("")
 
     const handleSubmit = async (event) => {
@@ -22,7 +22,6 @@ const NewVenueForm = () => {
             const response = await VenueService.createNewVenue(name, address, town, postcode, notes, url)
             navigate(`/venues/${response.data.venue.id}`)
         } catch (e) {
-            setSuccessMessage("")
             setErrorMessage(e.message)
         }
     }
@@ -30,6 +29,7 @@ const NewVenueForm = () => {
     return (
         <div className="bg-sky-900 bg-opacity-35 lg:w-1/2 md:w-2/3 rounded p-4 m-2 flex flex-col gap-2 shadow-md">
             <form className="flex flex-col gap-2 max-w-md" onSubmit={(event) => handleSubmit(event, name, address, town, postcode, notes, url)}>
+                <ErrorMessage message={errorMessage} />
                 <div>
                     <div className="mb-2 block">
                         <Label value="Venue Name (required)" />

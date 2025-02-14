@@ -72,7 +72,6 @@ const EditFestivalForm = ({festivalData, handleEdit, setEditMode}) => {
                     <Textarea placeholder="A tale of a young orphan... " value={description} onChange={(e) => setDescription(e.target.value)} onBlur={(e) => setDescriptionLength(e.target.value.length)} rows={4} />
                 </div>
 
-
                 <div className="grid grid-cols-2 justify-end px-2">
                     <button className="text-sm hover:underline font-bold text-center col-span-1" onClick={() => setEditMode(false)}>
                         Cancel Edit Mode

@@ -8,6 +8,7 @@ import EditProductionForm from "./EditProductionForm.jsx";
 import { format } from "date-fns";
 import ProductionHighlight from "./ProductionHighlight.jsx";
 import PerformancesTable from "../performances/PerformancesTable.jsx";
+import AltPerformanceTable from "../performances/AltPerformanceTable.jsx";
 
 const ProductionPage = () => {
 
@@ -57,7 +58,7 @@ const ProductionPage = () => {
     const handleEdit = async (event, productionId, name, venueId, author, description, auditionDate, sundowners, notConfirmed, flyerFile) => {
         event.preventDefault()
         try {
-            const response = await ProductionService.updateProduction(
+            await ProductionService.updateProduction(
                 productionId,
                 name,
                 venueId,
@@ -87,16 +88,24 @@ const ProductionPage = () => {
             <SuccessMessage message={successMessage} />
             <ErrorMessage message={errorMessage} />
 
-            <div className="flex w-full justify-center">
-                {(productionData && !editMode) &&
-                    <ProductionHighlight productionData={productionData} setEditMode={setEditMode} handleDelete={handleDelete} />
+            <div className="flex justify-center w-full md:my-2 ">
+                {(productionData && !editMode && performances.length > 0) &&
+                    <div className="grid md:grid-cols-5 grid-cols-1 w-full lg:w-1/2 md:w-2/3 md:shadow-md min-h-[26rem]">
+                        <ProductionHighlight productionData={productionData} setEditMode={setEditMode} handleDelete={handleDelete} />
+                        <AltPerformanceTable performances={performances}/>
+                    </div>
+                }
+                {(productionData && !editMode && performances.length === 0) &&
+                    <div className="grid md:grid-cols-3 grid-cols-1 w-full lg:w-1/2 md:w-2/3 md:shadow-md h-[26rem]">
+                        <ProductionHighlight productionData={productionData} setEditMode={setEditMode} handleDelete={handleDelete} />
+                    </div>
                 }
                 {(productionData && editMode) &&
                     <EditProductionForm productionData={productionData} handleEdit={handleEdit} setEditMode={setEditMode} />
                 }
             </div>
-
-            <PerformancesTable performances={performances} />
+        
+            {/* <PerformancesTable performances={performances} /> */}
         </div>
     )
 }
