@@ -69,7 +69,7 @@ const EditFestivalForm = ({festivalData, handleEdit, setEditMode}) => {
                     <div className="mb-2 block italic">
                         <Label value={`Description (max 2000 characters, current: ${descriptionLength})`} />
                     </div>
-                    <Textarea placeholder="A tale of a young orphan... " value={description} onChange={(e) => setDescription(e.target.value)} onBlur={(e) => setDescriptionLength(e.target.value.length)} rows={4} />
+                    <Textarea placeholder="A drama festival that takes place every year in Woking. " value={description} onChange={(e) => setDescription(e.target.value)} onBlur={(e) => setDescriptionLength(e.target.value.length)} rows={4} />
                 </div>
 
                 <div className="grid grid-cols-2 justify-end px-2">
