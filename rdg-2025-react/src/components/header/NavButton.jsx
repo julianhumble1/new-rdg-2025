@@ -9,12 +9,7 @@ const NavButton = ({ buttonName }) => {
     const [active, setActive] = useState(false)
 
     useEffect(() => {
-        if (url.includes(buttonName.toLowerCase())) {
-            setActive(true)
-        } else {
-            setActive(false)
-        }
-
+        setActive(url.includes(buttonName.toLowerCase()))
     }, [url, buttonName])
 
     return (

@@ -1,10 +1,7 @@
 const Home = () => {
-
-	return (
-		<div>
-        	Home
-		</div>
-	)
+    return (<>
+        <div className="text-green-500 text-xl">Home</div>
+    </>)
 }
 
 export default Home
