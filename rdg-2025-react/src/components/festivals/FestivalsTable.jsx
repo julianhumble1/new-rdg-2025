@@ -1,27 +1,36 @@
+import { Table } from "flowbite-react"
 import FestivalRow from "./FestivalRow.jsx"
 
-const FestivalsTable = ({ festivals }) => {
-    
-    if (festivals.length > 0) {
+const FestivalsTable = ({ festivals, handleDelete, nameSearch, venueSearch }) => {
+        if (festivals.length > 0) {
         return (
-            <div className="mx-3">
-                <div className="grid grid-cols-12 bg-slate-400 italic font-bold">
-                    <div className="col-span-2 p-1">Name</div>
-                    <div className="col-span-2 p-1">Venue</div>
-                    <div className="col-span-2 p-1">Description</div>
-                    <div className="col-span-2 p-1">Year</div>
-                    <div className="col-span-2 p-1">Month</div>
-                    <div className="col-span-2 p-1">Date Created</div>
-                </div>
-                {festivals.map((festival, index) => (
-                    <FestivalRow festivalData={festival} key={index} />
-                ))}
-            </div>  
+            <Table hoverable className='border p-2 overflow-auto max-w-screen'>
+                <Table.Head className='text-lg'>
+                    <Table.HeadCell>Festival</Table.HeadCell>
+                    <Table.HeadCell>Year</Table.HeadCell>
+                    <Table.HeadCell>Venue</Table.HeadCell>
+                    <Table.HeadCell>Description</Table.HeadCell>
+                    <Table.HeadCell>Month</Table.HeadCell>
+                    <Table.HeadCell>Date Created</Table.HeadCell>
+                    <Table.HeadCell>Actions</Table.HeadCell>
+                </Table.Head>
+                <Table.Body className="divide-y">
+                    {festivals.map((festival, index) => (
+                        <FestivalRow festival={festival} handleDelete={handleDelete} key={index} nameSearch={nameSearch} venueSearch={venueSearch} />
+                    ))} 
+                </Table.Body>
+            </Table>
         )
+        
     } else {
-        return <div className="font-bold m-3">No festivals to display</div>
-    }
+        return (
+            <div className="w-full text-center text-bold">
+                No festivals to display.
+            </div>
 
+        )
+
+    }
 }
 
 export default FestivalsTable

@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react"
-import Select from "react-select"
+import { Link, useNavigate } from "react-router-dom"
+import PerformanceService from "../../services/PerformanceService.js"
 import FetchValueOptionsHelper from "../../utils/FetchValueOptionsHelper.js"
+import Select from "react-select"
+import { Label, Textarea, TextInput } from "flowbite-react"
 import DatePicker from "react-datepicker"
 import "react-datepicker/dist/react-datepicker.css";
-import PerformanceService from "../../services/PerformanceService.js";
-import { useNavigate } from "react-router-dom";
 
 const NewPerformanceForm = () => {
 
@@ -22,6 +23,8 @@ const NewPerformanceForm = () => {
     const [productionOptions, setProductionOptions] = useState([])
     const [venueOptions, setVenueOptions] = useState([])
     const [festivalOptions, setFestivalOptions] = useState([])
+
+    const [descriptionLength, setDescriptionLength] = useState(0)
 
     const [failMessage, setFailMessage] = useState("")
 
@@ -42,7 +45,7 @@ const NewPerformanceForm = () => {
         event.preventDefault()
 
         try {
-            const response = await PerformanceService.addNewPerformance(
+            await PerformanceService.addNewPerformance(
                 production.value,
                 venue.value,
                 festival ? festival.value : "",
@@ -58,79 +61,85 @@ const NewPerformanceForm = () => {
         }
     }
 
-    return (<>
-        <div className="pl-1 font-bold " >Add a new performance</div>
-        {failMessage &&
-            <div className="text-red-500 pl-1">
-                {failMessage}
-            </div>
-        }
-        <form className="border border-black w-1/2 p-4 flex flex-col ml-3 gap-2"  onSubmit={handleSubmit}>
-            <div>
-                <div className="italic">Production (required)</div>
-                <Select
-                    options={productionOptions}
-                    onChange={(selectedOption) => {
-                        setProduction(selectedOption)
-                        selectedOption.venue ? setVenue({label: selectedOption.venue.name, value: selectedOption.venue.id}) : setVenue(null)
-                    }}
-                    value={production}
-                    required
-                />
-                <div className="text-sm">
-                    If production has an associated venue, this will be automatically filled below. Can be overridden if necessary.
+    return (
+        <div className="bg-sky-900 bg-opacity-35 lg:w-1/2 md:w-2/3 rounded p-4 m-2 flex flex-col gap-2 shadow-md">
+            <form className="flex flex-col gap-2 max-w-md" onSubmit={handleSubmit}>
+                <div>
+                    <div className="mb-2 block">
+                        <Label value="Production (required)" />
+                    </div>
+                    <Select options={productionOptions} value={production} required
+                        onChange={(selectedOption) => {
+                            setProduction(selectedOption)
+                            selectedOption.venue ? setVenue({label: selectedOption.venue.name, value: selectedOption.venue.id}) : setVenue(null)
+                    }} />
+                    <div className="text-xs m-2">
+                        If production has an associated venue, this will be automatically filled below. Can be overridden if necessary.
+                    </div>
                 </div>
-            </div>
-            <div>
-                <div className="italic">Venue (required)</div>
-                <Select options={venueOptions} onChange={setVenue} value={venue} />
-            </div>
-            <div>
-                <div className="italic">Festival</div>
-                <Select options={festivalOptions} onChange={setFestival} isClearable value={festival} />
-            </div>
-            <div>
-                <div className="italic">Date (required)</div>
-                <DatePicker className="border  p-1 rounded w-full" selected={performanceTime} onChange={(time) => setPerformanceTime(time)}  dateFormat="dd/MM/yyyy h:mm aa" showTimeSelect timeIntervals={15} showIcon popperPlacement="right"/>
-            </div>
-            <div>
-                <div className="italic">Description</div>
-                <input type="text" className="border p-1 w-full" placeholder="An amazing performance..." value={description} onChange={(e) => setDescription(e.target.value)} />
-            </div>
-            <div>
-                <div className="italic">Standard Price</div>
-                <input type="number"
-                    className="border p-1 w-fit"
-                    step={0.01}
-                    onBlur={(e) => {
-                        const value = parseFloat(e.target.value).toFixed(2);
-                        e.target.value = value;
-                    }}
-                    onChange={(e) => setStandardPrice(e.target.value)}
-                />
-            </div>
-            <div>
-                <div className="italic">Concession Price</div>
-                <input
-                    type="number"
-                    className="border p-1 w-fit"
-                    step={0.01}
-                    onBlur={(e) => {
-                        const value = parseFloat(e.target.value).toFixed(2);
-                        e.target.value = value;
-                    }}
-                    onChange={(e) => setConcessionPrice(e.target.value)}
-                />
-            </div>
-            <div>
-                <div className="italic">Box Office</div>
-                <input type="text" className="border p-1 w-full" placeholder="www.boxoffice.com" value={boxOffice} onChange={(e) => setBoxOffice(e.target.value)} />
-            </div>
-
-            <button className={`bg-green-300 px-3 py-1 w-fit rounded hover:bg-green-600 ${(!venue || !production || !performanceTime) && "cursor-not-allowed"}`} >Submit</button>
-
-        </form>
-    </>)
+                <div>
+                    <div className="mb-2 block">
+                        <Label value="Venue (required)" />
+                    </div>
+                    <Select options={venueOptions} onChange={setVenue} value={venue} />
+                </div>
+                <div>
+                    <div className="mb-2 block">
+                        <Label value="Festival" />
+                    </div>
+                    <Select options={festivalOptions} onChange={setFestival} isClearable value={festival} />
+                </div>
+                <div>
+                    <div className="mb-2 block">
+                        <Label value="Date & Time (required)" />
+                    </div>
+                    <DatePicker selected={performanceTime} onChange={(time) => setPerformanceTime(time)}  dateFormat="dd/MM/yyyy h:mm aa" showTimeSelect timeIntervals={15} popperPlacement="right" showIcon className="p-1 rounded border border-gray-300"/>
+                </div>
+                <div>
+                    <div className="mb-2 block italic">
+                        <Label value={`Description (max 2000 characters, current: ${descriptionLength})`} />
+                    </div>
+                    <Textarea placeholder="Divisional Final of the All-England Theatre Festival" value={description} onChange={(e) => setDescription(e.target.value)} onBlur={(e) => setDescriptionLength(e.target.value.length)} rows={4} />
+                </div>
+                <div>
+                    <Label value="Standard Price (£)" />
+                    <TextInput type="number"
+                        step={0.01}
+                        onBlur={(e) => {
+                            const value = parseFloat(e.target.value).toFixed(2);
+                            e.target.value = value;
+                        }}
+                        onChange={(e) => setStandardPrice(e.target.value)}
+                    />
+                </div>
+                <div>
+                    <Label value="Concession Price (£)" />
+                    <TextInput type="number"
+                        step={0.01}
+                        onBlur={(e) => {
+                            const value = parseFloat(e.target.value).toFixed(2);
+                            e.target.value = value;
+                        }}
+                        onChange={(e) => setConcessionPrice(e.target.value)}
+                    />
+                </div>
+                <div>
+                    <div className="mb-2 block">
+                        <Label value="Box Office" />
+                    </div>
+                    <TextInput placeholder="www.boxoffice.com" value={boxOffice} onChange={(e) => setBoxOffice(e.target.value)} />
+                </div>
+                <div className="grid grid-cols-2 justify-end px-2">
+                    <Link to="/dashboard" className="text-sm hover:underline font-bold text-center col-span-1 my-auto" >
+                        Cancel
+                    </Link>
+                    <button className="hover:underline bg-sky-900  p-2 py-1 rounded w-full text-white col-span-1 text-sm">
+                        Submit
+                    </button>
+                </div>
+            </form>
+        </div>
+    )
 }
 
 export default NewPerformanceForm

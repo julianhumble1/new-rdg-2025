@@ -1,26 +1,45 @@
-import { Link } from "react-router-dom"
-import { format } from "date-fns"
+import { format } from 'date-fns'
+import { Table } from 'flowbite-react'
+import { Link } from 'react-router-dom'
+import { useEffect, useState } from 'react'
 
-const VenueRow = ({ venueData, handleDelete }) => {
+const VenueRow = ({ venue, handleDelete, nameSearch }) => {
+    
+    const [hide, setHide] = useState(false)
+
+    useEffect(() => {
+        setHide(!(venue.name.toLowerCase().includes(nameSearch.toLowerCase())))
+    }, [nameSearch, venue])
 
     return (
-        <div className="bg-gray-200 grid grid-cols-12 h-fit hover:bg-gray-300">
-            <div className="col-span-2 p-1">   
-                <Link to={`/venues/${venueData.id}`} className="text-blue-500 hover:text-blue-700 hover:underline">
-                    {venueData.name}
+        <Table.Row className={`bg-white dark:border-gray-700 dark:bg-gray-800 ${hide && "hidden"}`} >
+            <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white ">
+                <Link to={`/venues/${venue.id}`} className='hover:underline' >
+                    {venue.name}
                 </Link>
-            </div>
-            <div className="col-span-2 p-1"> {venueData.address} </div>
-            <div className="col-span-1 p-1"> {venueData.town} </div>
-            <div className="col-span-1 p-1"> {venueData.postcode} </div>
-            <div className="col-span-2 p-1"> {format(new Date(venueData.createdAt), "dd-MM-yyyy")} </div>
-            <div className="col-span-2 p-1"> {venueData.notes} </div>
-            <div className="col-span-2 p-1 flex flex-row gap-2">
-                <Link className="underline text-blue-500 hover:text-blue-700" to={`/venues/${venueData.id}?edit=true`}>Edit</Link>
-                <button className="underline text-blue-500 hover:text-blue-700" onClick={() => handleDelete(venueData)}>Delete</button>
-            </div>
-        </div>
-  )
+            </Table.Cell>
+            <Table.Cell >
+                {venue.address}
+            </Table.Cell>
+            <Table.Cell >
+                {venue.town}
+            </Table.Cell>
+            <Table.Cell >
+                {venue.postcode}
+            </Table.Cell>
+            <Table.Cell >
+                {format(new Date(venue.createdAt), "dd-MM-yyyy")} 
+            </Table.Cell>
+            <Table.Cell>
+                <div className='flex gap-2'>
+                    <Link className="text-medium text-black hover:underline font-bold text-end" to={`/venues/${venue.id}?edit=true`}>
+                        Edit
+                    </Link>
+                    <button className="text-medium text-black hover:underline font-bold text-end" onClick={() => handleDelete(venue)}>Delete</button>
+                </div>
+            </Table.Cell>
+        </Table.Row>
+    )
 }
 
 export default VenueRow

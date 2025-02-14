@@ -8,15 +8,15 @@ import Dashboard from "./components/dashboards/Dashboard.jsx"
 import UserDashboard from "./components/dashboards/UserDashboard.jsx"
 import AdminDashboard from "./components/dashboards/AdminDashboard.jsx"
 import NewVenueForm from "./components/venues/NewVenueForm.jsx"
-import AllVenuesList from "./components/venues/AllVenuesList.jsx"
+import AllVenues from "./components/venues/AllVenues.jsx"
 import NewProductionForm from "./components/productions/NewProductionForm.jsx"
-import AllProductionsList from "./components/productions/AllProductionsList.jsx"
 import NewFestivalForm from "./components/festivals/NewFestivalForm.jsx"
-import AllFestivalsList from "./components/festivals/AllFestivalsList.jsx"
 import VenuePage from "./components/venues/VenuePage.jsx"
 import ProductionPage from "./components/productions/ProductionPage.jsx"
 import NewPerformanceForm from "./components/performances/NewPerformanceForm.jsx"
 import FestivalPage from "./components/festivals/FestivalPage.jsx"
+import AllProductions from "./components/productions/AllProductions.jsx"
+import AllFestivals from "./components/festivals/AllFestivals.jsx"
 
 
 function App() {
@@ -29,7 +29,7 @@ function App() {
   }, [])
 
   return (
-    <Router>
+    <Router >
       <Header
         loggedIn={loggedIn}
         setLoggedIn={setLoggedIn}
@@ -52,15 +52,15 @@ function App() {
         <Route path="/admin-dashboard" element={<AdminDashboard />} />
 
         <Route path="/venues/new" element={<NewVenueForm />} />
-        <Route path="/venues" element={<AllVenuesList />} />
+        <Route path="/venues" element={<AllVenues />} />
         <Route path="/venues/:id" element={<VenuePage />} />
 
         <Route path="/productions/new" element={<NewProductionForm />} />
-        <Route path="/productions" element={<AllProductionsList />} />
+        <Route path="/productions" element={<AllProductions />} />
         <Route path="/productions/:id" element={<ProductionPage />} />
 
         <Route path="/festivals/new" element={<NewFestivalForm />} />
-        <Route path="/festivals" element={<AllFestivalsList />} />
+        <Route path="/festivals" element={<AllFestivals />} />
         <Route path="/festivals/:id" element={<FestivalPage />} />
 
         <Route path="/performances/new" element={<NewPerformanceForm />} />

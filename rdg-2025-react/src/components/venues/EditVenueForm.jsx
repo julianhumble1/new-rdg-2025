@@ -1,7 +1,8 @@
 import { useState } from "react"
+import { Label, Textarea, TextInput } from "flowbite-react"
 
-const EditVenueForm = ({ venueData, handleEdit }) => {
-    
+const EditVenueForm = ({ venueData, handleEdit, setEditMode }) => {
+
     const [name, setName] = useState(venueData.name)
     const [address, setAddress] = useState(venueData.address ? venueData.address : "")
     const [town, setTown] = useState(venueData.town ? venueData.town : "")
@@ -10,46 +11,54 @@ const EditVenueForm = ({ venueData, handleEdit }) => {
     const [url, setUrl] = useState(venueData.url ? venueData.url : "")
 
     return (
-        <form className="flex flex-col gap-2" onSubmit={(event) => handleEdit(event, venueData.id, name, address, town, postcode, notes, url)}>
-            <div>
-                <div className="italic">
-                    Venue Name (required)
+        <div className="bg-sky-900 bg-opacity-35 lg:w-1/2 md:w-2/3 w-full rounded p-4 mt-3 md:mx-0 m-3 flex flex-col gap-2 shadow-md">
+            <form className="flex flex-col gap-2 max-w-md" onSubmit={(event) => handleEdit(event, venueData.id, name, address, town, postcode, notes, url)}>
+                <div>
+                    <div className="mb-2 block">
+                        <Label value="Venue Name (required)" />
+                    </div>
+                    <TextInput placeholder="The Globe" required value={name} onChange={(e) => setName(e.target.value)}/>
                 </div>
-                <input placeholder="The Globe" className="border p-1 rounded" required={true} value={name} onChange={(e) => setName(e.target.value)} />
-            </div>
-            <div>
-                <div className="italic">
-                    Address
+                <div>
+                    <div className="mb-2 block">
+                        <Label value="Address" />
+                    </div>
+                    <TextInput placeholder="21 New Globe Walk" value={address} onChange={(e) => setAddress(e.target.value)}/>
                 </div>
-                <input placeholder="21 New Globe Walk" className="border p-1" value={address} onChange={(e) => setAddress(e.target.value)}/>
-            </div>
-            <div>
-                <div className="italic">
-                    Town
+                <div>
+                    <div className="mb-2 block">
+                        <Label value="Town" />
+                    </div>
+                    <TextInput placeholder="London" value={town} onChange={(e) => setTown(e.target.value)}/>
                 </div>
-                <input placeholder="London" className="border p-1" value={town} onChange={(e) => setTown(e.target.value)}/>
-            </div>
-            <div>
-                <div className="italic">
-                    Postcode
+                <div>
+                    <div className="mb-2 block">
+                        <Label value="Postcode" />
+                    </div>
+                    <TextInput placeholder="SE1 9DT" value={postcode} onChange={(e) => setPostcode(e.target.value)}/>
                 </div>
-                <input placeholder="SE1 9DT" className="border p-1" value={postcode} onChange={(e) => setPostcode(e.target.value)}  />
-            </div>
-            <div>
-                <div className="italic">
-                    Notes
+                <div>
+                    <div className="mb-2 block">
+                        <Label value="Notes" />
+                    </div>
+                    <Textarea placeholder="Parking is round the back" value={notes} onChange={(e) => setNotes(e.target.value)} rows={4} />
                 </div>
-                <input placeholder="Parking is round the back" className="border p-1" value={notes} onChange={(e) => setNotes(e.target.value)} />
-            </div>
-            <div>
-                <div className="italic">
-                    Website
+                <div>
+                    <div className="mb-2 block">
+                        <Label value="Website" />
+                    </div>
+                    <TextInput placeholder="www.theglobe.com" value={url} onChange={(e) => setUrl(e.target.value)} />
                 </div>
-                <input placeholder="www.theglobe.com" className="border p-1" value={url} onChange={(e) => setUrl(e.target.value)} />
-            </div>
-            <button className={`bg-green-500 px-3 py-1 w-fit rounded hover:bg-green-700 ${!name && "cursor-not-allowed"}`} >Submit</button>
-            
-        </form>
+                <div className="grid grid-cols-2 justify-end px-2">
+                    <button className="text-sm hover:underline font-bold text-center col-span-1" onClick={() => setEditMode(false)}>
+                        Cancel Edit Mode
+                    </button>
+                    <button className="hover:underline bg-sky-900  p-2 py-1 rounded w-full text-white col-span-1 text-sm">
+                        Confirm Edit
+                    </button>
+                </div>
+            </form>
+        </div>
     )
 }
 

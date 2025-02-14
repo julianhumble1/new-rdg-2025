@@ -1,28 +1,34 @@
+import { Table } from "flowbite-react"
 import ProductionRow from "./ProductionRow.jsx"
 
-const ProductionsTable = ({ productions, handleDelete }) => {
-    
+const ProductionsTable = ({ productions, handleDelete, nameSearch, venueSearch, sundownersSearch }) => {
     if (productions.length > 0) {
         return (
-          <div className="mx-3">
-                <div className="grid grid-cols-12 bg-slate-400 italic font-bold">
-                    <div className="col-span-2 p-1">Name</div>
-                    <div className="col-span-2 p-1">Venue</div>
-                    <div className="col-span-2 p-1">Description</div>
-                    <div className="col-span-1 p-1">Sundowners</div>
-                    <div className="col-span-2 p-1">Author</div>
-                    <div className="col-span-1 p-1">Date Created</div>
-                    <div className="col-span-2 p-1">Actions</div>
-                </div>
-                {productions.map((production, index) => (
-                    <ProductionRow productionData={production} key={index} handleDelete={handleDelete}/>
-                ))}
+            <Table hoverable className='border overflow-auto max-w-screen'>
+                <Table.Head className='text-lg'>
+                    <Table.HeadCell>Production</Table.HeadCell>
+                    <Table.HeadCell>Venue</Table.HeadCell>
+                    <Table.HeadCell>Description</Table.HeadCell>
+                    <Table.HeadCell>Sundowners</Table.HeadCell>
+                    <Table.HeadCell>Author</Table.HeadCell>
+                    <Table.HeadCell>Date Created</Table.HeadCell>
+                    <Table.HeadCell>Actions</Table.HeadCell>
+                </Table.Head>
+                <Table.Body className="divide-y">
+                    {productions.map((production, index) => (
+                        <ProductionRow production={production} handleDelete={handleDelete} key={index} nameSearch={nameSearch} venueSearch={venueSearch} sundownersSearch={sundownersSearch} />
+                    ))} 
+                </Table.Body>
+            </Table>
+        )
+        
+    } else {
+        return (
+            <div className="w-full text-center text-bold">
+                No productions to display.
             </div>
         )
-    } else {
-        return <div className="font-bold m-3">No productions to display</div>
     }
-
 }
 
 export default ProductionsTable

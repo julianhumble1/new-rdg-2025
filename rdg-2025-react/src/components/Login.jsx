@@ -1,15 +1,17 @@
-import { useNavigate } from "react-router-dom"
+import { Label, TextInput, Button } from "flowbite-react"
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import UserService from "../services/UserService.js";
 import RoleHelper from "../utils/RoleHelper.js";
+import ErrorMessage from "./modals/ErrorMessage.jsx";
 
-const Login = ({ loggedIn, setLoggedIn}) => {
+const AltLogin = ({ loggedIn, setLoggedIn }) => {
 
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
 
-    const [failedLoginAttempt, setFailedLoginAttempt] = useState(false)
+    const [errorMessage, setErrorMessage] = useState("")
 
     const navigate = useNavigate()
 
@@ -21,50 +23,40 @@ const Login = ({ loggedIn, setLoggedIn}) => {
             Cookies.set("token", responseData.token, { expires: 7 })
             Cookies.set("role", mainRole, { expires: 7 })
             setLoggedIn(true)
-
             navigate("/dashboard")
 
         } catch (error) {
-            setFailedLoginAttempt(true)
+            setErrorMessage("Username or password incorrect. Please try again.")
         }
     }
 
-    return (<>
 
-        {!loggedIn &&
-            <form onSubmit={handleLogin}>
-                <div className="flex flex-col gap-3 m-3">
-                    <div className="flex flex-col">
-                        <div>Username</div>
-                        <input type="text" placeholder="Username" className="p-2 border border-black" value={username} onChange={(e) => setUsername(e.target.value)} />
-                    </div>
-                    <div className="flex flex-col">
-                        <div>Password</div>
-                        <input type="password" placeholder="Password" className="p-2 border border-black" value={password} onChange={(e) => setPassword(e.target.value)}/>
-                    </div>
-
-                    {failedLoginAttempt &&
-                        <div className="text-red-600">
-                            Username or password incorrect. Please try again.
-                        </div>
-                    }
-                    <button type="submit" className="bg-green-300 px-3 py-1 w-fit rounded hover:bg-green-600">
-                        Login
-                    </button>
-
+    return (
+        <div className="flex justify-center"> 
+            <form
+                onSubmit={(event) => handleLogin(event)}
+                className="flex lg:w-1/2 w-full flex-col gap-4 min-w-1/2 border-4 p-4 m-4 rounded-xl border-sky-900 border-opacity-60">
+                <div className="text-2xl font-bold">
+                    Login
                 </div>
+                <div>
+                    <div className="mb-2">
+                        <Label value="Username" />
+                    </div>
+                    <TextInput placeholder="Username" required onChange={(e) => setUsername(e.target.value)}/>
+                </div>
+                <div>
+                    <div className="mb-2">
+                        <Label value="Password" />
+                    </div>
+                    <TextInput placeholder="Password" type="password" required onChange={(e) => setPassword(e.target.value)}/>
+                </div>
+                <button type="submit" className="bg-green-700 hover:bg-green-800 text-white p-2 rounded transition">Login</button>
+                <ErrorMessage message={errorMessage} />
             </form>
-        }
-        {loggedIn &&
-            <div>
-                <div>You are already logged in</div>
-                <button className="text-blue-500 underline hover:text-blue-800">Logout</button>
-            </div>
-        }
 
-
-
-    </>)
+        </div>
+    )
 }
 
-export default Login
+export default AltLogin

@@ -32,6 +32,8 @@ public class Production {
     private Venue venue;
 
     private String author;
+
+    @Column(length = 2000)
     private String description;
     private LocalDateTime auditionDate;
     private boolean sundowners;
