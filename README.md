@@ -1,6 +1,6 @@
 ## RDG-2025 Spring / React.js Project
 
-This project is a web application for an amateur theatre group I have been part of for many years. It is a migration/rebuild of an existing project made in 2008 in Ruby on Rails, which can be visited currently at rdg.org. There are about 60 years of production and actor data, and the aim is to make a comprehensive, easily navigable and easily updatable database interface (as well as giving it a much needed makeover), while also giving me more practice with the Spring framework.
+This project is a web application for an amateur theatre group I have been part of for many years. It is a migration/rebuild of an existing project made in 2008 in Ruby on Rails, which can be visited currently at [rdg.org](https://rdg.org/). There are about 60 years of production and actor data, and the aim is to make a comprehensive, easily navigable and easily updatable database interface (as well as giving it a much needed makeover), while also giving me more practice with the Spring framework.
 
 ### Project Structure
 
@@ -80,43 +80,3 @@ Once the back-end is complete, I will host the MySQL instance online (probably G
 At that stage, I will then add more styling to the front end using TailwindCSS, as well as tests.
 
 ### Full Route Diagrams can be found [inside the spring application](https://github.com/julianhumble1/new-rdg-2025/tree/main/rdg-2025-spring)
-
-#### Venues
-
-![post venue diagram](./images/post-venue-diagram.jpg)
-
-![get venues diagram](./images/get-venues-diagram.jpg)
-
-![delete venue diagram](./images/delete-venue-diagram.jpg)
-
-![get venue diagram](./images/get-venue-diagram.jpg)
-
-![patch venue diagram](./images/patch-venue-diagram.jpg)
-
-#### Productions
-
-![post production diagram](./images/post-production-diagram.jpg)
-
-![get productions diagram](./images/get-productions-diagram.jpg)
-
-![get production diagram](./images/get-production-diagram.jpg)
-
-![patch production diagram](./images/patch-production-diagram.jpg)
-
-![delete production diagram](./images/delete-production-diagram.jpg)
-
-#### Festivals
-
-![post festival diagram](./images/post-festival-diagram.jpg)
-
-![get festivals diagram](./images/get-festivals-diagram.jpg)
-
-![get festival diagram](./images/get-festival-diagram.jpg)
-
-![patch festival diagram](./images/patch-festival-diagram.jpg)
-
-![delete festival diagram](./images/delete-festival-diagram.jpg)
-
-### Performances
-
-![post performance diagram](./images/post-performance-diagram.jpg)
