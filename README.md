@@ -53,6 +53,8 @@ The following is a list of entities and their corresponding routes that have bee
 * POST ("/festivals") - create new festival
 * GET ("/festivals") - get all festivals
 * GET ("/festivals") - get specific festival
+* PATCH ("/festivals/{id}") - update festival
+* DELETE ("/festivals/{id}) - delete festival
 
 **Performances**
 * POST ("/performances") - add new performance
@@ -77,7 +79,7 @@ Once the back-end is complete, I will host the MySQL instance online (probably G
 
 At that stage, I will then add more styling to the front end using TailwindCSS, as well as tests.
 
-### Route Diagrams
+### Full Route Diagrams can be found [inside the spring application](https://github.com/julianhumble1/new-rdg-2025/tree/main/rdg-2025-spring)
 
 #### Venues
 
@@ -110,6 +112,10 @@ At that stage, I will then add more styling to the front end using TailwindCSS, 
 ![get festivals diagram](./images/get-festivals-diagram.jpg)
 
 ![get festival diagram](./images/get-festival-diagram.jpg)
+
+![patch festival diagram](./images/patch-festival-diagram.jpg)
+
+![delete festival diagram](./images/delete-festival-diagram.jpg)
 
 ### Performances
 
