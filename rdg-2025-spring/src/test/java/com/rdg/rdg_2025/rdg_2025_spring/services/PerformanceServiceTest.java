@@ -300,6 +300,16 @@ public class PerformanceServiceTest {
             });
         }
 
+        @Test
+        void testRemovePerformanceFestivalServiceMethodIsCalled() {
+            // Arrange
+            when(performanceRepository.findById(anyInt())).thenReturn(Optional.of(testPerformance));
+            // Act
+            performanceService.deletePerformanceById(1);
+            // Assert
+            verify(festivalService, times(1)).removePerformanceFromFestivalPerformanceList(testPerformance);
+        }
+
 
     }
 

@@ -52,6 +52,7 @@ public class PerformanceService {
             Performance performance = performanceRepository.findById(performanceId).orElseThrow(() -> new EntityNotFoundException());
             productionService.removePerformanceFromProductionPerformanceList(performance);
             venueService.removePerformanceFromVenuePerformanceList(performance);
+            festivalService.removePerformanceFromFestivalPerformanceList(performance);
             return true;
         } catch (EntityNotFoundException ex){
             return false;
