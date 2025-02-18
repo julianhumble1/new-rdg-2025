@@ -515,4 +515,35 @@ public class FestivalServiceTest {
 
 
     }
+
+    @Nested
+    @DisplayName("removePerformanceFromFestivalPerformanceList service tests")
+    class RemovePerformanceFromFestivalPerformanceListServiceTests {
+
+        private Festival testFestival;
+        private Performance testPerformance;
+
+        @BeforeEach
+        void setUp() {
+            testFestival = new Festival();
+            testPerformance = new Performance();
+            testPerformance.setFestival(testFestival);
+            List<Performance> performanceList = new ArrayList<>();
+            performanceList.add(testPerformance);
+            testFestival.setPerformances(performanceList);
+        }
+
+        @Test
+        void testPerformanceHasNoFestivalThenFestivalRepositoryNotCalled() {
+            // Arrange
+            testPerformance.setFestival(null);
+            // Act
+            festivalService.removePerformanceFromFestivalPerformanceList(testPerformance);
+            // Assert
+            verify(festivalRepository, never()).save(testFestival);
+
+        }
+
+
+    }
 }

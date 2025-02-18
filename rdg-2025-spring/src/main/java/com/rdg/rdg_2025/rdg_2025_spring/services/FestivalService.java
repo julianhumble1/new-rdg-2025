@@ -99,6 +99,10 @@ public class FestivalService {
         saveFestivalToDatabase(festival);
     }
 
+    public void removePerformanceFromFestivalPerformanceList(Performance performance) {
+
+    }
+
     // PRIVATE HELPER METHODS
 
     private Venue getVenueFromService(FestivalRequest festivalRequest) {
