@@ -22,6 +22,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -617,6 +618,36 @@ public class PerformanceIntegrationTest {
                                             "}"
                             ))
                     .andExpect(status().isUnauthorized());
+        }
+
+    }
+
+    @Nested
+    @DisplayName("DELETE delete performance by id integration tests")
+    class DeletePerformanceByIdIntegrationTests {
+
+        private Performance testPerformance;
+        private int testPerformanceId;
+
+        @BeforeEach
+        void setup() {
+            testPerformance = new Performance();
+            testPerformance.setVenue(testVenue);
+            testPerformance.setProduction(testProduction);
+            testPerformance.setFestival(testFestival);
+            testPerformance.setTime(LocalDateTime.now());
+
+            performanceRepository.save(testPerformance);
+            testPerformanceId = testPerformance.getId();
+        }
+
+        @Test
+        void testSuccessfulDeletionResponds204() throws Exception {
+            // Arrange
+            // Act & Assert
+            mockMvc.perform(delete("/performances/" + testPerformanceId)
+                            .header("Authorization", adminToken))
+                    .andExpect(status().isNoContent());
         }
 
     }

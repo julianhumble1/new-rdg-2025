@@ -49,13 +49,11 @@ public class PerformanceService {
 
     public boolean deletePerformanceById(int performanceId) {
         try {
-            Performance performance = performanceRepository.findById(performanceId).orElseThrow(() -> new EntityNotFoundException());
-            productionService.removePerformanceFromProductionPerformanceList(performance);
-            venueService.removePerformanceFromVenuePerformanceList(performance);
-            festivalService.removePerformanceFromFestivalPerformanceList(performance);
+            Performance performance = getPerformanceById(performanceId);
+            removePerformanceFromAssociatedObjects(performance);
             performanceRepository.delete(performance);
             return true;
-        } catch (EntityNotFoundException ex){
+        } catch (EntityNotFoundException ex) {
             return false;
         } catch (DataAccessException | PersistenceException ex) {
             throw new DatabaseException(ex.getMessage(), ex);
@@ -135,5 +133,22 @@ public class PerformanceService {
         }
     }
 
+    private void removePerformanceFromAssociatedObjects(Performance performance) {
+        try {
+            productionService.removePerformanceFromProductionPerformanceList(performance);
+            venueService.removePerformanceFromVenuePerformanceList(performance);
+            festivalService.removePerformanceFromFestivalPerformanceList(performance);
+        } catch (DatabaseException ex) {
+            throw new DatabaseException(ex.getMessage());
+        }
+    }
+
+    private Performance getPerformanceById(int performanceId) {
+        try {
+            return performanceRepository.findById(performanceId).orElseThrow(() -> new EntityNotFoundException());
+        } catch (DataAccessException ex) {
+            throw new DatabaseException(ex.getMessage(), ex);
+        }
+    }
 
 }
