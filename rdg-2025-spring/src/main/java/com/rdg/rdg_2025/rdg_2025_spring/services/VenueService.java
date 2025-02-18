@@ -3,6 +3,7 @@ package com.rdg.rdg_2025.rdg_2025_spring.services;
 import com.rdg.rdg_2025.rdg_2025_spring.exception.DatabaseException;
 import com.rdg.rdg_2025.rdg_2025_spring.helpers.SlugUtils;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Festival;
+import com.rdg.rdg_2025.rdg_2025_spring.models.Performance;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Production;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Venue;
 import com.rdg.rdg_2025.rdg_2025_spring.payload.request.venue.VenueRequest;
@@ -100,6 +101,13 @@ public class VenueService {
             venue.setFestivals(festivalList);
             saveVenueToDatabase(venue);
         }
+    }
+
+    public void removePerformanceFromVenuePerformanceList(Performance performance) {
+        Venue venue = performance.getVenue();
+        List<Performance> performanceList = venue.getPerformances();
+        performanceList.remove(performance);
+        venue.setPerformances(performanceList);
     }
 
     // PRIVATE HELPER METHODS

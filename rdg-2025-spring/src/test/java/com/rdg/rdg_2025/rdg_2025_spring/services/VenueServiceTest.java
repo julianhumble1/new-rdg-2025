@@ -2,6 +2,7 @@ package com.rdg.rdg_2025.rdg_2025_spring.services;
 
 import com.rdg.rdg_2025.rdg_2025_spring.exception.DatabaseException;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Festival;
+import com.rdg.rdg_2025.rdg_2025_spring.models.Performance;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Production;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Venue;
 import com.rdg.rdg_2025.rdg_2025_spring.payload.request.venue.VenueRequest;
@@ -617,6 +618,7 @@ public class VenueServiceTest {
     }
 
     @Nested
+    @DisplayName("removeFestivalFromVenueList service tests")
     class RemoveFestivalFromVenueListServiceTests {
 
         private Venue testVenue;
@@ -668,6 +670,37 @@ public class VenueServiceTest {
             venueService.removeFestivalFromVenueFestivalList(testFestival);
             // Assert
             verify(venueRepository, atLeastOnce()).save(any());
+        }
+
+    }
+
+    @Nested
+    @DisplayName("removePerformanceFromVenueList service tests")
+    class RemovePerformanceFromVenueListServiceTests {
+
+        private Performance testPerformance;
+        private Venue testVenue;
+
+        @BeforeEach
+        void setUp() {
+            testVenue = new Venue("Test Venue", "Test Notes", "Test Postcode", "Test Address", "Test Town", "www.test.com");
+            testPerformance = new Performance();
+            testPerformance.setVenue(testVenue);
+            ArrayList<Performance> performances= new ArrayList<>();
+            performances.add(testPerformance);
+            testVenue.setPerformances(performances);
+        }
+
+        @Test
+        void testPerformanceListLengthReducesByOne() {
+
+            // Arrange
+            int initialLength = testVenue.getPerformances().size();
+            // Act
+            venueService.removePerformanceFromVenuePerformanceList(testPerformance);
+            // Assert
+            assertEquals(initialLength - 1, testVenue.getPerformances().size());
+
         }
 
     }
