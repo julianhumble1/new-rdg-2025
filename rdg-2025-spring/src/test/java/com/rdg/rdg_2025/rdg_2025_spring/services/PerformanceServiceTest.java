@@ -275,7 +275,7 @@ public class PerformanceServiceTest {
             doThrow(new DatabaseException("database exception")).when(productionService).removePerformanceFromPerformanceList(any());
             // Act & Assert
             assertThrows(DatabaseException.class, () -> {
-                performanceService.deletePerformanceById(1)
+                performanceService.deletePerformanceById(1);
             });
         }
 
