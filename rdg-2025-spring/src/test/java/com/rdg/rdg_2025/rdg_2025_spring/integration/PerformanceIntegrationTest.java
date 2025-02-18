@@ -700,5 +700,18 @@ public class PerformanceIntegrationTest {
             assertFalse(postVenue.getPerformances().contains(testPerformance));
         }
 
+        @Test
+        void testProductionNoLongerReferencesPerformanceFollowingDeletion() throws Exception {
+            // Arrange
+            Production preProduction = productionRepository.findById(testProductionId).orElseThrow(() -> new RuntimeException("No Production with this id"));
+            assertTrue(preProduction.getPerformances().contains(testPerformance));
+            // Act
+            mockMvc.perform(delete("/performances/" + testPerformanceId)
+                    .header("Authorization", adminToken));
+            // Assert
+            Production postProduction = productionRepository.findById(testProductionId).orElseThrow(() -> new RuntimeException("No Production with this id"));
+            assertFalse(postProduction.getPerformances().contains(testPerformance));
+        }
+
     }
 }
