@@ -100,7 +100,13 @@ public class FestivalService {
     }
 
     public void removePerformanceFromFestivalPerformanceList(Performance performance) {
-
+        if (performance.getFestival() != null) {
+            Festival festival = performance.getFestival();
+            List<Performance> performanceList = festival.getPerformances();
+            performanceList.remove(performance);
+            festival.setPerformances(performanceList);
+            saveFestivalToDatabase(festival);
+        }
     }
 
     // PRIVATE HELPER METHODS

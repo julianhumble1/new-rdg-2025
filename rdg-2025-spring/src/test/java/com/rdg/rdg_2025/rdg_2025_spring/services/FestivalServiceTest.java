@@ -544,6 +544,16 @@ public class FestivalServiceTest {
 
         }
 
+        @Test
+        void testPerformanceListLengthReducesByOne() {
+            // Arrange
+            int initialLength = testFestival.getPerformances().size();
+            // Act
+            festivalService.removePerformanceFromFestivalPerformanceList(testPerformance);
+            // Assert
+            assertEquals(initialLength - 1, testFestival.getPerformances().size());
+        }
+
 
     }
 }
