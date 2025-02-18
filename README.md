@@ -58,6 +58,7 @@ The following is a list of entities and their corresponding routes that have bee
 
 **Performances**
 * POST ("/performances") - add new performance
+* DELETE ("/performances/{id}) - delete a performance
 
 As well as the above, there are also /signup and /signin routes, although signing up has no associated front end interface as this application does not require users to be able to sign up. Many of the existing routes require an admin token to carry out.
 

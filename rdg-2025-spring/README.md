@@ -25,6 +25,7 @@
 
 **Performances**
 * POST ("/performances") - add new performance
+* DELETE ("/performances/{id}) - delete a performance
 
 ### Diagrams
 
@@ -67,3 +68,5 @@
 ### Performances
 
 ![post performance diagram](../images/post-performance-diagram.jpg)
+
+![delete performance diagram](../images/delete-performance-diagram)
