@@ -342,6 +342,17 @@ public class PerformanceServiceTest {
             });
         }
 
+        @Test
+        void testDeletePerformancePersistenceExceptionThrowsDatabaseException() {
+            // Arrange
+            when(performanceRepository.findById(anyInt())).thenReturn(Optional.of(testPerformance));
+            doThrow(new PersistenceException()).when(performanceRepository).delete(testPerformance);
+            // Act & Assert
+            assertThrows(DatabaseException.class, () -> {
+                performanceService.deletePerformanceById(1);
+            });
+        }
+
 
     }
 
