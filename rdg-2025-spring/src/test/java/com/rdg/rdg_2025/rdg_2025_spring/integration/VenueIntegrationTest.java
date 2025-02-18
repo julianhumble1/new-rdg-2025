@@ -7,7 +7,6 @@ import com.rdg.rdg_2025.rdg_2025_spring.models.Venue;
 import com.rdg.rdg_2025.rdg_2025_spring.repository.*;
 import com.rdg.rdg_2025.rdg_2025_spring.security.jwt.JwtUtils;
 import com.rdg.rdg_2025.rdg_2025_spring.utils.AuthTestUtils;
-import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.*;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -20,12 +19,13 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -367,42 +367,43 @@ public class VenueIntegrationTest {
         @Autowired
         private FestivalRepository festivalRepository;
 
-        Venue testVenue1;
-        Venue testVenue2;
+        Venue testVenue;
+        int testVenueId;
 
-        Production testProduction1;
-        Production testProduction2;
+        Production testProduction;
+        int testProductionId;
 
-        Festival testFestival1;
-        Festival testFestival2 ;
+        Festival testFestival;
+        int testFestivalId;
 
         @BeforeEach
         public void populateDatabase() {
 
-            testVenue1 = new Venue("Test Venue", "Test Notes", "Test Postcode", "Test Address", "Test Town", "www.test.com");
-            testVenue2 = new Venue("Another Test Venue", "Test Notes", "Test Postcode", "Test Address", "Test Town", "www.test.com");
+            testVenue = new Venue("Test Venue", "Test Notes", "Test Postcode", "Test Address", "Test Town", "www.test.com");
 
-            venueRepository.save(testVenue1);
-            venueRepository.save(testVenue2);
+            testProduction = new Production("Test Production 1", testVenue, null, null, null, false, false, null);
+            productionRepository.save(testProduction);
+            testProductionId = testProduction.getId();
 
-            testProduction1 = new Production("Test Production 1", testVenue1, null, null, null, false, false, null);
-            testProduction2 = new Production("Test Production 2", testVenue2, null, null, null, false, false, null);
+            testFestival = new Festival("Test Festival 1", testVenue, 2025, 1, "Test Description");
+            festivalRepository.save(testFestival);
+            testFestivalId = testFestival.getId();
 
-            productionRepository.save(testProduction1);
-            productionRepository.save(testProduction2);
+            List<Production> productionList = new ArrayList<>();
+            productionList.add(testProduction);
+            testVenue.setProductions(productionList);
 
-            testFestival1  = new Festival("Test Festival 1", testVenue1, 2025, 1, "Test Description");
-            testFestival2 = new Festival("Test Festival 2", testVenue2, 2025, 1, "Test Description");
+            List<Festival> festivalList = new ArrayList<>();
+            festivalList.add(testFestival);
+            testVenue.setFestivals(festivalList);
 
-            festivalRepository.save(testFestival1);
-            festivalRepository.save(testFestival2);
-
+            venueRepository.save(testVenue);
+            testVenueId = testVenue.getId();
         }
 
         @Test
         void testSuccessfulDeletionResponds204() throws Exception {
             // Arrange
-            int testVenueId = testVenue1.getId();
             // Act
             mockMvc.perform(delete("/venues/" + testVenueId)
                             .header("Authorization", adminToken))
@@ -412,55 +413,56 @@ public class VenueIntegrationTest {
         @Test
         void testVenueIsNoLongerInDatabaseFollowingDeletion() throws Exception {
             // Arrange
-            int testVenueId = testVenue1.getId();
+            assertTrue(venueRepository.existsById(testVenueId));
             // Act
             mockMvc.perform(delete("/venues/" + testVenueId)
                             .header("Authorization", adminToken));
-
-            Optional<Venue> retrievedVenue = venueRepository.findById(testVenueId);
-
             // Assert
-            assert(retrievedVenue).isEmpty();
+            assertFalse(venueRepository.existsById(testVenueId));
         }
 
         @Test
         void testAssociatedProductionIsNotDeletedAfterDeletionOfVenue() throws Exception {
             // Arrange
-            int testVenueId = testVenue1.getId();
             // Act
             mockMvc.perform(delete("/venues/" + testVenueId)
                             .header("Authorization", adminToken));
 
-            int testProduction1Id = testProduction1.getId();
-            Optional<Production> associatedProduction = productionRepository.findById(testProduction1Id);
+            // Assert
+            assertTrue(productionRepository.existsById(testProductionId));
+        }
+
+        @Test
+        void testAssociatedProductionNoLongerReferencesVenueFollowingDeletion() throws Exception {
+            // Arrange
+            Production preProduction = productionRepository.findById(testProduction.getId()).orElseThrow(() -> new RuntimeException("No production with this id"));
+            assertEquals(testVenue, preProduction.getVenue());
+            // Act
+            mockMvc.perform(delete("/venues/" + testVenueId)
+                    .header("Authorization", adminToken));
 
             // Assert
-            assert(associatedProduction).isPresent();
+            Production postProduction = productionRepository.findById(testProduction.getId()).orElseThrow(() -> new RuntimeException("No production with this id"));
+            assertNull(postProduction.getVenue());
         }
 
         @Test
         void testAssociatedFestivalIsNotDeletedAfterDeletionOfVenue() throws Exception {
             // Arrange
-            int testVenueId = testVenue1.getId();
             // Act
             mockMvc.perform(delete("/venues/" + testVenueId)
                     .header("Authorization", adminToken));
-
-            int testFestival1Id = testFestival1.getId();
-            Optional<Festival> associatedFestival = festivalRepository.findById(testFestival1Id);
-
             // Assert
-            assert(associatedFestival).isPresent();
+            assertTrue(festivalRepository.existsById(testFestivalId));
         }
 
         @Test
         void testNonExistentVenueIdResponds404() throws Exception {
             // Arrange
-            int testVenueId = testVenue1.getId();
             // Act & Assert
             mockMvc.perform(delete("/venues/" + (testVenueId - 1))
-                    .header("Authorization", adminToken))
-            .andExpect(status().isNotFound());
+                            .header("Authorization", adminToken))
+                    .andExpect(status().isNotFound());
         }
 
         @Test
@@ -475,7 +477,6 @@ public class VenueIntegrationTest {
         @Test
         void testMissingTokenResponds401() throws Exception {
             // Arrange
-            int testVenueId = testVenue1.getId();
             // Act & Assert
             mockMvc.perform(delete("/venues/" + testVenueId))
                     .andExpect(status().isUnauthorized());
@@ -484,7 +485,6 @@ public class VenueIntegrationTest {
         @Test
         void testBadTokenResponds401() throws Exception {
             // Arrange
-            int testVenueId = testVenue1.getId();
             // Act & Assert
             mockMvc.perform(delete("/venues/" + testVenueId)
                     .header("Authorization", "Bad Token"))
@@ -494,7 +494,6 @@ public class VenueIntegrationTest {
         @Test
         void testUserTokenResponds403() throws Exception {
             // Arrange
-            int testVenueId = testVenue1.getId();
             // Act & Assert
             mockMvc.perform(delete("/venues/" + testVenueId)
                             .header("Authorization", userToken))
