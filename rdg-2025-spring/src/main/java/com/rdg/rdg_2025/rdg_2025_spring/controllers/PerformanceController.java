@@ -37,4 +37,15 @@ public class PerformanceController {
         }
     }
 
+    @DeleteMapping("/{performanceId}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> deletePerformanceById(@PathVariable int performanceId) {
+        try {
+            performanceService.deletePerformanceById(performanceId);
+        } catch (DatabaseException ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
+        }
+        return ResponseEntity.ok().build();
+    }
+
 }

@@ -25,6 +25,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -492,8 +493,20 @@ public class PerformanceControllerTest {
         void testPerformanceIdNotIntResponds400() throws Exception {
             // Arrange
             // Act & Assert
-            mockMvc.perform(delete("/performances/notanint"));
+            mockMvc.perform(delete("/performances/notanint"))
+                    .andExpect(status().isBadRequest());
         }
+
+        @Test
+        @WithMockUser(roles = "ADMIN")
+        void testServiceThrowsDatabaseExceptionResponds500() throws Exception {
+            // Arrange
+            when(performanceService.deletePerformanceById(anyInt())).thenThrow(new DatabaseException("Database exception"));
+            // Act & Assert
+            mockMvc.perform(delete("/performances/1"))
+                    .andExpect(status().isInternalServerError());
+        }
+
 
 
     }
