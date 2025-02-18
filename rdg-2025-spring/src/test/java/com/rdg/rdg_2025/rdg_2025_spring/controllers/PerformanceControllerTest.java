@@ -507,6 +507,16 @@ public class PerformanceControllerTest {
                     .andExpect(status().isInternalServerError());
         }
 
+        @Test
+        @WithMockUser(roles = "ADMIN")
+        void testServiceThrowsEntityNotFoundExceptionResponds404() throws Exception {
+            // Arrange
+            when(performanceService.deletePerformanceById(anyInt())).thenThrow(new EntityNotFoundException());
+            // Act & Assert
+            mockMvc.perform(delete("/performances/1"))
+                    .andExpect(status().isNotFound());
+        }
+
 
 
     }
