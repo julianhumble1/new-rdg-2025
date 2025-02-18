@@ -310,6 +310,17 @@ public class PerformanceServiceTest {
             verify(festivalService, times(1)).removePerformanceFromFestivalPerformanceList(testPerformance);
         }
 
+        @Test
+        void testRemovePerformanceFromFestivalDatabaseExceptionThrowsDatabaseException() {
+            // Arrange
+            when(performanceRepository.findById(anyInt())).thenReturn(Optional.of(testPerformance));
+            doThrow(new DatabaseException("database exception")).when(festivalService).removePerformanceFromFestivalPerformanceList(testPerformance);
+            // Act & Assert
+            assertThrows(DatabaseException.class, () -> {
+                performanceService.deletePerformanceById(1);
+            });
+        }
+
 
     }
 
