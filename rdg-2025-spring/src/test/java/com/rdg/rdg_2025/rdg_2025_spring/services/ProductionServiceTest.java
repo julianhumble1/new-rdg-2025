@@ -1,6 +1,7 @@
 package com.rdg.rdg_2025.rdg_2025_spring.services;
 
 import com.rdg.rdg_2025.rdg_2025_spring.exception.DatabaseException;
+import com.rdg.rdg_2025.rdg_2025_spring.models.Performance;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Production;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Venue;
 import com.rdg.rdg_2025.rdg_2025_spring.payload.request.production.ProductionRequest;
@@ -572,4 +573,24 @@ public class ProductionServiceTest {
 
     }
 
+    @Nested
+    @DisplayName("removePerformanceFromPerformanceList service tests")
+    class RemovePerformanceFromPerformanceListServiceTests {
+
+        @Test
+        void testPerformanceListLengthReducesByOne() {
+            // Arrange
+            Performance performance = new Performance();
+            performance.setProduction(testProduction);
+            ArrayList<Performance> performances = new ArrayList<>();
+            performances.add(performance);
+            testProduction.setPerformances(performances);
+            int initialLength = testProduction.getPerformances().size();
+            // Act
+            productionService.removePerformanceFromPerformanceList(performance);
+            // Assert
+            assertEquals(initialLength - 1, testProduction.getPerformances().size());
+        }
+
+    }
 }

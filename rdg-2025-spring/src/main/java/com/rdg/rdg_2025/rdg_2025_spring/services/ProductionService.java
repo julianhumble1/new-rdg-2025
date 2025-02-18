@@ -2,6 +2,7 @@ package com.rdg.rdg_2025.rdg_2025_spring.services;
 
 import com.rdg.rdg_2025.rdg_2025_spring.exception.DatabaseException;
 import com.rdg.rdg_2025.rdg_2025_spring.helpers.SlugUtils;
+import com.rdg.rdg_2025.rdg_2025_spring.models.Performance;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Production;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Venue;
 import com.rdg.rdg_2025.rdg_2025_spring.payload.request.production.ProductionRequest;
@@ -94,6 +95,14 @@ public class ProductionService {
 
     public void setProductionVenueFieldToNull(Production production) {
         production.setVenue(null);
+        saveProductionToDatabase(production);
+    }
+
+    public void removePerformanceFromPerformanceList(Performance performance) {
+        Production production = performance.getProduction();
+        List<Performance> performanceList = production.getPerformances();
+        performanceList.remove(performance);
+        production.setPerformances(performanceList);
         saveProductionToDatabase(production);
     }
 

@@ -247,6 +247,17 @@ public class PerformanceServiceTest {
 
         }
 
+        @Test
+        void testPerformanceExistsDataAccessExceptionThrowsDatabaseException() {
+            // Arrange
+            when(performanceRepository.findById(anyInt())).thenThrow(new DataAccessException("Data access exception") {});
+            // Act & Assert
+            assertThrows(DatabaseException.class, () -> {
+                performanceService.deletePerformanceById(1);
+            });
+
+        }
+
 
     }
 

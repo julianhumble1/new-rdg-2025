@@ -54,6 +54,8 @@ public class PerformanceService {
             return true;
         } catch (EntityNotFoundException ex){
             return false;
+        } catch (DataAccessException ex) {
+            throw new DatabaseException(ex.getMessage(), ex);
         }
     }
 
