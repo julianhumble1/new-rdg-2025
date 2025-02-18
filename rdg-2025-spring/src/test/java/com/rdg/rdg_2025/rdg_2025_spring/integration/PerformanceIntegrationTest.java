@@ -726,5 +726,14 @@ public class PerformanceIntegrationTest {
             assertFalse(postFestival.getPerformances().contains(testPerformance));
         }
 
+        @Test
+        void testNonExistentPerformanceIdResponds404() throws Exception {
+            // Arrange
+            // Act & Assert
+            mockMvc.perform(delete("/performances/" + (testPerformanceId - 1))
+                            .header("Authorization", adminToken))
+                    .andExpect(status().isNotFound());
+        }
+
     }
 }
