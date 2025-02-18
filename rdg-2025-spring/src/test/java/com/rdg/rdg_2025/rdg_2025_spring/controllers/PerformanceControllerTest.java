@@ -26,6 +26,7 @@ import java.time.LocalDateTime;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -482,5 +483,19 @@ public class PerformanceControllerTest {
 
     }
 
+    @Nested
+    @DisplayName("deletePerformanceById controller tests")
+    class DeletePerformanceByIdControllerTests {
+
+        @Test
+        @WithMockUser(roles = "ADMIN")
+        void testPerformanceIdNotIntResponds400() throws Exception {
+            // Arrange
+            // Act & Assert
+            mockMvc.perform(delete("/performances/notanint"));
+        }
+
+
+    }
 
 }
