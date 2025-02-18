@@ -762,5 +762,13 @@ public class PerformanceIntegrationTest {
                     .andExpect(status().isUnauthorized());
         }
 
+        @Test
+        void testMissingTokenResponds401() throws Exception {
+            // Arrange
+            // Act & Assert
+            mockMvc.perform(delete("/performances/" + testPerformanceId ))
+                    .andExpect(status().isUnauthorized());
+        }
+
     }
 }
