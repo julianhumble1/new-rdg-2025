@@ -51,6 +51,7 @@ public class PerformanceService {
     public boolean deletePerformanceById(int performanceId) {
         try {
             Performance performance = performanceRepository.findById(performanceId).orElseThrow(() -> new EntityNotFoundException());
+            productionService.removePerformanceFromPerformanceList(performance);
             return true;
         } catch (EntityNotFoundException ex){
             return false;

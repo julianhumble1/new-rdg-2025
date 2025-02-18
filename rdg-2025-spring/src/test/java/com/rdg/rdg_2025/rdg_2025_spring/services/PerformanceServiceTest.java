@@ -258,6 +258,27 @@ public class PerformanceServiceTest {
 
         }
 
+        @Test
+        void testRemovePerformanceFromProductionsPerformancesIsCalled() {
+            // Arrange
+            when(performanceRepository.findById(anyInt())).thenReturn(Optional.of(testPerformance));
+            // Act
+            performanceService.deletePerformanceById(1);
+            // Assert
+            verify(productionService, times(1)).removePerformanceFromPerformanceList(testPerformance);
+        }
+
+        @Test
+        void testRemovePerformanceFromProductionDatabaseExceptionThrowsDatabaseException() {
+            // Arrange
+            when(performanceRepository.findById(anyInt())).thenReturn(Optional.of(testPerformance));
+            doThrow(new DatabaseException("database exception")).when(productionService).removePerformanceFromPerformanceList(any());
+            // Act & Assert
+            assertThrows(DatabaseException.class, () -> {
+                performanceService.deletePerformanceById(1)
+            });
+        }
+
 
     }
 
