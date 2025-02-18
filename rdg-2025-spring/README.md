@@ -69,4 +69,4 @@
 
 ![post performance diagram](../images/post-performance-diagram.jpg)
 
-![delete performance diagram](../images/delete-performance-diagram)
+![delete performance diagram](../images/delete-performance-diagram.jpg)
