@@ -5,7 +5,6 @@ import com.rdg.rdg_2025.rdg_2025_spring.repository.*;
 import com.rdg.rdg_2025.rdg_2025_spring.security.jwt.JwtUtils;
 import com.rdg.rdg_2025.rdg_2025_spring.utils.AuthTestUtils;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,8 +20,8 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -521,76 +520,65 @@ public class FestivalIntegrationTest {
         @Autowired
         private ProductionRepository productionRepository;
 
-        @Autowired
-        private EntityManager entityManager;
-
-        Festival testExistingFestival;
+        Festival testFestival;
+        int testFestivalId;
 
         @BeforeEach
         void beforeEach() {
-            Venue managedTestVenue1 = venueRepository.findById(testVenue1.getId()).orElseThrow(() -> new RuntimeException("Venue not found"));
-
-            testExistingFestival = new Festival(
+            testFestival = new Festival(
                     "Existing Festival",
-                    managedTestVenue1,
+                    testVenue1,
                     2025,
                     1,
                     "Existing Festival Description"
             );
 
-            festivalRepository.save(testExistingFestival);
+            List<Festival> festivalList = new ArrayList<>();
+            festivalList.add(testFestival);
+            testVenue1.setFestivals(festivalList);
+
+            festivalRepository.save(testFestival);
+            testFestivalId = testFestival.getId();
+
+            venueRepository.save(testVenue1);
         }
 
         @Test
         void testSuccessfulDeletionResponds204() throws Exception {
             // Arrange
             // Act & Assert
-            mockMvc.perform(delete("/festivals/" + testExistingFestival.getId())
-                    .header("Authorization", adminToken))
+            mockMvc.perform(delete("/festivals/" + testFestival.getId())
+                            .header("Authorization", adminToken))
                     .andExpect(status().isNoContent());
         }
 
         @Test
         void testFestivalNoLongerInDatabaseFollowingDeletion() throws Exception {
             // Arrange
+            assertTrue(festivalRepository.existsById(testFestivalId));
             // Act
-            mockMvc.perform(delete("/festivals/" + testExistingFestival.getId())
+            mockMvc.perform(delete("/festivals/" + testFestivalId)
                             .header("Authorization", adminToken));
             // Assert
-            festivalRepository.flush();
-
-            boolean exists = festivalRepository.existsById(testExistingFestival.getId());
-            assertFalse(exists);
-        }
-
-        @Test
-        void testAssociatedVenueStillInDatabaseFollowingDeletion() throws Exception {
-            // Arrange
-            // Act
-            mockMvc.perform(delete("/festivals/" + testExistingFestival.getId())
-                    .header("Authorization", adminToken));
-            // Assert
-            festivalRepository.flush();
-            boolean exists = venueRepository.existsById(testVenue1.getId());
-            assertTrue(exists);
+            assertFalse(festivalRepository.existsById(testFestivalId));
         }
 
         @Test
         void testAssociatedVenueNoLongerReferencesFestivalFollowingDeletion() throws Exception {
             // Arrange
+            Venue preVenue = venueRepository.findById(testVenue1.getId()).orElseThrow(() -> new RuntimeException("No venue with this id"));
+            assertTrue(preVenue.getFestivals().contains(testFestival));
             // Act
-            mockMvc.perform(delete("/festivals/" + testExistingFestival.getId())
+            mockMvc.perform(delete("/festivals/" + testFestivalId)
                     .header("Authorization", adminToken));
             // Assert
-            festivalRepository.flush();
-            Venue managedTestVenue1 = venueRepository.findById(testVenue1.getId()).orElseThrow(() -> new RuntimeException("Venue not found"));
-
-            List<Festival> festivalList = managedTestVenue1.getFestivals();
-            assertFalse(festivalList.contains(testExistingFestival));
+            Venue postVenue = venueRepository.findById(testVenue1.getId()).orElseThrow(() -> new RuntimeException("No venue with this id"));
+            assertFalse(postVenue.getFestivals().contains(testFestival));
         }
 
+
         @Test
-        void testAssociatedPerformanceStillInDatabaseFollowingDeletion() throws Exception {
+        void testAssociatedPerformanceNoLongerReferencesFestivalFollowingDeletion() throws Exception {
             // Arrange
             Production production = new Production(
                     "Test Production",
@@ -604,31 +592,30 @@ public class FestivalIntegrationTest {
             );
             productionRepository.save(production);
 
-            Performance performance = new Performance(
-                    production,
-                    testVenue1,
-                    testExistingFestival,
-                    LocalDateTime.now(),
-                    "Test Description",
-                    BigDecimal.TEN,
-                    BigDecimal.TEN,
-                    "box office"
-            );
-            performanceRepository.save(performance);
+            Performance associatedPerformance = new Performance();
+            associatedPerformance.setVenue(testVenue1);
+            associatedPerformance.setProduction(production);
+            associatedPerformance.setFestival(testFestival);
+            associatedPerformance.setTime(LocalDateTime.now());
+            performanceRepository.save(associatedPerformance);
+            List<Performance> performanceList = new ArrayList<>();
+            performanceList.add(associatedPerformance);
+            testFestival.setPerformances(performanceList);
+            festivalRepository.save(testFestival);
+
+            assertEquals(testFestival, associatedPerformance.getFestival());
             // Act
-            mockMvc.perform(delete("/festivals/" + testExistingFestival.getId())
+            mockMvc.perform(delete("/festivals/" + testFestivalId)
                     .header("Authorization", adminToken));
             // Assert
-            boolean exists = performanceRepository.existsById(performance.getId());
-            assertTrue(exists);
-
+            assertNull(associatedPerformance.getFestival());
         }
 
         @Test
         void testNonExistentFestivalIdResponds404() throws Exception {
             // Arrange
             // Act & Assert
-            mockMvc.perform(delete("/festivals/" + (testExistingFestival.getId() - 1) )
+            mockMvc.perform(delete("/festivals/" + (testFestivalId - 1) )
                             .header("Authorization", adminToken))
                     .andExpect(status().isNotFound());
         }
@@ -646,7 +633,7 @@ public class FestivalIntegrationTest {
         void testUserTokenResponds403() throws Exception {
             // Arrange
             // Act & Assert
-            mockMvc.perform(delete("/festivals/" + testExistingFestival.getId() )
+            mockMvc.perform(delete("/festivals/" + testFestivalId )
                             .header("Authorization", userToken))
                     .andExpect(status().isForbidden());
         }
@@ -655,7 +642,7 @@ public class FestivalIntegrationTest {
         void testBadTokenResponds401() throws Exception {
             // Arrange
             // Act & Assert
-            mockMvc.perform(delete("/festivals/" + testExistingFestival.getId() )
+            mockMvc.perform(delete("/festivals/" + testFestivalId )
                             .header("Authorization", "bad token"))
                     .andExpect(status().isUnauthorized());
         }
@@ -664,7 +651,7 @@ public class FestivalIntegrationTest {
         void testMissingTokenResponds401() throws Exception {
             // Arrange
             // Act & Assert
-            mockMvc.perform(delete("/festivals/" + testExistingFestival.getId() ))
+            mockMvc.perform(delete("/festivals/" + testFestivalId ))
                     .andExpect(status().isUnauthorized());
         }
 

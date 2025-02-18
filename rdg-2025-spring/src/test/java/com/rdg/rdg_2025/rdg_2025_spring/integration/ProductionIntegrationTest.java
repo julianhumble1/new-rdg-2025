@@ -962,7 +962,7 @@ public class ProductionIntegrationTest {
             // Arrange
             // Act & Assert
             mockMvc.perform(delete("/productions/" + testProductionId)
-                    .header("Authorization", adminToken))
+                            .header("Authorization", adminToken))
                     .andExpect(status().isNoContent());
         }
 
@@ -1024,8 +1024,6 @@ public class ProductionIntegrationTest {
         @Test
         void testProductionIdNotIntResponds400() throws Exception {
             // Arrange
-            int productionId = testProduction.getId();
-
             // Act & Assert
             mockMvc.perform(delete("/productions/" +  "notanint")
                             .header("Authorization", adminToken))
@@ -1036,10 +1034,8 @@ public class ProductionIntegrationTest {
         @Test
         void testBadTokenResponds401() throws Exception {
             // Arrange
-            int productionId = testProduction.getId();
-
             // Act & Assert
-            mockMvc.perform(delete("/productions/" +  productionId)
+            mockMvc.perform(delete("/productions/" +  testProductionId)
                             .header("Authorization", "badToken"))
                     .andExpect(status().isUnauthorized());
 
@@ -1048,10 +1044,8 @@ public class ProductionIntegrationTest {
         @Test
         void testMissingTokenResponds401() throws Exception {
             // Arrange
-            int productionId = testProduction.getId();
-
             // Act & Assert
-            mockMvc.perform(delete("/productions/" +  productionId))
+            mockMvc.perform(delete("/productions/" +  testProductionId))
                     .andExpect(status().isUnauthorized());
 
         }
@@ -1059,10 +1053,8 @@ public class ProductionIntegrationTest {
         @Test
         void testUserTokenResponds403() throws Exception {
             // Arrange
-            int productionId = testProduction.getId();
-
             // Act & Assert
-            mockMvc.perform(delete("/productions/" +  productionId)
+            mockMvc.perform(delete("/productions/" +  testProductionId)
                     .header("Authorization", userToken))
                     .andExpect(status().isForbidden());
 
