@@ -587,7 +587,7 @@ public class ProductionServiceTest {
             testProduction.setPerformances(performances);
             int initialLength = testProduction.getPerformances().size();
             // Act
-            productionService.removePerformanceFromPerformanceList(performance);
+            productionService.removePerformanceFromProductionPerformanceList(performance);
             // Assert
             assertEquals(initialLength - 1, testProduction.getPerformances().size());
         }
@@ -602,7 +602,7 @@ public class ProductionServiceTest {
             testProduction.setPerformances(performances);
 
             // Act
-            productionService.removePerformanceFromPerformanceList(performance);
+            productionService.removePerformanceFromProductionPerformanceList(performance);
             // Assert
             verify(productionRepository, times(1)).save(testProduction);
         }

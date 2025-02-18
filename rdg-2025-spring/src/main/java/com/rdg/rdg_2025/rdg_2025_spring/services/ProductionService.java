@@ -98,7 +98,7 @@ public class ProductionService {
         saveProductionToDatabase(production);
     }
 
-    public void removePerformanceFromPerformanceList(Performance performance) {
+    public void removePerformanceFromProductionPerformanceList(Performance performance) {
         Production production = performance.getProduction();
         List<Performance> performanceList = production.getPerformances();
         performanceList.remove(performance);

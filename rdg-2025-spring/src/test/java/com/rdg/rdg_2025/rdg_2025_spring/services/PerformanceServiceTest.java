@@ -265,18 +265,28 @@ public class PerformanceServiceTest {
             // Act
             performanceService.deletePerformanceById(1);
             // Assert
-            verify(productionService, times(1)).removePerformanceFromPerformanceList(testPerformance);
+            verify(productionService, times(1)).removePerformanceFromProductionPerformanceList(testPerformance);
         }
 
         @Test
         void testRemovePerformanceFromProductionDatabaseExceptionThrowsDatabaseException() {
             // Arrange
             when(performanceRepository.findById(anyInt())).thenReturn(Optional.of(testPerformance));
-            doThrow(new DatabaseException("database exception")).when(productionService).removePerformanceFromPerformanceList(any());
+            doThrow(new DatabaseException("database exception")).when(productionService).removePerformanceFromProductionPerformanceList(any());
             // Act & Assert
             assertThrows(DatabaseException.class, () -> {
                 performanceService.deletePerformanceById(1);
             });
+        }
+
+        @Test
+        void testRemovePerformanceVenueServiceMethodIsCalled() {
+            // Arrange
+            when(performanceRepository.findById(anyInt())).thenReturn(Optional.of(testPerformance));
+            // Act
+            performanceService.deletePerformanceById(1);
+            // Assert
+            verify(venueService, times(1)).removePerformanceFromVenuePerformanceList(testPerformance);
         }
 
 

@@ -14,7 +14,6 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 @Service
 public class PerformanceService {
@@ -51,7 +50,8 @@ public class PerformanceService {
     public boolean deletePerformanceById(int performanceId) {
         try {
             Performance performance = performanceRepository.findById(performanceId).orElseThrow(() -> new EntityNotFoundException());
-            productionService.removePerformanceFromPerformanceList(performance);
+            productionService.removePerformanceFromProductionPerformanceList(performance);
+            venueService.removePerformanceFromVenuePerformanceList(performance);
             return true;
         } catch (EntityNotFoundException ex){
             return false;
