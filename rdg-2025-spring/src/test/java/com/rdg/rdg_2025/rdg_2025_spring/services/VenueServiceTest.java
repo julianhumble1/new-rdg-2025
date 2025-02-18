@@ -693,14 +693,21 @@ public class VenueServiceTest {
 
         @Test
         void testPerformanceListLengthReducesByOne() {
-
             // Arrange
             int initialLength = testVenue.getPerformances().size();
             // Act
             venueService.removePerformanceFromVenuePerformanceList(testPerformance);
             // Assert
             assertEquals(initialLength - 1, testVenue.getPerformances().size());
+        }
 
+        @Test
+        void testUpdatedVenueIsSavedToDatabase() {
+            // Arrange
+            // Act
+            venueService.removePerformanceFromVenuePerformanceList(testPerformance);
+            // Assert
+            verify(venueRepository, times(1)).save(testVenue);
         }
 
     }

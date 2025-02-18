@@ -108,6 +108,7 @@ public class VenueService {
         List<Performance> performanceList = venue.getPerformances();
         performanceList.remove(performance);
         venue.setPerformances(performanceList);
+        saveVenueToDatabase(venue);
     }
 
     // PRIVATE HELPER METHODS
