@@ -735,5 +735,14 @@ public class PerformanceIntegrationTest {
                     .andExpect(status().isNotFound());
         }
 
+        @Test
+        void testBadPerformanceIdResponds400() throws Exception {
+            // Arrange
+            // Act & Assert
+            mockMvc.perform(delete("/performances/notanint" )
+                            .header("Authorization", adminToken))
+                    .andExpect(status().isBadRequest());
+        }
+
     }
 }
