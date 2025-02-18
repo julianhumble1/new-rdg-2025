@@ -74,7 +74,7 @@ I have also chosen at this stage not to test the front-end application, as my fo
 
 ### Going forward
 
-There is still a long way to go with this project. Further CRUD operations for festivals and performances are required, as well as introducing people (and their different credits).
+There is still a long way to go with this project. I need to introduce people, and their acting, producing and musician credits.
 
 Once the back-end is complete, I will host the MySQL instance online (probably GCP) and upload the existing data (which I currently have as csv files on my computer), and test that the Spring application interacts with the production database as expected. I anticipate there will be some teething issues here as I integrate with existing data, although I have done everything I can to ensure the application will work with the data.
 
