@@ -713,5 +713,18 @@ public class PerformanceIntegrationTest {
             assertFalse(postProduction.getPerformances().contains(testPerformance));
         }
 
+        @Test
+        void testFestivalNoLongerReferencesPerformanceFollowingDeletion() throws Exception {
+            // Arrange
+            Festival preFestival = festivalRepository.findById(testFestivalId).orElseThrow(() -> new RuntimeException("No Festival with this id"));
+            assertTrue(preFestival.getPerformances().contains(testPerformance));
+            // Act
+            mockMvc.perform(delete("/performances/" + testPerformanceId)
+                    .header("Authorization", adminToken));
+            // Assert
+            Festival postFestival = festivalRepository.findById(testFestivalId).orElseThrow(() -> new RuntimeException("No Festival with this id"));
+            assertFalse(postFestival.getPerformances().contains(testPerformance));
+        }
+
     }
 }
