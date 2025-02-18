@@ -592,5 +592,20 @@ public class ProductionServiceTest {
             assertEquals(initialLength - 1, testProduction.getPerformances().size());
         }
 
+        @Test
+        void testUpdatedPerformanceIsSavedToDatabase() {
+            // Arrange
+            Performance performance = new Performance();
+            performance.setProduction(testProduction);
+            ArrayList<Performance> performances = new ArrayList<>();
+            performances.add(performance);
+            testProduction.setPerformances(performances);
+
+            // Act
+            productionService.removePerformanceFromPerformanceList(performance);
+            // Assert
+            verify(productionRepository, times(1)).save(testProduction);
+        }
+
     }
 }
