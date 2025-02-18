@@ -20,8 +20,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -648,6 +649,17 @@ public class PerformanceIntegrationTest {
             mockMvc.perform(delete("/performances/" + testPerformanceId)
                             .header("Authorization", adminToken))
                     .andExpect(status().isNoContent());
+        }
+
+        @Test
+        void testPerformanceNoLongerInDatabaseFollowingDeletion() throws Exception {
+            // Arrange
+            // Act
+            mockMvc.perform(delete("/performances/" + testPerformanceId)
+                            .header("Authorization", adminToken))
+                    .andExpect(status().isNoContent());
+            // Assert
+            assertFalse(performanceRepository.existsById(testPerformanceId));
         }
 
     }
