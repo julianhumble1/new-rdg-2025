@@ -554,6 +554,16 @@ public class FestivalServiceTest {
             assertEquals(initialLength - 1, testFestival.getPerformances().size());
         }
 
+        @Test
+        void testUpdatedFestivalIsSavedToDatabase() {
+            // Arrange
+            // Act
+            festivalService.removePerformanceFromFestivalPerformanceList(testPerformance);
+            // Assert
+            verify(festivalRepository, times(1)).save(testFestival);
+
+        }
+
 
     }
 }
