@@ -1,5 +1,7 @@
 import { Table } from "flowbite-react"
 import ProductionRow from "./ProductionRow.jsx"
+import { Link } from "react-router-dom"
+import { PlusCircleIcon } from "@heroicons/react/16/solid"
 
 const ProductionsTable = ({ productions, handleDelete, nameSearch, venueSearch, sundownersSearch }) => {
     if (productions.length > 0) {
@@ -15,6 +17,16 @@ const ProductionsTable = ({ productions, handleDelete, nameSearch, venueSearch, 
                     <Table.HeadCell>Actions</Table.HeadCell>
                 </Table.Head>
                 <Table.Body className="divide-y">
+                    <Table.Row className="">
+                        <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white ">
+                            <Link className='hover:underline flex flex-row gap-2' to="/productions/new">
+                                <PlusCircleIcon className="max-h-5 text-black text-opacity-75" />
+                                <div className="my-auto">
+                                    Add New Production...
+                                </div>
+                            </Link>
+                        </Table.Cell>
+                    </Table.Row>
                     {productions.map((production, index) => (
                         <ProductionRow production={production} handleDelete={handleDelete} key={index} nameSearch={nameSearch} venueSearch={venueSearch} sundownersSearch={sundownersSearch} />
                     ))} 

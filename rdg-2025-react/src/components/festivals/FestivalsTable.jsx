@@ -1,5 +1,7 @@
 import { Table } from "flowbite-react"
 import FestivalRow from "./FestivalRow.jsx"
+import { Link } from "react-router-dom"
+import { PlusCircleIcon } from "@heroicons/react/16/solid"
 
 const FestivalsTable = ({ festivals, handleDelete, nameSearch, venueSearch }) => {
         if (festivals.length > 0) {
@@ -15,6 +17,16 @@ const FestivalsTable = ({ festivals, handleDelete, nameSearch, venueSearch }) =>
                     <Table.HeadCell>Actions</Table.HeadCell>
                 </Table.Head>
                 <Table.Body className="divide-y">
+                    <Table.Row className="">
+                        <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white ">
+                            <Link className='hover:underline flex flex-row gap-2' to="/festivals/new">
+                                <PlusCircleIcon className="max-h-5 text-black text-opacity-75" />
+                                <div className="my-auto">
+                                    Add New Festival...
+                                </div>
+                            </Link>
+                        </Table.Cell>
+                    </Table.Row>
                     {festivals.map((festival, index) => (
                         <FestivalRow festival={festival} handleDelete={handleDelete} key={index} nameSearch={nameSearch} venueSearch={venueSearch} />
                     ))} 

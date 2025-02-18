@@ -1,7 +1,7 @@
 import { format } from "date-fns"
 import { Link } from "react-router-dom"
 
-const PerformanceRow = ({ performanceData }) => {
+const PerformanceRow = ({ performanceData, handleDelete }) => {
     
     const formattedDate = format(new Date(performanceData.time), "MMMM d, yyyy, h:mm a")
 
@@ -29,6 +29,11 @@ const PerformanceRow = ({ performanceData }) => {
             </div>
             <div className="italic">
                 {performanceData.description}
+            </div>
+            <div className="flex justify-end">
+                <button className="font-bold hover:underline" onClick={() => handleDelete(performanceData)}>
+                    Delete
+                </button>
             </div>
         </div>
     )

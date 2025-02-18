@@ -8,6 +8,7 @@ import EditProductionForm from "./EditProductionForm.jsx";
 import { format } from "date-fns";
 import ProductionHighlight from "./ProductionHighlight.jsx";
 import PerformancesTable from "../performances/PerformancesTable.jsx";
+import PerformanceService from "../../services/PerformanceService.js";
 
 const ProductionPage = () => {
 
@@ -25,6 +26,8 @@ const ProductionPage = () => {
 
     const [showConfirmDelete, setShowConfirmDelete] = useState(false);
 
+    const [itemToDelete, setItemToDelete] = useState(null)
+
     const fetchProductionData = useCallback(async () => {
         try {
             const response = await ProductionService.getProductionById(productionId);
@@ -40,16 +43,26 @@ const ProductionPage = () => {
     }, [fetchProductionData])
 
 
-    const handleDelete = () => {
+    const handleDelete = (item) => {
         setShowConfirmDelete(true)
+        setItemToDelete(item)
     }
 
-    const handleConfirmDelete = async (production) => {
+    const handleConfirmDelete = async (item) => {
         try {
-            await ProductionService.deleteProduction(production.id)
-            setShowConfirmDelete(false)
-            navigate("/productions")
+            if (item.sundowners != null) {
+                await ProductionService.deleteProduction(item.id)
+                setShowConfirmDelete(false)
+                navigate("/productions")
+            } else {
+                await PerformanceService.deletePerformance(item.id)
+                setShowConfirmDelete(false)
+                setErrorMessage("")
+                setSuccessMessage("Successfully deleted performance")
+                fetchProductionData()
+            }
         } catch (e) {
+            setSuccessMessage("")
             setErrorMessage(e.message)
         }
     }
@@ -82,7 +95,7 @@ const ProductionPage = () => {
     return (
         <div>
             {showConfirmDelete &&
-                <ConfirmDeleteModal setShowConfirmDelete={setShowConfirmDelete} itemToDelete={productionData} handleConfirmDelete={ handleConfirmDelete } />
+                <ConfirmDeleteModal setShowConfirmDelete={setShowConfirmDelete} itemToDelete={itemToDelete} handleConfirmDelete={ handleConfirmDelete } />
             }
             <SuccessMessage message={successMessage} />
             <ErrorMessage message={errorMessage} />
@@ -91,7 +104,7 @@ const ProductionPage = () => {
                 {(productionData && !editMode && performances.length > 0) &&
                     <div className="grid md:grid-cols-5 grid-cols-1 w-full lg:w-1/2 md:w-2/3 md:shadow-md min-h-[26rem]">
                         <ProductionHighlight productionData={productionData} setEditMode={setEditMode} handleDelete={handleDelete} />
-                        <PerformancesTable performances={performances}/>
+                        <PerformancesTable performances={performances} handleDelete={handleDelete} />
                     </div>
                 }
                 {(productionData && !editMode && performances.length === 0) &&

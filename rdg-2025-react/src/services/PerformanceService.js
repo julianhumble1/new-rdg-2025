@@ -31,4 +31,21 @@ export default class PerformanceService {
 
     }
 
+    static deletePerformance = async (performanceId) => {
+        const token = Cookies.get("token")
+
+        try {
+            const response = await axios.delete(`http://localhost:8080/performances/${performanceId}`,
+                {
+                    headers: {
+                        "Authorization" : `Bearer ${token}`
+                    }
+                }
+            )
+            return response
+        } catch (e) {
+            throw new Error(e.message)
+        }
+    }
+
 }

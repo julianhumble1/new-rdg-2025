@@ -7,6 +7,7 @@ import ErrorMessage from "../modals/ErrorMessage.jsx";
 import FestivalHighlight from "./FestivalHighlight.jsx";
 import PerformancesTable from "../performances/PerformancesTable.jsx";
 import EditFestivalForm from "./EditFestivalForm.jsx";
+import PerformanceService from "../../services/PerformanceService.js";
 
 const FestivalPage = () => {
 
@@ -22,6 +23,7 @@ const FestivalPage = () => {
     const [errorMessage, setErrorMessage] = useState("")
 
     const [showConfirmDelete, setShowConfirmDelete] = useState(false)
+    const [itemToDelete, setItemToDelete] = useState(false)
 
     const [editMode, setEditMode] = useState(searchParams.get("edit"))
 
@@ -39,14 +41,23 @@ const FestivalPage = () => {
         getFestivalData()
     }, [getFestivalData])
 
-    const handleDelete = () => {
+    const handleDelete = (item) => {
         setShowConfirmDelete(true)
+        setItemToDelete(item)
     }
 
-    const handleConfirmDelete = async () => {
+    const handleConfirmDelete = async (item) => {
         try {
-            await FestivalService.deleteFestivalById(festivalData.id)
-            navigate("/festivals")
+            if (item.year != null) {
+                await FestivalService.deleteFestivalById(item.id)
+                navigate("/festivals")
+            } else {
+                await PerformanceService.deletePerformance(item.id)
+                setShowConfirmDelete(false)
+                setErrorMessage("")
+                setSuccessMessage("Successfully deleted performance")
+                getFestivalData()
+            }
         } catch (e) {
             setErrorMessage(e.message)
         }
@@ -68,7 +79,7 @@ const FestivalPage = () => {
     return (
         <div>
             {showConfirmDelete &&
-                <ConfirmDeleteModal setShowConfirmDelete={setShowConfirmDelete} itemToDelete={festivalData} handleConfirmDelete={ handleConfirmDelete } />
+                <ConfirmDeleteModal setShowConfirmDelete={setShowConfirmDelete} itemToDelete={itemToDelete} handleConfirmDelete={ handleConfirmDelete } />
             }
             <SuccessMessage message={successMessage} />
             <ErrorMessage message={errorMessage} />
@@ -77,7 +88,7 @@ const FestivalPage = () => {
                 {(festivalData && !editMode && performances.length > 0) &&
                     <div className="grid md:grid-cols-5 grid-cols-1 w-full lg:w-1/2 md:w-2/3 md:shadow-md min-h-[26rem]">
                         <FestivalHighlight festivalData={festivalData} setEditMode={setEditMode} handleDelete={handleDelete} />
-                        <PerformancesTable performances={performances}/>
+                        <PerformancesTable performances={performances} handleDelete={handleDelete}/>
                     </div>
                 }
 

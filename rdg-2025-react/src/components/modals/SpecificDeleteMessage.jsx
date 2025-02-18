@@ -17,6 +17,10 @@ const SpecificDeleteMessage = ({ itemToDelete }) => {
             setMessage(<>
                     When deleting a festival, <strong>performances</strong> associated with the festival will <strong>not</strong> be deleted.
                 </>)
+        } else if (itemToDelete.time != null) {
+            setMessage(<>
+                When deleting a performance, no other objects will be deleted.
+            </>)
         }
 
     }, [itemToDelete])

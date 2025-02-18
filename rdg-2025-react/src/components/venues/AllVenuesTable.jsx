@@ -17,10 +17,7 @@ const AllVenuesTable = ({ venues, handleDelete, nameSearch }) => {
                     <Table.HeadCell>Actions</Table.HeadCell>
                 </Table.Head>
                 <Table.Body className="divide-y">
-                    {venues.map((venue, index) => (
-                        <AltVenueRow venue={venue} handleDelete={handleDelete} key={index} nameSearch={nameSearch} />
-                    ))} 
-                    <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
+                    <Table.Row className="">
                         <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white ">
                             <Link className='hover:underline flex flex-row gap-2' to="/venues/new">
                                 <PlusCircleIcon className="max-h-5 text-black text-opacity-75" />
@@ -29,8 +26,10 @@ const AllVenuesTable = ({ venues, handleDelete, nameSearch }) => {
                                 </div>
                             </Link>
                         </Table.Cell>
-
                     </Table.Row>
+                    {venues.map((venue, index) => (
+                        <AltVenueRow venue={venue} handleDelete={handleDelete} key={index} nameSearch={nameSearch} />
+                    ))} 
                 </Table.Body>
             </Table>
         )
