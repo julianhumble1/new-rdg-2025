@@ -744,5 +744,14 @@ public class PerformanceIntegrationTest {
                     .andExpect(status().isBadRequest());
         }
 
+        @Test
+        void testUserTokenResponds403() throws Exception {
+            // Arrange
+            // Act & Assert
+            mockMvc.perform(delete("/performances/" + testPerformanceId )
+                            .header("Authorization", userToken))
+                    .andExpect(status().isForbidden());
+        }
+
     }
 }
