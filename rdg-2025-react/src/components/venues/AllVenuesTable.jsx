@@ -1,5 +1,7 @@
 import { Table } from "flowbite-react"
 import AltVenueRow from "./VenueRow.jsx"
+import { Link } from "react-router-dom"
+import { PlusCircleIcon } from "@heroicons/react/16/solid"
 
 const AllVenuesTable = ({ venues, handleDelete, nameSearch }) => {
     
@@ -18,6 +20,17 @@ const AllVenuesTable = ({ venues, handleDelete, nameSearch }) => {
                     {venues.map((venue, index) => (
                         <AltVenueRow venue={venue} handleDelete={handleDelete} key={index} nameSearch={nameSearch} />
                     ))} 
+                    <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
+                        <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white ">
+                            <Link className='hover:underline flex flex-row gap-2' to="/venues/new">
+                                <PlusCircleIcon className="max-h-5 text-black text-opacity-75" />
+                                <div className="my-auto">
+                                    Add New Venue...
+                                </div>
+                            </Link>
+                        </Table.Cell>
+
+                    </Table.Row>
                 </Table.Body>
             </Table>
         )
