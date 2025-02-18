@@ -53,6 +53,7 @@ public class PerformanceService {
             productionService.removePerformanceFromProductionPerformanceList(performance);
             venueService.removePerformanceFromVenuePerformanceList(performance);
             festivalService.removePerformanceFromFestivalPerformanceList(performance);
+            performanceRepository.delete(performance);
             return true;
         } catch (EntityNotFoundException ex){
             return false;

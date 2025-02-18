@@ -321,6 +321,16 @@ public class PerformanceServiceTest {
             });
         }
 
+        @Test
+        void testPerformanceRepositoryDeleteMethodIsCalled() {
+            // Arrange
+            when(performanceRepository.findById(anyInt())).thenReturn(Optional.of(testPerformance));
+            // Act
+            performanceService.deletePerformanceById(1);
+            // Assert
+            verify(performanceRepository, times(1)).delete(testPerformance);
+        }
+
 
     }
 
