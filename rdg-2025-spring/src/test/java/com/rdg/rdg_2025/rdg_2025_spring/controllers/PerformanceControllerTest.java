@@ -517,6 +517,26 @@ public class PerformanceControllerTest {
                     .andExpect(status().isNotFound());
         }
 
+        @Test
+        @WithMockUser(roles = "ADMIN")
+        void testPerformanceDoesNotExistResponds404() throws Exception {
+            // Arrange
+            when(performanceService.deletePerformanceById(anyInt())).thenReturn(false);
+            // Act & Assert
+            mockMvc.perform(delete("/performances/1"))
+                    .andExpect(status().isNotFound());
+        }
+
+        @Test
+        @WithMockUser(roles = "ADMIN")
+        void testSuccessfulDeletionResponds204() throws Exception {
+            // Arrange
+            when(performanceService.deletePerformanceById(anyInt())).thenReturn(true);
+            // Act & Assert
+            mockMvc.perform(delete("/performances/1"))
+                    .andExpect(status().isNoContent());
+        }
+
 
 
     }
