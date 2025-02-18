@@ -4,6 +4,7 @@ import com.rdg.rdg_2025.rdg_2025_spring.models.*;
 import com.rdg.rdg_2025.rdg_2025_spring.repository.*;
 import com.rdg.rdg_2025.rdg_2025_spring.security.jwt.JwtUtils;
 import com.rdg.rdg_2025.rdg_2025_spring.utils.AuthTestUtils;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -627,19 +629,42 @@ public class PerformanceIntegrationTest {
     @DisplayName("DELETE delete performance by id integration tests")
     class DeletePerformanceByIdIntegrationTests {
 
+        @Autowired
+        private VenueRepository venueRepository;
+
+        @Autowired
+        private ProductionRepository productionRepository;
+
+        @Autowired
+        private FestivalRepository festivalRepository;
+
         private Performance testPerformance;
         private int testPerformanceId;
 
         @BeforeEach
         void setup() {
             testPerformance = new Performance();
+            List<Performance> performanceList = new ArrayList<>();
+            performanceList.add(testPerformance);
+
             testPerformance.setVenue(testVenue);
+            testVenue.setPerformances(performanceList);
+
             testPerformance.setProduction(testProduction);
+            testProduction.setPerformances(performanceList);
+
             testPerformance.setFestival(testFestival);
+            testFestival.setPerformances(performanceList);
+
             testPerformance.setTime(LocalDateTime.now());
 
             performanceRepository.save(testPerformance);
             testPerformanceId = testPerformance.getId();
+
+            venueRepository.save(testVenue);
+            productionRepository.save(testProduction);
+            festivalRepository.save(testFestival);
+
         }
 
         @Test
@@ -660,6 +685,19 @@ public class PerformanceIntegrationTest {
                     .andExpect(status().isNoContent());
             // Assert
             assertFalse(performanceRepository.existsById(testPerformanceId));
+        }
+
+        @Test
+        void testVenueNoLongerReferencesPerformanceFollowingDeletion() throws Exception {
+            // Arrange
+            Venue preVenue = venueRepository.findById(testVenueId).orElseThrow(() -> new RuntimeException("No Venue with this id"));
+            assertTrue(preVenue.getPerformances().contains(testPerformance));
+            // Act
+            mockMvc.perform(delete("/performances/" + testPerformanceId)
+                            .header("Authorization", adminToken));
+            // Assert
+            Venue postVenue = venueRepository.findById(testVenueId).orElseThrow(() -> new RuntimeException("No Venue with this id"));
+            assertFalse(postVenue.getPerformances().contains(testPerformance));
         }
 
     }
