@@ -1,12 +1,10 @@
 package com.rdg.rdg_2025.rdg_2025_spring.integration;
 
+import com.rdg.rdg_2025.rdg_2025_spring.models.Performance;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Production;
 import com.rdg.rdg_2025.rdg_2025_spring.models.User;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Venue;
-import com.rdg.rdg_2025.rdg_2025_spring.repository.ProductionRepository;
-import com.rdg.rdg_2025.rdg_2025_spring.repository.RoleRepository;
-import com.rdg.rdg_2025.rdg_2025_spring.repository.UserRepository;
-import com.rdg.rdg_2025.rdg_2025_spring.repository.VenueRepository;
+import com.rdg.rdg_2025.rdg_2025_spring.repository.*;
 import com.rdg.rdg_2025.rdg_2025_spring.security.jwt.JwtUtils;
 import com.rdg.rdg_2025.rdg_2025_spring.utils.AuthTestUtils;
 import jakarta.transaction.Transactional;
@@ -18,16 +16,17 @@ import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.parameters.P;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -928,15 +927,18 @@ public class ProductionIntegrationTest {
         @Autowired
         private VenueRepository venueRepository;
 
-        Production testExistingProduction;
+        @Autowired
+        private PerformanceRepository performanceRepository;
+
+        Production testProduction;
+        int testProductionId;
 
         @BeforeEach
         void beforeEach() {
-            Venue managedTestVenue1 = venueRepository.findById(testVenue1.getId()).orElseThrow(() -> new RuntimeException("Venue not found"));
 
-            testExistingProduction = new Production(
+            testProduction = new Production(
                     "Test Production",
-                    managedTestVenue1,
+                    testVenue1,
                     "Test Author",
                     "Test Description",
                     LocalDateTime.now(),
@@ -944,15 +946,22 @@ public class ProductionIntegrationTest {
                     false,
                     "Test Flyer File"
             );
-            productionRepository.save(testExistingProduction);
+
+            List<Production> productionList = new ArrayList<>();
+            productionList.add(testProduction);
+            testVenue1.setProductions(productionList);
+
+            productionRepository.save(testProduction);
+            testProductionId = testProduction.getId();
+
+            venueRepository.save(testVenue1);
         }
 
         @Test
         void testSuccessfulDeletionResponds204() throws Exception {
             // Arrange
-            int productionId = testExistingProduction.getId();
             // Act & Assert
-            mockMvc.perform(delete("/productions/" + productionId)
+            mockMvc.perform(delete("/productions/" + testProductionId)
                     .header("Authorization", adminToken))
                     .andExpect(status().isNoContent());
         }
@@ -960,37 +969,53 @@ public class ProductionIntegrationTest {
         @Test
         void testProductionNoLongerInDatabaseFollowingDeletion() throws Exception {
             // Arrange
-            int productionId = testExistingProduction.getId();
+            assertTrue(productionRepository.existsById(testProductionId));
             // Act
-            mockMvc.perform(delete("/productions/" + productionId)
+            mockMvc.perform(delete("/productions/" + testProductionId)
                             .header("Authorization", adminToken));
             // Assert
-            boolean exists = productionRepository.existsById(productionId);
-            assertEquals(false, exists);
+            assertFalse(productionRepository.existsById(testProductionId));
         }
 
         @Test
         void testAssociatedVenueNoLongerReferencesProductionFollowingDeletion() throws Exception {
             // Arrange
-            int productionId = testExistingProduction.getId();
-
+            Venue preVenue = venueRepository.findById(testVenue1.getId()).orElseThrow(() -> new RuntimeException("No venue with this id"));
+            assertTrue(preVenue.getProductions().contains(testProduction));
             // Act
-            mockMvc.perform(delete("/productions/" + productionId)
+            mockMvc.perform(delete("/productions/" + testProductionId)
                     .header("Authorization", adminToken));
             // Assert
-            productionRepository.flush();
-            Venue managedTestVenue1 = venueRepository.findById(testVenue1.getId()).orElseThrow(() -> new RuntimeException("Venue not found"));
-            List<Production> productions = managedTestVenue1.getProductions();
-            assertEquals(false, productions.contains(testExistingProduction));
+            Venue postVenue = venueRepository.findById(testVenue1.getId()).orElseThrow(() -> new RuntimeException("No venue with this id"));
+            assertFalse(postVenue.getProductions().contains(testProduction));
+        }
+
+        @Test
+        void testAssociatedPerformancesNoLongerExistFollowingDeletion() throws Exception {
+            // Arrange
+            Performance associatedPerformance = new Performance();
+            associatedPerformance.setVenue(testVenue1);
+            associatedPerformance.setProduction(testProduction);
+            associatedPerformance.setTime(LocalDateTime.now());
+            performanceRepository.save(associatedPerformance);
+            List<Performance> performanceList = new ArrayList<>();
+            performanceList.add(associatedPerformance);
+            testProduction.setPerformances(performanceList);
+            productionRepository.save(testProduction);
+
+            assertTrue(performanceRepository.existsById(associatedPerformance.getId()));
+            // Act
+            mockMvc.perform(delete("/productions/" + testProductionId)
+                    .header("Authorization", adminToken));
+            // Assert
+            assertFalse(performanceRepository.existsById(associatedPerformance.getId()));
         }
 
         @Test
         void testNonExistentProductionIdResponds404() throws Exception {
             // Arrange
-            int productionId = testExistingProduction.getId();
-
             // Act & Assert
-            mockMvc.perform(delete("/productions/" + (productionId - 1))
+            mockMvc.perform(delete("/productions/" + (testProductionId - 1))
                     .header("Authorization", adminToken))
                     .andExpect(status().isNotFound());
 
@@ -999,7 +1024,7 @@ public class ProductionIntegrationTest {
         @Test
         void testProductionIdNotIntResponds400() throws Exception {
             // Arrange
-            int productionId = testExistingProduction.getId();
+            int productionId = testProduction.getId();
 
             // Act & Assert
             mockMvc.perform(delete("/productions/" +  "notanint")
@@ -1011,7 +1036,7 @@ public class ProductionIntegrationTest {
         @Test
         void testBadTokenResponds401() throws Exception {
             // Arrange
-            int productionId = testExistingProduction.getId();
+            int productionId = testProduction.getId();
 
             // Act & Assert
             mockMvc.perform(delete("/productions/" +  productionId)
@@ -1023,7 +1048,7 @@ public class ProductionIntegrationTest {
         @Test
         void testMissingTokenResponds401() throws Exception {
             // Arrange
-            int productionId = testExistingProduction.getId();
+            int productionId = testProduction.getId();
 
             // Act & Assert
             mockMvc.perform(delete("/productions/" +  productionId))
@@ -1034,7 +1059,7 @@ public class ProductionIntegrationTest {
         @Test
         void testUserTokenResponds403() throws Exception {
             // Arrange
-            int productionId = testExistingProduction.getId();
+            int productionId = testProduction.getId();
 
             // Act & Assert
             mockMvc.perform(delete("/productions/" +  productionId)
