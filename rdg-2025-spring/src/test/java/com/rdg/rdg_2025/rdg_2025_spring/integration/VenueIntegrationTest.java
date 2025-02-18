@@ -457,6 +457,19 @@ public class VenueIntegrationTest {
         }
 
         @Test
+        void testAssociatedFestivalNoLongerReferencesVenueFollowingDeletion() throws Exception {
+            // Arrange
+            Festival preFestival = festivalRepository.findById(testFestivalId).orElseThrow(() -> new RuntimeException("No festival with this id"));
+            assertEquals(testVenue, preFestival.getVenue());
+            // Act
+            mockMvc.perform(delete("/venues/" + testVenueId)
+                    .header("Authorization", adminToken));
+            // Assert
+            Festival postFestival = festivalRepository.findById(testFestivalId).orElseThrow(() -> new RuntimeException("No festival with this id"));
+            assertNull(postFestival.getVenue());
+        }
+
+        @Test
         void testNonExistentVenueIdResponds404() throws Exception {
             // Arrange
             // Act & Assert
