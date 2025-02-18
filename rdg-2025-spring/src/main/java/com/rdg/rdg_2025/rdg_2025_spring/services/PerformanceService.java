@@ -14,6 +14,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Service
 public class PerformanceService {
@@ -31,7 +32,7 @@ public class PerformanceService {
         this.festivalService = festivalService;
     }
 
-    // METHODS
+    // CRUD METHODS
 
     public Performance addNewPerformance(PerformanceRequest newPerformanceRequest) {
         Venue venue = retrieveVenueFromService(newPerformanceRequest);
@@ -45,6 +46,15 @@ public class PerformanceService {
 
         return savePerformanceToDatabase(performance);
 
+    }
+
+    public boolean deletePerformanceById(int performanceId) {
+        try {
+            Performance performance = performanceRepository.findById(performanceId).orElseThrow(() -> new EntityNotFoundException());
+            return true;
+        } catch (EntityNotFoundException ex){
+            return false;
+        }
     }
 
     // ADDITIONAL PUBLIC METHODS

@@ -22,9 +22,9 @@ import org.springframework.dao.DataAccessException;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.*;
 
@@ -75,7 +75,6 @@ public class PerformanceServiceTest {
                 new BigDecimal("10.00"),
                 new BigDecimal("9.00"),
                 "Test Box Office"
-
         );
     }
 
@@ -232,5 +231,23 @@ public class PerformanceServiceTest {
 
     }
 
+
+    @Nested
+    @DisplayName("deletePerformanceById service tests")
+    class DeletePerformanceByIdServiceTests {
+
+        @Test
+        void testIfPerformanceNotInDatabaseThenReturnsFalse() {
+            // Arrange
+            when(performanceRepository.findById(anyInt())).thenReturn(Optional.empty());
+            // Act
+            boolean result = performanceService.deletePerformanceById(1);
+            // Assert
+            assertFalse(result);
+
+        }
+
+
+    }
 
 }
