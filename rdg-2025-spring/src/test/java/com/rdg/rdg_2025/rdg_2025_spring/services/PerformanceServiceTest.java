@@ -331,6 +331,17 @@ public class PerformanceServiceTest {
             verify(performanceRepository, times(1)).delete(testPerformance);
         }
 
+        @Test
+        void testDeletePerformanceDataAccessExceptionThrowsDatabaseException() {
+            // Arrange
+            when(performanceRepository.findById(anyInt())).thenReturn(Optional.of(testPerformance));
+            doThrow(new DataAccessException("Data access exception") {}).when(performanceRepository).delete(testPerformance);
+            // Act & Assert
+            assertThrows(DatabaseException.class, () -> {
+                performanceService.deletePerformanceById(1);
+            });
+        }
+
 
     }
 
