@@ -50,12 +50,10 @@ public class PerformanceService {
     public void deletePerformanceById(int performanceId) {
         Performance performance = getPerformanceById(performanceId);
         removePerformanceFromAssociatedObjects(performance);
-        try {
-            performanceRepository.delete(performance);
-        } catch (DataAccessException | PersistenceException ex) {
-            throw new DatabaseException(ex.getMessage(), ex);
-        }
+        deletePerformanceInDatabase(performance);
     }
+
+
 
     // ADDITIONAL PUBLIC METHODS
 
@@ -141,6 +139,14 @@ public class PerformanceService {
         try {
             return performanceRepository.findById(performanceId).orElseThrow(() -> new EntityNotFoundException());
         } catch (DataAccessException ex) {
+            throw new DatabaseException(ex.getMessage(), ex);
+        }
+    }
+
+    private void deletePerformanceInDatabase(Performance performance) {
+        try {
+            performanceRepository.delete(performance);
+        } catch (DataAccessException | PersistenceException ex) {
             throw new DatabaseException(ex.getMessage(), ex);
         }
     }
