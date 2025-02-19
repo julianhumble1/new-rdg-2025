@@ -68,11 +68,10 @@ public class FestivalController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> deleteFestivalById(@PathVariable int festivalId) {
         try {
-            if (festivalService.deleteFestivalById(festivalId)) {
-                return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-            } else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No festival with id: " + festivalId);
-            }
+            festivalService.deleteFestivalById(festivalId);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        } catch (EntityNotFoundException ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
         } catch (DatabaseException ex) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
         }

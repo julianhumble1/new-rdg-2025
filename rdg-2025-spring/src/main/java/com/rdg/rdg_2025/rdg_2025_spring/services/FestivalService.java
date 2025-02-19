@@ -62,18 +62,11 @@ public class FestivalService {
         }
     }
 
-    public boolean deleteFestivalById(int festivalId) {
-        try {
-            Festival festival = getFestivalById(festivalId);
-            venueService.removeFestivalFromVenueFestivalList(festival);
-            setAssociatedPerformancesFestivalToNull(festival);
-            festivalRepository.delete(festival);
-            return true;
-        } catch (EntityNotFoundException ex) {
-            return false;
-        } catch (DataAccessException | PersistenceException ex) {
-            throw new DatabaseException(ex.getMessage(), ex);
-        }
+    public void deleteFestivalById(int festivalId) {
+        Festival festival = getFestivalById(festivalId);
+        venueService.removeFestivalFromVenueFestivalList(festival);
+        setAssociatedPerformancesFestivalToNull(festival);
+        deleteFestival(festival);
     }
 
     public Festival updateFestival(int festivalId, FestivalRequest festivalRequest) {
@@ -142,6 +135,14 @@ public class FestivalService {
         performances.forEach((performance) -> {
             performanceService.setPerformanceFestivalFieldToNull(performance);
         });
+    }
+
+    private void deleteFestival(Festival festival) {
+        try {
+            festivalRepository.delete(festival);
+        } catch (DataAccessException | PersistenceException ex) {
+            throw new DatabaseException(ex.getMessage(), ex);
+        }
     }
 
 }
