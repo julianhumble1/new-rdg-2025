@@ -63,7 +63,6 @@ public class FestivalService {
     }
 
     public boolean deleteFestivalById(int festivalId) {
-
         try {
             Festival festival = getFestivalById(festivalId);
             venueService.removeFestivalFromVenueFestivalList(festival);
@@ -75,13 +74,6 @@ public class FestivalService {
         } catch (DataAccessException | PersistenceException ex) {
             throw new DatabaseException(ex.getMessage(), ex);
         }
-    }
-
-    private void setAssociatedPerformancesFestivalToNull(Festival festival) {
-        List<Performance> performances = festival.getPerformances();
-        performances.forEach((performance) -> {
-            performanceService.setPerformanceFestivalFieldToNull(performance);
-        });
     }
 
     public Festival updateFestival(int festivalId, FestivalRequest festivalRequest) {
@@ -143,6 +135,13 @@ public class FestivalService {
             festival.setCreatedAt(LocalDateTime.now());
         }
         festival.setUpdatedAt(LocalDateTime.now());
+    }
+
+    private void setAssociatedPerformancesFestivalToNull(Festival festival) {
+        List<Performance> performances = festival.getPerformances();
+        performances.forEach((performance) -> {
+            performanceService.setPerformanceFestivalFieldToNull(performance);
+        });
     }
 
 }
