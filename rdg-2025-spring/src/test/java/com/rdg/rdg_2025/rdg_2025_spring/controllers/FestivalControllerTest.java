@@ -55,8 +55,6 @@ public class FestivalControllerTest {
         );
     }
 
-
-
     @Nested
     @DisplayName("addNewFestival controller tests")
     class AddNewFestivalControllerTests {
@@ -221,7 +219,6 @@ public class FestivalControllerTest {
         @WithMockUser(roles="ADMIN")
         void testEmptyNameResponds400BadRequest() throws Exception {
             // Arrange
-
             // Act & Assert
             mockMvc.perform(post("/festivals")
                             .contentType(MediaType.APPLICATION_JSON)

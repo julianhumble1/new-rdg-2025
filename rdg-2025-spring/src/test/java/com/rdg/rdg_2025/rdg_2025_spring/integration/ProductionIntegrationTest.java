@@ -74,19 +74,17 @@ public class ProductionIntegrationTest {
         userToken = "Bearer " + jwtUtils.generateJwtToken(userAuthentication);
     }
 
-    @BeforeEach
-    public void addVenuesToDatabase(@Autowired VenueRepository venueRepository) {
-
-        testVenue = new Venue("Test Venue 1", null, null, null, null, null);
-        venueRepository.save(testVenue);
-        testVenueId = testVenue.getId();
-
-    }
-
     @AfterAll
     public static void destroyUsers(@Autowired UserRepository userRepository, @Autowired VenueRepository venueRepository) {
         userRepository.deleteAll();
         venueRepository.deleteAll();
+    }
+
+    @BeforeEach
+    public void addVenuesToDatabase(@Autowired VenueRepository venueRepository) {
+        testVenue = new Venue("Test Venue 1", null, null, null, null, null);
+        venueRepository.save(testVenue);
+        testVenueId = testVenue.getId();
     }
 
     @Nested

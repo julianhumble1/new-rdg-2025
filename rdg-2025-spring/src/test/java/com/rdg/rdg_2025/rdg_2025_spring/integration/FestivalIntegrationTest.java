@@ -69,6 +69,12 @@ public class FestivalIntegrationTest {
         userToken = "Bearer " + jwtUtils.generateJwtToken(userAuthentication);
     }
 
+    @AfterAll
+    public static void destroyUsers(@Autowired UserRepository userRepository, @Autowired VenueRepository venueRepository) {
+        userRepository.deleteAll();
+        venueRepository.deleteAll();
+    }
+
     @BeforeEach
     public void addVenuesToDatabase(@Autowired VenueRepository venueRepository) {
 
@@ -77,13 +83,6 @@ public class FestivalIntegrationTest {
         testVenueId = testVenue.getId();
 
     }
-
-    @AfterAll
-    public static void destroyUsers(@Autowired UserRepository userRepository, @Autowired VenueRepository venueRepository) {
-        userRepository.deleteAll();
-        venueRepository.deleteAll();
-    }
-
 
     @Nested
     @DisplayName("POST add new festival integration tests")
@@ -523,8 +522,8 @@ public class FestivalIntegrationTest {
         @Autowired
         private ProductionRepository productionRepository;
 
-        Festival testFestival;
-        int testFestivalId;
+        private Festival testFestival;
+        private int testFestivalId;
 
         @BeforeEach
         void beforeEach() {
@@ -665,13 +664,13 @@ public class FestivalIntegrationTest {
     class UpdateFestivalIntegrationTests {
 
         private Festival testFestival;
-        int testFestivalId;
+        private int testFestivalId;
 
         private Venue testVenue2;
-        int testVenue2Id;
+        private int testVenue2Id;
 
         @Autowired
-        VenueRepository venueRepository;
+        private VenueRepository venueRepository;
 
         @BeforeEach
         void beforeEach() {

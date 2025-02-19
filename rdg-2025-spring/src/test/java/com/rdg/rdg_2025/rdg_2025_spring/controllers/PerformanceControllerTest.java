@@ -36,13 +36,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class PerformanceControllerTest {
 
     @Autowired
-    MockMvc mockMvc;
+    private MockMvc mockMvc;
 
     @MockitoBean
-    PerformanceService performanceService;
+    private PerformanceService performanceService;
 
     @InjectMocks
-    PerformanceController performanceController;
+    private PerformanceController performanceController;
 
     @Autowired
     private WebApplicationContext context;

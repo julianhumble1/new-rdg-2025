@@ -21,7 +21,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -368,17 +367,17 @@ public class VenueIntegrationTest {
         @Autowired
         private PerformanceRepository performanceRepository;
 
-        Venue testVenue;
-        int testVenueId;
+        private Venue testVenue;
+        private int testVenueId;
 
-        Production testProduction;
-        int testProductionId;
+        private Production testProduction;
+        private int testProductionId;
 
-        Festival testFestival;
-        int testFestivalId;
+        private Festival testFestival;
+        private int testFestivalId;
 
-        Performance testPerformance;
-        int testPerformanceId;
+        private Performance testPerformance;
+        private int testPerformanceId;
 
         @BeforeEach
         public void populateDatabase() {
@@ -545,89 +544,92 @@ public class VenueIntegrationTest {
     @DisplayName("GET getVenueById integration tests")
     class GetVenueByIdIntegrationTests {
 
-        @BeforeEach
-        public void setup() {
-            venueRepository.deleteAll();
-        }
+        private Venue testVenue;
+        private int testVenueId;
 
-        @AfterEach
-        public void cleanup() {
-            venueRepository.deleteAll();
+        @Autowired
+        private ProductionRepository productionRepository;
+
+        @Autowired
+        private FestivalRepository festivalRepository;
+
+        @BeforeEach
+        void addVenue() {
+            testVenue = new Venue("Test Venue", "Test Notes", "Test Postcode", "Test Address", "Test Town", "Test URL");
+            venueRepository.save(testVenue);
+            testVenueId = testVenue.getId();
         }
 
         @Test
         void testSuccessfulGetReturns200() throws Exception {
             // Arrange
-            Venue testVenue = new Venue("Test Venue", "Test Notes", "Test Postcode", "Test Address", "Test Town", "Test URL");
-            venueRepository.save(testVenue);
             // Act & Assert
-            mockMvc.perform(get("/venues/" + testVenue.getId()))
+            mockMvc.perform(get("/venues/" + testVenueId))
                     .andExpect(status().isOk());
         }
 
         @Test
         void testSuccessfulGetReturnsExpectedVenue() throws Exception {
             // Arrange
-            Venue testVenue = new Venue("Test Venue", "Test Notes", "Test Postcode", "Test Address", "Test Town", "Test URL");
-            venueRepository.save(testVenue);
             // Act & Assert
-            mockMvc.perform(get("/venues/" + testVenue.getId()))
+            mockMvc.perform(get("/venues/" + testVenueId))
                     .andExpect(jsonPath("$.venue.name").value("Test Venue"));
         }
 
         @Test
         void testSuccessfulGetReturnsProductionsArray() throws Exception {
             // Arrange
-            Venue testVenue = new Venue("Test Venue", "Test Notes", "Test Postcode", "Test Address", "Test Town", "Test URL");
-            venueRepository.save(testVenue);
             // Act & Assert
-            mockMvc.perform(get("/venues/" + testVenue.getId()))
+            mockMvc.perform(get("/venues/" + testVenueId))
                     .andExpect(jsonPath("$.productions").isArray());
         }
 
         @Test
         void testSuccessfulGetReturnsExpectedProductionInArray() throws Exception {
             // Arrange
-            Venue testVenue = new Venue("Test Venue", "Test Notes", "Test Postcode", "Test Address", "Test Town", "Test URL");
             Production testProduction = new Production(
                     "Test Production", testVenue, null, null, null, false, false, null
             );
-            testVenue.setProductions(Arrays.asList(testProduction));
+            productionRepository.save(testProduction);
+
+            List<Production> productionList = new ArrayList<>();
+            productionList.add(testProduction);
+            testVenue.setProductions(productionList);
             venueRepository.save(testVenue);
             // Act & Assert
-            mockMvc.perform(get("/venues/" + testVenue.getId()))
+            mockMvc.perform(get("/venues/" + testVenueId))
                     .andExpect(jsonPath("$.productions[0].name").value("Test Production"));
         }
 
         @Test
         void testSuccessfulGetReturnsFestivalsArray() throws Exception {
             // Arrange
-            Venue testVenue = new Venue("Test Venue", "Test Notes", "Test Postcode", "Test Address", "Test Town", "Test URL");
-            venueRepository.save(testVenue);
             // Act & Assert
-            mockMvc.perform(get("/venues/" + testVenue.getId()))
+            mockMvc.perform(get("/venues/" + testVenueId))
                     .andExpect(jsonPath("$.festivals").isArray());
         }
 
         @Test
         void testSuccessfulGetReturnsExpectedFestivalInArray() throws Exception {
             // Arrange
-            Venue testVenue = new Venue("Test Venue", "Test Notes", "Test Postcode", "Test Address", "Test Town", "Test URL");
             Festival testFestival = new Festival("Test Festival", testVenue, 2025, 1, null);
-            testVenue.setFestivals(Arrays.asList(testFestival));
+            festivalRepository.save(testFestival);
+
+            List<Festival> festivalList = new ArrayList<>();
+            festivalList.add(testFestival);
+            testVenue.setFestivals(festivalList);
             venueRepository.save(testVenue);
             // Act & Assert
-            mockMvc.perform(get("/venues/" + testVenue.getId()))
+            mockMvc.perform(get("/venues/" + testVenueId))
                     .andExpect(jsonPath("$.festivals[0].name").value("Test Festival"));
         }
 
         @Test
         void testNonExistentVenueIdResponds404() throws Exception {
             // Arrange
-            Venue testVenue = new Venue("Test Venue", "Test Notes", "Test Postcode", "Test Address", "Test Town", "Test URL");
             venueRepository.save(testVenue);
             // Act & Assert
-            mockMvc.perform(get("/venues/" + (testVenue.getId() - 1)))
+            mockMvc.perform(get("/venues/" + (testVenueId - 1)))
                     .andExpect(status().isNotFound());
         }
 
@@ -644,29 +646,24 @@ public class VenueIntegrationTest {
     @DisplayName("PATCH updateVenue integration tests")
     class UpdateVenueIntegrationTests {
 
-        static Venue existingVenue1;
-        static Venue existingVenue2;
+        private Venue testVenue;
+        private int testVenueId;
 
-        @BeforeAll
-        static void beforeAll(@Autowired VenueRepository venueRepository) {
+        @BeforeEach
+        void beforeAll(@Autowired VenueRepository venueRepository) {
 
             venueRepository.deleteAll();
 
-            existingVenue1 = new Venue("Test Venue", "Test Notes", "Test Postcode", "Test Address", "Test Town", "www.test.com");
-            existingVenue2 = new Venue("Another Test Venue", null, null, null, null, null);
-            venueRepository.save(existingVenue1);
-            venueRepository.save(existingVenue2);
-
+            testVenue = new Venue("Test Venue", "Test Notes", "Test Postcode", "Test Address", "Test Town", "www.test.com");
+            venueRepository.save(testVenue);
+            testVenueId = testVenue.getId();
         }
-
-        @AfterAll
-        static void afterAll(@Autowired VenueRepository venueRepository) { venueRepository.deleteAll();}
 
         @Test
         void testFullDetailsWithAdminTokenResponds200() throws Exception {
             // Arrange
             // Act & Assert
-            mockMvc.perform(patch("/venues/" + existingVenue1.getId())
+            mockMvc.perform(patch("/venues/" + testVenueId)
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", adminToken)
                             .content(
@@ -687,7 +684,7 @@ public class VenueIntegrationTest {
         void testFullDetailsWithAdminTokenRespondsExpectedVenueObject() throws Exception {
             // Arrange
             // Act & Assert
-            mockMvc.perform(patch("/venues/" + existingVenue1.getId())
+            mockMvc.perform(patch("/venues/" + testVenueId)
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", adminToken)
                             .content(
@@ -714,7 +711,7 @@ public class VenueIntegrationTest {
         void testOnlyNameResponds200() throws Exception {
             // Arrange
             // Act & Assert
-            mockMvc.perform(patch("/venues/" + existingVenue1.getId())
+            mockMvc.perform(patch("/venues/" + testVenueId)
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", adminToken)
                             .content(
@@ -728,7 +725,7 @@ public class VenueIntegrationTest {
         void testEmptyNameResponds400() throws Exception {
             // Arrange
             // Act & Assert
-            mockMvc.perform(patch("/venues/" + existingVenue1.getId())
+            mockMvc.perform(patch("/venues/" + testVenueId)
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", adminToken)
                             .content(
@@ -749,7 +746,7 @@ public class VenueIntegrationTest {
         void testMissingNameResponds400() throws Exception {
             // Arrange
             // Act & Assert
-            mockMvc.perform(patch("/venues/" + existingVenue1.getId())
+            mockMvc.perform(patch("/venues/" + testVenueId)
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", adminToken)
                             .content(
@@ -769,7 +766,7 @@ public class VenueIntegrationTest {
         void testNonExistentVenueIdResponds404() throws Exception {
             // Arrange
             // Act & Assert
-            mockMvc.perform(patch("/venues/" + (existingVenue1.getId() -1))
+            mockMvc.perform(patch("/venues/" + (testVenueId -1))
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", adminToken)
                             .content(
@@ -811,7 +808,7 @@ public class VenueIntegrationTest {
         void testMissingTokenResponds401() throws Exception {
             // Arrange
             // Act & Assert
-            mockMvc.perform(patch("/venues/" + existingVenue1.getId())
+            mockMvc.perform(patch("/venues/" + testVenueId)
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(
                                     "{ " +
@@ -830,7 +827,7 @@ public class VenueIntegrationTest {
         void testBadTokenResponds401() throws Exception {
             // Arrange
             // Act & Assert
-            mockMvc.perform(patch("/venues/" + existingVenue1.getId())
+            mockMvc.perform(patch("/venues/" + testVenueId)
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", "Bad token")
                             .content(
@@ -851,7 +848,7 @@ public class VenueIntegrationTest {
         void testUserTokenResponds403() throws Exception {
             // Arrange
             // Act & Assert
-            mockMvc.perform(patch("/venues/" + existingVenue1.getId())
+            mockMvc.perform(patch("/venues/" + testVenueId)
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", userToken)
                             .content(
