@@ -24,8 +24,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.*;
@@ -480,21 +479,21 @@ public class ProductionServiceTest {
     class DeleteProductionServiceTests {
 
         @Test
-        void testProductionDoesNotExistReturnsFalse() {
+        void testProductionDoesNotExistThrowsEntityNotFoundException() {
             // Arrange
-            when(productionRepository.existsById(anyInt())).thenReturn(false);
-            // Act
-            boolean result = productionService.deleteProductionById(1);
-            // Assert
-            assertEquals(false, result);
+            when(productionRepository.findById(anyInt())).thenThrow(new EntityNotFoundException("no production with this id"));
+            // Act & Assert
+            assertThrows(EntityNotFoundException.class, () -> {
+                productionService.deleteProductionById(1);
+            });
         }
 
         @Test
-        void testProductionExistsDataAccessExceptionThrowsDatabaseException() {
+        void testGetProductionDataAccessExceptionThrowsDatabaseException() {
             // Arrange
-            when(productionRepository.existsById(anyInt())).thenThrow(new DataAccessException("Data Access Exception"){});
+            when(productionRepository.findById(anyInt())).thenThrow(new DataAccessException("Data Access Exception"){});
             // Act & Assert
-            DatabaseException ex = assertThrows(DatabaseException.class, () -> {
+            assertThrows(DatabaseException.class, () -> {
                 productionService.deleteProductionById(1);
             });
         }
@@ -502,18 +501,16 @@ public class ProductionServiceTest {
         @Test
         void testProductionExistsThenDeleteIsCalled() {
             // Arrange
-            when(productionRepository.existsById(anyInt())).thenReturn(true);
             when(productionRepository.findById(anyInt())).thenReturn(Optional.of(testProduction));
             // Act
             productionService.deleteProductionById(1);
             // Assert
-            verify(productionRepository, atLeastOnce()).deleteById(1);
+            verify(productionRepository, atLeastOnce()).delete(any());
         }
 
         @Test
         void testProductionExistsThenRemoveProductionFromVenueIsCalled() {
             // Arrange
-            when(productionRepository.existsById(anyInt())).thenReturn(true);
             when(productionRepository.findById(anyInt())).thenReturn(Optional.of(testProduction));
             // Act
             productionService.deleteProductionById(1);
@@ -524,11 +521,10 @@ public class ProductionServiceTest {
         @Test
         void testDeleteDataAccessExceptionThrowsDatabaseException() {
             // Arrange
-            when(productionRepository.existsById(anyInt())).thenReturn(true);
             when(productionRepository.findById(anyInt())).thenReturn(Optional.of(testProduction));
-            doThrow(new DataAccessException("Data access exception") {}).when(productionRepository).deleteById(anyInt());
+            doThrow(new DataAccessException("Data access exception") {}).when(productionRepository).delete(any());
             // Act & Assert
-            DatabaseException ex = assertThrows(DatabaseException.class, () -> {
+            assertThrows(DatabaseException.class, () -> {
                 productionService.deleteProductionById(1);
             });
         }
@@ -536,24 +532,22 @@ public class ProductionServiceTest {
         @Test
         void testDeleteDataPersistenceExceptionThrowsDatabaseException() {
             // Arrange
-            when(productionRepository.existsById(anyInt())).thenReturn(true);
             when(productionRepository.findById(anyInt())).thenReturn(Optional.of(testProduction));
-            doThrow(new PersistenceException("Data persistence exception") {}).when(productionRepository).deleteById(anyInt());
+            doThrow(new PersistenceException("Data persistence exception") {}).when(productionRepository).delete(any());
             // Act & Assert
-            DatabaseException ex = assertThrows(DatabaseException.class, () -> {
+            assertThrows(DatabaseException.class, () -> {
                 productionService.deleteProductionById(1);
             });
         }
 
         @Test
-        void testSuccessfulDeletionReturnsTrue() {
+        void testSuccessfulDeletionDoesNotThrowException() {
             // Arrange
-            when(productionRepository.existsById(anyInt())).thenReturn(true);
             when(productionRepository.findById(anyInt())).thenReturn(Optional.of(testProduction));
-            // Act
-            boolean result = productionService.deleteProductionById(1);
-            // Assert
-            assertEquals(true, result);
+            // Act & Assert
+            assertDoesNotThrow(() -> {
+                productionService.deleteProductionById(1);
+            });
         }
 
     }

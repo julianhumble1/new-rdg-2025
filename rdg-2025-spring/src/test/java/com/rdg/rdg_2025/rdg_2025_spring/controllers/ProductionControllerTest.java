@@ -24,8 +24,7 @@ import java.util.ArrayList;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -751,7 +750,7 @@ public class ProductionControllerTest {
         @WithMockUser(roles="ADMIN")
         void testServiceThrowsDatabaseExceptionResponds500() throws Exception {
             // Arrange
-            when(productionService.deleteProductionById(anyInt())).thenThrow(new DatabaseException("Database exception"));
+            doThrow(DatabaseException.class).when(productionService).deleteProductionById(anyInt());
             // Act & Assert
             mockMvc.perform(delete("/productions/1"))
                     .andExpect(status().isInternalServerError());
@@ -759,9 +758,9 @@ public class ProductionControllerTest {
 
         @Test
         @WithMockUser(roles="ADMIN")
-        void testProductionNotFoundResponds404() throws Exception {
+        void testServiceThrowsEntityNotFoundResponds404() throws Exception {
             // Arrange
-            when(productionService.deleteProductionById(anyInt())).thenReturn(false);
+            doThrow(EntityNotFoundException.class).when(productionService).deleteProductionById(anyInt());
             // Act & Assert
             mockMvc.perform(delete("/productions/1"))
                     .andExpect(status().isNotFound());
@@ -771,7 +770,6 @@ public class ProductionControllerTest {
         @WithMockUser(roles="ADMIN")
         void testSuccessfulDeletionResponds204() throws Exception {
             // Arrange
-            when(productionService.deleteProductionById(anyInt())).thenReturn(true);
             // Act & Assert
             mockMvc.perform(delete("/productions/1"))
                     .andExpect(status().isNoContent());

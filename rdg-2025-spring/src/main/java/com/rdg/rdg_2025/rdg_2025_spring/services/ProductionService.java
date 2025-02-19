@@ -76,19 +76,10 @@ public class ProductionService {
         return saveProductionToDatabase(production);
     }
 
-    public boolean deleteProductionById(int productionId) {
-        try {
-            if (productionRepository.existsById(productionId)) {
-                Production production = getProductionById(productionId);
-                venueService.removeProductionFromVenueProductionList(production);
-                productionRepository.deleteById(productionId);
-                return true;
-            } else {
-                return false;
-            }
-        } catch (DataAccessException | PersistenceException ex) {
-            throw new DatabaseException(ex.getMessage(), ex);
-        }
+    public void deleteProductionById(int productionId) {
+        Production production = getProductionById(productionId);
+        venueService.removeProductionFromVenueProductionList(production);
+        deleteProductionInDatabase(production);
     }
 
     // ADDITIONAL METHODS
@@ -161,4 +152,11 @@ public class ProductionService {
 
     }
 
+    private void deleteProductionInDatabase(Production production) {
+        try {
+            productionRepository.delete(production);
+        } catch (DataAccessException | PersistenceException ex) {
+            throw new DatabaseException(ex.getMessage(), ex);
+        }
+    }
 }

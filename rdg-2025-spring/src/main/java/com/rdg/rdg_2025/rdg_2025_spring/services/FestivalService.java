@@ -66,7 +66,7 @@ public class FestivalService {
         Festival festival = getFestivalById(festivalId);
         venueService.removeFestivalFromVenueFestivalList(festival);
         setAssociatedPerformancesFestivalToNull(festival);
-        deleteFestival(festival);
+        deleteFestivalInDatabase(festival);
     }
 
     public Festival updateFestival(int festivalId, FestivalRequest festivalRequest) {
@@ -137,7 +137,7 @@ public class FestivalService {
         });
     }
 
-    private void deleteFestival(Festival festival) {
+    private void deleteFestivalInDatabase(Festival festival) {
         try {
             festivalRepository.delete(festival);
         } catch (DataAccessException | PersistenceException ex) {
