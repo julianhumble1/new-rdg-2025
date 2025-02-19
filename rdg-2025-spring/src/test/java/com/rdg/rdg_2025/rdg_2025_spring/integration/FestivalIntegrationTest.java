@@ -4,7 +4,6 @@ import com.rdg.rdg_2025.rdg_2025_spring.models.*;
 import com.rdg.rdg_2025.rdg_2025_spring.repository.*;
 import com.rdg.rdg_2025.rdg_2025_spring.security.jwt.JwtUtils;
 import com.rdg.rdg_2025.rdg_2025_spring.utils.AuthTestUtils;
-import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +17,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -46,8 +44,8 @@ public class FestivalIntegrationTest {
     private static User testUser;
     private static String userToken;
 
-    private static Venue testVenue1;
-    private static Venue testVenue2;
+    private Venue testVenue;
+    private int testVenueId;
 
     @BeforeAll
     public static void setupUsersAndTokens(@Autowired UserRepository userRepository,
@@ -71,16 +69,13 @@ public class FestivalIntegrationTest {
         userToken = "Bearer " + jwtUtils.generateJwtToken(userAuthentication);
     }
 
-    @BeforeAll
-    public static void addVenuesToDatabase(@Autowired VenueRepository venueRepository) {
+    @BeforeEach
+    public void addVenuesToDatabase(@Autowired VenueRepository venueRepository) {
 
-        venueRepository.deleteAll();
+        testVenue = new Venue("Test Venue 1", null, null, null, null, null);
+        venueRepository.save(testVenue);
+        testVenueId = testVenue.getId();
 
-        testVenue1 = new Venue("Test Venue 1", null, null, null, null, null);
-        testVenue2 = new Venue("Test Venue 2", "Test Notes", "Test Postcode", "Test Address", "Test Town", "www.test.com");
-
-        venueRepository.save(testVenue1);
-        venueRepository.save(testVenue2);
     }
 
     @AfterAll
@@ -131,7 +126,6 @@ public class FestivalIntegrationTest {
         @Test
         void testFullProductionDetailsWithValidVenueReturns201() throws Exception {
             // Arrange
-            int testVenueId = testVenue1.getId();
 
             // Act & Assert
             mockMvc.perform(post("/festivals")
@@ -152,7 +146,6 @@ public class FestivalIntegrationTest {
         @Test
         void testProductionInDatabaseFollowingSuccessfulAdd() throws Exception {
             // Arrange
-            int testVenueId = testVenue1.getId();
             List<Festival> festivals = festivalRepository.findAll();
             int startingLength = festivals.size();
             // Act
@@ -192,7 +185,6 @@ public class FestivalIntegrationTest {
         @Test
         void testInvalidVenueIdResponds404BadRequest() throws Exception {
             // Arrange
-            int testVenueId = testVenue1.getId();
             // Act & Assert
             mockMvc.perform(post("/festivals")
                             .contentType(MediaType.APPLICATION_JSON)
@@ -416,17 +408,22 @@ public class FestivalIntegrationTest {
         }
 
         @Test
-        void testSuccessfulGetWithFestivalsInDatabaseRespondsFestivalsArray() throws Exception {
+        void testSuccessfulGetWithFestivalsInDatabaseRespondsExpectedFestivalsArray() throws Exception {
             // Arrange
-            Venue managedTestVenue1 = venueRepository.findById(testVenue1.getId()).orElseThrow(() -> new RuntimeException("Venue not found"));
-
-            Festival testFestival = new Festival("Test Festival", managedTestVenue1, 2025, 1, "Test Description");
+            Festival testFestival = new Festival("Test Festival", testVenue, 2025, 1, "Test Description");
             festivalRepository.save(testFestival);
+
+            List<Festival> festivalList = new ArrayList<>();
+            festivalList.add(testFestival);
+            testVenue.setFestivals(festivalList);
+
+            venueRepository.save(testVenue);
 
             // Act & Assert
             mockMvc.perform(get("/festivals")
                             .header("Authorization", adminToken))
-                    .andExpect(jsonPath("$.festivals").isArray());
+                    .andExpect(jsonPath("$.festivals").isArray())
+                    .andExpect(jsonPath("$.festivals[0].name").value("Test Festival"));
         }
 
         @Test
@@ -463,28 +460,34 @@ public class FestivalIntegrationTest {
         private VenueRepository venueRepository;
 
         private Festival testFestival;
+        private int testFestivalId;
 
         @BeforeEach
         void beforeEach() {
-            Venue managedTestVenue1 = venueRepository.findById(testVenue1.getId()).orElseThrow(() -> new RuntimeException("Venue not found"));
-
-            testFestival = new Festival("Test Festival", managedTestVenue1, 2025, 1, "Test Description");
+            testFestival = new Festival("Test Festival", testVenue, 2025, 1, "Test Description");
             festivalRepository.save(testFestival);
+            testFestivalId = testFestival.getId();
+
+            List<Festival> festivalList = new ArrayList<>();
+            festivalList.add(testFestival);
+            testVenue.setFestivals(festivalList);
+
+            venueRepository.save(testVenue);
         }
 
         @Test
         void testSuccessfulGetResponds200() throws Exception {
             // Act & Assert
-            mockMvc.perform(get("/festivals/" + testFestival.getId()))
+            mockMvc.perform(get("/festivals/" + testFestivalId))
                     .andExpect(status().isOk());
         }
 
         @Test
         void testSuccessfulGetRespondsExpectedFestivalObject() throws Exception {
             // Act & Assert
-            mockMvc.perform(get("/festivals/" + testFestival.getId()))
+            mockMvc.perform(get("/festivals/" + testFestivalId))
                     .andExpect(jsonPath("$.festival.name").value("Test Festival"))
-                    .andExpect(jsonPath("$.festival.id").value(testFestival.getId()))
+                    .andExpect(jsonPath("$.festival.id").value(testFestivalId))
                     .andExpect(jsonPath("$.festival.year").value(2025))
                     .andExpect(jsonPath("$.festival.month").value(1))
                     .andExpect(jsonPath("$.festival.description").value("Test Description"))
@@ -494,7 +497,7 @@ public class FestivalIntegrationTest {
         @Test
         void testNonExistentFestivalIdResponds404() throws Exception {
             // Act & Assert
-            mockMvc.perform(get("/festivals/" + (testFestival.getId() + 1)))
+            mockMvc.perform(get("/festivals/" + (testFestivalId + 1)))
                     .andExpect(status().isNotFound());
         }
 
@@ -527,7 +530,7 @@ public class FestivalIntegrationTest {
         void beforeEach() {
             testFestival = new Festival(
                     "Existing Festival",
-                    testVenue1,
+                    testVenue,
                     2025,
                     1,
                     "Existing Festival Description"
@@ -535,12 +538,12 @@ public class FestivalIntegrationTest {
 
             List<Festival> festivalList = new ArrayList<>();
             festivalList.add(testFestival);
-            testVenue1.setFestivals(festivalList);
+            testVenue.setFestivals(festivalList);
 
             festivalRepository.save(testFestival);
             testFestivalId = testFestival.getId();
 
-            venueRepository.save(testVenue1);
+            venueRepository.save(testVenue);
         }
 
         @Test
@@ -566,13 +569,13 @@ public class FestivalIntegrationTest {
         @Test
         void testAssociatedVenueNoLongerReferencesFestivalFollowingDeletion() throws Exception {
             // Arrange
-            Venue preVenue = venueRepository.findById(testVenue1.getId()).orElseThrow(() -> new RuntimeException("No venue with this id"));
+            Venue preVenue = venueRepository.findById(testVenue.getId()).orElseThrow(() -> new RuntimeException("No venue with this id"));
             assertTrue(preVenue.getFestivals().contains(testFestival));
             // Act
             mockMvc.perform(delete("/festivals/" + testFestivalId)
                     .header("Authorization", adminToken));
             // Assert
-            Venue postVenue = venueRepository.findById(testVenue1.getId()).orElseThrow(() -> new RuntimeException("No venue with this id"));
+            Venue postVenue = venueRepository.findById(testVenue.getId()).orElseThrow(() -> new RuntimeException("No venue with this id"));
             assertFalse(postVenue.getFestivals().contains(testFestival));
         }
 
@@ -582,7 +585,7 @@ public class FestivalIntegrationTest {
             // Arrange
             Production production = new Production(
                     "Test Production",
-                    testVenue1,
+                    testVenue,
                     "Test Author",
                     "Test Description",
                     LocalDateTime.now(),
@@ -593,7 +596,7 @@ public class FestivalIntegrationTest {
             productionRepository.save(production);
 
             Performance associatedPerformance = new Performance();
-            associatedPerformance.setVenue(testVenue1);
+            associatedPerformance.setVenue(testVenue);
             associatedPerformance.setProduction(production);
             associatedPerformance.setFestival(testFestival);
             associatedPerformance.setTime(LocalDateTime.now());
@@ -661,23 +664,30 @@ public class FestivalIntegrationTest {
     @DisplayName("PATCH update festival integration tests")
     class UpdateFestivalIntegrationTests {
 
-        private Festival existingFestival;
-        int existingFestivalId;
+        private Festival testFestival;
+        int testFestivalId;
+
+        private Venue testVenue2;
+        int testVenue2Id;
 
         @Autowired
         VenueRepository venueRepository;
 
-        Venue managedTestVenue1;
-        Venue managedTestVenue2;
-
         @BeforeEach
         void beforeEach() {
-            managedTestVenue1 = venueRepository.findById(testVenue1.getId()).orElseThrow(() -> new RuntimeException("Venue not found"));
-            managedTestVenue2 = venueRepository.findById(testVenue2.getId()).orElseThrow(() -> new RuntimeException("no venue with this id"));
+            testVenue2 = new Venue("Test Venue 2", "Test Notes", "Test Postcode", "Test Address", "Test Town", "www.test.com");
+            venueRepository.save(testVenue2);
+            testVenue2Id = testVenue2.getId();
 
-            existingFestival = new Festival("Test Festival", managedTestVenue1, 2025, 1, "Test Description");
-            festivalRepository.save(existingFestival);
-            existingFestivalId = existingFestival.getId();
+            testFestival = new Festival("Test Festival", testVenue, 2025, 1, "Test Description");
+            festivalRepository.save(testFestival);
+            testFestivalId = testFestival.getId();
+
+            List<Festival> festivalList = new ArrayList<>();
+            festivalList.add(testFestival);
+            testFestivalId = testFestival.getId();
+            testVenue.setFestivals(festivalList);
+            venueRepository.save(testVenue);
 
         }
 
@@ -685,13 +695,13 @@ public class FestivalIntegrationTest {
         void testSuccessfulUpdateResponds200() throws Exception {
             // Arrange
             // Act & Assert
-            mockMvc.perform(patch("/festivals/" + existingFestivalId)
+            mockMvc.perform(patch("/festivals/" + testFestivalId)
                             .header("Authorization", adminToken)
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(
                                     "{" +
                                             "\"name\": \"Updated Test Festival\"," +
-                                            "\"venueId\": "+ managedTestVenue2.getId() +", " +
+                                            "\"venueId\": "+ testVenue2Id +", " +
                                             "\"year\": 2026, " +
                                             "\"month\": 2, " +
                                             "\"description\": \"Updated Test Description\"" +
@@ -705,13 +715,13 @@ public class FestivalIntegrationTest {
         void testSuccessfulUpdateRespondsExpectedFestivalObject() throws Exception {
             // Arrange
             // Act & Assert
-            mockMvc.perform(patch("/festivals/" + existingFestivalId)
+            mockMvc.perform(patch("/festivals/" + testFestivalId)
                             .header("Authorization", adminToken)
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(
                                     "{" +
                                             "\"name\": \"Updated Test Festival\"," +
-                                            "\"venueId\": "+ managedTestVenue2.getId() +", " +
+                                            "\"venueId\": "+ testVenue2Id +", " +
                                             "\"year\": 2026, " +
                                             "\"month\": 2, " +
                                             "\"description\": \"Updated Test Description\"" +
@@ -729,20 +739,20 @@ public class FestivalIntegrationTest {
         void testFestivalInDatabaseHasBeenUpdated() throws Exception {
             // Arrange
             // Act
-            mockMvc.perform(patch("/festivals/" + existingFestivalId)
+            mockMvc.perform(patch("/festivals/" + testFestivalId)
                             .header("Authorization", adminToken)
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(
                                     "{" +
                                             "\"name\": \"Updated Test Festival\"," +
-                                            "\"venueId\": "+ managedTestVenue2.getId() +", " +
+                                            "\"venueId\": "+ testVenue2Id +", " +
                                             "\"year\": 2026, " +
                                             "\"month\": 2, " +
                                             "\"description\": \"Updated Test Description\"" +
                                             "}"
                             ));
             // Assert
-            Festival festival = festivalRepository.findById(existingFestivalId).orElseThrow(() -> new RuntimeException("festival can't be found"));
+            Festival festival = festivalRepository.findById(testFestivalId).orElseThrow(() -> new RuntimeException("festival can't be found"));
             assertEquals("Updated Test Festival", festival.getName());
         }
 
@@ -750,13 +760,13 @@ public class FestivalIntegrationTest {
         void testNonExistentVenueIdResponds404() throws Exception {
             // Arrange
             // Act & Assert
-            mockMvc.perform(patch("/festivals/" + existingFestivalId)
+            mockMvc.perform(patch("/festivals/" + testFestivalId)
                     .header("Authorization", adminToken)
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(
                             "{" +
                                     "\"name\": \"Updated Test Festival\"," +
-                                    "\"venueId\": "+ (managedTestVenue2.getId() + 1) +", " +
+                                    "\"venueId\": "+ (testVenue2Id + 1) +", " +
                                     "\"year\": 2026, " +
                                     "\"month\": 2, " +
                                     "\"description\": \"Updated Test Description\"" +
@@ -770,13 +780,13 @@ public class FestivalIntegrationTest {
         void testNonExistentFestivalIdResponds404() throws Exception {
             // Arrange
             // Act & Assert
-            mockMvc.perform(patch("/festivals/" + (existingFestivalId + 1))
+            mockMvc.perform(patch("/festivals/" + (testFestivalId + 1))
                             .header("Authorization", adminToken)
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(
                                     "{" +
                                             "\"name\": \"Updated Test Festival\"," +
-                                            "\"venueId\": "+ managedTestVenue2.getId() +", " +
+                                            "\"venueId\": "+ testVenue2Id +", " +
                                             "\"year\": 2026, " +
                                             "\"month\": 2, " +
                                             "\"description\": \"Updated Test Description\"" +
@@ -796,7 +806,7 @@ public class FestivalIntegrationTest {
                             .content(
                                     "{" +
                                             "\"name\": \"Updated Test Festival\"," +
-                                            "\"venueId\": "+ managedTestVenue2.getId() +", " +
+                                            "\"venueId\": "+ testVenue2Id +", " +
                                             "\"year\": 2026, " +
                                             "\"month\": 2, " +
                                             "\"description\": \"Updated Test Description\"" +
@@ -810,13 +820,13 @@ public class FestivalIntegrationTest {
         void testNameEmptyResponds400() throws Exception {
             // Arrange
             // Act & Assert
-            mockMvc.perform(patch("/festivals/" + existingFestivalId)
+            mockMvc.perform(patch("/festivals/" + testFestivalId)
                             .header("Authorization", adminToken)
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(
                                     "{" +
                                             "\"name\": \"\"," +
-                                            " \"venueId\": 2, " +
+                                            "\"venueId\": "+ testVenue2Id +", " +
                                             "\"year\": 2026, " +
                                             "\"month\": 2, " +
                                             "\"description\": \"Updated Test Description\"" +
@@ -830,12 +840,12 @@ public class FestivalIntegrationTest {
         void testNameMissingResponds400() throws Exception {
             // Arrange
             // Act & Assert
-            mockMvc.perform(patch("/festivals/" + existingFestivalId)
+            mockMvc.perform(patch("/festivals/" + testFestivalId)
                             .header("Authorization", adminToken)
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(
                                     "{" +
-                                            " \"venueId\": 2, " +
+                                            "\"venueId\": "+ testVenue2Id +", " +
                                             "\"year\": 2026, " +
                                             "\"month\": 2, " +
                                             "\"description\": \"Updated Test Description\"" +
@@ -849,7 +859,7 @@ public class FestivalIntegrationTest {
         void testVenueIdNotIntResponds400() throws Exception {
             // Arrange
             // Act & Assert
-            mockMvc.perform(patch("/festivals/" + existingFestivalId)
+            mockMvc.perform(patch("/festivals/" + testFestivalId)
                             .header("Authorization", adminToken)
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(
@@ -869,13 +879,13 @@ public class FestivalIntegrationTest {
         void testYearNotIntResponds400() throws Exception {
             // Arrange
             // Act & Assert
-            mockMvc.perform(patch("/festivals/" + existingFestivalId)
+            mockMvc.perform(patch("/festivals/" + testFestivalId)
                             .header("Authorization", adminToken)
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(
                                     "{" +
                                             "\"name\": \"Updated Test Festival\"," +
-                                            " \"venueId\": 2, " +
+                                            "\"venueId\": "+ testVenue2Id +", " +
                                             "\"year\": \"not an integer\", " +
                                             "\"month\": 2, " +
                                             "\"description\": \"Updated Test Description\"" +
@@ -889,13 +899,13 @@ public class FestivalIntegrationTest {
         void testYearBlankResponds400() throws Exception {
             // Arrange
             // Act & Assert
-            mockMvc.perform(patch("/festivals/" + existingFestivalId)
+            mockMvc.perform(patch("/festivals/" + testFestivalId)
                             .header("Authorization", adminToken)
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(
                                     "{" +
                                             "\"name\": \"Updated Test Festival\"," +
-                                            " \"venueId\": 2, " +
+                                            "\"venueId\": "+ testVenue2Id +", " +
                                             "\"year\": \"\", " +
                                             "\"month\": 2, " +
                                             "\"description\": \"Updated Test Description\"" +
@@ -909,13 +919,13 @@ public class FestivalIntegrationTest {
         void testYearMissingResponds400() throws Exception {
             // Arrange
             // Act & Assert
-            mockMvc.perform(patch("/festivals/" + existingFestivalId)
+            mockMvc.perform(patch("/festivals/" + testFestivalId)
                             .header("Authorization", adminToken)
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(
                                     "{" +
                                             "\"name\": \"Updated Test Festival\"," +
-                                            " \"venueId\": 2, " +
+                                            "\"venueId\": "+ testVenue2Id +", " +
                                             "\"month\": 2, " +
                                             "\"description\": \"Updated Test Description\"" +
                                             "}"
@@ -928,13 +938,13 @@ public class FestivalIntegrationTest {
         void testMonthBelowZeroResponds400() throws Exception {
             // Arrange
             // Act & Assert
-            mockMvc.perform(patch("/festivals/" + existingFestivalId)
+            mockMvc.perform(patch("/festivals/" + testFestivalId)
                             .header("Authorization", adminToken)
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(
                                     "{" +
                                             "\"name\": \"Updated Test Festival\"," +
-                                            " \"venueId\": 2, " +
+                                            "\"venueId\": "+ testVenue2Id +", " +
                                             "\"year\": 2026, " +
                                             "\"month\": -1, " +
                                             "\"description\": \"Updated Test Description\"" +
@@ -948,13 +958,13 @@ public class FestivalIntegrationTest {
         void testMonthAboveTwelveResponds400() throws Exception {
             // Arrange
             // Act & Assert
-            mockMvc.perform(patch("/festivals/" + existingFestivalId)
+            mockMvc.perform(patch("/festivals/" + testFestivalId)
                             .header("Authorization", adminToken)
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(
                                     "{" +
                                             "\"name\": \"Updated Test Festival\"," +
-                                            " \"venueId\": 2, " +
+                                            "\"venueId\": "+ testVenue2Id +", " +
                                             "\"year\": 2026, " +
                                             "\"month\": 13, " +
                                             "\"description\": \"Updated Test Description\"" +
@@ -968,7 +978,7 @@ public class FestivalIntegrationTest {
         void testUpdateWithOnlyMandatoryFieldsResponds200() throws Exception {
             // Arrange
             // Act & Assert
-            mockMvc.perform(patch("/festivals/" + existingFestivalId)
+            mockMvc.perform(patch("/festivals/" + testFestivalId)
                             .header("Authorization", adminToken)
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(
