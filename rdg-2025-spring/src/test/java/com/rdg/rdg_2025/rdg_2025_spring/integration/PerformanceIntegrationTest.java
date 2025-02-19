@@ -181,7 +181,6 @@ public class PerformanceIntegrationTest {
         @Test
         void testFullDetailsSuccessfulAddRespondsExpectedPerformanceObject() throws Exception {
             // Arrange
-
             // Act & Assert
             mockMvc.perform(post("/performances")
                     .contentType(MediaType.APPLICATION_JSON)

@@ -16,13 +16,11 @@ import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.parameters.P;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,8 +47,10 @@ public class ProductionIntegrationTest {
     private static User testUser;
     private static String userToken;
 
-    private static Venue testVenue1;
-    private static Venue testVenue2;
+    private Venue testVenue;
+    private int testVenueId;
+
+
 
     @BeforeAll
     public static void setupUsersAndTokens(@Autowired UserRepository userRepository,
@@ -74,16 +74,13 @@ public class ProductionIntegrationTest {
         userToken = "Bearer " + jwtUtils.generateJwtToken(userAuthentication);
     }
 
-    @BeforeAll
-    public static void addVenuesToDatabase(@Autowired VenueRepository venueRepository) {
+    @BeforeEach
+    public void addVenuesToDatabase(@Autowired VenueRepository venueRepository) {
 
-        venueRepository.deleteAll();
+        testVenue = new Venue("Test Venue 1", null, null, null, null, null);
+        venueRepository.save(testVenue);
+        testVenueId = testVenue.getId();
 
-        testVenue1 = new Venue("Test Venue 1", null, null, null, null, null);
-        testVenue2 = new Venue("Test Venue 2", "Test Notes", "Test Postcode", "Test Address", "Test Town", "www.test.com");
-
-        venueRepository.save(testVenue1);
-        venueRepository.save(testVenue2);
     }
 
     @AfterAll
@@ -172,7 +169,7 @@ public class ProductionIntegrationTest {
                             .content(
                                     "{ " +
                                             "\"name\": \"Test Production\", " +
-                                            "\"venueId\": " + testVenue1.getId() + ", " +
+                                            "\"venueId\": " + testVenueId + ", " +
                                             "\"author\": \"Test Author\", " +
                                             "\"description\": \"Test Description\", " +
                                             "\"auditionDate\": \"2025-10-10T10:00:00\", " +
@@ -199,15 +196,12 @@ public class ProductionIntegrationTest {
 
         @Test
         void testDuplicateVenueNameReturnsNameWithNumberOnEnd() throws Exception {
-
             // Arrange
             Production existingProduction = new Production(
                     "Test Production",
                     null, null, null, null, false, false, null
             );
-
             productionRepository.save(existingProduction);
-
             // Act & Assert
             mockMvc.perform(post("/productions")
                             .contentType(MediaType.APPLICATION_JSON)
@@ -228,16 +222,13 @@ public class ProductionIntegrationTest {
         }
 
         @Test
-        void testDuplicateVenueNameReturnsSlugWithNumberOnEnd() throws Exception {
-
+        void testDuplicateProductionNameReturnsSlugWithNumberOnEnd() throws Exception {
             // Arrange
             Production existingProduction = new Production(
                     "Test Production",
                     null, null, null, null, false, false, null
             );
-
             productionRepository.save(existingProduction);
-
             // Act & Assert
             mockMvc.perform(post("/productions")
                             .contentType(MediaType.APPLICATION_JSON)
@@ -265,7 +256,7 @@ public class ProductionIntegrationTest {
                             .content(
                                     "{ " +
                                             "\"name\": \"Test Production\", " +
-                                            "\"venueId\": " + (testVenue1.getId() - 1) + ", " +
+                                            "\"venueId\": " + (testVenueId - 1) + ", " +
                                             "\"author\": \"Test Author\", " +
                                             "\"description\": \"Test Description\", " +
                                             "\"auditionDate\": \"2025-10-10T10:00:00\", " +
@@ -307,7 +298,7 @@ public class ProductionIntegrationTest {
                             .content(
                                     "{ " +
                                             "\"name\": \"Test Production\", " +
-                                            "\"venueId\": " + testVenue1.getId() + ", " +
+                                            "\"venueId\": " + testVenueId + ", " +
                                             "\"author\": \"Test Author\", " +
                                             "\"description\": \"Test Description\", " +
                                             "\"auditionDate\": \"Bad Date\", " +
@@ -328,7 +319,7 @@ public class ProductionIntegrationTest {
                             .content(
                                     "{ " +
                                             "\"name\": \"Test Production\", " +
-                                            "\"venueId\": " + testVenue1.getId() + ", " +
+                                            "\"venueId\": " + testVenueId + ", " +
                                             "\"author\": \"Test Author\", " +
                                             "\"description\": \"Test Description\", " +
                                             "\"auditionDate\": \"2025-10-10T10:00:00\", " +
@@ -349,7 +340,7 @@ public class ProductionIntegrationTest {
                             .content(
                                     "{ " +
                                             "\"name\": \"Test Production\", " +
-                                            "\"venueId\": " + testVenue1.getId() + ", " +
+                                            "\"venueId\": " + testVenueId + ", " +
                                             "\"author\": \"Test Author\", " +
                                             "\"description\": \"Test Description\", " +
                                             "\"auditionDate\": \"2025-10-10T10:00:00\", " +
@@ -369,7 +360,7 @@ public class ProductionIntegrationTest {
                             .content(
                                     "{ " +
                                             "\"name\": \"Test Production\", " +
-                                            "\"venueId\": " + testVenue1.getId() + ", " +
+                                            "\"venueId\": " + testVenueId + ", " +
                                             "\"author\": \"Test Author\", " +
                                             "\"description\": \"Test Description\", " +
                                             "\"auditionDate\": \"2025-10-10T10:00:00\", " +
@@ -390,7 +381,7 @@ public class ProductionIntegrationTest {
                             .content(
                                     "{ " +
                                             "\"name\": \"Test Production\", " +
-                                            "\"venueId\": " + testVenue1.getId() + ", " +
+                                            "\"venueId\": " + testVenueId + ", " +
                                             "\"author\": \"Test Author\", " +
                                             "\"description\": \"Test Description\", " +
                                             "\"auditionDate\": \"2025-10-10T10:00:00\", " +
@@ -411,7 +402,7 @@ public class ProductionIntegrationTest {
                             .content(
                                     "{ " +
                                             "\"name\": \"Test Production\", " +
-                                            "\"venueId\": " + testVenue1.getId() + ", " +
+                                            "\"venueId\": " + testVenueId + ", " +
                                             "\"author\": \"Test Author\", " +
                                             "\"description\": \"Test Description\", " +
                                             "\"auditionDate\": \"2025-10-10T10:00:00\", " +
@@ -432,6 +423,8 @@ public class ProductionIntegrationTest {
         @Autowired
         private VenueRepository venueRepository;
 
+        private Production testProduction;
+
         @Test
         void testSuccessfulGetResponds200() throws Exception{
             // Act & Assert
@@ -440,19 +433,23 @@ public class ProductionIntegrationTest {
         }
 
         @Test
-        void testSuccessfulGetWithProductionsInDatabaseReturnsProductionsArray() throws Exception {
+        void testSuccessfulGetWithProductionsInDatabaseReturnsExpectedProductionsArray() throws Exception {
             // Arrange
-            Venue managedTestVenue1 = venueRepository.findById(testVenue1.getId()).orElseThrow(() -> new RuntimeException("Venue not found"));
-
-            Production testProduction = new Production(
+            testProduction = new Production(
                     "Test Production",
-                    managedTestVenue1, null, null, null, false, false, null
+                    testVenue, null, null, null, false, false, null
             );
             productionRepository.save(testProduction);
 
+            List<Production> productionList = new ArrayList<>();
+            productionList.add(testProduction);
+            testVenue.setProductions(productionList);
+            venueRepository.save(testVenue);
+
             // Act & Assert
             mockMvc.perform(get("/productions"))
-                    .andExpect(jsonPath("$.productions").isArray());
+                    .andExpect(jsonPath("$.productions").isArray())
+                    .andExpect(jsonPath("$.productions[0].name").value("Test Production"));
 
         }
 
@@ -463,40 +460,37 @@ public class ProductionIntegrationTest {
     class GetProductionByIdIntegrationTest {
 
         @Autowired
-        VenueRepository venueRepository;
+        private VenueRepository venueRepository;
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
-
-        Production testProduction;
+        private Production testProduction;
+        private int testProductionId;
 
         @BeforeEach
         void beforeEach() {
-            productionRepository.deleteAll();
-            Venue managedTestVenue1 = venueRepository.findById(testVenue1.getId()).orElseThrow(() -> new RuntimeException("Failed to find venue"));
-
             testProduction = new Production(
                     "Test Production",
-                    managedTestVenue1,
+                    testVenue,
                     "Test Author",
                     "Test Description",
-                    LocalDateTime.parse("2025-10-10T10:00:00", formatter),
+                    LocalDateTime.now(),
                     false,
                     false,
                     "Test File String"
             );
             productionRepository.save(testProduction);
-        }
+            testProductionId = testProduction.getId();
 
-        @AfterEach
-        void afterEach() {
-            productionRepository.deleteAll();
+            List<Production> productionList = new ArrayList<>();
+            productionList.add(testProduction);
+            testVenue.setProductions(productionList);
+            venueRepository.save(testVenue);
         }
 
         @Test
         void testSuccessfulGetResponds200() throws Exception {
             // Arrange
             // Act & Assert
-            mockMvc.perform(get("/productions/" + testProduction.getId()))
+            mockMvc.perform(get("/productions/" + testProductionId))
                     .andExpect(status().isOk());
         }
 
@@ -504,10 +498,11 @@ public class ProductionIntegrationTest {
         void testSuccessfulGetRespondsExpectedProductionObject() throws Exception {
             // Arrange
             // Act & Assert
-            mockMvc.perform(get("/productions/" + testProduction.getId()))
+            mockMvc.perform(get("/productions/" + testProductionId))
                     .andExpect(jsonPath("$.production.name").value("Test Production"))
                     .andExpect(jsonPath("$.production.author").value("Test Author"))
                     .andExpect(jsonPath("$.production.description").value("Test Description"))
+                    .andExpect(jsonPath("$.production.auditionDate").isNotEmpty())
                     .andExpect(jsonPath("$.production.sundowners").value(false))
                     .andExpect(jsonPath("$.production.notConfirmed").value(false))
                     .andExpect(jsonPath("$.production.flyerFile").value("Test File String"))
@@ -518,7 +513,7 @@ public class ProductionIntegrationTest {
         void testNonExistentVenueIdResponds404() throws Exception {
             // Arrange
             // Act & Assert
-            mockMvc.perform(get("/productions/" + (testProduction.getId() - 1)))
+            mockMvc.perform(get("/productions/" + (testProductionId - 1)))
                     .andExpect(status().isNotFound());
         }
 
@@ -539,15 +534,17 @@ public class ProductionIntegrationTest {
         @Autowired
         private VenueRepository venueRepository;
 
-        Production testExistingProduction;
+        private Production testProduction;
+        private int testProductionId;
+
+        private Venue testVenue2;
+        private int testVenue2Id;
 
         @BeforeEach
         void beforeEach() {
-            Venue managedTestVenue1 = venueRepository.findById(testVenue1.getId()).orElseThrow(() -> new RuntimeException("Venue not found"));
-
-            testExistingProduction = new Production(
+            testProduction = new Production(
                     "Test Production",
-                    managedTestVenue1,
+                    testVenue,
                     "Test Author",
                     "Test Description",
                     LocalDateTime.now(),
@@ -555,21 +552,31 @@ public class ProductionIntegrationTest {
                     false,
                     "Test Flyer File"
             );
-            productionRepository.save(testExistingProduction);
+            productionRepository.save(testProduction);
+            testProductionId = testProduction.getId();
+
+            List<Production> productionList = new ArrayList<>();
+            productionList.add(testProduction);
+            testVenue.setProductions(productionList);
+            venueRepository.save(testVenue);
+
+            testVenue2 = new Venue("Test Venue 2", "Test Notes", "Test Postcode", "Test Address", "Test Town", "www.test.com");
+            venueRepository.save(testVenue2);
+            testVenue2Id = testVenue2.getId();
+
         }
 
         @Test
         void testSuccessfulUpdateWithFullProductionDetailsResponds200() throws Exception {
             // Arrange
-            Venue managedTestVenue2 = venueRepository.findById(testVenue2.getId()).orElseThrow(() -> new RuntimeException("Venue not found"));
             // Act & Assert
-            mockMvc.perform(patch("/productions/" + testExistingProduction.getId())
+            mockMvc.perform(patch("/productions/" + testProductionId)
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", adminToken)
                             .content(
                                     "{ " +
                                             "\"name\": \"Updated Test Production\", " +
-                                            "\"venueId\": " + managedTestVenue2.getId() +  ", " +
+                                            "\"venueId\": " + testVenue2Id +  ", " +
                                             "\"author\": \"Updated Test Author\", " +
                                             "\"description\": \"Updated Test Description\", " +
                                             "\"auditionDate\": \"2025-11-10T10:00:00\", " +
@@ -584,16 +591,14 @@ public class ProductionIntegrationTest {
         @Test
         void testSuccessfulUpdateWithFullProductionDetailsRespondsExpectedProductionObject() throws Exception {
             // Arrange
-            Venue managedTestVenue2 = venueRepository.findById(testVenue2.getId()).orElseThrow(() -> new RuntimeException("Venue not found"));
-
             // Act & Assert
-            mockMvc.perform(patch("/productions/" + testExistingProduction.getId())
+            mockMvc.perform(patch("/productions/" +testProductionId)
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", adminToken)
                             .content(
                                     "{ " +
                                             "\"name\": \"Updated Test Production\", " +
-                                            "\"venueId\": " + managedTestVenue2.getId() +  ", " +
+                                            "\"venueId\": " + testVenue2Id +  ", " +
                                             "\"author\": \"Updated Test Author\", " +
                                             "\"description\": \"Updated Test Description\", " +
                                             "\"auditionDate\": \"2025-11-10T10:00:00\", " +
@@ -603,7 +608,7 @@ public class ProductionIntegrationTest {
                                             "}"
                             ))
                     .andExpect(jsonPath("$.production.name").value("Updated Test Production"))
-                    .andExpect(jsonPath("$.production.venue.id").value(managedTestVenue2.getId()))
+                    .andExpect(jsonPath("$.production.venue.id").value(testVenue2Id))
                     .andExpect(jsonPath("$.production.author").value("Updated Test Author"))
                     .andExpect(jsonPath("$.production.description").value("Updated Test Description"))
                     .andExpect(jsonPath("$.production.auditionDate").value("2025-11-10T10:00:00"))
@@ -618,7 +623,7 @@ public class ProductionIntegrationTest {
         void testSuccessfulUpdateOnlyNameRespondsExpectedProductionObject() throws Exception {
             // Arrange
             // Act & Assert
-            mockMvc.perform(patch("/productions/" + testExistingProduction.getId())
+            mockMvc.perform(patch("/productions/" + testProductionId)
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", adminToken)
                             .content(
@@ -640,11 +645,10 @@ public class ProductionIntegrationTest {
             // Arrange
             Production existingProduction = new Production(
                     "Existing Production", null, null, null, null, false, false, null
-
             );
             productionRepository.save(existingProduction);
             // Act & Assert
-            mockMvc.perform(patch("/productions/" + testExistingProduction.getId())
+            mockMvc.perform(patch("/productions/" + testProductionId)
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", adminToken)
                             .content(
@@ -657,16 +661,14 @@ public class ProductionIntegrationTest {
         @Test
         void testNonExistentVenueIdResponds404() throws Exception {
             // Arrange
-            Venue managedTestVenue2 = venueRepository.findById(testVenue2.getId()).orElseThrow(() -> new RuntimeException("Venue not found"));
-
             // Act & Assert
-            mockMvc.perform(patch("/productions/" + testExistingProduction.getId())
+            mockMvc.perform(patch("/productions/" + testProductionId)
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", adminToken)
                             .content(
                                     "{ " +
                                             "\"name\": \"Existing Production\", " +
-                                            "\"venueId\": " + (managedTestVenue2.getId() + 1) +
+                                            "\"venueId\": " + (testVenue2Id + 1) +
                                             "}"
                             ))
                     .andExpect(status().isNotFound());
@@ -675,16 +677,14 @@ public class ProductionIntegrationTest {
         @Test
         void testNonExistentProductionIdResponds404() throws Exception {
             // Arrange
-            Venue managedTestVenue2 = venueRepository.findById(testVenue2.getId()).orElseThrow(() -> new RuntimeException("Venue not found"));
-
             // Act & Assert
-            mockMvc.perform(patch("/productions/" + (testExistingProduction.getId() + 1))
+            mockMvc.perform(patch("/productions/" + (testProductionId + 1))
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", adminToken)
                             .content(
                                     "{ " +
                                             "\"name\": \"Existing Production\", " +
-                                            "\"venueId\": " + managedTestVenue2.getId() +
+                                            "\"venueId\": " + testVenue2Id +
                                             "}"
                             ))
                     .andExpect(status().isNotFound());
@@ -693,7 +693,6 @@ public class ProductionIntegrationTest {
         @Test
         void testProductionIdNotIntegerResponds400() throws Exception {
             // Arrange
-            Venue managedTestVenue2 = venueRepository.findById(testVenue2.getId()).orElseThrow(() -> new RuntimeException("Venue not found"));
             // Act & Assert
             mockMvc.perform(patch("/productions/" + "bad production id")
                             .contentType(MediaType.APPLICATION_JSON)
@@ -701,7 +700,7 @@ public class ProductionIntegrationTest {
                             .content(
                                     "{ " +
                                             "\"name\": \"Updated Test Production\", " +
-                                            "\"venueId\": " + managedTestVenue2.getId() +  ", " +
+                                            "\"venueId\": " + testVenue2Id +  ", " +
                                             "\"author\": \"Updated Test Author\", " +
                                             "\"description\": \"Updated Test Description\", " +
                                             "\"auditionDate\": \"2025-11-10T10:00:00\", " +
@@ -716,7 +715,6 @@ public class ProductionIntegrationTest {
         @Test
         void testProductionIdMissingResponds404() throws Exception {
             // Arrange
-            Venue managedTestVenue2 = venueRepository.findById(testVenue2.getId()).orElseThrow(() -> new RuntimeException("Venue not found"));
             // Act & Assert
             mockMvc.perform(patch("/productions/")
                             .contentType(MediaType.APPLICATION_JSON)
@@ -724,7 +722,7 @@ public class ProductionIntegrationTest {
                             .content(
                                     "{ " +
                                             "\"name\": \"Updated Test Production\", " +
-                                            "\"venueId\": " + managedTestVenue2.getId() +  ", " +
+                                            "\"venueId\": " + testVenue2Id +  ", " +
                                             "\"author\": \"Updated Test Author\", " +
                                             "\"description\": \"Updated Test Description\", " +
                                             "\"auditionDate\": \"2025-11-10T10:00:00\", " +
@@ -739,9 +737,8 @@ public class ProductionIntegrationTest {
         @Test
         void testVenueIdNotIntegerResponds400() throws Exception {
             // Arrange
-            Venue managedTestVenue2 = venueRepository.findById(testVenue2.getId()).orElseThrow(() -> new RuntimeException("Venue not found"));
             // Act & Assert
-            mockMvc.perform(patch("/productions/" + testExistingProduction.getId())
+            mockMvc.perform(patch("/productions/" + testProductionId)
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", adminToken)
                             .content(
@@ -762,15 +759,14 @@ public class ProductionIntegrationTest {
         @Test
         void testAuditionDateNotDateResponds400() throws Exception {
             // Arrange
-            Venue managedTestVenue2 = venueRepository.findById(testVenue2.getId()).orElseThrow(() -> new RuntimeException("Venue not found"));
             // Act & Assert
-            mockMvc.perform(patch("/productions/" + testExistingProduction.getId())
+            mockMvc.perform(patch("/productions/" + testProductionId)
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", adminToken)
                             .content(
                                     "{ " +
                                             "\"name\": \"Updated Test Production\", " +
-                                            "\"venueId\": " + managedTestVenue2.getId() +  ", " +
+                                            "\"venueId\": " + testVenue2Id +  ", " +
                                             "\"author\": \"Updated Test Author\", " +
                                             "\"description\": \"Updated Test Description\", " +
                                             "\"auditionDate\": \"not a date\", " +
@@ -785,15 +781,14 @@ public class ProductionIntegrationTest {
         @Test
         void testSundownersNotBooleanResponds400() throws Exception {
             // Arrange
-            Venue managedTestVenue2 = venueRepository.findById(testVenue2.getId()).orElseThrow(() -> new RuntimeException("Venue not found"));
             // Act & Assert
-            mockMvc.perform(patch("/productions/" + testExistingProduction.getId())
+            mockMvc.perform(patch("/productions/" + testProductionId)
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", adminToken)
                             .content(
                                     "{ " +
                                             "\"name\": \"Updated Test Production\", " +
-                                            "\"venueId\": " + managedTestVenue2.getId() +  ", " +
+                                            "\"venueId\": " + testVenue2Id +  ", " +
                                             "\"author\": \"Updated Test Author\", " +
                                             "\"description\": \"Updated Test Description\", " +
                                             "\"auditionDate\": \"2025-11-10T10:00:00\", " +
@@ -808,15 +803,14 @@ public class ProductionIntegrationTest {
         @Test
         void testNotConfirmedNotBooleanResponds400() throws Exception {
             // Arrange
-            Venue managedTestVenue2 = venueRepository.findById(testVenue2.getId()).orElseThrow(() -> new RuntimeException("Venue not found"));
             // Act & Assert
-            mockMvc.perform(patch("/productions/" + testExistingProduction.getId())
+            mockMvc.perform(patch("/productions/" + testProductionId)
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", adminToken)
                             .content(
                                     "{ " +
                                             "\"name\": \"Updated Test Production\", " +
-                                            "\"venueId\": " + managedTestVenue2.getId() +  ", " +
+                                            "\"venueId\": " + testVenue2Id +  ", " +
                                             "\"author\": \"Updated Test Author\", " +
                                             "\"description\": \"Updated Test Description\", " +
                                             "\"auditionDate\": \"2025-11-10T10:00:00\", " +
@@ -831,15 +825,14 @@ public class ProductionIntegrationTest {
         @Test
         void testNameBlankResponds400() throws Exception {
             // Arrange
-            Venue managedTestVenue2 = venueRepository.findById(testVenue2.getId()).orElseThrow(() -> new RuntimeException("Venue not found"));
             // Act & Assert
-            mockMvc.perform(patch("/productions/" + testExistingProduction.getId())
+            mockMvc.perform(patch("/productions/" + testProductionId)
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", adminToken)
                             .content(
                                     "{ " +
                                             "\"name\": \"\", " +
-                                            "\"venueId\": " + managedTestVenue2.getId() +  ", " +
+                                            "\"venueId\": " + testVenue2Id +  ", " +
                                             "\"author\": \"Updated Test Author\", " +
                                             "\"description\": \"Updated Test Description\", " +
                                             "\"auditionDate\": \"2025-11-10T10:00:00\", " +
@@ -854,14 +847,13 @@ public class ProductionIntegrationTest {
         @Test
         void testNameMissingResponds400() throws Exception {
             // Arrange
-            Venue managedTestVenue2 = venueRepository.findById(testVenue2.getId()).orElseThrow(() -> new RuntimeException("Venue not found"));
             // Act & Assert
-            mockMvc.perform(patch("/productions/" + testExistingProduction.getId())
+            mockMvc.perform(patch("/productions/" + testProductionId)
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", adminToken)
                             .content(
                                     "{ " +
-                                            "\"venueId\": " + managedTestVenue2.getId() +  ", " +
+                                            "\"venueId\": " + testVenue2Id +  ", " +
                                             "\"author\": \"Updated Test Author\", " +
                                             "\"description\": \"Updated Test Description\", " +
                                             "\"auditionDate\": \"2025-11-10T10:00:00\", " +
@@ -876,15 +868,14 @@ public class ProductionIntegrationTest {
         @Test
         void testUserTokenResponds403() throws Exception {
             // Arrange
-            Venue managedTestVenue2 = venueRepository.findById(testVenue2.getId()).orElseThrow(() -> new RuntimeException("Venue not found"));
             // Act & Assert
-            mockMvc.perform(patch("/productions/" + testExistingProduction.getId())
+            mockMvc.perform(patch("/productions/" + testProductionId)
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", userToken)
                             .content(
                                     "{ " +
                                             "\"name\": \"Updated Test Production\", " +
-                                            "\"venueId\": " + managedTestVenue2.getId() +  ", " +
+                                            "\"venueId\": " + testVenue2Id +  ", " +
                                             "\"author\": \"Updated Test Author\", " +
                                             "\"description\": \"Updated Test Description\", " +
                                             "\"auditionDate\": \"2025-11-10T10:00:00\", " +
@@ -899,14 +890,13 @@ public class ProductionIntegrationTest {
         @Test
         void testMissingTokenResponds401() throws Exception {
             // Arrange
-            Venue managedTestVenue2 = venueRepository.findById(testVenue2.getId()).orElseThrow(() -> new RuntimeException("Venue not found"));
             // Act & Assert
-            mockMvc.perform(patch("/productions/" + testExistingProduction.getId())
+            mockMvc.perform(patch("/productions/" + testProductionId)
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(
                                     "{ " +
                                             "\"name\": \"Updated Test Production\", " +
-                                            "\"venueId\": " + managedTestVenue2.getId() +  ", " +
+                                            "\"venueId\": " + testVenue2Id +  ", " +
                                             "\"author\": \"Updated Test Author\", " +
                                             "\"description\": \"Updated Test Description\", " +
                                             "\"auditionDate\": \"2025-11-10T10:00:00\", " +
@@ -930,15 +920,15 @@ public class ProductionIntegrationTest {
         @Autowired
         private PerformanceRepository performanceRepository;
 
-        Production testProduction;
-        int testProductionId;
+        private Production testProduction;
+        private int testProductionId;
 
         @BeforeEach
         void beforeEach() {
 
             testProduction = new Production(
                     "Test Production",
-                    testVenue1,
+                    testVenue,
                     "Test Author",
                     "Test Description",
                     LocalDateTime.now(),
@@ -949,12 +939,12 @@ public class ProductionIntegrationTest {
 
             List<Production> productionList = new ArrayList<>();
             productionList.add(testProduction);
-            testVenue1.setProductions(productionList);
+            testVenue.setProductions(productionList);
 
             productionRepository.save(testProduction);
             testProductionId = testProduction.getId();
 
-            venueRepository.save(testVenue1);
+            venueRepository.save(testVenue);
         }
 
         @Test
@@ -980,13 +970,13 @@ public class ProductionIntegrationTest {
         @Test
         void testAssociatedVenueNoLongerReferencesProductionFollowingDeletion() throws Exception {
             // Arrange
-            Venue preVenue = venueRepository.findById(testVenue1.getId()).orElseThrow(() -> new RuntimeException("No venue with this id"));
+            Venue preVenue = venueRepository.findById(testVenueId).orElseThrow(() -> new RuntimeException("No venue with this id"));
             assertTrue(preVenue.getProductions().contains(testProduction));
             // Act
             mockMvc.perform(delete("/productions/" + testProductionId)
                     .header("Authorization", adminToken));
             // Assert
-            Venue postVenue = venueRepository.findById(testVenue1.getId()).orElseThrow(() -> new RuntimeException("No venue with this id"));
+            Venue postVenue = venueRepository.findById(testVenueId).orElseThrow(() -> new RuntimeException("No venue with this id"));
             assertFalse(postVenue.getProductions().contains(testProduction));
         }
 
@@ -994,7 +984,7 @@ public class ProductionIntegrationTest {
         void testAssociatedPerformancesNoLongerExistFollowingDeletion() throws Exception {
             // Arrange
             Performance associatedPerformance = new Performance();
-            associatedPerformance.setVenue(testVenue1);
+            associatedPerformance.setVenue(testVenue);
             associatedPerformance.setProduction(testProduction);
             associatedPerformance.setTime(LocalDateTime.now());
             performanceRepository.save(associatedPerformance);
