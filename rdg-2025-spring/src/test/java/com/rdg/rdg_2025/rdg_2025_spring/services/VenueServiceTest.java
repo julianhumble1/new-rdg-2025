@@ -23,9 +23,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import java.time.LocalDateTime;
 import java.util.*;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.*;
@@ -209,26 +207,24 @@ public class VenueServiceTest {
     @DisplayName("deleteVenue service tests")
     class DeleteVenueServiceTests {
 
-        Venue testVenue1 = new Venue("Test Venue", "Test Notes", "Test Postcode", "Test Address", "Test Town", "www.test.com");
-        Venue testVenue2 = new Venue("Test Venue", "Test Notes", "Test Postcode", "Test Address", "Test Town", "www.test.com");
+        Venue testVenue = new Venue("Test Venue", "Test Notes", "Test Postcode", "Test Address", "Test Town", "www.test.com");
 
         @Test
-        void testSuccessfulDeletionReturnsTrue() {
+        void testSuccessfulDeletionDoesNotThrowAnException() {
             // Arrange
-            when(venueRepository.existsById(any())).thenReturn(true);
-            when(venueRepository.findById(anyInt())).thenReturn(Optional.of(testVenue1));
-            // Act
-            boolean result = venueService.deleteVenueById(1);
-            // Assert
-            assertEquals(true, result);
+            when(venueRepository.findById(anyInt())).thenReturn(Optional.of(testVenue));
+            // Act & Assert
+            assertDoesNotThrow(() -> {
+                venueService.deleteVenueById(1);
+            });
         }
 
         @Test
-        void testExistsDataAccessExceptionThrowsDatabaseException() {
+        void testGetDataAccessExceptionThrowsDatabaseException() {
             // Arrange
-            when(venueRepository.existsById(any())).thenThrow(new DataAccessException("Data Access Exception"){});
+            when(venueRepository.findById(any())).thenThrow(new DataAccessException("Data Access Exception"){});
             // Act & Assert
-            DatabaseException ex = assertThrows(DatabaseException.class, () -> {
+            assertThrows(DatabaseException.class, () -> {
                 venueService.deleteVenueById(1);
             });
         }
@@ -236,12 +232,10 @@ public class VenueServiceTest {
         @Test
         void testDeleteDataAccessExceptionThrowsDatabaseException() {
             // Arrange
-            when(venueRepository.existsById(any())).thenReturn(true);
-            when(venueRepository.findById(anyInt())).thenReturn(Optional.of(testVenue1));
-
-            doThrow(new DataAccessException("Data access exception") {}).when(venueRepository).deleteById(anyInt());
+            when(venueRepository.findById(anyInt())).thenReturn(Optional.of(testVenue));
+            doThrow(new DataAccessException("Data access exception") {}).when(venueRepository).delete(any());
             // Act & Assert
-            DatabaseException ex = assertThrows(DatabaseException.class, () -> {
+            assertThrows(DatabaseException.class, () -> {
                 venueService.deleteVenueById(1);
             });
         }
@@ -249,32 +243,29 @@ public class VenueServiceTest {
         @Test
         void testDeletePersistenceExceptionThrowsDatabaseException() {
             // Arrange
-            when(venueRepository.existsById(any())).thenReturn(true);
-            when(venueRepository.findById(anyInt())).thenReturn(Optional.of(testVenue1));
-
-            doThrow(new PersistenceException("Data persistence exception") {}).when(venueRepository).deleteById(anyInt());
+            when(venueRepository.findById(anyInt())).thenReturn(Optional.of(testVenue));
+            doThrow(new PersistenceException("Data persistence exception") {}).when(venueRepository).delete(any());
             // Act & Assert
-            DatabaseException ex = assertThrows(DatabaseException.class, () -> {
+            assertThrows(DatabaseException.class, () -> {
                 venueService.deleteVenueById(1);
             });
         }
 
         @Test
-        void testNonExistentVenueIdReturnsFalse() {
+        void testNonExistentVenueIdThrowsEntityNotFoundException() {
             // Arrange
-            when(venueRepository.existsById(anyInt())).thenReturn(false);
-            // Act
-            boolean result = venueService.deleteVenueById(1);
-            // Assert
-            assertEquals(false, result);
+            when(venueRepository.findById(anyInt())).thenThrow(new EntityNotFoundException("no venue with this id"));
+            // Act & Assert
+            assertThrows(EntityNotFoundException.class, () -> {
+                venueService.deleteVenueById(1);
+            });
 
         }
 
         @Test
         void testVenueHasNoProductionsThenProductionServiceIsNotCalled() {
             // Arrange
-            when(venueRepository.existsById(any())).thenReturn(true);
-            when(venueRepository.findById(anyInt())).thenReturn(Optional.of(testVenue1));
+            when(venueRepository.findById(anyInt())).thenReturn(Optional.of(testVenue));
             // Act
             venueService.deleteVenueById(1);
             // Assert
@@ -287,10 +278,8 @@ public class VenueServiceTest {
             Production production = new Production();
             List<Production> productionList = new ArrayList<>();
             productionList.add(production);
-            testVenue1.setProductions(productionList);
-            when(venueRepository.existsById(any())).thenReturn(true);
-            when(venueRepository.findById(anyInt())).thenReturn(Optional.of(testVenue1));
-
+            testVenue.setProductions(productionList);
+            when(venueRepository.findById(anyInt())).thenReturn(Optional.of(testVenue));
             // Act
             venueService.deleteVenueById(1);
             // Assert
@@ -305,10 +294,8 @@ public class VenueServiceTest {
             List<Production> productionList = new ArrayList<>();
             productionList.add(production1);
             productionList.add(production2);
-            testVenue1.setProductions(productionList);
-            when(venueRepository.existsById(any())).thenReturn(true);
-            when(venueRepository.findById(anyInt())).thenReturn(Optional.of(testVenue1));
-
+            testVenue.setProductions(productionList);
+            when(venueRepository.findById(anyInt())).thenReturn(Optional.of(testVenue));
             // Act
             venueService.deleteVenueById(1);
             // Assert
@@ -321,14 +308,12 @@ public class VenueServiceTest {
             Production production = new Production();
             List<Production> productionList = new ArrayList<>();
             productionList.add(production);
-            testVenue1.setProductions(productionList);
-            when(venueRepository.existsById(any())).thenReturn(true);
-            when(venueRepository.findById(anyInt())).thenReturn(Optional.of(testVenue1));
-
+            testVenue.setProductions(productionList);
+            when(venueRepository.findById(anyInt())).thenReturn(Optional.of(testVenue));
             doThrow(new DatabaseException("database exception")).when(productionService).setProductionVenueFieldToNull(any());
 
             // Act & Assert
-            DatabaseException ex = assertThrows(DatabaseException.class, () -> {
+            assertThrows(DatabaseException.class, () -> {
                 venueService.deleteVenueById(1);
             });
         }
@@ -336,9 +321,7 @@ public class VenueServiceTest {
         @Test
         void testIfVenueHasNoFestivalsThenFestivalServiceNotCalled() {
             // Arrange
-            when(venueRepository.existsById(any())).thenReturn(true);
-            when(venueRepository.findById(anyInt())).thenReturn(Optional.of(testVenue1));
-
+            when(venueRepository.findById(anyInt())).thenReturn(Optional.of(testVenue));
             // Act
             venueService.deleteVenueById(1);
             // Assert
@@ -351,11 +334,8 @@ public class VenueServiceTest {
             Festival festival = new Festival();
             List<Festival> festivalList = new ArrayList<>();
             festivalList.add(festival);
-            testVenue1.setFestivals(festivalList);
-
-            when(venueRepository.existsById(any())).thenReturn(true);
-            when(venueRepository.findById(anyInt())).thenReturn(Optional.of(testVenue1));
-
+            testVenue.setFestivals(festivalList);
+            when(venueRepository.findById(anyInt())).thenReturn(Optional.of(testVenue));
             // Act
             venueService.deleteVenueById(1);
             // Assert
@@ -371,10 +351,8 @@ public class VenueServiceTest {
             List<Festival> festivalList = new ArrayList<>();
             festivalList.add(festival1);
             festivalList.add(festival2);
-            testVenue1.setFestivals(festivalList);
-
-            when(venueRepository.existsById(any())).thenReturn(true);
-            when(venueRepository.findById(anyInt())).thenReturn(Optional.of(testVenue1));
+            testVenue.setFestivals(festivalList);
+            when(venueRepository.findById(anyInt())).thenReturn(Optional.of(testVenue));
 
             // Act
             venueService.deleteVenueById(1);
@@ -389,15 +367,14 @@ public class VenueServiceTest {
             Festival festival = new Festival();
             List<Festival> festivalList = new ArrayList<>();
             festivalList.add(festival);
-            testVenue1.setFestivals(festivalList);
+            testVenue.setFestivals(festivalList);
 
-            when(venueRepository.existsById(any())).thenReturn(true);
-            when(venueRepository.findById(anyInt())).thenReturn(Optional.of(testVenue1));
+            when(venueRepository.findById(anyInt())).thenReturn(Optional.of(testVenue));
 
             doThrow(new DatabaseException("database exception")).when(festivalService).setFestivalVenueFieldToNull(any());
 
             // Act & Assert
-            DatabaseException ex = assertThrows(DatabaseException.class, () -> {
+            assertThrows(DatabaseException.class, () -> {
                 venueService.deleteVenueById(1);
             });
 

@@ -89,12 +89,10 @@ public class ProductionController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> deleteProductionById(@PathVariable int productionId) {
         try {
-            boolean deleted = productionService.deleteProductionById(productionId);
-            if (deleted) {
-                return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-            } else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponse("No production found with id" + productionId));
-            }
+            productionService.deleteProductionById(productionId);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        } catch (EntityNotFoundException ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
         } catch (DatabaseException ex) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
         }

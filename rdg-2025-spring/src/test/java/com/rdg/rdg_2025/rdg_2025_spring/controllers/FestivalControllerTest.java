@@ -24,6 +24,7 @@ import java.util.ArrayList;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -504,9 +505,9 @@ public class FestivalControllerTest {
         }
 
         @Test
-        void testServiceReturnsFalseResponds404() throws Exception {
+        void testServiceThrowsEntityNotFoundExceptionResponds404() throws Exception {
             // Arrange
-            when(festivalService.deleteFestivalById(anyInt())).thenReturn(false);
+            doThrow(EntityNotFoundException.class).when(festivalService).deleteFestivalById(anyInt());
             // Act & Assert
             mockMvc.perform(delete("/festivals/1"))
                     .andExpect(status().isNotFound());
@@ -515,7 +516,7 @@ public class FestivalControllerTest {
         @Test
         void testDatabaseExceptionResponds500() throws Exception {
             // Arrange
-            when(festivalService.deleteFestivalById(anyInt())).thenThrow(new DatabaseException("database exception"));
+            doThrow(DatabaseException.class).when(festivalService).deleteFestivalById(anyInt());
             // Act & Assert
             mockMvc.perform(delete("/festivals/1"))
                     .andExpect(status().isInternalServerError());
@@ -524,7 +525,6 @@ public class FestivalControllerTest {
         @Test
         void testServiceReturnsTrueResponds204() throws Exception {
             // Arrange
-            when(festivalService.deleteFestivalById(anyInt())).thenReturn(true);
             // Act & Assert
             mockMvc.perform(delete("/festivals/1"))
                     .andExpect(status().isNoContent());

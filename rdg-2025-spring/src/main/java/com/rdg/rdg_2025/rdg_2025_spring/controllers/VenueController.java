@@ -86,14 +86,10 @@ public class VenueController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> deleteVenueById(@PathVariable int id) {
         try {
-            boolean deleted = venueService.deleteVenueById(id);
-            if (deleted) {
-                return ResponseEntity.noContent().build();
-            } else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                        new MessageResponse("Could not delete as venue does not exist")
-                );
-            }
+            venueService.deleteVenueById(id);
+            return ResponseEntity.noContent().build();
+        } catch (EntityNotFoundException ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
         } catch (DataIntegrityViolationException ex) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
         } catch (DatabaseException ex) {

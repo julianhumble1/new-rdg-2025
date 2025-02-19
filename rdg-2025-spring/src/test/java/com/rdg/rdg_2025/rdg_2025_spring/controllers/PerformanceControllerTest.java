@@ -26,6 +26,7 @@ import java.time.LocalDateTime;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -501,7 +502,7 @@ public class PerformanceControllerTest {
         @WithMockUser(roles = "ADMIN")
         void testServiceThrowsDatabaseExceptionResponds500() throws Exception {
             // Arrange
-            when(performanceService.deletePerformanceById(anyInt())).thenThrow(new DatabaseException("Database exception"));
+            doThrow(DatabaseException.class).when(performanceService).deletePerformanceById(anyInt());
             // Act & Assert
             mockMvc.perform(delete("/performances/1"))
                     .andExpect(status().isInternalServerError());
@@ -509,9 +510,9 @@ public class PerformanceControllerTest {
 
         @Test
         @WithMockUser(roles = "ADMIN")
-        void testPerformanceDoesNotExistResponds404() throws Exception {
+        void testServiceThrowsEntityNotFoundResponds404() throws Exception {
             // Arrange
-            when(performanceService.deletePerformanceById(anyInt())).thenReturn(false);
+            doThrow(EntityNotFoundException.class).when(performanceService).deletePerformanceById(anyInt());
             // Act & Assert
             mockMvc.perform(delete("/performances/1"))
                     .andExpect(status().isNotFound());
@@ -521,7 +522,6 @@ public class PerformanceControllerTest {
         @WithMockUser(roles = "ADMIN")
         void testSuccessfulDeletionResponds204() throws Exception {
             // Arrange
-            when(performanceService.deletePerformanceById(anyInt())).thenReturn(true);
             // Act & Assert
             mockMvc.perform(delete("/performances/1"))
                     .andExpect(status().isNoContent());

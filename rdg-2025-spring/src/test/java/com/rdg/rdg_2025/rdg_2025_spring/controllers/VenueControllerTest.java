@@ -30,6 +30,7 @@ import java.util.Arrays;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -277,7 +278,6 @@ public class VenueControllerTest {
         @WithMockUser(roles = "ADMIN")
         void testSuccessfulDeletionResponds204() throws Exception {
             // Arrange
-            when(venueService.deleteVenueById(anyInt())).thenReturn(true);
             // Act & Assert
             mockMvc.perform(delete("/venues/1"))
                     .andExpect(status().isNoContent());
@@ -287,7 +287,7 @@ public class VenueControllerTest {
         @WithMockUser(roles = "ADMIN")
         void testNonExistentVenueResponds404() throws Exception {
             // Arrange
-            when(venueService.deleteVenueById(anyInt())).thenReturn(false);
+            doThrow(EntityNotFoundException.class).when(venueService).deleteVenueById(anyInt());
             // Act & Assert
             mockMvc.perform(delete("/venues/1"))
                     .andExpect(status().isNotFound());
@@ -297,7 +297,7 @@ public class VenueControllerTest {
         @WithMockUser(roles = "ADMIN")
         void testDatabaseExceptionResponds500() throws Exception {
             // Arrange
-            when(venueService.deleteVenueById(anyInt())).thenThrow(new DatabaseException("Database Exception"));
+            doThrow(DatabaseException.class).when(venueService).deleteVenueById(anyInt());
             // Act & Assert
             mockMvc.perform(delete("/venues/1"))
                     .andExpect(status().isInternalServerError());
@@ -307,7 +307,7 @@ public class VenueControllerTest {
         @WithMockUser(roles = "ADMIN")
         void testDataIntegrityViolationExceptionResponds409() throws Exception {
             // Arrange
-            when(venueService.deleteVenueById(anyInt())).thenThrow(new DataIntegrityViolationException("data integrity"));
+            doThrow(DataIntegrityViolationException.class).when(venueService).deleteVenueById(anyInt());
             // Act & Assert
             mockMvc.perform(delete("/venues/1"))
                     .andExpect(status().isConflict());

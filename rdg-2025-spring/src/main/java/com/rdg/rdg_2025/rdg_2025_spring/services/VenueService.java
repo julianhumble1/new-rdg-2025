@@ -70,15 +70,13 @@ public class VenueService {
         return saveVenueToDatabase(venue);
     }
 
-    public boolean deleteVenueById(int venueId) {
+    public void deleteVenueById(int venueId) {
 
-        if ( checkVenueExists(venueId) ) {
-            setAssociatedProductionVenuesToNull(venueId);
-            setAssociatedFestivalVenuesToNull(venueId);
-            return deleteVenueInDatabase(venueId);
-        } else {
-            return false;
-        }
+        Venue venue = getVenueById(venueId);
+        setAssociatedProductionVenuesToNull(venue);
+        setAssociatedFestivalVenuesToNull(venue);
+        deleteVenueInDatabase(venue);
+
     }
 
     // ADDITIONAL METHODS
@@ -149,17 +147,16 @@ public class VenueService {
         }
     }
 
-    private boolean deleteVenueInDatabase(int venueId) {
+    private void deleteVenueInDatabase(Venue venue) {
         try {
-            venueRepository.deleteById(venueId);
-            return true;
+            venueRepository.delete(venue);
         } catch (DataAccessException | PersistenceException ex) {
             throw new DatabaseException(ex.getMessage());
         }
     }
 
-    private void setAssociatedProductionVenuesToNull(int venueId) {
-        List<Production> productionList = getVenueById(venueId).getProductions();
+    private void setAssociatedProductionVenuesToNull(Venue venue) {
+        List<Production> productionList = venue.getProductions();
         try {
             productionList.forEach((production) -> productionService.setProductionVenueFieldToNull(production));
         } catch (DataIntegrityViolationException ex) {
@@ -169,8 +166,8 @@ public class VenueService {
         }
     }
 
-    private void setAssociatedFestivalVenuesToNull(int venueId) {
-        List<Festival> festivalList = getVenueById(venueId).getFestivals();
+    private void setAssociatedFestivalVenuesToNull(Venue venue) {
+        List<Festival> festivalList = venue.getFestivals();
         try {
             festivalList.forEach((festival) -> festivalService.setFestivalVenueFieldToNull(festival));
         } catch (DatabaseException ex) {

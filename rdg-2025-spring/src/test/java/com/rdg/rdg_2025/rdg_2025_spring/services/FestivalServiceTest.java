@@ -286,13 +286,13 @@ public class FestivalServiceTest {
     class DeleteFestivalByIdServiceTests {
 
         @Test
-        void testIfFestivalIsNotInDatabaseThenReturnsFalse() {
+        void testIfFestivalIsNotInDatabaseThenThrowsEntityNotFoundException() {
             // Arrange
             when(festivalRepository.findById(anyInt())).thenReturn(Optional.empty());
-            // Act
-            boolean result = festivalService.deleteFestivalById(1);
-            // Assert
-            assertEquals(false, result);
+            // Act & Assert
+            assertThrows(EntityNotFoundException.class, () -> {
+                festivalService.deleteFestivalById(1);
+            });
         }
 
         @Test
@@ -405,13 +405,14 @@ public class FestivalServiceTest {
         }
 
         @Test
-        void testSuccessfulDeletionReturnsTrue() {
+        void testSuccessfulDeletionDoesNotThrowException() {
             // Arrange
             when(festivalRepository.findById(anyInt())).thenReturn(Optional.of(testFestival));
-            // Act
-            boolean result = festivalService.deleteFestivalById(1);
-            // Assert
-            assertTrue(result);
+            // Act & Assert
+
+            assertDoesNotThrow(() -> {
+                festivalService.deleteFestivalById(1);
+            });
         }
 
     }
