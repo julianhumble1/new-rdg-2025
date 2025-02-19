@@ -47,14 +47,11 @@ public class PerformanceService {
 
     }
 
-    public boolean deletePerformanceById(int performanceId) {
+    public void deletePerformanceById(int performanceId) {
+        Performance performance = getPerformanceById(performanceId);
+        removePerformanceFromAssociatedObjects(performance);
         try {
-            Performance performance = getPerformanceById(performanceId);
-            removePerformanceFromAssociatedObjects(performance);
             performanceRepository.delete(performance);
-            return true;
-        } catch (EntityNotFoundException ex) {
-            return false;
         } catch (DataAccessException | PersistenceException ex) {
             throw new DatabaseException(ex.getMessage(), ex);
         }
@@ -134,13 +131,10 @@ public class PerformanceService {
     }
 
     private void removePerformanceFromAssociatedObjects(Performance performance) {
-        try {
-            productionService.removePerformanceFromProductionPerformanceList(performance);
-            venueService.removePerformanceFromVenuePerformanceList(performance);
-            festivalService.removePerformanceFromFestivalPerformanceList(performance);
-        } catch (DatabaseException ex) {
-            throw new DatabaseException(ex.getMessage());
-        }
+        productionService.removePerformanceFromProductionPerformanceList(performance);
+        venueService.removePerformanceFromVenuePerformanceList(performance);
+        festivalService.removePerformanceFromFestivalPerformanceList(performance);
+
     }
 
     private Performance getPerformanceById(int performanceId) {

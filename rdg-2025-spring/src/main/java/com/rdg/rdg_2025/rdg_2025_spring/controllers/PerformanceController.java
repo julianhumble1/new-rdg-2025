@@ -41,11 +41,10 @@ public class PerformanceController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> deletePerformanceById(@PathVariable int performanceId) {
         try {
-            if (performanceService.deletePerformanceById(performanceId)) {
-                return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-            } else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No Performance with this id");
-            }
+            performanceService.deletePerformanceById(performanceId);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        } catch (EntityNotFoundException ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No Performance with this id");
         } catch (DatabaseException ex) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
         }

@@ -237,13 +237,13 @@ public class PerformanceServiceTest {
     class DeletePerformanceByIdServiceTests {
 
         @Test
-        void testIfPerformanceNotInDatabaseThenReturnsFalse() {
+        void testIfPerformanceNotInDatabaseThenThrowsEntityNotFoundException() {
             // Arrange
-            when(performanceRepository.findById(anyInt())).thenReturn(Optional.empty());
-            // Act
-            boolean result = performanceService.deletePerformanceById(1);
-            // Assert
-            assertFalse(result);
+            when(performanceRepository.findById(anyInt())).thenThrow(new EntityNotFoundException("No performance with this id"));
+            // Act & Assert
+            assertThrows(EntityNotFoundException.class, () -> {
+                performanceService.deletePerformanceById(1);
+            });
 
         }
 
@@ -354,13 +354,13 @@ public class PerformanceServiceTest {
         }
 
         @Test
-        void testSuccessfulDeleteReturnsTrue() {
+        void testSuccessfulDeleteDoesNotThrowException() {
             // Arrange
             when(performanceRepository.findById(anyInt())).thenReturn(Optional.of(testPerformance));
-            // Act
-            boolean result = performanceService.deletePerformanceById(1);
-            // Assert
-            assertTrue(result);
+            // Act & Assert
+            assertDoesNotThrow(() -> {
+                performanceService.deletePerformanceById(1);
+            });
         }
 
 
