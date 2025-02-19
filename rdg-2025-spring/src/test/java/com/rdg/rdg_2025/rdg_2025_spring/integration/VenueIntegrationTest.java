@@ -1,9 +1,6 @@
 package com.rdg.rdg_2025.rdg_2025_spring.integration;
 
-import com.rdg.rdg_2025.rdg_2025_spring.models.Festival;
-import com.rdg.rdg_2025.rdg_2025_spring.models.Production;
-import com.rdg.rdg_2025.rdg_2025_spring.models.User;
-import com.rdg.rdg_2025.rdg_2025_spring.models.Venue;
+import com.rdg.rdg_2025.rdg_2025_spring.models.*;
 import com.rdg.rdg_2025.rdg_2025_spring.repository.*;
 import com.rdg.rdg_2025.rdg_2025_spring.security.jwt.JwtUtils;
 import com.rdg.rdg_2025.rdg_2025_spring.utils.AuthTestUtils;
@@ -20,6 +17,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -367,6 +365,9 @@ public class VenueIntegrationTest {
         @Autowired
         private FestivalRepository festivalRepository;
 
+        @Autowired
+        private PerformanceRepository performanceRepository;
+
         Venue testVenue;
         int testVenueId;
 
@@ -375,6 +376,9 @@ public class VenueIntegrationTest {
 
         Festival testFestival;
         int testFestivalId;
+
+        Performance testPerformance;
+        int testPerformanceId;
 
         @BeforeEach
         public void populateDatabase() {
@@ -396,6 +400,17 @@ public class VenueIntegrationTest {
             List<Festival> festivalList = new ArrayList<>();
             festivalList.add(testFestival);
             testVenue.setFestivals(festivalList);
+
+            testPerformance = new Performance();
+            testPerformance.setVenue(testVenue);
+            testPerformance.setProduction(testProduction);
+            testPerformance.setTime(LocalDateTime.now());
+            performanceRepository.save(testPerformance);
+            testPerformanceId = testPerformance.getId();
+
+            List<Performance> performanceList = new ArrayList<>();
+            performanceList.add(testPerformance);
+            testVenue.setPerformances(performanceList);
 
             venueRepository.save(testVenue);
             testVenueId = testVenue.getId();
@@ -467,6 +482,17 @@ public class VenueIntegrationTest {
             // Assert
             Festival postFestival = festivalRepository.findById(testFestivalId).orElseThrow(() -> new RuntimeException("No festival with this id"));
             assertNull(postFestival.getVenue());
+        }
+
+        @Test
+        void testAssociatedPerformanceNoLongerExistsFollowingDeletion() throws Exception {
+            // Arrange
+            assertTrue(performanceRepository.existsById(testPerformanceId));
+            // Act
+            mockMvc.perform(delete("/venues/" + testVenueId)
+                    .header("Authorization", adminToken));
+            // Assert
+            assertFalse(performanceRepository.existsById(testPerformanceId));
         }
 
         @Test

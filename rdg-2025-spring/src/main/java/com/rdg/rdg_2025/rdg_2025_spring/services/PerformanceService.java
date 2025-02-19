@@ -53,8 +53,6 @@ public class PerformanceService {
         deletePerformanceInDatabase(performance);
     }
 
-
-
     // ADDITIONAL PUBLIC METHODS
 
     public void setPerformanceFestivalFieldToNull(Performance performance) {
