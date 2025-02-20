@@ -172,6 +172,32 @@ public class VenueIntegrationTest {
         }
 
         @Test
+        void testDuplicateVenueNameResponds409() throws Exception {
+            // Arrange
+            Venue venue = new Venue("Test Venue", null, null, null, null, null);
+            venueRepository.save(venue);
+
+            assertTrue(venueRepository.existsById(venue.getId()));
+            // Act & Assert
+            mockMvc.perform(post("/venues")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .header("Authorization", adminToken)
+                    .content(
+                            "{ " +
+                                    "\"name\": \"Test Venue\", " +
+                                    "\"notes\": \"\", " +
+                                    "\"postcode\": \"\", " +
+                                    "\"address\": \"\", " +
+                                    "\"town\": \"\", " +
+                                    "\"url\": \"\" " +
+                                    "}"
+                    ))
+                    .andExpect(status().isConflict());
+
+
+        }
+
+        @Test
         void testVenueNameOthersMissingWithAdminTokenReturns201() throws Exception {
             mockMvc.perform(post("/venues")
                             .contentType(MediaType.APPLICATION_JSON)
