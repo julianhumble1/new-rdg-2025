@@ -19,7 +19,7 @@ import java.util.List;
 @Service
 public class FestivalService {
 
-    FestivalRepository festivalRepository;
+    private FestivalRepository festivalRepository;
 
     private VenueService venueService;
     private PerformanceService performanceService;

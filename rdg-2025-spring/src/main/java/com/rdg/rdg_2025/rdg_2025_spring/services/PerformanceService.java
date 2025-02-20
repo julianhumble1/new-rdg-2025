@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
 public class PerformanceService {
 
     @Autowired
-    PerformanceRepository performanceRepository;
+    private PerformanceRepository performanceRepository;
 
     private ProductionService productionService;
     private VenueService venueService;

@@ -520,7 +520,7 @@ public class FestivalControllerTest {
         }
 
         @Test
-        void testServiceReturnsTrueResponds204() throws Exception {
+        void testServiceThrowsNoErrorResponds204() throws Exception {
             // Arrange
             // Act & Assert
             mockMvc.perform(delete("/festivals/1"))
