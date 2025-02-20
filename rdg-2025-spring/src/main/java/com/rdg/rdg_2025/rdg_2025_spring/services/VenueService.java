@@ -139,14 +139,6 @@ public class VenueService {
         }
     }
 
-    private boolean checkVenueExists(int venueId) {
-        try {
-            return venueRepository.existsById(venueId);
-        } catch (DataAccessException ex) {
-            throw new DatabaseException(ex.getMessage(), ex);
-        }
-    }
-
     private void deleteVenueInDatabase(Venue venue) {
         try {
             venueRepository.delete(venue);

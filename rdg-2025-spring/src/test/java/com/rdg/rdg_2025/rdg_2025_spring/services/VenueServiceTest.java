@@ -7,6 +7,7 @@ import com.rdg.rdg_2025.rdg_2025_spring.models.Production;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Venue;
 import com.rdg.rdg_2025.rdg_2025_spring.payload.request.venue.VenueRequest;
 import com.rdg.rdg_2025.rdg_2025_spring.repository.VenueRepository;
+import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.PersistenceException;
 import org.junit.jupiter.api.BeforeEach;
@@ -284,6 +285,21 @@ public class VenueServiceTest {
             venueService.deleteVenueById(1);
             // Assert
             verify(productionService, times(1)).setProductionVenueFieldToNull(any());
+        }
+
+        @Test
+        void testProductionServiceEntityNotFoundThrowsEntityNotFoundException() {
+            // Arrange
+            Production production = new Production();
+            List<Production> productionList = new ArrayList<>();
+            productionList.add(production);
+            testVenue.setProductions(productionList);
+            when(venueRepository.findById(anyInt())).thenReturn(Optional.of(testVenue));
+            doThrow(DataIntegrityViolationException.class).when(productionService).setProductionVenueFieldToNull(any());
+            // Act & Assert
+            assertThrows(DataIntegrityViolationException.class, () -> {
+                venueService.deleteVenueById(1);
+            });
         }
 
         @Test
