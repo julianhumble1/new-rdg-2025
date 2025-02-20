@@ -324,16 +324,6 @@ public class VenueIntegrationTest {
     @DisplayName("GET getAllVenues integration tests")
     class GetAllVenuesIntegrationTests {
 
-        @BeforeEach
-        public void setup() {
-            venueRepository.deleteAll();
-        }
-
-        @AfterEach
-        public void cleanup() {
-            venueRepository.deleteAll();
-        }
-
         @Test
         void testSuccessfulGetWithAdminTokenReturns200() throws Exception {
             // Act & Assert
@@ -676,9 +666,7 @@ public class VenueIntegrationTest {
         private int testVenueId;
 
         @BeforeEach
-        void beforeAll(@Autowired VenueRepository venueRepository) {
-
-            venueRepository.deleteAll();
+        void beforeEach() {
 
             testVenue = new Venue("Test Venue", "Test Notes", "Test Postcode", "Test Address", "Test Town", "www.test.com");
             venueRepository.save(testVenue);

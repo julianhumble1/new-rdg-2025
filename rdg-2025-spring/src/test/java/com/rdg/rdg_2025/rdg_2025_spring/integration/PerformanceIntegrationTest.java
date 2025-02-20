@@ -40,6 +40,15 @@ public class PerformanceIntegrationTest {
     private PerformanceRepository performanceRepository;
 
     @Autowired
+    private VenueRepository venueRepository;
+
+    @Autowired
+    private ProductionRepository productionRepository;
+
+    @Autowired
+    private FestivalRepository festivalRepository;
+
+    @Autowired
     private MockMvc mockMvc;
 
     private static User testAdmin;
@@ -82,9 +91,7 @@ public class PerformanceIntegrationTest {
     }
 
     @BeforeEach
-    public void populateDatabase(@Autowired VenueRepository venueRepository,
-                                 @Autowired ProductionRepository productionRepository,
-                                 @Autowired FestivalRepository festivalRepository) {
+    public void populateDatabase() {
 
         testVenue = new Venue("Test Venue", "Test Notes", "Test Postcode", "Test Address", "Test Town", "www.test.com");
 
@@ -627,15 +634,6 @@ public class PerformanceIntegrationTest {
     @Nested
     @DisplayName("DELETE delete performance by id integration tests")
     class DeletePerformanceByIdIntegrationTests {
-
-        @Autowired
-        private VenueRepository venueRepository;
-
-        @Autowired
-        private ProductionRepository productionRepository;
-
-        @Autowired
-        private FestivalRepository festivalRepository;
 
         private Performance testPerformance;
         private int testPerformanceId;

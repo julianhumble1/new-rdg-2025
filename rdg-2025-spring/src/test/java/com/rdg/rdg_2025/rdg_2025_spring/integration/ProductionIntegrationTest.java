@@ -41,6 +41,9 @@ public class ProductionIntegrationTest {
     @Autowired
     private ProductionRepository productionRepository;
 
+    @Autowired
+    private VenueRepository venueRepository;
+
     private static User testAdmin;
     private static String adminToken;
 
@@ -49,8 +52,6 @@ public class ProductionIntegrationTest {
 
     private Venue testVenue;
     private int testVenueId;
-
-
 
     @BeforeAll
     public static void setupUsersAndTokens(@Autowired UserRepository userRepository,
@@ -81,7 +82,7 @@ public class ProductionIntegrationTest {
     }
 
     @BeforeEach
-    public void addVenuesToDatabase(@Autowired VenueRepository venueRepository) {
+    public void addVenuesToDatabase() {
         testVenue = new Venue("Test Venue 1", null, null, null, null, null);
         venueRepository.save(testVenue);
         testVenueId = testVenue.getId();
@@ -529,9 +530,6 @@ public class ProductionIntegrationTest {
     @DisplayName("PATCH update production integration tests")
     class UpdateProductionIntegrationTests {
 
-        @Autowired
-        private VenueRepository venueRepository;
-
         private Production testProduction;
         private int testProductionId;
 
@@ -911,9 +909,6 @@ public class ProductionIntegrationTest {
     @Nested
     @DisplayName("DELETE delete production by id integration tests")
     class DeleteProductionByIdIntegrationTests {
-
-        @Autowired
-        private VenueRepository venueRepository;
 
         @Autowired
         private PerformanceRepository performanceRepository;

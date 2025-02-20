@@ -38,6 +38,9 @@ public class FestivalIntegrationTest {
     @Autowired
     private FestivalRepository festivalRepository;
 
+    @Autowired
+    private VenueRepository venueRepository;
+
     private static User testAdmin;
     private static String adminToken;
 
@@ -76,7 +79,7 @@ public class FestivalIntegrationTest {
     }
 
     @BeforeEach
-    public void addVenuesToDatabase(@Autowired VenueRepository venueRepository) {
+    public void addVenuesToDatabase() {
 
         testVenue = new Venue("Test Venue 1", null, null, null, null, null);
         venueRepository.save(testVenue);
@@ -393,9 +396,6 @@ public class FestivalIntegrationTest {
     @DisplayName("GET get all festivals integration tests")
     class GetAllFestivalsIntegrationTests {
 
-        @Autowired
-        private VenueRepository venueRepository;
-
         @Test
         void testSuccessfulGetWithAdminTokenResponds200 () throws Exception {
 
@@ -455,9 +455,6 @@ public class FestivalIntegrationTest {
     @DisplayName("GET get festival by id integration tests")
     class GetFestivalByIdIntegrationTests {
 
-        @Autowired
-        private VenueRepository venueRepository;
-
         private Festival testFestival;
         private int testFestivalId;
 
@@ -512,9 +509,6 @@ public class FestivalIntegrationTest {
     @Nested
     @DisplayName("DELETE delete festival by id integration tests")
     class DeleteFestivalByIdIntegrationTests {
-
-        @Autowired
-        private VenueRepository venueRepository;
 
         @Autowired
         private PerformanceRepository performanceRepository;
@@ -668,9 +662,6 @@ public class FestivalIntegrationTest {
 
         private Venue testVenue2;
         private int testVenue2Id;
-
-        @Autowired
-        private VenueRepository venueRepository;
 
         @BeforeEach
         void beforeEach() {
