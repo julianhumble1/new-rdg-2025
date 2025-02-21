@@ -1,4 +1,4 @@
-package com.rdg.rdg_2025.rdg_2025_spring.controllers;
+package com.rdg.rdg_2025.rdg_2025_spring.controllers.auth;
 
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;

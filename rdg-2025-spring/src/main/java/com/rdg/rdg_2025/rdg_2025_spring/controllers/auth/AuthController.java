@@ -1,8 +1,8 @@
-package com.rdg.rdg_2025.rdg_2025_spring.controllers;
+package com.rdg.rdg_2025.rdg_2025_spring.controllers.auth;
 
-import com.rdg.rdg_2025.rdg_2025_spring.models.ERole;
-import com.rdg.rdg_2025.rdg_2025_spring.models.Role;
-import com.rdg.rdg_2025.rdg_2025_spring.models.User;
+import com.rdg.rdg_2025.rdg_2025_spring.models.auth.ERole;
+import com.rdg.rdg_2025.rdg_2025_spring.models.auth.Role;
+import com.rdg.rdg_2025.rdg_2025_spring.models.auth.User;
 import com.rdg.rdg_2025.rdg_2025_spring.payload.request.auth.LoginRequest;
 import com.rdg.rdg_2025.rdg_2025_spring.payload.request.auth.SignUpRequest;
 import com.rdg.rdg_2025.rdg_2025_spring.payload.response.auth.JwtResponse;

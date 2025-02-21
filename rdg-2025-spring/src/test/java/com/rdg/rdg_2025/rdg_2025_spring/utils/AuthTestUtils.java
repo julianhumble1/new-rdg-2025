@@ -1,8 +1,8 @@
 package com.rdg.rdg_2025.rdg_2025_spring.utils;
 
-import com.rdg.rdg_2025.rdg_2025_spring.models.ERole;
-import com.rdg.rdg_2025.rdg_2025_spring.models.Role;
-import com.rdg.rdg_2025.rdg_2025_spring.models.User;
+import com.rdg.rdg_2025.rdg_2025_spring.models.auth.ERole;
+import com.rdg.rdg_2025.rdg_2025_spring.models.auth.Role;
+import com.rdg.rdg_2025.rdg_2025_spring.models.auth.User;
 import com.rdg.rdg_2025.rdg_2025_spring.repository.RoleRepository;
 import com.rdg.rdg_2025.rdg_2025_spring.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;

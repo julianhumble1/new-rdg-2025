@@ -1,6 +1,6 @@
 package com.rdg.rdg_2025.rdg_2025_spring.security.services;
 
-import com.rdg.rdg_2025.rdg_2025_spring.models.User;
+import com.rdg.rdg_2025.rdg_2025_spring.models.auth.User;
 import com.rdg.rdg_2025.rdg_2025_spring.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;

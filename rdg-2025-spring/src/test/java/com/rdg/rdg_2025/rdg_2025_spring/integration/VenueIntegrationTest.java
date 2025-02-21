@@ -1,6 +1,7 @@
 package com.rdg.rdg_2025.rdg_2025_spring.integration;
 
 import com.rdg.rdg_2025.rdg_2025_spring.models.*;
+import com.rdg.rdg_2025.rdg_2025_spring.models.auth.User;
 import com.rdg.rdg_2025.rdg_2025_spring.repository.*;
 import com.rdg.rdg_2025.rdg_2025_spring.security.jwt.JwtUtils;
 import com.rdg.rdg_2025.rdg_2025_spring.utils.AuthTestUtils;
@@ -19,7 +20,6 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;

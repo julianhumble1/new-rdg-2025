@@ -1,7 +1,7 @@
 package com.rdg.rdg_2025.rdg_2025_spring.security.services;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.rdg.rdg_2025.rdg_2025_spring.models.User;
+import com.rdg.rdg_2025.rdg_2025_spring.models.auth.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

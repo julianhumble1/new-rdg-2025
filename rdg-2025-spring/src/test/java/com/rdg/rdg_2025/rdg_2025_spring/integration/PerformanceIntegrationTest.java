@@ -1,10 +1,10 @@
 package com.rdg.rdg_2025.rdg_2025_spring.integration;
 
 import com.rdg.rdg_2025.rdg_2025_spring.models.*;
+import com.rdg.rdg_2025.rdg_2025_spring.models.auth.User;
 import com.rdg.rdg_2025.rdg_2025_spring.repository.*;
 import com.rdg.rdg_2025.rdg_2025_spring.security.jwt.JwtUtils;
 import com.rdg.rdg_2025.rdg_2025_spring.utils.AuthTestUtils;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +22,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;

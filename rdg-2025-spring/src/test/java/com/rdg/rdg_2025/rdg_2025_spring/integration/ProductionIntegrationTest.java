@@ -2,7 +2,7 @@ package com.rdg.rdg_2025.rdg_2025_spring.integration;
 
 import com.rdg.rdg_2025.rdg_2025_spring.models.Performance;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Production;
-import com.rdg.rdg_2025.rdg_2025_spring.models.User;
+import com.rdg.rdg_2025.rdg_2025_spring.models.auth.User;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Venue;
 import com.rdg.rdg_2025.rdg_2025_spring.repository.*;
 import com.rdg.rdg_2025.rdg_2025_spring.security.jwt.JwtUtils;

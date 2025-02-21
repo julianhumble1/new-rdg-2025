@@ -1,4 +1,4 @@
-package com.rdg.rdg_2025.rdg_2025_spring.models;
+package com.rdg.rdg_2025.rdg_2025_spring.models.auth;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
