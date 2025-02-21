@@ -50,7 +50,7 @@ const EditProductionForm = ({ productionData, handleEdit, setEditMode }) => {
                     <div className="mb-2 block italic">
                         <Label value="Venue" />
                     </div>
-                    <Select options={venueOptions} onChange={setVenue} className="w-full rounded" isClearable defaultValue={venue}/>
+                    <Select options={venueOptions} onChange={setVenue} className="w-full text-sm"  styles={{control: (baseStyles) => ({...baseStyles, borderRadius: 8, padding: 1 })}} defaultValue={venue} isClearable/>
                 </div>
                 <div>
                     <div className="mb-2 block italic">

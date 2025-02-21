@@ -81,7 +81,7 @@ const NewProductionForm = () => {
                     <div className="mb-2 block italic">
                         <Label value="Venue" />
                     </div>
-                    <Select options={venueOptions} onChange={setVenue} className="w-full rounded" isClearable/>
+                    <Select options={venueOptions} onChange={setVenue} className="w-full text-sm" isClearable styles={{control: (baseStyles) => ({...baseStyles, borderRadius: 8, padding: 1 })}}/>
                 </div>
                 <div>
                     <div className="mb-2 block italic">

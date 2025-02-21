@@ -69,19 +69,19 @@ const NewFestivalForm = () => {
                     <div className="mb-2 block italic">
                         <Label value="Venue" />
                     </div>
-                    <Select options={venueOptions} onChange={setVenue} className="w-full rounded" isClearable/>
+                    <Select options={venueOptions} onChange={setVenue} className="w-full text-sm"  styles={{control: (baseStyles) => ({...baseStyles, borderRadius: 8, padding: 1 })}} isClearable/>
                 </div>
                 <div>
                     <div className="mb-2 block italic">
                         <Label value="Year (required)" />
                     </div>
-                    <Select options={yearOptions} default={year} onChange={setYear} className="w-fit" value={year} required={true} />
+                    <Select options={yearOptions} default={year} onChange={setYear} className="w-full text-sm"  styles={{control: (baseStyles) => ({...baseStyles, borderRadius: 8, padding: 1 })}}value={year} required={true} />
                 </div>
                 <div>
                     <div className=" mb-2 block italic">
                         <Label value="Month" />
                     </div>
-                    <Select options={MonthDateUtils.monthOptions} onChange={setMonth} className="w-fit" isClearable value={month} />
+                    <Select options={MonthDateUtils.monthOptions} onChange={setMonth} className="w-full text-sm"  styles={{control: (baseStyles) => ({...baseStyles, borderRadius: 8, padding: 1 })}} isClearable value={month} />
                 </div>
                 <div>
                     <div className="mb-2 block italic">

@@ -72,7 +72,7 @@ const NewPerformanceForm = () => {
                         onChange={(selectedOption) => {
                             setProduction(selectedOption)
                             selectedOption.venue ? setVenue({label: selectedOption.venue.name, value: selectedOption.venue.id}) : setVenue(null)
-                    }} />
+                    }} className="w-full text-sm"  styles={{control: (baseStyles) => ({...baseStyles, borderRadius: 8, padding: 1 })}}/>
                     <div className="text-xs m-2">
                         If production has an associated venue, this will be automatically filled below. Can be overridden if necessary.
                     </div>
@@ -81,13 +81,13 @@ const NewPerformanceForm = () => {
                     <div className="mb-2 block">
                         <Label value="Venue (required)" />
                     </div>
-                    <Select options={venueOptions} onChange={setVenue} value={venue} />
+                    <Select options={venueOptions} onChange={setVenue} value={venue} className="w-full text-sm"  styles={{control: (baseStyles) => ({...baseStyles, borderRadius: 8, padding: 1 })}}/>
                 </div>
                 <div>
                     <div className="mb-2 block">
                         <Label value="Festival" />
                     </div>
-                    <Select options={festivalOptions} onChange={setFestival} isClearable value={festival} />
+                    <Select options={festivalOptions} onChange={setFestival} isClearable value={festival} className="w-full text-sm"  styles={{control: (baseStyles) => ({...baseStyles, borderRadius: 8, padding: 1 })}}/>
                 </div>
                 <div>
                     <div className="mb-2 block">
