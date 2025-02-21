@@ -76,9 +76,8 @@ public class ProductionIntegrationTest {
     }
 
     @AfterAll
-    public static void destroyUsers(@Autowired UserRepository userRepository, @Autowired VenueRepository venueRepository) {
+    public static void destroyUsers(@Autowired UserRepository userRepository) {
         userRepository.deleteAll();
-        venueRepository.deleteAll();
     }
 
     @BeforeEach
