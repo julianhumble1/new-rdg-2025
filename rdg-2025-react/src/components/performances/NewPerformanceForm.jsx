@@ -93,7 +93,7 @@ const NewPerformanceForm = () => {
                     <div className="mb-2 block">
                         <Label value="Date & Time (required)" />
                     </div>
-                    <DatePicker selected={performanceTime} onChange={(time) => setPerformanceTime(time)}  dateFormat="dd/MM/yyyy h:mm aa" showTimeSelect timeIntervals={15} popperPlacement="right" showIcon className="p-1 rounded border border-gray-300"/>
+                    <DatePicker selected={performanceTime} onChange={(time) => setPerformanceTime(time)}  dateFormat="dd/MM/yyyy h:mm aa" showTimeSelect timeIntervals={15} popperPlacement="right" showIcon className="p-1 rounded border border-gray-300 text-sm"/>
                 </div>
                 <div>
                     <div className="mb-2 block italic">
