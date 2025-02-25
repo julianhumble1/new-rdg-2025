@@ -1,7 +1,7 @@
 const Home = () => {
     return (<>
         <div className="flex justify-center">
-            Home
+            Home Page Branch
         </div>
     </>)
 }
