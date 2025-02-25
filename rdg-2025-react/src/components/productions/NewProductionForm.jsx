@@ -100,7 +100,7 @@ const NewProductionForm = () => {
                         <div className="italic">
                             <Label value="Audition Date" />
                         </div>
-                        <DatePicker className="border border-gray-300 rounded p-2 text-sm" selected={auditionDate} onChange={(date) => setAuditionDate(date)} dateFormat="dd/MM/yyyy" isClearable/>
+                        <DatePicker className="border border-gray-300 rounded p-2 text-sm" selected={auditionDate} onChange={(date) => setAuditionDate(date)} dateFormat="dd/MM/yyyy" isClearable showIcon/>
                     </div>
                     <div className="flex flex-col justify-center gap-2">
                         <div className="flex justify-center gap-2">
