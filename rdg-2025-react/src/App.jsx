@@ -17,6 +17,7 @@ import NewPerformanceForm from "./components/performances/NewPerformanceForm.jsx
 import FestivalPage from "./components/festivals/FestivalPage.jsx"
 import AllProductions from "./components/productions/AllProductions.jsx"
 import AllFestivals from "./components/festivals/AllFestivals.jsx"
+import FacebookFeed from "./components/FacebookFeed.jsx"
 
 
 function App() {
@@ -64,6 +65,8 @@ function App() {
         <Route path="/festivals/:id" element={<FestivalPage />} />
 
         <Route path="/performances/new" element={<NewPerformanceForm />} />
+
+        <Route path="/facebook" element={<FacebookFeed />} />
       </Routes>
     </Router>
   )
