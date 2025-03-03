@@ -10,6 +10,8 @@ import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import org.hibernate.annotations.Type;
+import org.hibernate.type.NumericBooleanConverter;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -36,8 +38,16 @@ public class Production {
     @Column(length = 2000)
     private String description;
     private LocalDateTime auditionDate;
+
+    @Column(columnDefinition = "TINYINT", length = 1)
+    @Convert(converter = NumericBooleanConverter.class)
     private boolean sundowners;
+
+    @Column(columnDefinition = "TINYINT", length = 1)
+    @Convert(converter = NumericBooleanConverter.class)
     private boolean notConfirmed;
+
+
     private String flyerFile;
 
     @Column(nullable = false)

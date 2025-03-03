@@ -24,6 +24,7 @@ public class Venue {
     @Column(nullable = false, unique = true)
     private String name;
 
+    @Column(length = 2000)
     private String notes;
     private String postcode;
     private String address;
