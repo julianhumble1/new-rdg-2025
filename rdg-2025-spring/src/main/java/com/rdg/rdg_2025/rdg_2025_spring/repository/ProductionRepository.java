@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ProductionRepository extends JpaRepository<Production, Integer> {
 
-    @Query(value = "SELECT COUNT(*) FROM Productions p WHERE p.name LIKE BINARY :prefix%", nativeQuery = true)
+    @Query(value = "SELECT COUNT(*) FROM productions p WHERE p.name LIKE BINARY :prefix%", nativeQuery = true)
     int countByNameStartingWith(@Param("prefix") String prefix);
 
 }
