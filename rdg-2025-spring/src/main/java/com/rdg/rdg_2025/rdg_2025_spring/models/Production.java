@@ -8,9 +8,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
-import org.hibernate.annotations.Type;
 import org.hibernate.type.NumericBooleanConverter;
 
 import java.time.LocalDateTime;
@@ -46,7 +43,6 @@ public class Production {
     @Column(columnDefinition = "TINYINT", length = 1)
     @Convert(converter = NumericBooleanConverter.class)
     private boolean notConfirmed;
-
 
     private String flyerFile;
 
