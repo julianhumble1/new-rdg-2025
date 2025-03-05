@@ -1,6 +1,8 @@
 package com.rdg.rdg_2025.rdg_2025_spring.controllers;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Person;
 import com.rdg.rdg_2025.rdg_2025_spring.payload.request.person.PersonRequest;
 import com.rdg.rdg_2025.rdg_2025_spring.services.PersonService;
@@ -44,22 +46,11 @@ public class PersonControllerTest {
 
     private Person testPerson;
 
-    private PersonRequest testPersonRequest;
+    private ObjectNode requestJson;
 
     @BeforeEach
     void setup() {
         testPerson = new Person(
-                "Test First Name",
-                "Test Last Name",
-                "Test Summary",
-                "01111 111111",
-                "07111 111111",
-                "Test Street",
-                "Test Town",
-                "Test Postcode"
-        );
-
-        testPersonRequest = new PersonRequest(
                 "Test First Name",
                 "Test Last Name",
                 "Test Summary",
@@ -75,30 +66,41 @@ public class PersonControllerTest {
     @DisplayName("addNewPerson controller tests")
     class AddNewPersonControllerTests {
 
-        @Test
-        @WithMockUser(roles="ADMIN")
-        void testFirstNameMissingResponds400() throws Exception {
-            // Arrange
-            testPersonRequest.setFirstName(null);
-
-            // Act & Assert
-            mockMvc.perform(post("/people")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(testPersonRequest)))
-                    .andExpect(status().isBadRequest());
-
+        @BeforeEach
+        void setup() {
+            requestJson = objectMapper.createObjectNode();
+            requestJson.put("firstName", "Test First Name");
+            requestJson.put("lastName", "Test Last Name");
+            requestJson.put("summary", "Test Summary");
+            requestJson.put("homePhone", "01111 111111");
+            requestJson.put("mobilePhone" ,"07111 111111");
+            requestJson.put("addressStreet", "Test Street");
+            requestJson.put("addressTown", "Test Town");
+            requestJson.put("addressPostcode", "Test Postcode");
         }
 
         @Test
         @WithMockUser(roles="ADMIN")
         void testFirstNameEmptyResponds400() throws Exception {
             // Arrange
-            testPersonRequest.setFirstName("");
-
+            requestJson.put("firstName", "");
             // Act & Assert
             mockMvc.perform(post("/people")
                             .contentType(MediaType.APPLICATION_JSON)
-                            .content(objectMapper.writeValueAsString(testPersonRequest)))
+                            .content(objectMapper.writeValueAsString(requestJson)))
+                    .andExpect(status().isBadRequest());
+
+        }
+
+        @Test
+        @WithMockUser(roles="ADMIN")
+        void testFirstNameMissingResponds400() throws Exception {
+            // Arrange
+            requestJson.remove("firstName");
+            // Act & Assert
+            mockMvc.perform(post("/people")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(requestJson)))
                     .andExpect(status().isBadRequest());
 
         }
