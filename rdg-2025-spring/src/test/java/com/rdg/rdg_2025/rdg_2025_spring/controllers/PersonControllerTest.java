@@ -83,8 +83,22 @@ public class PersonControllerTest {
 
             // Act & Assert
             mockMvc.perform(post("/people")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(objectMapper.writeValueAsString(testPersonRequest)))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(testPersonRequest)))
+                    .andExpect(status().isBadRequest());
+
+        }
+
+        @Test
+        @WithMockUser(roles="ADMIN")
+        void testFirstNameEmptyResponds400() throws Exception {
+            // Arrange
+            testPersonRequest.setFirstName("");
+
+            // Act & Assert
+            mockMvc.perform(post("/people")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(testPersonRequest)))
                     .andExpect(status().isBadRequest());
 
         }
