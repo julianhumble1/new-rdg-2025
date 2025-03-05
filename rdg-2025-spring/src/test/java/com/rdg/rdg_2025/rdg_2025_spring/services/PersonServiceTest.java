@@ -16,6 +16,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -33,12 +34,12 @@ public class PersonServiceTest {
     @DisplayName("addNewPerson service tests")
     class AddNewPersonServiceTests {
 
-        private PersonRequest personRequest;
-        private Person person;
+        private PersonRequest testPersonRequest;
+        private Person testPerson;
 
         @BeforeEach
         void setup() {
-            personRequest = new PersonRequest(
+            testPersonRequest = new PersonRequest(
                     "Test First Name",
                     "Test Last Name",
                     "Test Summary",
@@ -48,7 +49,7 @@ public class PersonServiceTest {
                     "Test Town",
                     "Test Postcode"
             );
-            person = new Person(
+            testPerson = new Person(
                     "Test First Name",
                     "Test Last Name",
                     "Test Summary",
@@ -64,7 +65,7 @@ public class PersonServiceTest {
         void testSavePersonIsCalledOnPersonRepository() {
             // Arrange
             // Act
-            personService.addNewPerson(personRequest);
+            personService.addNewPerson(testPersonRequest);
             // Assert
             verify(personRepository, times(1)).save(any(Person.class));
         }
@@ -75,7 +76,7 @@ public class PersonServiceTest {
             when(personRepository.save(any(Person.class))).thenThrow(new DataIntegrityViolationException("Data integrity violation"));
             // Act & Assert
             assertThrows(DataIntegrityViolationException.class, () -> {
-                personService.addNewPerson(personRequest);
+                personService.addNewPerson(testPersonRequest);
             });
         }
 
@@ -85,7 +86,7 @@ public class PersonServiceTest {
             when(personRepository.save(any(Person.class))).thenThrow(new DataAccessException("Data access exception") {});
             // Act & Assert
             assertThrows(DatabaseException.class, () -> {
-                personService.addNewPerson(personRequest);
+                personService.addNewPerson(testPersonRequest);
             });
         }
 
@@ -95,8 +96,18 @@ public class PersonServiceTest {
             when(personRepository.save(any(Person.class))).thenThrow(new PersistenceException("Persistence exception") );
             // Act & Assert
             assertThrows(DatabaseException.class, () -> {
-                personService.addNewPerson(personRequest);
+                personService.addNewPerson(testPersonRequest);
             });
+        }
+
+        @Test
+        void testSuccessfulSaveReturnsPerson() {
+            // Arrange
+            when(personRepository.save(any(Person.class))).thenReturn(testPerson);
+            // Act
+            Person actual = personService.addNewPerson(testPersonRequest);
+            // Assert
+            assertEquals(testPerson, actual);
         }
 
     }

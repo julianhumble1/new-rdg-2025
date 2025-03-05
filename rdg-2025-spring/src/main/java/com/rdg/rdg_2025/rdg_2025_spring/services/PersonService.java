@@ -26,13 +26,7 @@ public class PersonService {
         Person person = new Person();
         updatePersonFromRequest(personRequest, person);
 
-        try {
-            return personRepository.save(person);
-        } catch (DataIntegrityViolationException ex) {
-            throw new DataIntegrityViolationException(ex.getMessage(), ex);
-        } catch (DataAccessException | PersistenceException ex) {
-            throw new DatabaseException(ex.getMessage(), ex);
-        }
+        return savePersonToDatabase(person);
 
     }
 
@@ -54,6 +48,16 @@ public class PersonService {
             person.setCreatedAt(LocalDateTime.now());
         }
         person.setUpdatedAt(LocalDateTime.now());
+    }
+
+    private Person savePersonToDatabase(Person person) {
+        try {
+            return personRepository.save(person);
+        } catch (DataIntegrityViolationException ex) {
+            throw new DataIntegrityViolationException(ex.getMessage(), ex);
+        } catch (DataAccessException | PersistenceException ex) {
+            throw new DatabaseException(ex.getMessage(), ex);
+        }
     }
 
 }
