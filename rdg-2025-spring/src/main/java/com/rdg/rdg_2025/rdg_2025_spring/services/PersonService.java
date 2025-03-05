@@ -5,6 +5,7 @@ import com.rdg.rdg_2025.rdg_2025_spring.helpers.SlugUtils;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Person;
 import com.rdg.rdg_2025.rdg_2025_spring.payload.request.person.PersonRequest;
 import com.rdg.rdg_2025.rdg_2025_spring.repository.PersonRepository;
+import jakarta.persistence.PersistenceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -29,11 +30,13 @@ public class PersonService {
             return personRepository.save(person);
         } catch (DataIntegrityViolationException ex) {
             throw new DataIntegrityViolationException(ex.getMessage(), ex);
-        } catch (DataAccessException ex) {
+        } catch (DataAccessException | PersistenceException ex) {
             throw new DatabaseException(ex.getMessage(), ex);
         }
 
     }
+
+    // PRIVATE HELPER METHODS
 
     private void updatePersonFromRequest(PersonRequest personRequest, Person person) {
         person.setFirstName(personRequest.getFirstName());

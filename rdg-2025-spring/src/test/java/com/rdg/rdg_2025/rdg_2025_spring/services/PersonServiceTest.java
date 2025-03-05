@@ -4,6 +4,7 @@ import com.rdg.rdg_2025.rdg_2025_spring.exception.DatabaseException;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Person;
 import com.rdg.rdg_2025.rdg_2025_spring.payload.request.person.PersonRequest;
 import com.rdg.rdg_2025.rdg_2025_spring.repository.PersonRepository;
+import jakarta.persistence.PersistenceException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -82,6 +83,16 @@ public class PersonServiceTest {
         void testSaveDataAccessExceptionThrowsDatabaseException() {
             // Arrange
             when(personRepository.save(any(Person.class))).thenThrow(new DataAccessException("Data access exception") {});
+            // Act & Assert
+            assertThrows(DatabaseException.class, () -> {
+                personService.addNewPerson(personRequest);
+            });
+        }
+
+        @Test
+        void testSaveDataPersistenceExceptionThrowsDatabaseException() {
+            // Arrange
+            when(personRepository.save(any(Person.class))).thenThrow(new PersistenceException("Persistence exception") );
             // Act & Assert
             assertThrows(DatabaseException.class, () -> {
                 personService.addNewPerson(personRequest);
