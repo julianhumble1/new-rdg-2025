@@ -6,6 +6,7 @@ import com.rdg.rdg_2025.rdg_2025_spring.models.Person;
 import com.rdg.rdg_2025.rdg_2025_spring.payload.request.person.PersonRequest;
 import com.rdg.rdg_2025.rdg_2025_spring.repository.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +28,8 @@ public class PersonService {
         try {
             return personRepository.save(person);
         } catch (DataIntegrityViolationException ex) {
+            throw new DataIntegrityViolationException(ex.getMessage(), ex);
+        } catch (DataAccessException ex) {
             throw new DatabaseException(ex.getMessage(), ex);
         }
 

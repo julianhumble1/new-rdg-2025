@@ -12,6 +12,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -68,9 +69,19 @@ public class PersonServiceTest {
         }
 
         @Test
-        void testSaveDataIntegrityViolationThrowsDatabaseException() {
+        void testSaveDataIntegrityViolationThrowsDataIntegrityViolationException() {
             // Arrange
             when(personRepository.save(any(Person.class))).thenThrow(new DataIntegrityViolationException("Data integrity violation"));
+            // Act & Assert
+            assertThrows(DataIntegrityViolationException.class, () -> {
+                personService.addNewPerson(personRequest);
+            });
+        }
+
+        @Test
+        void testSaveDataAccessExceptionThrowsDatabaseException() {
+            // Arrange
+            when(personRepository.save(any(Person.class))).thenThrow(new DataAccessException("Data access exception") {});
             // Act & Assert
             assertThrows(DatabaseException.class, () -> {
                 personService.addNewPerson(personRequest);
