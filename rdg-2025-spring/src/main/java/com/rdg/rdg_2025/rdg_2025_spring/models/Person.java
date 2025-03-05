@@ -1,5 +1,6 @@
 package com.rdg.rdg_2025.rdg_2025_spring.models;
 
+import com.rdg.rdg_2025.rdg_2025_spring.helpers.SlugUtils;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -42,4 +43,19 @@ public class Person {
 
     private LocalDateTime updatedAt;
 
+    public Person(String firstName, String lastName, String summary, String home_phone, String mobile_phone, String address_street, String address_town, String address_postcode) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.summary = summary;
+        this.home_phone = home_phone;
+        this.mobile_phone = mobile_phone;
+        this.address_street = address_street;
+        this.address_town = address_town;
+        this.address_postcode = address_postcode;
+
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
+
+        this.slug = SlugUtils.generateSlug(firstName, lastName);
+    }
 }
