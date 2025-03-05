@@ -26,32 +26,28 @@ public class Person {
     @Column(length = 2000)
     private String summary;
 
-    private String home_phone;
-
-    private String mobile_phone;
-
-    private String address_street;
-
-    private String address_town;
-
-    private String address_postcode;
+    private String homePhone;
+    private String mobilePhone;
+    private String addressStreet;
+    private String addressTown;
+    private String addressPostcode;
 
     @Column(nullable = false, unique = true)
     private String slug;
 
+    @Column(nullable = false)
     private LocalDateTime createdAt;
-
     private LocalDateTime updatedAt;
 
     public Person(String firstName, String lastName, String summary, String home_phone, String mobile_phone, String address_street, String address_town, String address_postcode) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.summary = summary;
-        this.home_phone = home_phone;
-        this.mobile_phone = mobile_phone;
-        this.address_street = address_street;
-        this.address_town = address_town;
-        this.address_postcode = address_postcode;
+        this.homePhone = home_phone;
+        this.mobilePhone = mobile_phone;
+        this.addressStreet = address_street;
+        this.addressTown = address_town;
+        this.addressPostcode = address_postcode;
 
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
