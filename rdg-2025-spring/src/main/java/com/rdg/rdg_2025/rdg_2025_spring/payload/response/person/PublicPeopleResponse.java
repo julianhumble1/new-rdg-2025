@@ -7,11 +7,13 @@ import lombok.Setter;
 import java.util.List;
 
 @Getter @Setter
-public class SafePeopleResponse {
+public class PublicPeopleResponse {
 
     private List<Person> people;
 
-    public SafePeopleResponse(List<Person> people) {
+    private PersonResponseType responseType = PersonResponseType.PUBLIC;
+
+    public PublicPeopleResponse(List<Person> people) {
         people.forEach((Person person) -> {
             person.setHomePhone("");
             person.setMobilePhone("");

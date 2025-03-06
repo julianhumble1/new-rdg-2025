@@ -3,9 +3,9 @@ package com.rdg.rdg_2025.rdg_2025_spring.controllers;
 import com.rdg.rdg_2025.rdg_2025_spring.exception.DatabaseException;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Person;
 import com.rdg.rdg_2025.rdg_2025_spring.payload.request.person.PersonRequest;
-import com.rdg.rdg_2025.rdg_2025_spring.payload.response.person.FullPeopleResponse;
+import com.rdg.rdg_2025.rdg_2025_spring.payload.response.person.DetailedPeopleResponse;
 import com.rdg.rdg_2025.rdg_2025_spring.payload.response.person.PersonResponse;
-import com.rdg.rdg_2025.rdg_2025_spring.payload.response.person.SafePeopleResponse;
+import com.rdg.rdg_2025.rdg_2025_spring.payload.response.person.PublicPeopleResponse;
 import com.rdg.rdg_2025.rdg_2025_spring.security.jwt.JwtUtils;
 import com.rdg.rdg_2025.rdg_2025_spring.services.PersonService;
 import jakarta.validation.Valid;
@@ -54,9 +54,9 @@ public class PersonController {
         try {
             List<Person> personList = personService.getAllPeople();
             if (isAdmin) {
-                return ResponseEntity.ok().body(new FullPeopleResponse(personList));
+                return ResponseEntity.ok().body(new DetailedPeopleResponse(personList));
             } else {
-                return ResponseEntity.ok().body(new SafePeopleResponse(personList));
+                return ResponseEntity.ok().body(new PublicPeopleResponse(personList));
             }
         } catch (DatabaseException ex) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());

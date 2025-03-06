@@ -7,11 +7,13 @@ import lombok.Setter;
 import java.util.List;
 
 @Getter @Setter
-public class FullPeopleResponse {
+public class DetailedPeopleResponse {
 
     private List<Person> people;
 
-    public FullPeopleResponse(List<Person> people) {
+    private PersonResponseType responseType = PersonResponseType.DETAILED;
+
+    public DetailedPeopleResponse(List<Person> people) {
         this.people = people;
     }
 }
