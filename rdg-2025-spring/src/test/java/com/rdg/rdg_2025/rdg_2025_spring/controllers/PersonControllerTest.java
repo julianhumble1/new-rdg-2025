@@ -217,5 +217,18 @@ public class PersonControllerTest {
                             .content(objectMapper.writeValueAsString(requestJson)))
                     .andExpect(header().string("Location", "/people/" + testPerson.getId()));
         }
+
+        @Test
+        @WithMockUser(roles="ADMIN")
+        void testSuccessfulAddRespondsExpectedPersonJSON() throws Exception {
+            // Arrange
+            when(personService.addNewPerson(any(PersonRequest.class))).thenReturn(testPerson);
+            // Act & Assert
+            mockMvc.perform(post("/people")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(requestJson)))
+                    .andExpect(jsonPath("$.person.firstName").value("Test First Name"))
+                    .andExpect(jsonPath("$.person.lastName").value("Test Last Name"));
+        }
     }
 }
