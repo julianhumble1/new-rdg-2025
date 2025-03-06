@@ -265,6 +265,18 @@ public class PersonIntegrationTest {
 
         }
 
+        @Test
+        void testUserTokenResponds401() throws Exception {
+            // Arrange
+            // Act & Assert
+            mockMvc.perform(post("/people")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", "bad token")
+                            .content(objectMapper.writeValueAsString(requestJson)))
+                    .andExpect(status().isUnauthorized());
+
+        }
+
     }
 
 }
