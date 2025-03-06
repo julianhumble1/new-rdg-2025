@@ -39,15 +39,15 @@ public class Person {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    public Person(String firstName, String lastName, String summary, String home_phone, String mobile_phone, String address_street, String address_town, String address_postcode) {
+    public Person(String firstName, String lastName, String summary, String homePhone, String mobilePhone, String addressStreet, String addressTown, String addressPostcode) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.summary = summary;
-        this.homePhone = home_phone;
-        this.mobilePhone = mobile_phone;
-        this.addressStreet = address_street;
-        this.addressTown = address_town;
-        this.addressPostcode = address_postcode;
+        this.homePhone = homePhone;
+        this.mobilePhone = mobilePhone;
+        this.addressStreet = addressStreet;
+        this.addressTown = addressTown;
+        this.addressPostcode = addressPostcode;
 
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
