@@ -25,7 +25,7 @@ import org.springframework.web.context.WebApplicationContext;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(PersonController.class)
 public class PersonControllerTest {
@@ -204,6 +204,18 @@ public class PersonControllerTest {
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(requestJson)))
                     .andExpect(status().isCreated());
+        }
+
+        @Test
+        @WithMockUser(roles="ADMIN")
+        void testSuccessfulAddRespondsExpectedURI() throws Exception {
+            // Arrange
+            when(personService.addNewPerson(any(PersonRequest.class))).thenReturn(testPerson);
+            // Act & Assert
+            mockMvc.perform(post("/people")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(requestJson)))
+                    .andExpect(header().string("Location", "/people/" + testPerson.getId()));
         }
     }
 }
