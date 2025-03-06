@@ -24,6 +24,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -230,5 +231,22 @@ public class PersonControllerTest {
                     .andExpect(jsonPath("$.person.firstName").value("Test First Name"))
                     .andExpect(jsonPath("$.person.lastName").value("Test Last Name"));
         }
+    }
+
+    @Nested
+    @DisplayName("getAllPeople controller tests")
+    class GetAllPeopleControllerTests {
+
+        @Test
+        void testGetAllPeopleServiceMethodIsCalled() throws Exception {
+            // Arrange
+            // Act
+            mockMvc.perform(get("/people"));
+            // Assert
+            verify(personService, times(1)).getAllPeople();
+
+
+        }
+
     }
 }

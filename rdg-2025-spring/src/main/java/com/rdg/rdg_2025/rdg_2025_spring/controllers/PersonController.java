@@ -37,6 +37,11 @@ public class PersonController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
         }
 
+    }
 
+    @GetMapping
+    public ResponseEntity<?> getAllPeople() {
+        personService.getAllPeople();
+        return ResponseEntity.ok().build();
     }
 }
