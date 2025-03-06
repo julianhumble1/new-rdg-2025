@@ -3,6 +3,7 @@ package com.rdg.rdg_2025.rdg_2025_spring.controllers;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.rdg.rdg_2025.rdg_2025_spring.exception.DatabaseException;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Person;
 import com.rdg.rdg_2025.rdg_2025_spring.payload.request.person.PersonRequest;
 import com.rdg.rdg_2025.rdg_2025_spring.services.PersonService;
@@ -178,6 +179,19 @@ public class PersonControllerTest {
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(requestJson)))
                     .andExpect(status().isConflict());
+        }
+
+        @Test
+        @WithMockUser(roles="ADMIN")
+        void testDatabaseExceptionResponds500() throws Exception {
+            // Arrange
+            when(personService.addNewPerson(any(PersonRequest.class)))
+                    .thenThrow(new DatabaseException("Database exception"));
+            // Act & Assert
+            mockMvc.perform(post("/people")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(requestJson)))
+                    .andExpect(status().isInternalServerError());
         }
     }
 }
