@@ -192,7 +192,17 @@ public class PersonIntegrationTest {
                     .andExpect(status().isBadRequest());
         }
 
-
+        @Test
+        void testLastNameMissingResponds400() throws Exception {
+            // Arrange
+            requestJson.remove("lastName");
+            // Act & Assert
+            mockMvc.perform(post("/people")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", adminToken)
+                            .content(objectMapper.writeValueAsString(requestJson)))
+                    .andExpect(status().isBadRequest());
+        }
 
     }
 
