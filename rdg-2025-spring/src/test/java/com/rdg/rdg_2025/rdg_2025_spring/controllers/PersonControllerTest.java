@@ -1,11 +1,11 @@
 package com.rdg.rdg_2025.rdg_2025_spring.controllers;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.rdg.rdg_2025.rdg_2025_spring.exception.DatabaseException;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Person;
 import com.rdg.rdg_2025.rdg_2025_spring.payload.request.person.PersonRequest;
+import com.rdg.rdg_2025.rdg_2025_spring.security.jwt.JwtUtils;
 import com.rdg.rdg_2025.rdg_2025_spring.services.PersonService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -39,6 +39,9 @@ public class PersonControllerTest {
 
     @MockitoBean
     private PersonService personService;
+
+    @MockitoBean
+    private JwtUtils jwtUtils;
 
     @InjectMocks
     private PersonController personController;
@@ -285,6 +288,7 @@ public class PersonControllerTest {
         @Test
         void testAdminRequestResponds200WhenSuccessful() throws Exception {
             // Arrange
+            when(jwtUtils.checkAdmin()).thenReturn(true);
             when(personService.getAllPeople()).thenReturn(personList);
             // Act & Assert
             mockMvc.perform(get("/people"))
@@ -295,6 +299,7 @@ public class PersonControllerTest {
         @Test
         void testAdminRequestRespondsExpectedJSONPersonList() throws Exception {
             // Arrange
+            when(jwtUtils.checkAdmin()).thenReturn(true);
             when(personService.getAllPeople()).thenReturn(personList);
             // Act & Assert
             mockMvc.perform(get("/people"))
@@ -306,6 +311,24 @@ public class PersonControllerTest {
                     .andExpect(jsonPath("$.people[1].lastName").value("Test Last Name 2"))
                     .andExpect(jsonPath("$.people[1].summary").value("Test Summary"))
                     .andExpect(jsonPath("$.people[1].mobilePhone").value("07111 111111"));
+
+        }
+
+        @Test
+        void testNonAdminRequestRespondsRestrictedJSONPersonList() throws Exception {
+            // Arrange
+            when(jwtUtils.checkAdmin()).thenReturn(false);
+            when(personService.getAllPeople()).thenReturn(personList);
+            // Act & Assert
+            mockMvc.perform(get("/people"))
+                    .andExpect(jsonPath("$.people[0].firstName").isNotEmpty())
+                    .andExpect(jsonPath("$.people[0].lastName").isNotEmpty())
+                    .andExpect(jsonPath("$.people[0].summary").isNotEmpty())
+                    .andExpect(jsonPath("$.people[0].homePhone").isEmpty())
+                    .andExpect(jsonPath("$.people[0].mobilePhone").isEmpty())
+                    .andExpect(jsonPath("$.people[0].addressStreet").isEmpty())
+                    .andExpect(jsonPath("$.people[0].addressTown").isEmpty())
+                    .andExpect(jsonPath("$.people[0].addressPostcode").isEmpty());
 
         }
 

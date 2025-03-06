@@ -3,8 +3,10 @@ package com.rdg.rdg_2025.rdg_2025_spring.controllers;
 import com.rdg.rdg_2025.rdg_2025_spring.exception.DatabaseException;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Person;
 import com.rdg.rdg_2025.rdg_2025_spring.payload.request.person.PersonRequest;
-import com.rdg.rdg_2025.rdg_2025_spring.payload.response.person.PeopleResponse;
+import com.rdg.rdg_2025.rdg_2025_spring.payload.response.person.FullPeopleResponse;
 import com.rdg.rdg_2025.rdg_2025_spring.payload.response.person.PersonResponse;
+import com.rdg.rdg_2025.rdg_2025_spring.payload.response.person.SafePeopleResponse;
+import com.rdg.rdg_2025.rdg_2025_spring.security.jwt.JwtUtils;
 import com.rdg.rdg_2025.rdg_2025_spring.services.PersonService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -24,6 +27,9 @@ public class PersonController {
 
     @Autowired
     PersonService personService;
+
+    @Autowired
+    JwtUtils jwtUtils;
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
@@ -43,11 +49,19 @@ public class PersonController {
 
     @GetMapping
     public ResponseEntity<?> getAllPeople() {
+        boolean isAdmin = jwtUtils.checkAdmin();
+
         try {
             List<Person> personList = personService.getAllPeople();
-            return ResponseEntity.ok().body(new PeopleResponse(personList));
+            if (isAdmin) {
+                return ResponseEntity.ok().body(new FullPeopleResponse(personList));
+            } else {
+                return ResponseEntity.ok().body(new SafePeopleResponse(personList));
+            }
         } catch (DatabaseException ex) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
         }
     }
+
+
 }

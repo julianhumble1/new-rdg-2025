@@ -7,11 +7,11 @@ import lombok.Setter;
 import java.util.List;
 
 @Getter @Setter
-public class PeopleResponse {
+public class FullPeopleResponse {
 
     private List<Person> people;
 
-    public PeopleResponse(List<Person> people) {
+    public FullPeopleResponse(List<Person> people) {
         this.people = people;
     }
 }
