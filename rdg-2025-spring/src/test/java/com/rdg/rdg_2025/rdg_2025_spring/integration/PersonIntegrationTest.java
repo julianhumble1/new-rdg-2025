@@ -224,6 +224,35 @@ public class PersonIntegrationTest {
                     .andExpect(status().isCreated());
         }
 
+        @Test
+        void testOnlyFirstNameLastNamePresentRespondsExpectedJSON() throws Exception {
+            // Arrange
+            requestJson.remove("summary");
+            requestJson.remove("homePhone");
+            requestJson.remove("mobilePhone");
+            requestJson.remove("addressStreet");
+            requestJson.remove("addressTown");
+            requestJson.remove("addressPostcode");
+
+            // Act & Assert
+            mockMvc.perform(post("/people")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", adminToken)
+                            .content(objectMapper.writeValueAsString(requestJson)))
+                    .andExpect(jsonPath("$.person.firstName").value("Test First Name"))
+                    .andExpect(jsonPath("$.person.lastName").value("Test Last Name"))
+                    .andExpect(jsonPath("$.person.summary").isEmpty())
+                    .andExpect(jsonPath("$.person.homePhone").isEmpty())
+                    .andExpect(jsonPath("$.person.mobilePhone").isEmpty())
+                    .andExpect(jsonPath("$.person.addressStreet").isEmpty())
+                    .andExpect(jsonPath("$.person.addressTown").isEmpty())
+                    .andExpect(jsonPath("$.person.addressPostcode").isEmpty())
+                    .andExpect(jsonPath("$.person.id").isNumber())
+                    .andExpect(jsonPath("$.person.slug").value("test-first-name-test-last-name"))
+                    .andExpect(jsonPath("$.person.createdAt").isNotEmpty())
+                    .andExpect(jsonPath("$.person.updatedAt").isNotEmpty());
+        }
+
     }
 
 }
