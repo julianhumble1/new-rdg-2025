@@ -12,6 +12,8 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class PersonService {
@@ -27,7 +29,11 @@ public class PersonService {
         updatePersonFromRequest(personRequest, person);
 
         return savePersonToDatabase(person);
+    }
 
+    public List<Person> getAllPeople() {
+        personRepository.findAll();
+        return new ArrayList<Person>();
     }
 
     // PRIVATE HELPER METHODS

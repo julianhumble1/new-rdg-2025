@@ -16,6 +16,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
 
+import java.util.ArrayList;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
@@ -108,6 +110,51 @@ public class PersonServiceTest {
             Person actual = personService.addNewPerson(testPersonRequest);
             // Assert
             assertEquals(testPerson, actual);
+        }
+
+    }
+
+    @Nested
+    @DisplayName("getAllPeople service tests")
+    class GetAllPeopleServiceTests {
+
+        private ArrayList<Person> testPersonList;
+
+        @BeforeEach
+        void setup() {
+            Person testPerson1 = new Person(
+                    "Test First Name 1",
+                    "Test Last Name 1",
+                    "Test Summary",
+                    "01111 111111",
+                    "07111 111111",
+                    "Test Street",
+                    "Test Town",
+                    "Test Postcode"
+            );
+
+            Person testPerson2 = new Person(
+                    "Test First Name 2",
+                    "Test Last Name 2",
+                    "Test Summary",
+                    "01111 111111",
+                    "07111 111111",
+                    "Test Street",
+                    "Test Town",
+                    "Test Postcode"
+            );
+            testPersonList = new ArrayList<Person>();
+            testPersonList.add(testPerson1);
+            testPersonList.add(testPerson2);
+        }
+
+        @Test
+        void testRepositoryFindAllMethodIsCalled() {
+            // Arrange
+            // Act
+            personService.getAllPeople();
+            // Assert
+            verify(personRepository, times(1)).findAll();
         }
 
     }
