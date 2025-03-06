@@ -93,8 +93,9 @@ public class PersonIntegrationTest {
             // Arrange
             // Act & Assert
             mockMvc.perform(post("/people")
-                    .contentType(MediaType.APPLICATION_JSON).header("Authorization", adminToken)
-                    .content(objectMapper.writeValueAsString(requestJson)))
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", adminToken)
+                            .content(objectMapper.writeValueAsString(requestJson)))
                     .andExpect(status().isCreated());
 
         }
@@ -104,7 +105,8 @@ public class PersonIntegrationTest {
             // Arrange
             // Act & Assert
             mockMvc.perform(post("/people")
-                            .contentType(MediaType.APPLICATION_JSON).header("Authorization", adminToken)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", adminToken)
                             .content(objectMapper.writeValueAsString(requestJson)))
                     .andExpect(jsonPath("$.person.firstName").value("Test First Name"))
                     .andExpect(jsonPath("$.person.lastName").value("Test Last Name"))
@@ -128,7 +130,8 @@ public class PersonIntegrationTest {
             int startingLength = personRepository.findAll().size();
             // Act
             mockMvc.perform(post("/people")
-                            .contentType(MediaType.APPLICATION_JSON).header("Authorization", adminToken)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", adminToken)
                             .content(objectMapper.writeValueAsString(requestJson)));
             // Assert
             int endingLength = personRepository.findAll().size();
@@ -139,16 +142,30 @@ public class PersonIntegrationTest {
         void testDuplicateFirstNameAndLastNameResponds409() throws Exception {
             // Arrange
             mockMvc.perform(post("/people")
-                    .contentType(MediaType.APPLICATION_JSON).header("Authorization", adminToken)
-                    .content(objectMapper.writeValueAsString(requestJson)))
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", adminToken)
+                            .content(objectMapper.writeValueAsString(requestJson)))
                     .andExpect(status().isCreated());
 
             // Act & Assert
             mockMvc.perform(post("/people")
-                    .contentType(MediaType.APPLICATION_JSON).header("Authorization", adminToken)
-                    .content(objectMapper.writeValueAsString(requestJson)))
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", adminToken)
+                            .content(objectMapper.writeValueAsString(requestJson)))
                     .andExpect(status().isConflict());
 
+        }
+
+        @Test
+        void testFirstNameEmptyResponds400() throws Exception {
+            // Arrange
+            requestJson.put("firstName", "");
+            // Act & Assert
+            mockMvc.perform(post("/people")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", adminToken)
+                            .content(objectMapper.writeValueAsString(requestJson)))
+                    .andExpect(status().isBadRequest());
         }
 
 
