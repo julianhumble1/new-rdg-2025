@@ -41,6 +41,15 @@ const AltAdminDashboard = () => {
                     <Link to="/performances/new" className="underline text-blue-500 hover:text-blue-700">Add New Performance</Link>
                 </div>
             </div>
+
+            <div className="hover:bg-slate-300 hover:drop-shadow-sm transition col-span-1 flex justify-center">
+                <div className="w-1/2 flex flex-col p-6 my-6 text-lg">
+                    <div className="font-bold py-3 w-full italic">
+                        People
+                    </div>
+                    <Link to="/people/new" className="underline text-blue-500 hover:text-blue-700">Add New Person</Link>
+                </div>
+            </div>
         </div>
     )
 }
