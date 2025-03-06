@@ -43,7 +43,7 @@ public class PersonControllerTest {
     private WebApplicationContext context;
 
     @Autowired
-    ObjectMapper objectMapper;
+    private ObjectMapper objectMapper;
 
     @BeforeEach
     public void setupContext() {mockMvc = MockMvcBuilders.webAppContextSetup(context).build();}
