@@ -130,5 +130,24 @@ public class PersonControllerTest {
                     .andExpect(status().isBadRequest());
 
         }
+
+        @Test
+        @WithMockUser(roles="ADMIN")
+        void testOnlyFirstNameLastNamePresentResponds201() throws Exception {
+            // Arrange
+            requestJson.remove("summary");
+            requestJson.remove("homePhone");
+            requestJson.remove("mobilePhone");
+            requestJson.remove("addressStreet");
+            requestJson.remove("addressTown");
+            requestJson.remove("addressPostcode");
+
+            // Act & Assert
+            mockMvc.perform(post("/people")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(requestJson)))
+                    .andExpect(status().isCreated());
+
+        }
     }
 }

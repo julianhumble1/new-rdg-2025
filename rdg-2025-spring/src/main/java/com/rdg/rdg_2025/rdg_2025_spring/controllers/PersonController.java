@@ -6,6 +6,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
+
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/people")
@@ -15,7 +17,7 @@ public class PersonController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> addNewVenue(@Valid @RequestBody PersonRequest personRequest) {
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.created(URI.create("")).build();
 
     }
 }
