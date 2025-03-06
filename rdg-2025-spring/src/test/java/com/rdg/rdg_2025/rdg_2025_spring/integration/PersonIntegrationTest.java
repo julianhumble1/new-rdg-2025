@@ -333,5 +333,14 @@ public class PersonIntegrationTest {
                     .andExpect(status().isOk());
         }
 
+        @Test
+        void testAdminSuccessfulGetRespondsPeopleArray() throws Exception {
+            // Arrange
+            // Act & Assert
+            mockMvc.perform(get("/people")
+                            .header("Authorization", adminToken))
+                    .andExpect(jsonPath("$.people").isArray());
+        }
+
     }
 }
