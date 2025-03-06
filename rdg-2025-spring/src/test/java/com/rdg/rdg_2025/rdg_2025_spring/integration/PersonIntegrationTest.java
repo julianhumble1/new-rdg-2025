@@ -342,5 +342,22 @@ public class PersonIntegrationTest {
                     .andExpect(jsonPath("$.people").isArray());
         }
 
+        @Test
+        void testAdminSuccessfulGetRespondsFullDetailsOfPeople() throws Exception {
+            // Arrange
+            // Act & Assert
+            mockMvc.perform(get("/people")
+                            .header("Authorization", adminToken))
+                    .andExpect(jsonPath("$.people[0].id").value(testPerson1.getId()))
+                    .andExpect(jsonPath("$.people[0].firstName").value(testPerson1.getFirstName()))
+                    .andExpect(jsonPath("$.people[0].lastName").value(testPerson1.getLastName()))
+                    .andExpect(jsonPath("$.people[0].summary").value(testPerson1.getSummary()))
+                    .andExpect(jsonPath("$.people[0].homePhone").value(testPerson1.getHomePhone()))
+                    .andExpect(jsonPath("$.people[0].mobilePhone").value(testPerson1.getMobilePhone()))
+                    .andExpect(jsonPath("$.people[0].addressStreet").value(testPerson1.getAddressStreet()))
+                    .andExpect(jsonPath("$.people[0].addressTown").value(testPerson1.getAddressTown()))
+                    .andExpect(jsonPath("$.people[0].addressPostcode").value(testPerson1.getAddressPostcode()));
+        }
+
     }
 }
