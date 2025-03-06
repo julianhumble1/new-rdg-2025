@@ -33,11 +33,10 @@ public class PersonService {
 
     public List<Person> getAllPeople() {
         try {
-            personRepository.findAll();
+            return personRepository.findAll();
         } catch (DataAccessException ex) {
             throw new DatabaseException(ex.getMessage(), ex);
         }
-        return new ArrayList<Person>();
     }
 
     // PRIVATE HELPER METHODS

@@ -121,36 +121,6 @@ public class PersonServiceTest {
     @DisplayName("getAllPeople service tests")
     class GetAllPeopleServiceTests {
 
-        private ArrayList<Person> testPersonList;
-
-        @BeforeEach
-        void setup() {
-            Person testPerson1 = new Person(
-                    "Test First Name 1",
-                    "Test Last Name 1",
-                    "Test Summary",
-                    "01111 111111",
-                    "07111 111111",
-                    "Test Street",
-                    "Test Town",
-                    "Test Postcode"
-            );
-
-            Person testPerson2 = new Person(
-                    "Test First Name 2",
-                    "Test Last Name 2",
-                    "Test Summary",
-                    "01111 111111",
-                    "07111 111111",
-                    "Test Street",
-                    "Test Town",
-                    "Test Postcode"
-            );
-            testPersonList = new ArrayList<Person>();
-            testPersonList.add(testPerson1);
-            testPersonList.add(testPerson2);
-        }
-
         @Test
         void testRepositoryFindAllMethodIsCalled() {
             // Arrange
@@ -178,6 +148,19 @@ public class PersonServiceTest {
             List<Person> people = personService.getAllPeople();
             // Assert
             assertEquals(0, people.size());
+        }
+
+        @Test
+        void testOnePersonInDatabaseReturnsListLengthOne() {
+            // Arrange
+            Person testPerson1 = new Person();
+            ArrayList<Person> testPersonList = new ArrayList<>();
+            testPersonList.add(testPerson1);
+            when(personRepository.findAll()).thenReturn(testPersonList);
+            // Act
+            List<Person> people = personService.getAllPeople();
+            // Assert
+            assertEquals(1, people.size());
         }
 
     }
