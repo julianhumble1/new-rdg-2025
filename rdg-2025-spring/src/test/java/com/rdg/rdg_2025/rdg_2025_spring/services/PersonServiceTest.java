@@ -17,6 +17,9 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -165,6 +168,16 @@ public class PersonServiceTest {
             assertThrows(DatabaseException.class, () ->{
                 personService.getAllPeople();
             });
+        }
+
+        @Test
+        void testEmptyDatabaseReturnsEmptyList() {
+            // Arrange
+            when(personRepository.findAll()).thenReturn(Collections.EMPTY_LIST);
+            // Act
+            List<Person> people = personService.getAllPeople();
+            // Assert
+            assertEquals(0, people.size());
         }
 
     }
