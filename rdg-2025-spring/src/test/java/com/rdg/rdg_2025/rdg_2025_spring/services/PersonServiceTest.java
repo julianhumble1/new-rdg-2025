@@ -163,5 +163,20 @@ public class PersonServiceTest {
             assertEquals(1, people.size());
         }
 
+        @Test
+        void testMultiplePeopleInDatabaseReturnsExpectedListLength() {
+            // Arrange
+            Person testPerson1 = new Person();
+            Person testPerson2 = new Person();
+            ArrayList<Person> testPersonList = new ArrayList<>();
+            testPersonList.add(testPerson1);
+            testPersonList.add(testPerson2);
+            when(personRepository.findAll()).thenReturn(testPersonList);
+            // Act
+            List<Person> people = personService.getAllPeople();
+            // Assert
+            assertEquals(2, people.size());
+        }
+
     }
 }
