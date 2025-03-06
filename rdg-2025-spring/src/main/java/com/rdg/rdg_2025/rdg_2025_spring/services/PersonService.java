@@ -32,7 +32,11 @@ public class PersonService {
     }
 
     public List<Person> getAllPeople() {
-        personRepository.findAll();
+        try {
+            personRepository.findAll();
+        } catch (DataAccessException ex) {
+            throw new DatabaseException(ex.getMessage(), ex);
+        }
         return new ArrayList<Person>();
     }
 

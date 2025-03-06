@@ -157,5 +157,15 @@ public class PersonServiceTest {
             verify(personRepository, times(1)).findAll();
         }
 
+        @Test
+        void testDataAccessExceptionThrowsDatabaseException() {
+            // Arrange
+            when(personRepository.findAll()).thenThrow(new DataAccessException("Data access exception")  {});
+            // Act & Assert
+            assertThrows(DatabaseException.class, () ->{
+                personService.getAllPeople();
+            });
+        }
+
     }
 }
