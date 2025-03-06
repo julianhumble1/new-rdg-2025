@@ -253,6 +253,18 @@ public class PersonIntegrationTest {
                     .andExpect(jsonPath("$.person.updatedAt").isNotEmpty());
         }
 
+        @Test
+        void testUserTokenResponds403() throws Exception {
+            // Arrange
+            // Act & Assert
+            mockMvc.perform(post("/people")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", userToken)
+                            .content(objectMapper.writeValueAsString(requestJson)))
+                    .andExpect(status().isForbidden());
+
+        }
+
     }
 
 }
