@@ -48,6 +48,7 @@ const AltAdminDashboard = () => {
                         People
                     </div>
                     <Link to="/people/new" className="underline text-blue-500 hover:text-blue-700">Add New Person</Link>
+                    <Link to="/people" className="underline text-blue-500 hover:text-blue-700">See All People</Link>
                 </div>
             </div>
         </div>

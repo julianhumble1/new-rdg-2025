@@ -31,5 +31,24 @@ export default class PersonService {
 
     }
 
+    static getAllPeople = async () => {
+        const token = Cookies.get("token")
+        console.log(token)
+
+        try {
+            const response = await axios.get("http://localhost:8080/people",
+                {
+                    headers: {
+                        "Authorization": `Bearer ${token}`
+                    }
+                }
+
+            )
+            return response
+        } catch (e) {
+            throw new Error(e.message)
+        }
+    }
+
 
 }

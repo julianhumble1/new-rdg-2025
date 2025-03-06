@@ -1,6 +1,6 @@
 import { useState } from "react"
 import PersonService from "../../services/PersonService.js"
-import { Label, TextInput } from "flowbite-react"
+import { Label, Textarea, TextInput } from "flowbite-react"
 import { Link } from "react-router-dom"
 import ErrorMessage from "../modals/ErrorMessage.jsx"
 import SuccessMessage from "../modals/SuccessMessage.jsx"
@@ -25,7 +25,6 @@ const NewPersonForm = () => {
 			const response = await PersonService.addNewPerson(
 				firstName, lastName, summary, homePhone, mobilePhone, addressStreet, addressTown, addressPostcode
 			)
-			console.log(response)
 			setSuccessMessage(`Successfully created ${response.data.person.firstName} ${response.data.person.lastName}`)
 		} catch (e) {
 			setErrorMessage(e.message)
@@ -46,6 +45,13 @@ const NewPersonForm = () => {
 						<TextInput placeholder="Last Name" className="flex-auto" required value={lastName} onChange={(e) => setLastName(e.target.value)}/>
 					</div>
 				</div>
+
+				<div>
+                    <div className="mb-2 block italic">
+                        <Label value={`Summary (max 2000 characters, current: ${summary.length})`} />
+                    </div>
+                    <Textarea placeholder="A brilliant actor... " value={summary} onChange={(e) => setSummary(e.target.value)} rows={6} />
+                </div>
 				
 				<div>
                     <div className="mb-2 block">
