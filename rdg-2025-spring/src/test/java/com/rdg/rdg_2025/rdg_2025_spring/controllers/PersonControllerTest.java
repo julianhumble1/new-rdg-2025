@@ -292,5 +292,22 @@ public class PersonControllerTest {
 
         }
 
+        @Test
+        void testAdminRequestRespondsExpectedJSONPersonList() throws Exception {
+            // Arrange
+            when(personService.getAllPeople()).thenReturn(personList);
+            // Act & Assert
+            mockMvc.perform(get("/people"))
+                    .andExpect(jsonPath("$.people[0].firstName").value("Test First Name"))
+                    .andExpect(jsonPath("$.people[0].lastName").value("Test Last Name"))
+                    .andExpect(jsonPath("$.people[0].summary").value("Test Summary"))
+                    .andExpect(jsonPath("$.people[0].mobilePhone").value("07111 111111"))
+                    .andExpect(jsonPath("$.people[1].firstName").value("Test First Name 2"))
+                    .andExpect(jsonPath("$.people[1].lastName").value("Test Last Name 2"))
+                    .andExpect(jsonPath("$.people[1].summary").value("Test Summary"))
+                    .andExpect(jsonPath("$.people[1].mobilePhone").value("07111 111111"));
+
+        }
+
     }
 }
