@@ -193,5 +193,17 @@ public class PersonControllerTest {
                             .content(objectMapper.writeValueAsString(requestJson)))
                     .andExpect(status().isInternalServerError());
         }
+
+        @Test
+        @WithMockUser(roles="ADMIN")
+        void testSuccessfulAddResponds201() throws Exception {
+            // Arrange
+            when(personService.addNewPerson(any(PersonRequest.class))).thenReturn(testPerson);
+            // Act & Assert
+            mockMvc.perform(post("/people")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(requestJson)))
+                    .andExpect(status().isCreated());
+        }
     }
 }
