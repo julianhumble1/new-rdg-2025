@@ -22,6 +22,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -237,6 +240,28 @@ public class PersonControllerTest {
     @DisplayName("getAllPeople controller tests")
     class GetAllPeopleControllerTests {
 
+        private Person testPerson2;
+
+        private List<Person> personList;
+
+        @BeforeEach
+        void setup() {
+            testPerson2 = new Person(
+                    "Test First Name 2",
+                    "Test Last Name 2",
+                    "Test Summary",
+                    "01111 111111",
+                    "07111 111111",
+                    "Test Street",
+                    "Test Town",
+                    "Test Postcode"
+            );
+
+            personList = new ArrayList<>();
+            personList.add(testPerson);
+            personList.add(testPerson2);
+        }
+
         @Test
         void testGetAllPeopleServiceMethodIsCalled() throws Exception {
             // Arrange
@@ -244,7 +269,6 @@ public class PersonControllerTest {
             mockMvc.perform(get("/people"));
             // Assert
             verify(personService, times(1)).getAllPeople();
-
 
         }
 
@@ -256,6 +280,15 @@ public class PersonControllerTest {
             mockMvc.perform(get("/people"))
                     .andExpect(status().isInternalServerError());
 
+        }
+
+        @Test
+        void testAdminRequestResponds200WhenSuccessful() throws Exception {
+            // Arrange
+            when(personService.getAllPeople()).thenReturn(personList);
+            // Act & Assert
+            mockMvc.perform(get("/people"))
+                    .andExpect(status().isOk());
 
         }
 
