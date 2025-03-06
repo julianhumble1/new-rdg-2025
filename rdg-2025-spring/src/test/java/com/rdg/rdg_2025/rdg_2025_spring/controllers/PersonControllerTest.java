@@ -117,5 +117,18 @@ public class PersonControllerTest {
                     .andExpect(status().isBadRequest());
 
         }
+
+        @Test
+        @WithMockUser(roles="ADMIN")
+        void testLastNameMissingResponds400() throws Exception {
+            // Arrange
+            requestJson.remove("lastName");
+            // Act & Assert
+            mockMvc.perform(post("/people")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(requestJson)))
+                    .andExpect(status().isBadRequest());
+
+        }
     }
 }
