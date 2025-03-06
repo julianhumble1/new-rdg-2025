@@ -3,6 +3,7 @@ package com.rdg.rdg_2025.rdg_2025_spring.integration;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.rdg.rdg_2025.rdg_2025_spring.models.auth.User;
+import com.rdg.rdg_2025.rdg_2025_spring.repository.PersonRepository;
 import com.rdg.rdg_2025.rdg_2025_spring.repository.RoleRepository;
 import com.rdg.rdg_2025.rdg_2025_spring.repository.UserRepository;
 import com.rdg.rdg_2025.rdg_2025_spring.security.jwt.JwtUtils;
@@ -20,6 +21,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -31,6 +33,9 @@ public class PersonIntegrationTest {
 
     @Autowired
     private MockMvc mockMvc;
+
+    @Autowired
+    private PersonRepository personRepository;
 
     private static User testAdmin;
     private static String adminToken;
@@ -115,6 +120,19 @@ public class PersonIntegrationTest {
                     .andExpect(jsonPath("$.person.updatedAt").isNotEmpty());
 
 
+        }
+
+        @Test
+        void testSuccessfulAddAddsRowToDatabase() throws Exception {
+            // Arrange
+            int startingLength = personRepository.findAll().size();
+            // Act
+            mockMvc.perform(post("/people")
+                            .contentType(MediaType.APPLICATION_JSON).header("Authorization", adminToken)
+                            .content(objectMapper.writeValueAsString(requestJson)));
+            // Assert
+            int endingLength = personRepository.findAll().size();
+            assertEquals(startingLength + 1, endingLength);
         }
 
 
