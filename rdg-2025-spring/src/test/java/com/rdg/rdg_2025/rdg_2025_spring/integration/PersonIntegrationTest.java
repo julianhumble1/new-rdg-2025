@@ -2,6 +2,7 @@ package com.rdg.rdg_2025.rdg_2025_spring.integration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.rdg.rdg_2025.rdg_2025_spring.models.Person;
 import com.rdg.rdg_2025.rdg_2025_spring.models.auth.User;
 import com.rdg.rdg_2025.rdg_2025_spring.repository.PersonRepository;
 import com.rdg.rdg_2025.rdg_2025_spring.repository.RoleRepository;
@@ -22,6 +23,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -288,4 +290,48 @@ public class PersonIntegrationTest {
 
     }
 
+    @Nested
+    @DisplayName("GET get all people integration tests")
+    class GetAllPeopleIntegrationTests {
+
+        private Person testPerson1;
+        private Person testPerson2;
+
+        @BeforeEach
+        void setup() {
+            testPerson1 = new Person(
+                    "Test First Name",
+                    "Test Last Name",
+                    "Test Summary",
+                    "01111 111111",
+                    "07111 111111",
+                    "Test Street",
+                    "Test Town",
+                    "Test Postcode"
+            );
+            testPerson2 = new Person(
+                    "Test First Name 2",
+                    "Test Last Name 2",
+                    "Test Summary",
+                    "01111 111111",
+                    "07111 111111",
+                    "Test Street",
+                    "Test Town",
+                    "Test Postcode"
+            );
+
+            personRepository.save(testPerson1);
+            personRepository.save(testPerson2);
+        }
+
+        @Test
+        void testAdminSuccessfulGetResponds200() throws Exception {
+            // Arrange
+            // Act & Assert
+            mockMvc.perform(get("/people")
+                            .header("Authorization", adminToken))
+                    .andExpect(status().isOk());
+        }
+
+    }
 }

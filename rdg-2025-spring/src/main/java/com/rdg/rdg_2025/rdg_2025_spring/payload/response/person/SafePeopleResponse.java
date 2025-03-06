@@ -13,11 +13,11 @@ public class SafePeopleResponse {
 
     public SafePeopleResponse(List<Person> people) {
         people.forEach((Person person) -> {
-            person.setHomePhone(null);
-            person.setMobilePhone(null);
-            person.setAddressStreet(null);
-            person.setAddressTown(null);
-            person.setAddressPostcode(null);
+            person.setHomePhone("");
+            person.setMobilePhone("");
+            person.setAddressStreet("");
+            person.setAddressTown("");
+            person.setAddressPostcode("");
         });
         this.people = people;
     }
