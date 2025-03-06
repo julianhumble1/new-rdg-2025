@@ -6,6 +6,8 @@ import com.rdg.rdg_2025.rdg_2025_spring.payload.response.person.PersonResponse;
 import com.rdg.rdg_2025.rdg_2025_spring.services.PersonService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -24,10 +26,13 @@ public class PersonController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> addNewVenue(@Valid @RequestBody PersonRequest personRequest) {
 
-        System.out.println(personRequest);
-        Person person = personService.addNewPerson(personRequest);
-        URI location = URI.create("/people/" + person.getId());
-        return ResponseEntity.created(location).body(new PersonResponse(person));
+        try {
+            Person person = personService.addNewPerson(personRequest);
+            URI location = URI.create("/people/" + person.getId());
+            return ResponseEntity.created(location).body(new PersonResponse(person));
+        } catch (DataIntegrityViolationException ex) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
+        }
 
 
     }

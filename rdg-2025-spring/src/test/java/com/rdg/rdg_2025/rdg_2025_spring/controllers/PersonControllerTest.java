@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
@@ -164,6 +165,19 @@ public class PersonControllerTest {
                             .content(objectMapper.writeValueAsString(requestJson)));
             // Assert
             verify(personService, times(1)).addNewPerson(any(PersonRequest.class));
+        }
+
+        @Test
+        @WithMockUser(roles="ADMIN")
+        void testDataIntegrityViolationExceptionResponds409() throws Exception {
+            // Arrange
+            when(personService.addNewPerson(any(PersonRequest.class)))
+                    .thenThrow(new DataIntegrityViolationException("data integrity violation"));
+            // Act & Assert
+            mockMvc.perform(post("/people")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(requestJson)))
+                    .andExpect(status().isConflict());
         }
     }
 }
