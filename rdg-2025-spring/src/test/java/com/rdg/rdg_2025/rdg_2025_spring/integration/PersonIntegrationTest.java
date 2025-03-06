@@ -21,7 +21,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -91,6 +91,29 @@ public class PersonIntegrationTest {
                     .contentType(MediaType.APPLICATION_JSON).header("Authorization", adminToken)
                     .content(objectMapper.writeValueAsString(requestJson)))
                     .andExpect(status().isCreated());
+
+        }
+
+        @Test
+        void testSuccessfulAddWithAllFieldsRespondsExpectedPersonJSON() throws Exception {
+            // Arrange
+            // Act & Assert
+            mockMvc.perform(post("/people")
+                            .contentType(MediaType.APPLICATION_JSON).header("Authorization", adminToken)
+                            .content(objectMapper.writeValueAsString(requestJson)))
+                    .andExpect(jsonPath("$.person.firstName").value("Test First Name"))
+                    .andExpect(jsonPath("$.person.lastName").value("Test Last Name"))
+                    .andExpect(jsonPath("$.person.summary").value("Test Summary"))
+                    .andExpect(jsonPath("$.person.homePhone").value("01111 111111"))
+                    .andExpect(jsonPath("$.person.mobilePhone").value("07111 111111"))
+                    .andExpect(jsonPath("$.person.addressStreet").value("Test Street"))
+                    .andExpect(jsonPath("$.person.addressTown").value("Test Town"))
+                    .andExpect(jsonPath("$.person.addressPostcode").value("Test Postcode"))
+                    .andExpect(jsonPath("$.person.id").isNumber())
+                    .andExpect(jsonPath("$.person.slug").value("test-first-name-test-last-name"))
+                    .andExpect(jsonPath("$.person.createdAt").isNotEmpty())
+                    .andExpect(jsonPath("$.person.updatedAt").isNotEmpty());
+
 
         }
 
