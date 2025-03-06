@@ -135,6 +135,22 @@ public class PersonIntegrationTest {
             assertEquals(startingLength + 1, endingLength);
         }
 
+        @Test
+        void testDuplicateFirstNameAndLastNameResponds409() throws Exception {
+            // Arrange
+            mockMvc.perform(post("/people")
+                    .contentType(MediaType.APPLICATION_JSON).header("Authorization", adminToken)
+                    .content(objectMapper.writeValueAsString(requestJson)))
+                    .andExpect(status().isCreated());
+
+            // Act & Assert
+            mockMvc.perform(post("/people")
+                    .contentType(MediaType.APPLICATION_JSON).header("Authorization", adminToken)
+                    .content(objectMapper.writeValueAsString(requestJson)))
+                    .andExpect(status().isConflict());
+
+        }
+
 
 
     }
