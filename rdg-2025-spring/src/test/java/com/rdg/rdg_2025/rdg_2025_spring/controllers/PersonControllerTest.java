@@ -20,6 +20,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -142,12 +144,26 @@ public class PersonControllerTest {
             requestJson.remove("addressTown");
             requestJson.remove("addressPostcode");
 
+            when(personService.addNewPerson(any(PersonRequest.class))).thenReturn(testPerson);
             // Act & Assert
             mockMvc.perform(post("/people")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(requestJson)))
                     .andExpect(status().isCreated());
 
+        }
+
+        @Test
+        @WithMockUser(roles="ADMIN")
+        void testAddNewPersonServiceMethodIsCalled() throws Exception {
+            // Arrange
+            when(personService.addNewPerson(any(PersonRequest.class))).thenReturn(testPerson);
+            // Act
+            mockMvc.perform(post("/people")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(requestJson)));
+            // Assert
+            verify(personService, times(1)).addNewPerson(any(PersonRequest.class));
         }
     }
 }

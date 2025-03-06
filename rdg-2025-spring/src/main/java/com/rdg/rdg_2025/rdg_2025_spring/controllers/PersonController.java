@@ -1,7 +1,11 @@
 package com.rdg.rdg_2025.rdg_2025_spring.controllers;
 
+import com.rdg.rdg_2025.rdg_2025_spring.models.Person;
 import com.rdg.rdg_2025.rdg_2025_spring.payload.request.person.PersonRequest;
+import com.rdg.rdg_2025.rdg_2025_spring.payload.response.person.PersonResponse;
+import com.rdg.rdg_2025.rdg_2025_spring.services.PersonService;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -13,11 +17,18 @@ import java.net.URI;
 @RequestMapping("/people")
 public class PersonController {
 
+    @Autowired
+    PersonService personService;
+
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> addNewVenue(@Valid @RequestBody PersonRequest personRequest) {
 
-        return ResponseEntity.created(URI.create("")).build();
+        System.out.println(personRequest);
+        Person person = personService.addNewPerson(personRequest);
+        URI location = URI.create("/people/" + person.getId());
+        return ResponseEntity.created(location).body(new PersonResponse(person));
+
 
     }
 }
