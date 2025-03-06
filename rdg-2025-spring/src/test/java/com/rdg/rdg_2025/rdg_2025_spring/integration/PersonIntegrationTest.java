@@ -21,6 +21,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.net.http.HttpResponse;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -202,6 +204,24 @@ public class PersonIntegrationTest {
                             .header("Authorization", adminToken)
                             .content(objectMapper.writeValueAsString(requestJson)))
                     .andExpect(status().isBadRequest());
+        }
+
+        @Test
+        void testOnlyFirstNameLastNamePresentResponds201() throws Exception {
+            // Arrange
+            requestJson.remove("summary");
+            requestJson.remove("homePhone");
+            requestJson.remove("mobilePhone");
+            requestJson.remove("addressStreet");
+            requestJson.remove("addressTown");
+            requestJson.remove("addressPostcode");
+
+            // Act & Assert
+            mockMvc.perform(post("/people")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", adminToken)
+                            .content(objectMapper.writeValueAsString(requestJson)))
+                    .andExpect(status().isCreated());
         }
 
     }
