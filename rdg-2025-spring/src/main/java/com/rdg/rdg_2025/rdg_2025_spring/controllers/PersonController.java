@@ -49,11 +49,10 @@ public class PersonController {
 
     @GetMapping
     public ResponseEntity<?> getAllPeople() {
-        boolean isAdmin = jwtUtils.checkAdmin();
 
         try {
             List<Person> personList = personService.getAllPeople();
-            if (isAdmin) {
+            if (jwtUtils.checkAdmin()) {
                 return ResponseEntity.ok().body(new DetailedPeopleResponse(personList));
             } else {
                 return ResponseEntity.ok().body(new PublicPeopleResponse(personList));

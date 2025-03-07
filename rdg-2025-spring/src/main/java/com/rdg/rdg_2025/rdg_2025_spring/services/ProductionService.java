@@ -84,6 +84,10 @@ public class ProductionService {
 
     // ADDITIONAL METHODS
 
+    public void getProductionsWithFuturePerformances() {
+        productionRepository.findAllProductionsWithFuturePerformances(LocalDateTime.now());
+    }
+
     public void setProductionVenueFieldToNull(Production production) {
         production.setVenue(null);
         saveProductionToDatabase(production);

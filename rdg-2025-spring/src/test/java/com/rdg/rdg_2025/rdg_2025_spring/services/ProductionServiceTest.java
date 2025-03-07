@@ -602,4 +602,20 @@ public class ProductionServiceTest {
         }
 
     }
+
+    @Nested
+    @DisplayName("getProductionsWithFuturePerformances service tests")
+    class GetProductionsWithFuturePerformancesServiceTests {
+
+        @Test
+        void testProductionRepositoryMethodIsCalled() {
+            // Arrange
+
+            // Act
+            productionService.getProductionsWithFuturePerformances();
+            // Assert
+            verify(productionRepository, times(1)).findAllProductionsWithFuturePerformances(any(LocalDateTime.class));
+        }
+
+    }
 }
