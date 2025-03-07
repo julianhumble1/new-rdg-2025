@@ -617,5 +617,15 @@ public class ProductionServiceTest {
             verify(productionRepository, times(1)).findAllProductionsWithFuturePerformances(any(LocalDateTime.class));
         }
 
+        @Test
+        void testRepositoryDataAccessExceptionThrowsDatabaseException() {
+            // Arrange
+            when(productionRepository.findAllProductionsWithFuturePerformances(any())).thenThrow(new DataAccessException("Data access exception") {});
+            // Act & Assert
+            assertThrows(DatabaseException.class, () -> {
+                productionService.getProductionsWithFuturePerformances();
+            });
+        }
+
     }
 }
