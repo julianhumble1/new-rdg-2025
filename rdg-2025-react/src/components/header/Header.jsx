@@ -27,7 +27,7 @@ const Header = ({loggedIn, setLoggedIn}) => {
     return (
         <Navbar fluid className="bg-sky-900">
             <NavbarBrand href="/home">
-                <img src="/src/assets/new_logo_transparent.png" className="mr-3 h-6 sm:h-9" alt="Flowbite React Logo" />
+                <img src="/src/assets/new_logo_transparent.png" className="mr-3 h-9 sm:h-9" alt="Flowbite React Logo" />
                 <span className="self-center whitespace-nowrap text-xl font-semibold text-white">Runnymede Drama Group</span>
             </NavbarBrand>
             <NavbarToggle className="text-white"/>
