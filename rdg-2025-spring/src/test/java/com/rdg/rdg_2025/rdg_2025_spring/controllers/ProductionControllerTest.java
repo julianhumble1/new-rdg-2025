@@ -784,7 +784,6 @@ public class ProductionControllerTest {
         @Test
         void testAppropriateServiceMethodIsCalled() throws Exception {
             // Arrange
-
             // Act
             mockMvc.perform(get("/productions/future"));
             // Assert
@@ -798,6 +797,14 @@ public class ProductionControllerTest {
             // Act & Assert
             mockMvc.perform(get("/productions/future"))
                     .andExpect(status().isInternalServerError());
+        }
+
+        @Test
+        void testSuccessfulGetResponds200() throws Exception {
+            // Arrange
+            // Act & Assert
+            mockMvc.perform(get("/productions/future"))
+                    .andExpect(status().isOk());
         }
 
 
