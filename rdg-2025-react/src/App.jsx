@@ -17,7 +17,12 @@ import NewPerformanceForm from "./components/performances/NewPerformanceForm.jsx
 import FestivalPage from "./components/festivals/FestivalPage.jsx"
 import AllProductions from "./components/productions/AllProductions.jsx"
 import AllFestivals from "./components/festivals/AllFestivals.jsx"
+
+import NewPersonForm from "./components/people/NewPersonForm.jsx"
+import AllPeople from "./components/people/AllPeople.jsx"
+
 import FacebookFeed from "./components/FacebookFeed.jsx"
+
 
 
 function App() {
@@ -66,7 +71,12 @@ function App() {
 
         <Route path="/performances/new" element={<NewPerformanceForm />} />
 
+
+        <Route path="/people/new" element={<NewPersonForm />} />
+        <Route path="/people" element={<AllPeople />} />
+
         <Route path="/facebook" element={<FacebookFeed />} />
+
       </Routes>
     </Router>
   )

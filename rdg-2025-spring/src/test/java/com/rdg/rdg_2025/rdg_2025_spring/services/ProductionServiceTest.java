@@ -602,4 +602,42 @@ public class ProductionServiceTest {
         }
 
     }
+
+    @Nested
+    @DisplayName("getProductionsWithFuturePerformances service tests")
+    class GetProductionsWithFuturePerformancesServiceTests {
+
+        @Test
+        void testProductionRepositoryMethodIsCalled() {
+            // Arrange
+
+            // Act
+            productionService.getProductionsWithFuturePerformances();
+            // Assert
+            verify(productionRepository, times(1)).findAllProductionsWithFuturePerformances(any(LocalDateTime.class));
+        }
+
+        @Test
+        void testRepositoryDataAccessExceptionThrowsDatabaseException() {
+            // Arrange
+            when(productionRepository.findAllProductionsWithFuturePerformances(any())).thenThrow(new DataAccessException("Data access exception") {});
+            // Act & Assert
+            assertThrows(DatabaseException.class, () -> {
+                productionService.getProductionsWithFuturePerformances();
+            });
+        }
+
+        @Test
+        void testSuccessfulGetReturnsExpectedProductionList() {
+            // Arrange
+            List<Production> productionList = new ArrayList<>();
+            when(productionRepository.findAllProductionsWithFuturePerformances(any())).thenReturn(productionList);
+            // Act
+            List<Production> result = productionService.getProductionsWithFuturePerformances();
+            // Assert
+            assertEquals(productionList, result);
+
+        }
+
+    }
 }

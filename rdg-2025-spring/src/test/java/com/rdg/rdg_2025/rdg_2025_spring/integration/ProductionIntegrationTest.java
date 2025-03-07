@@ -24,6 +24,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.not;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -1041,6 +1043,129 @@ public class ProductionIntegrationTest {
                     .andExpect(status().isForbidden());
 
         }
+
+
+    }
+
+    @Nested
+    @DisplayName("GET get productions with future performances integration tests")
+    class GetProductionsWithFuturePerformancesIntegrationTests {
+
+        private Production testProduction1;
+        private Production testProduction2;
+
+        private Performance testPerformance1;
+        private Performance testPerformance2;
+        private List<Performance> performanceList1;
+        private List<Performance> performanceList2;
+
+        @Autowired
+        private PerformanceRepository performanceRepository;
+
+        @BeforeEach
+        void setup() {
+            testProduction1 = new Production(
+                    "Test Production",
+                    testVenue,
+                    "Test Author",
+                    "Test Description",
+                    LocalDateTime.now(),
+                    false,
+                    false,
+                    "Test File String"
+            );
+            testProduction2 = new Production(
+                    "Another Test Production",
+                    testVenue,
+                    "Test Author",
+                    "Test Description",
+                    LocalDateTime.now(),
+                    false,
+                    false,
+                    "Test File String"
+            );
+
+            testPerformance1 = new Performance(
+                    testProduction1,
+                    testVenue,
+                    null,
+                    LocalDateTime.now().plusDays(1),
+                    null, null, null, null
+            );
+
+            testPerformance2 = new Performance(
+                    testProduction2,
+                    testVenue,
+                    null,
+                    LocalDateTime.now().minusDays(1),
+                    null, null, null, null
+            );
+
+            performanceList1 = new ArrayList<>();
+            performanceList2 = new ArrayList<>();
+            performanceList1.add(testPerformance1);
+            performanceList2.add(testPerformance2);
+            testProduction1.setPerformances(performanceList1);
+            testProduction2.setPerformances(performanceList2);
+            productionRepository.save(testProduction1);
+            productionRepository.save(testProduction2);
+            performanceRepository.save(testPerformance1);
+            performanceRepository.save(testPerformance2);
+
+        }
+
+        @Test
+        void testSuccessfulGetResponds200() throws Exception {
+            // Arrange
+            // Act & Assert
+            mockMvc.perform(get("/productions/future"))
+                    .andExpect(status().isOk());
+        }
+
+        @Test
+        void testProductionWithFuturePerformanceIsInJsonResponse() throws Exception {
+            // Arrange
+            // Act & Assert
+            mockMvc.perform(get("/productions/future"))
+                    .andExpect(jsonPath("$.productions[*].name", contains("Test Production")));
+        }
+
+        @Test
+        void testProductionWithNoPerformancesIsNotInJsonResponse() throws Exception {
+            // Arrange
+            testProduction2.setPerformances(null);
+            performanceRepository.delete(testPerformance2);
+            productionRepository.save(testProduction2);
+            // Act & Assert
+            mockMvc.perform(get("/productions/future"))
+                    .andExpect(jsonPath("$.productions[*].name", not(contains("Another Test Production"))));
+        }
+
+        @Test
+        void testProductionWithOnlyPastPerformancesIsNotInJsonResponse() throws Exception {
+            // Arrange
+            // Act & Assert
+            mockMvc.perform(get("/productions/future"))
+                    .andExpect(jsonPath("$.productions[*].name", not(contains("Another Test Production"))));
+        }
+
+
+        @Test
+        void testProductionWithFutureAndPastPerformancesIsInJsonResponse() throws Exception {
+            // Arrange
+            testProduction2.setPerformances(null);
+            performanceList1.add(testPerformance2);
+            testProduction1.setPerformances(performanceList1);
+            productionRepository.save(testProduction2);
+            productionRepository.save(testProduction1);
+            performanceRepository.save(testPerformance2);
+            // Act & Assert
+            mockMvc.perform(get("/productions/future"))
+                    .andExpect(jsonPath("$.productions[*].name", contains("Test Production")))
+                    .andExpect(jsonPath("$.productions[*].name", not(contains("Another Test Production"))));
+        }
+
+
 
 
     }

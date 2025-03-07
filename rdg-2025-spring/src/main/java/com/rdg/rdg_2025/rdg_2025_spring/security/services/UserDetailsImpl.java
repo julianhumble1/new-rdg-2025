@@ -52,6 +52,14 @@ public class UserDetailsImpl implements UserDetails {
         return authorities;
     }
 
+    public boolean isAdmin() {
+        List<String> roles = this.getAuthorities().stream()
+                .map(item -> item.getAuthority())
+                .toList();
+
+        return roles.contains("ROLE_ADMIN");
+    }
+
     public Long getId() {
         return id;
     }

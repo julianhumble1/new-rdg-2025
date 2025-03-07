@@ -21,6 +21,7 @@ import org.springframework.web.context.WebApplicationContext;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -774,6 +775,50 @@ public class ProductionControllerTest {
             mockMvc.perform(delete("/productions/1"))
                     .andExpect(status().isNoContent());
         }
+
+    }
+
+    @Nested
+    @DisplayName("getProductionsWithFuturePerformancesControllerTests")
+    class getProductionsWithFuturePerformancesControllerTests {
+
+        @Test
+        void testAppropriateServiceMethodIsCalled() throws Exception {
+            // Arrange
+            // Act
+            mockMvc.perform(get("/productions/future"));
+            // Assert
+            verify(productionService, times(1)).getProductionsWithFuturePerformances();
+        }
+
+        @Test
+        void testServiceDatabaseExceptionResponds500() throws Exception {
+            // Arrange
+            when(productionService.getProductionsWithFuturePerformances()).thenThrow(new DatabaseException("Database exception"));
+            // Act & Assert
+            mockMvc.perform(get("/productions/future"))
+                    .andExpect(status().isInternalServerError());
+        }
+
+        @Test
+        void testSuccessfulGetResponds200() throws Exception {
+            // Arrange
+            // Act & Assert
+            mockMvc.perform(get("/productions/future"))
+                    .andExpect(status().isOk());
+        }
+
+        @Test
+        void testSuccessfulGetRespondsExpectedJson() throws Exception {
+            // Arrange
+            List<Production> productionList = new ArrayList<>();
+            productionList.add(testProduction);
+            when(productionService.getProductionsWithFuturePerformances()).thenReturn(productionList);
+            // Act & Assert
+            mockMvc.perform(get("/productions/future"))
+                    .andExpect(jsonPath("$.productions[0].name").value("Test Production"));
+        }
+
 
     }
 }

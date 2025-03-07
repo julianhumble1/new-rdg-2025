@@ -5,13 +5,14 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Getter @Setter
 public class ProductionsResponse {
 
-    private ArrayList<Production> productions;
+    private List<Production> productions;
 
-    public ProductionsResponse(ArrayList<Production> productions) {
+    public ProductionsResponse(List<Production> productions) {
         this.productions = productions;
     }
 

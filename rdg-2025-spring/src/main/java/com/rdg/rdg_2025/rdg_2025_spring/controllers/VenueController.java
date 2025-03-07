@@ -3,7 +3,6 @@ package com.rdg.rdg_2025.rdg_2025_spring.controllers;
 import com.rdg.rdg_2025.rdg_2025_spring.exception.DatabaseException;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Venue;
 import com.rdg.rdg_2025.rdg_2025_spring.payload.request.venue.VenueRequest;
-import com.rdg.rdg_2025.rdg_2025_spring.payload.response.MessageResponse;
 import com.rdg.rdg_2025.rdg_2025_spring.payload.response.venue.VenueResponse;
 import com.rdg.rdg_2025.rdg_2025_spring.payload.response.venue.VenuesResponse;
 import com.rdg.rdg_2025.rdg_2025_spring.services.VenueService;

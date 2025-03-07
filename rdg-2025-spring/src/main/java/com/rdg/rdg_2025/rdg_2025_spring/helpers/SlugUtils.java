@@ -10,4 +10,10 @@ public class SlugUtils {
 
     }
 
+    public static String generateSlug(String firstName, String secondName) {
+        String fullName = firstName + " " +  secondName;
+        Slugify slg = Slugify.builder().build();
+        return slg.slugify(fullName);
+    }
+
 }

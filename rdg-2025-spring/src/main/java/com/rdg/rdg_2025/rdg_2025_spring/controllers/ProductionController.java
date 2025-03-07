@@ -3,7 +3,6 @@ package com.rdg.rdg_2025.rdg_2025_spring.controllers;
 import com.rdg.rdg_2025.rdg_2025_spring.exception.DatabaseException;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Production;
 import com.rdg.rdg_2025.rdg_2025_spring.payload.request.production.ProductionRequest;
-import com.rdg.rdg_2025.rdg_2025_spring.payload.response.MessageResponse;
 import com.rdg.rdg_2025.rdg_2025_spring.payload.response.production.ProductionResponse;
 import com.rdg.rdg_2025.rdg_2025_spring.payload.response.production.ProductionsResponse;
 import com.rdg.rdg_2025.rdg_2025_spring.services.ProductionService;
@@ -49,7 +48,7 @@ public class ProductionController {
     public ResponseEntity<?> getAllProductions() {
         try {
             List<Production> productions = productionService.getAllProductions();
-            return ResponseEntity.ok(new ProductionsResponse((ArrayList<Production>) productions));
+            return ResponseEntity.ok(new ProductionsResponse(productions));
 
         } catch (DatabaseException ex) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
@@ -93,6 +92,16 @@ public class ProductionController {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         } catch (EntityNotFoundException ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+        } catch (DatabaseException ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
+        }
+    }
+
+    @GetMapping("/future")
+    public ResponseEntity<?> getProductionsWithFuturePerformances() {
+        try {
+            List<Production> productions = productionService.getProductionsWithFuturePerformances();
+            return ResponseEntity.ok().body(new ProductionsResponse(productions));
         } catch (DatabaseException ex) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
         }
