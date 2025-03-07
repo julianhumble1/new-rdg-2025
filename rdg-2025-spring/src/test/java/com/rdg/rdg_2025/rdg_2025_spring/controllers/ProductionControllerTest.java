@@ -791,6 +791,15 @@ public class ProductionControllerTest {
             verify(productionService, times(1)).getProductionsWithFuturePerformances();
         }
 
+        @Test
+        void testServiceDatabaseExceptionResponds500() throws Exception {
+            // Arrange
+            when(productionService.getProductionsWithFuturePerformances()).thenThrow(new DatabaseException("Database exception"));
+            // Act & Assert
+            mockMvc.perform(get("/productions/future"))
+                    .andExpect(status().isInternalServerError());
+        }
+
 
     }
 }

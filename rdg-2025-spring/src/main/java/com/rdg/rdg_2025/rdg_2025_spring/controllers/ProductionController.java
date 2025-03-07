@@ -99,7 +99,12 @@ public class ProductionController {
 
     @GetMapping("/future")
     public ResponseEntity<?> getProductionsWithFuturePerformances() {
-        productionService.getProductionsWithFuturePerformances();
+        try {
+            productionService.getProductionsWithFuturePerformances();
+
+        } catch (DatabaseException ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
+        }
         return ResponseEntity.ok().body("");
     }
 
