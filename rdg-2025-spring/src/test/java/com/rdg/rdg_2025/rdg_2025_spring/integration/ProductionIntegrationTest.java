@@ -1085,7 +1085,7 @@ public class ProductionIntegrationTest {
                     testProduction1,
                     testVenue,
                     null,
-                    LocalDateTime.now().plusDays(1L),
+                    LocalDateTime.now().plusDays(1),
                     null, null, null, null
             );
 
@@ -1114,6 +1114,14 @@ public class ProductionIntegrationTest {
             // Act & Assert
             mockMvc.perform(get("/productions/future"))
                     .andExpect(status().isOk());
+        }
+
+        @Test
+        void testProductionWithFuturePerformanceIsInJsonResponse() throws Exception {
+            // Arrange
+            // Act & Assert
+            mockMvc.perform(get("/productions/future"))
+                    .andExpect(jsonPath("$.productions[0].name").value("Test Production"));
         }
 
 
