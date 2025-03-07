@@ -1056,6 +1056,8 @@ public class ProductionIntegrationTest {
 
         private Performance testPerformance1;
         private Performance testPerformance2;
+        private List<Performance> performanceList1;
+        private List<Performance> performanceList2;
 
         @Autowired
         private PerformanceRepository performanceRepository;
@@ -1099,8 +1101,8 @@ public class ProductionIntegrationTest {
                     null, null, null, null
             );
 
-            List<Performance> performanceList1 = new ArrayList<>();
-            List<Performance> performanceList2 = new ArrayList<>();
+            performanceList1 = new ArrayList<>();
+            performanceList2 = new ArrayList<>();
             performanceList1.add(testPerformance1);
             performanceList2.add(testPerformance2);
             testProduction1.setPerformances(performanceList1);
@@ -1144,6 +1146,22 @@ public class ProductionIntegrationTest {
             // Arrange
             // Act & Assert
             mockMvc.perform(get("/productions/future"))
+                    .andExpect(jsonPath("$.productions[*].name", not(contains("Another Test Production"))));
+        }
+
+
+        @Test
+        void testProductionWithFutureAndPastPerformancesIsInJsonResponse() throws Exception {
+            // Arrange
+            testProduction2.setPerformances(null);
+            performanceList1.add(testPerformance2);
+            testProduction1.setPerformances(performanceList1);
+            productionRepository.save(testProduction2);
+            productionRepository.save(testProduction1);
+            performanceRepository.save(testPerformance2);
+            // Act & Assert
+            mockMvc.perform(get("/productions/future"))
+                    .andExpect(jsonPath("$.productions[*].name", contains("Test Production")))
                     .andExpect(jsonPath("$.productions[*].name", not(contains("Another Test Production"))));
         }
 
