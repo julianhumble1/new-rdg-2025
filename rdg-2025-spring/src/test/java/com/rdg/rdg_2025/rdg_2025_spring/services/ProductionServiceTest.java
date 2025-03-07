@@ -627,5 +627,17 @@ public class ProductionServiceTest {
             });
         }
 
+        @Test
+        void testSuccessfulGetReturnsExpectedProductionList() {
+            // Arrange
+            List<Production> productionList = new ArrayList<>();
+            when(productionRepository.findAllProductionsWithFuturePerformances(any())).thenReturn(productionList);
+            // Act
+            List<Production> result = productionService.getProductionsWithFuturePerformances();
+            // Assert
+            assertEquals(productionList, result);
+
+        }
+
     }
 }

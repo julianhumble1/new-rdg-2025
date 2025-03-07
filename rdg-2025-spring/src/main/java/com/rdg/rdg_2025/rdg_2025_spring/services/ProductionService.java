@@ -84,9 +84,9 @@ public class ProductionService {
 
     // ADDITIONAL METHODS
 
-    public void getProductionsWithFuturePerformances() {
+    public List<Production> getProductionsWithFuturePerformances() {
         try {
-            productionRepository.findAllProductionsWithFuturePerformances(LocalDateTime.now());
+            return productionRepository.findAllProductionsWithFuturePerformances(LocalDateTime.now());
         } catch (DataAccessException ex) {
             throw new DatabaseException(ex.getMessage(), ex);
         }
