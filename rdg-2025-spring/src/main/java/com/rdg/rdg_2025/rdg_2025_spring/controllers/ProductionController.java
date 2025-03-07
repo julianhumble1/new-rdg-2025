@@ -97,4 +97,10 @@ public class ProductionController {
         }
     }
 
+    @GetMapping("/future")
+    public ResponseEntity<?> getProductionsWithFuturePerformances() {
+        productionService.getProductionsWithFuturePerformances();
+        return ResponseEntity.ok().body("");
+    }
+
 }

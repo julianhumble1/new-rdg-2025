@@ -776,4 +776,21 @@ public class ProductionControllerTest {
         }
 
     }
+
+    @Nested
+    @DisplayName("getProductionsWithFuturePerformancesControllerTests")
+    class getProductionsWithFuturePerformancesControllerTests {
+
+        @Test
+        void testAppropriateServiceMethodIsCalled() throws Exception {
+            // Arrange
+
+            // Act
+            mockMvc.perform(get("/productions/future"));
+            // Assert
+            verify(productionService, times(1)).getProductionsWithFuturePerformances();
+        }
+
+
+    }
 }
