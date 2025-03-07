@@ -24,6 +24,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.hamcrest.Matchers.contains;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -1121,7 +1122,7 @@ public class ProductionIntegrationTest {
             // Arrange
             // Act & Assert
             mockMvc.perform(get("/productions/future"))
-                    .andExpect(jsonPath("$.productions[0].name").value("Test Production"));
+                    .andExpect(jsonPath("$.productions[*].name", contains("Test Production")));
         }
 
 
