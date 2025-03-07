@@ -1044,4 +1044,80 @@ public class ProductionIntegrationTest {
 
 
     }
+
+    @Nested
+    @DisplayName("GET get productions with future performances integration tests")
+    class GetProductionsWithFuturePerformancesIntegrationTests {
+
+        private Production testProduction1;
+        private Production testProduction2;
+
+        private Performance testPerformance1;
+        private Performance testPerformance2;
+
+        @Autowired
+        private PerformanceRepository performanceRepository;
+
+        @BeforeEach
+        void setup() {
+            testProduction1 = new Production(
+                    "Test Production",
+                    testVenue,
+                    "Test Author",
+                    "Test Description",
+                    LocalDateTime.now(),
+                    false,
+                    false,
+                    "Test File String"
+            );
+            testProduction2 = new Production(
+                    "Another Test Production",
+                    testVenue,
+                    "Test Author",
+                    "Test Description",
+                    LocalDateTime.now(),
+                    false,
+                    false,
+                    "Test File String"
+            );
+
+            testPerformance1 = new Performance(
+                    testProduction1,
+                    testVenue,
+                    null,
+                    LocalDateTime.now().plusDays(1L),
+                    null, null, null, null
+            );
+
+            testPerformance2 = new Performance(
+                    testProduction1,
+                    testVenue,
+                    null,
+                    LocalDateTime.now().minusDays(1),
+                    null, null, null, null
+            );
+
+            List<Performance> performanceList = new ArrayList<>();
+            performanceList.add(testPerformance1);
+            performanceList.add(testPerformance2);
+            testProduction1.setPerformances(performanceList);
+            productionRepository.save(testProduction1);
+            productionRepository.save(testProduction2);
+            performanceRepository.save(testPerformance1);
+            performanceRepository.save(testPerformance2);
+
+        }
+
+        @Test
+        void testSuccessfulGetResponds200() throws Exception {
+            // Arrange
+            // Act & Assert
+            mockMvc.perform(get("/productions/future"))
+                    .andExpect(status().isOk());
+        }
+
+
+
+
+    }
 }
