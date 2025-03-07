@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.not;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -1123,6 +1124,14 @@ public class ProductionIntegrationTest {
             // Act & Assert
             mockMvc.perform(get("/productions/future"))
                     .andExpect(jsonPath("$.productions[*].name", contains("Test Production")));
+        }
+
+        @Test
+        void testProductionWithNoPerformancesIsNotInJsonResponse() throws Exception {
+            // Arrange
+            // Act & Assert
+            mockMvc.perform(get("/productions/future"))
+                    .andExpect(jsonPath("$.productions[*].name", not(contains("Another Test Production"))));
         }
 
 
