@@ -21,6 +21,7 @@ import org.springframework.web.context.WebApplicationContext;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -805,6 +806,17 @@ public class ProductionControllerTest {
             // Act & Assert
             mockMvc.perform(get("/productions/future"))
                     .andExpect(status().isOk());
+        }
+
+        @Test
+        void testSuccessfulGetRespondsExpectedJson() throws Exception {
+            // Arrange
+            List<Production> productionList = new ArrayList<>();
+            productionList.add(testProduction);
+            when(productionService.getProductionsWithFuturePerformances()).thenReturn(productionList);
+            // Act & Assert
+            mockMvc.perform(get("/productions/future"))
+                    .andExpect(jsonPath("$.productions[0].name").value("Test Production"));
         }
 
 

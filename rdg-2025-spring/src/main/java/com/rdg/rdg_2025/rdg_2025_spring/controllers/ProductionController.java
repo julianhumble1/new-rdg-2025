@@ -48,7 +48,7 @@ public class ProductionController {
     public ResponseEntity<?> getAllProductions() {
         try {
             List<Production> productions = productionService.getAllProductions();
-            return ResponseEntity.ok(new ProductionsResponse((ArrayList<Production>) productions));
+            return ResponseEntity.ok(new ProductionsResponse(productions));
 
         } catch (DatabaseException ex) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
@@ -100,12 +100,11 @@ public class ProductionController {
     @GetMapping("/future")
     public ResponseEntity<?> getProductionsWithFuturePerformances() {
         try {
-            productionService.getProductionsWithFuturePerformances();
-
+            List<Production> productions = productionService.getProductionsWithFuturePerformances();
+            return ResponseEntity.ok().body(new ProductionsResponse(productions));
         } catch (DatabaseException ex) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
         }
-        return ResponseEntity.ok().body("");
     }
 
 }
