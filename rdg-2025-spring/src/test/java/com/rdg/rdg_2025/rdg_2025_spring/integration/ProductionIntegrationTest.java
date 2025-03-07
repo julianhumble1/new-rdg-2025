@@ -1092,17 +1092,19 @@ public class ProductionIntegrationTest {
             );
 
             testPerformance2 = new Performance(
-                    testProduction1,
+                    testProduction2,
                     testVenue,
                     null,
                     LocalDateTime.now().minusDays(1),
                     null, null, null, null
             );
 
-            List<Performance> performanceList = new ArrayList<>();
-            performanceList.add(testPerformance1);
-            performanceList.add(testPerformance2);
-            testProduction1.setPerformances(performanceList);
+            List<Performance> performanceList1 = new ArrayList<>();
+            List<Performance> performanceList2 = new ArrayList<>();
+            performanceList1.add(testPerformance1);
+            performanceList2.add(testPerformance2);
+            testProduction1.setPerformances(performanceList1);
+            testProduction2.setPerformances(performanceList2);
             productionRepository.save(testProduction1);
             productionRepository.save(testProduction2);
             performanceRepository.save(testPerformance1);
@@ -1128,6 +1130,17 @@ public class ProductionIntegrationTest {
 
         @Test
         void testProductionWithNoPerformancesIsNotInJsonResponse() throws Exception {
+            // Arrange
+            testProduction2.setPerformances(null);
+            performanceRepository.delete(testPerformance2);
+            productionRepository.save(testProduction2);
+            // Act & Assert
+            mockMvc.perform(get("/productions/future"))
+                    .andExpect(jsonPath("$.productions[*].name", not(contains("Another Test Production"))));
+        }
+
+        @Test
+        void testProductionWithOnlyPastPerformancesIsNotInJsonResponse() throws Exception {
             // Arrange
             // Act & Assert
             mockMvc.perform(get("/productions/future"))
