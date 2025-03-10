@@ -63,6 +63,9 @@ public class PersonController {
     @DeleteMapping("/{personId}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> deletePersonById(@PathVariable int personId) {
+
+        personService.deletePersonById(personId);
+
         return ResponseEntity.ok().build();
     }
 

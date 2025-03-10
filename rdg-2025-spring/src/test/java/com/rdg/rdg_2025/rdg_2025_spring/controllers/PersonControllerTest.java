@@ -341,8 +341,18 @@ public class PersonControllerTest {
         void testIdNotIntResponds404() throws Exception {
             // Arrange
             // Act & Assert
-            mockMvc.perform(delete("/people/notanint")).andExpect(status().isBadRequest());
+            mockMvc.perform(delete("/people/notanint"))
+                    .andExpect(status().isBadRequest());
 
+        }
+
+        @Test
+        void testDeletePersonServiceMethodIsCalled() throws Exception {
+            // Arrange
+            // Act
+            mockMvc.perform(delete("/people/1"));
+            // Assert
+            verify(personService, times(1)).deletePersonById(1);
         }
 
     }
