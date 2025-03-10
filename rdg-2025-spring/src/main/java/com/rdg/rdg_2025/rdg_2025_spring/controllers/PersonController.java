@@ -8,6 +8,7 @@ import com.rdg.rdg_2025.rdg_2025_spring.payload.response.person.PersonResponse;
 import com.rdg.rdg_2025.rdg_2025_spring.payload.response.person.PublicPeopleResponse;
 import com.rdg.rdg_2025.rdg_2025_spring.security.jwt.JwtUtils;
 import com.rdg.rdg_2025.rdg_2025_spring.services.PersonService;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -64,7 +65,11 @@ public class PersonController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> deletePersonById(@PathVariable int personId) {
 
-        personService.deletePersonById(personId);
+        try {
+            personService.deletePersonById(personId);
+        } catch (EntityNotFoundException ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+        }
 
         return ResponseEntity.ok().build();
     }

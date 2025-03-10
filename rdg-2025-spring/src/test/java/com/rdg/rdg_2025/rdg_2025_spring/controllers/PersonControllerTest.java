@@ -7,6 +7,7 @@ import com.rdg.rdg_2025.rdg_2025_spring.models.Person;
 import com.rdg.rdg_2025.rdg_2025_spring.payload.request.person.PersonRequest;
 import com.rdg.rdg_2025.rdg_2025_spring.security.jwt.JwtUtils;
 import com.rdg.rdg_2025.rdg_2025_spring.services.PersonService;
+import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -353,6 +354,15 @@ public class PersonControllerTest {
             mockMvc.perform(delete("/people/1"));
             // Assert
             verify(personService, times(1)).deletePersonById(1);
+        }
+
+        @Test
+        void testEntityNotFoundExceptionResponds404() throws Exception {
+            // Arrange
+            doThrow(new EntityNotFoundException("person not found")).when(personService).deletePersonById(anyInt());
+            // Act & Assert
+            mockMvc.perform(delete("/people/1"))
+                    .andExpect(status().isNotFound());
         }
 
     }
