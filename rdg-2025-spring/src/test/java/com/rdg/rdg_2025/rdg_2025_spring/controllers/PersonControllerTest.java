@@ -365,6 +365,15 @@ public class PersonControllerTest {
                     .andExpect(status().isNotFound());
         }
 
+        @Test
+        void testDatabaseExceptionResponds500() throws Exception {
+            // Arrange
+            doThrow(new DatabaseException("database exception")).when(personService).deletePersonById(anyInt());
+            // Act & Assert
+            mockMvc.perform(delete("/people/1"))
+                    .andExpect(status().isInternalServerError());
+        }
+
     }
 
 
