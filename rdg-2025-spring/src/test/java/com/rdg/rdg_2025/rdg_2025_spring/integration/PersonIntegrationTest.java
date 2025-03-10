@@ -23,8 +23,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
@@ -408,6 +407,41 @@ public class PersonIntegrationTest {
                     .andExpect(jsonPath("$.people[0].addressTown").isEmpty())
                     .andExpect(jsonPath("$.people[0].addressPostcode").isEmpty());
         }
+
+    }
+
+    @Nested
+    @DisplayName("DELETE delete person by id integration tests")
+    class DeletePersonByIdIntegrationTests {
+
+        private Person testPerson;
+        private int testPersonId;
+
+        @BeforeEach
+        void setup() {
+            testPerson = new Person(
+                    "Test First Name",
+                    "Test Last Name",
+                    "Test Summary",
+                    "01111 111111",
+                    "07111 111111",
+                    "Test Street",
+                    "Test Town",
+                    "Test Postcode"
+            );
+            personRepository.save(testPerson);
+            testPersonId = testPerson.getId();
+        }
+
+        @Test
+        void testSuccessfulDeleteResponds204() throws Exception {
+            // Arrange
+            // Act & Assert
+            mockMvc.perform(delete("/people/" + testPersonId)
+                            .header("Authorization", adminToken))
+                    .andExpect(status().isNoContent());
+        }
+
 
     }
 }
