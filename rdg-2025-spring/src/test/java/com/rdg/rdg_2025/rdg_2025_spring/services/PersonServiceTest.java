@@ -207,6 +207,28 @@ public class PersonServiceTest {
 
         }
 
+        @Test
+        void testDataAccessExceptionThrowsDatabaseException() {
+            // Arrange
+            doThrow(new DataAccessException("data access failed") {}).when(personRepository).deleteById(anyInt());
+            // Act & Assert
+            assertThrows(DatabaseException.class, () -> {
+                personService.deletePersonById(1);
+            });
+
+        }
+
+        @Test
+        void testPersistenceExceptionThrowsDatabaseException() {
+            // Arrange
+            doThrow(new PersistenceException("persistence failed")).when(personRepository).deleteById(anyInt());
+            // Act & Assert
+            assertThrows(DatabaseException.class, () -> {
+                personService.deletePersonById(1);
+            });
+
+        }
+
 
     }
 }

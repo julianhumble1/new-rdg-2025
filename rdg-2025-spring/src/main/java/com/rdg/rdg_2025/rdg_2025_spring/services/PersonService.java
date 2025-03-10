@@ -45,6 +45,8 @@ public class PersonService {
             personRepository.deleteById(personId);
         } catch (EntityNotFoundException ex) {
             throw new EntityNotFoundException(ex.getMessage(), ex);
+        } catch (DataAccessException | PersistenceException ex) {
+            throw new DatabaseException(ex.getMessage(), ex);
         }
     }
 
