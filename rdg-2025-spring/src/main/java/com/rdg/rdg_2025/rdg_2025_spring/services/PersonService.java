@@ -39,6 +39,10 @@ public class PersonService {
         }
     }
 
+    public void deletePersonById(int personId) {
+        personRepository.deleteById(personId);
+    }
+
     // PRIVATE HELPER METHODS
 
     private void updatePersonFromRequest(PersonRequest personRequest, Person person) {

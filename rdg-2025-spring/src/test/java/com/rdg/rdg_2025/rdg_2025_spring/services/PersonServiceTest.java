@@ -179,4 +179,22 @@ public class PersonServiceTest {
         }
 
     }
+
+    @Nested
+    @DisplayName("deletePersonById service tests")
+    class DeletePersonByIdServiceTests {
+
+        @Test
+        void testRepositoryDeleteMethodIsCalled() {
+            // Arrange
+
+            // Act
+            personService.deletePersonById(1);
+            // Assert
+            verify(personRepository, times(1)).deleteById(anyInt());
+
+        }
+
+
+    }
 }
