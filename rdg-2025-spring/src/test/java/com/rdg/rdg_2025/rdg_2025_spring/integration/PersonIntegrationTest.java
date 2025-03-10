@@ -480,6 +480,16 @@ public class PersonIntegrationTest {
                     .andExpect(status().isUnauthorized());
         }
 
+        @Test
+        void testNoTokenResponds401() throws Exception {
+            // Arrange
+            // Act & Assert
+            mockMvc.perform(delete("/people/" + testPersonId))
+                    .andExpect(status().isUnauthorized());
+        }
+
+
+
 
     }
 }
