@@ -453,6 +453,15 @@ public class PersonIntegrationTest {
                     .andExpect(status().isNotFound());
         }
 
+        @Test
+        void testPersonIdNotIntResponds400() throws Exception {
+            // Arrange
+            // Act & Assert
+            mockMvc.perform(delete("/people/notanint" )
+                            .header("Authorization", adminToken))
+                    .andExpect(status().isBadRequest());
+        }
+
 
     }
 }
