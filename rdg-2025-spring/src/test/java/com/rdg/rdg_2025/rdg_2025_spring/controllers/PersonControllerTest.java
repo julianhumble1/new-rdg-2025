@@ -374,6 +374,14 @@ public class PersonControllerTest {
                     .andExpect(status().isInternalServerError());
         }
 
+        @Test
+        void testNoServiceErrorResponds204() throws Exception {
+            // Arrange
+            // Act & Assert
+            mockMvc.perform(delete("/people/1"))
+                    .andExpect(status().isNoContent());
+        }
+
     }
 
 
