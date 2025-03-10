@@ -471,6 +471,15 @@ public class PersonIntegrationTest {
                     .andExpect(status().isForbidden());
         }
 
+        @Test
+        void testBadTokenResponds401() throws Exception {
+            // Arrange
+            // Act & Assert
+            mockMvc.perform(delete("/people/" + testPersonId)
+                            .header("Authorization", "bad token"))
+                    .andExpect(status().isUnauthorized());
+        }
+
 
     }
 }
