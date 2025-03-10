@@ -22,8 +22,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -486,6 +485,18 @@ public class PersonIntegrationTest {
             // Act & Assert
             mockMvc.perform(delete("/people/" + testPersonId))
                     .andExpect(status().isUnauthorized());
+        }
+
+        @Test
+        void testPersonNoLongerInDatabaseFollowingDeletion() throws Exception {
+            // Arrange
+            assertTrue(personRepository.existsById(testPersonId));
+            // Act
+            mockMvc.perform(delete("/people/" + testPersonId)
+                            .header("Authorization", adminToken))
+                    .andExpect(status().isNoContent());
+            // Assert
+            assertFalse(personRepository.existsById(testPersonId));
         }
 
 
