@@ -34,7 +34,6 @@ public class PersonController {
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> addNewVenue(@Valid @RequestBody PersonRequest personRequest) {
-
         try {
             Person person = personService.addNewPerson(personRequest);
             URI location = URI.create("/people/" + person.getId());
@@ -49,7 +48,6 @@ public class PersonController {
 
     @GetMapping
     public ResponseEntity<?> getAllPeople() {
-
         try {
             List<Person> personList = personService.getAllPeople();
             if (jwtUtils.checkAdmin()) {
@@ -60,6 +58,12 @@ public class PersonController {
         } catch (DatabaseException ex) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
         }
+    }
+
+    @DeleteMapping("/{personId}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> deletePersonById(@PathVariable int personId) {
+        return ResponseEntity.ok().build();
     }
 
 
