@@ -5,6 +5,7 @@ import com.rdg.rdg_2025.rdg_2025_spring.helpers.SlugUtils;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Person;
 import com.rdg.rdg_2025.rdg_2025_spring.payload.request.person.PersonRequest;
 import com.rdg.rdg_2025.rdg_2025_spring.repository.PersonRepository;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.PersistenceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -40,7 +41,11 @@ public class PersonService {
     }
 
     public void deletePersonById(int personId) {
-        personRepository.deleteById(personId);
+        try {
+            personRepository.deleteById(personId);
+        } catch (EntityNotFoundException ex) {
+            throw new EntityNotFoundException(ex.getMessage(), ex);
+        }
     }
 
     // PRIVATE HELPER METHODS

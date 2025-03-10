@@ -4,6 +4,7 @@ import com.rdg.rdg_2025.rdg_2025_spring.exception.DatabaseException;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Person;
 import com.rdg.rdg_2025.rdg_2025_spring.payload.request.person.PersonRequest;
 import com.rdg.rdg_2025.rdg_2025_spring.repository.PersonRepository;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.PersistenceException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -192,6 +193,17 @@ public class PersonServiceTest {
             personService.deletePersonById(1);
             // Assert
             verify(personRepository, times(1)).deleteById(anyInt());
+
+        }
+
+        @Test
+        void testEntityNotFoundThrowsEntityNotFoundException() {
+            // Arrange
+            doThrow(new EntityNotFoundException("person not found")).when(personRepository).deleteById(anyInt());
+            // Act & Assert
+            assertThrows(EntityNotFoundException.class, () -> {
+                personService.deletePersonById(1);
+            });
 
         }
 
