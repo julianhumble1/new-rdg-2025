@@ -23,6 +23,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -440,6 +441,16 @@ public class PersonIntegrationTest {
             mockMvc.perform(delete("/people/" + testPersonId)
                             .header("Authorization", adminToken))
                     .andExpect(status().isNoContent());
+        }
+
+        @Test
+        void testNonExistentPersonIdResponds404() throws Exception {
+            // Arrange
+            assertFalse(personRepository.existsById(testPersonId + 1));
+            // Act & Assert
+            mockMvc.perform(delete("/people/" + (testPersonId + 1))
+                            .header("Authorization", adminToken))
+                    .andExpect(status().isNotFound());
         }
 
 

@@ -17,10 +17,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -185,32 +182,28 @@ public class PersonServiceTest {
     @DisplayName("deletePersonById service tests")
     class DeletePersonByIdServiceTests {
 
-        @Test
-        void testRepositoryDeleteMethodIsCalled() {
-            // Arrange
+        private Person testPerson;
 
+        @BeforeEach
+        void setup() {
+            testPerson = new Person();
+        }
+
+        @Test
+        void testRepositoryFindPersonMethodIsCalled() {
+            // Arrange
+            when(personRepository.findById(anyInt())).thenReturn(Optional.of(testPerson));
             // Act
             personService.deletePersonById(1);
             // Assert
-            verify(personRepository, times(1)).deleteById(anyInt());
+            verify(personRepository, times(1)).findById(anyInt());
 
         }
 
         @Test
-        void testEntityNotFoundThrowsEntityNotFoundException() {
+        void testFindDataAccessExceptionThrowsDatabaseException() {
             // Arrange
-            doThrow(new EntityNotFoundException("person not found")).when(personRepository).deleteById(anyInt());
-            // Act & Assert
-            assertThrows(EntityNotFoundException.class, () -> {
-                personService.deletePersonById(1);
-            });
-
-        }
-
-        @Test
-        void testDataAccessExceptionThrowsDatabaseException() {
-            // Arrange
-            doThrow(new DataAccessException("data access failed") {}).when(personRepository).deleteById(anyInt());
+            when(personRepository.findById(anyInt())).thenThrow(new DatabaseException("data access failed"));
             // Act & Assert
             assertThrows(DatabaseException.class, () -> {
                 personService.deletePersonById(1);
@@ -219,9 +212,44 @@ public class PersonServiceTest {
         }
 
         @Test
-        void testPersistenceExceptionThrowsDatabaseException() {
+        void testFindEntityNotFoundThrowsEntityNotFoundException() {
             // Arrange
-            doThrow(new PersistenceException("persistence failed")).when(personRepository).deleteById(anyInt());
+            doThrow(new EntityNotFoundException("person not found")).when(personRepository).findById(anyInt());
+            // Act & Assert
+            assertThrows(EntityNotFoundException.class, () -> {
+                personService.deletePersonById(1);
+            });
+
+        }
+
+        @Test
+        void testRepositoryDeleteMethodIsCalled() {
+            // Arrange
+            when(personRepository.findById(anyInt())).thenReturn(Optional.of(testPerson));
+            // Act
+            personService.deletePersonById(1);
+            // Assert
+            verify(personRepository, times(1)).delete(any(Person.class));
+
+        }
+
+        @Test
+        void testDeleteDataAccessExceptionThrowsDatabaseException() {
+            // Arrange
+            when(personRepository.findById(anyInt())).thenReturn(Optional.of(testPerson));
+            doThrow(new DataAccessException("data access failed") {}).when(personRepository).delete(any(Person.class));
+            // Act & Assert
+            assertThrows(DatabaseException.class, () -> {
+                personService.deletePersonById(1);
+            });
+
+        }
+
+        @Test
+        void testDeletePersistenceExceptionThrowsDatabaseException() {
+            // Arrange
+            when(personRepository.findById(anyInt())).thenReturn(Optional.of(testPerson));
+            doThrow(new PersistenceException("persistence failed")).when(personRepository).delete(any(Person.class));
             // Act & Assert
             assertThrows(DatabaseException.class, () -> {
                 personService.deletePersonById(1);

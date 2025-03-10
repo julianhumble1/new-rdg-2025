@@ -40,14 +40,18 @@ public class PersonService {
         }
     }
 
-    public void deletePersonById(int personId) {
+    public Person getPersonById(int personId) {
         try {
-            personRepository.deleteById(personId);
-        } catch (EntityNotFoundException ex) {
-            throw new EntityNotFoundException(ex.getMessage(), ex);
-        } catch (DataAccessException | PersistenceException ex) {
+            return personRepository.findById(personId)
+                    .orElseThrow(() -> new EntityNotFoundException("No Person with this id: " + personId));
+        } catch (DataAccessException ex) {
             throw new DatabaseException(ex.getMessage(), ex);
         }
+    }
+
+    public void deletePersonById(int personId) {
+        Person person = getPersonById(personId);
+        deletePersonInDatabase(person);
     }
 
     // PRIVATE HELPER METHODS
@@ -75,6 +79,14 @@ public class PersonService {
             return personRepository.save(person);
         } catch (DataIntegrityViolationException ex) {
             throw new DataIntegrityViolationException(ex.getMessage(), ex);
+        } catch (DataAccessException | PersistenceException ex) {
+            throw new DatabaseException(ex.getMessage(), ex);
+        }
+    }
+
+    private void deletePersonInDatabase(Person person) {
+        try {
+            personRepository.delete(person);
         } catch (DataAccessException | PersistenceException ex) {
             throw new DatabaseException(ex.getMessage(), ex);
         }
