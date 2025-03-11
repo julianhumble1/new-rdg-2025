@@ -551,5 +551,21 @@ public class PersonControllerTest {
                     .andExpect(status().isBadRequest());
         }
 
+        @Test
+        void testOnlyFirstLastNameNotEmptyResponds200() throws Exception {
+            // Arrange
+            requestJson.put("summary", "");
+            requestJson.put("homePhone", "");
+            requestJson.put("mobilePhone" ,"");
+            requestJson.put("addressStreet", "");
+            requestJson.put("addressTown", "");
+            requestJson.put("addressPostcode", "");
+            // Act & Assert
+            mockMvc.perform(patch("/people/1")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(requestJson)))
+                    .andExpect(status().isOk());
+        }
+
     }
 }
