@@ -411,5 +411,16 @@ public class PersonServiceTest {
             });
         }
 
+        @Test
+        void testSavePersistenceExceptionThrowsDatabaseException() {
+            // Arrange
+            when(personRepository.findById(anyInt())).thenReturn(Optional.of(testPerson));
+            when(personRepository.save(any(Person.class))).thenThrow(new PersistenceException("") );
+            // Act & Assert
+            assertThrows(DatabaseException.class, () -> {
+                personService.updatePerson(1, testUpdatePersonRequest);
+            });
+        }
+
     }
 }
