@@ -627,5 +627,16 @@ public class PersonControllerTest {
                     .andExpect(status().isConflict());
         }
 
+        @Test
+        void testSuccessfulUpdateResponds200() throws Exception {
+            // Arrange
+            when(personService.updatePerson(anyInt(), any())).thenReturn(testPerson);
+            // Act & Assert
+            mockMvc.perform(patch("/people/1")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(requestJson)))
+                    .andExpect(status().isOk());
+        }
+
     }
 }
