@@ -95,7 +95,7 @@ public class PersonController {
     }
 
     @PatchMapping("/{personId}")
-    public ResponseEntity<?> updatePerson(@PathVariable int personId) {
+    public ResponseEntity<?> updatePerson(@PathVariable int personId, @Valid @RequestBody PersonRequest personRequest) {
         return ResponseEntity.ok().build();
     }
 
