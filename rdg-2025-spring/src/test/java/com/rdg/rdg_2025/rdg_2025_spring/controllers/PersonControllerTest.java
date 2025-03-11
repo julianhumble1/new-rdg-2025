@@ -638,5 +638,27 @@ public class PersonControllerTest {
                     .andExpect(status().isOk());
         }
 
+        @Test
+        void testSuccessfulUpdateRespondsExpectedJSON() throws Exception {
+            // Arrange
+            Person updatedPerson = new Person(
+                    "Updated First Name",
+                    "Updated Last Name",
+                    "Updated Summary",
+                    "01222 222222",
+                    "07222 222222",
+                    "Updated Street",
+                    "Updated Town",
+                    "Updated Postcode"
+            );
+            when(personService.updatePerson(anyInt(), any())).thenReturn(updatedPerson);
+            // Act & Assert
+            mockMvc.perform(patch("/people/1")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(requestJson)))
+                    .andExpect(jsonPath("$.person.firstName").value("Updated First Name"))
+                    .andExpect(jsonPath("$.person.lastName").value("Updated Last Name"));
+        }
+
     }
 }

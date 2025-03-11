@@ -98,7 +98,8 @@ public class PersonController {
     public ResponseEntity<?> updatePerson(@PathVariable int personId, @Valid @RequestBody PersonRequest personRequest) {
 
         try {
-            personService.updatePerson(personId, personRequest);
+            Person person = personService.updatePerson(personId, personRequest);
+            return ResponseEntity.ok().body(new DetailedPersonResponse(person));
         } catch (DatabaseException ex) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
         } catch (EntityNotFoundException ex) {
@@ -107,7 +108,7 @@ public class PersonController {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
         }
 
-        return ResponseEntity.ok().build();
+
     }
 
 
