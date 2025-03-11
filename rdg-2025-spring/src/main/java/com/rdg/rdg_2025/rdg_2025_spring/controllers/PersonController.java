@@ -95,6 +95,7 @@ public class PersonController {
     }
 
     @PatchMapping("/{personId}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> updatePerson(@PathVariable int personId, @Valid @RequestBody PersonRequest personRequest) {
 
         try {

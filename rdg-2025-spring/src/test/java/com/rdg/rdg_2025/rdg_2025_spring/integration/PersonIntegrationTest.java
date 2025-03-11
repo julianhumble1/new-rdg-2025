@@ -790,5 +790,17 @@ public class PersonIntegrationTest {
                             .content(objectMapper.writeValueAsString(requestJson)))
                     .andExpect(status().isOk());
         }
+
+        @Test
+        void testUserTokenResponds403() throws Exception {
+            // Arrange
+
+            // Act & Assert
+            mockMvc.perform(patch("/people/" + testPersonId)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", userToken)
+                            .content(objectMapper.writeValueAsString(requestJson)))
+                    .andExpect(status().isForbidden());
+        }
     }
 }
