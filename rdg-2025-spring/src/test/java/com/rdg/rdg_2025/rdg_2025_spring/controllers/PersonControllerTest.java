@@ -427,6 +427,16 @@ public class PersonControllerTest {
 
         }
 
+        @Test
+        void testSuccessfulGetResponds200() throws Exception {
+            // Arrange
+            when(personService.getPersonById(anyInt())).thenReturn(testPerson);
+            // Act & Assert
+            mockMvc.perform(get("/people/1"))
+                    .andExpect(status().isOk());
+
+        }
+
     }
 
 }
