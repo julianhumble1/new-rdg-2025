@@ -567,5 +567,21 @@ public class PersonControllerTest {
                     .andExpect(status().isOk());
         }
 
+        @Test
+        void testOnlyFirstLastNameNotMissingResponds200() throws Exception {
+            // Arrange
+            requestJson.remove("summary");
+            requestJson.remove("homePhone");
+            requestJson.remove("mobilePhone");
+            requestJson.remove("addressStreet");
+            requestJson.remove("addressTown");
+            requestJson.remove("addressPostcode");
+            // Act & Assert
+            mockMvc.perform(patch("/people/1")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(requestJson)))
+                    .andExpect(status().isOk());
+        }
+
     }
 }
