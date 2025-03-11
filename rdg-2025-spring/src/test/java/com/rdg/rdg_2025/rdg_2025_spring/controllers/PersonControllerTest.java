@@ -518,5 +518,16 @@ public class PersonControllerTest {
                     .andExpect(status().isBadRequest());
         }
 
+        @Test
+        void testFirstNameMissingResponds400() throws Exception {
+            // Arrange
+            requestJson.remove("firstName");
+            // Act & Assert
+            mockMvc.perform(patch("/people/1")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(requestJson)))
+                    .andExpect(status().isBadRequest());
+        }
+
     }
 }
