@@ -508,12 +508,40 @@ public class PersonIntegrationTest {
     @DisplayName("GET get person by id integration tests")
     class GetPersonByIdIntegrationTests {
 
+        private Person testPerson;
+        private int testPersonId;
+
+        @BeforeEach
+        void setup() {
+            testPerson = new Person(
+                    "Test First Name",
+                    "Test Last Name",
+                    "Test Summary",
+                    "01111 111111",
+                    "07111 111111",
+                    "Test Street",
+                    "Test Town",
+                    "Test Postcode"
+            );
+            personRepository.save(testPerson);
+            testPersonId = testPerson.getId();
+        }
+
         @Test
         void testPersonIdNotIntResponds400() throws Exception {
             // Arrange
             // Act & Assert
             mockMvc.perform(get("/people/notanint"))
                     .andExpect(status().isBadRequest());
+        }
+
+        @Test
+        void testInvalidPersonIdResponds404() throws Exception {
+            // Arrange
+            assertFalse(personRepository.existsById(testPersonId + 1));
+            // Act & Assert
+            mockMvc.perform(get("/people/" + (testPersonId + 1)))
+                    .andExpect(status().isNotFound());
         }
     }
 }
