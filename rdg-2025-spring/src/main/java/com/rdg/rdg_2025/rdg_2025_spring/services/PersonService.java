@@ -56,6 +56,7 @@ public class PersonService {
 
     public Person updatePerson(int personId, PersonRequest personRequest) {
         Person person = getPersonById(personId);
+        updatePersonFromRequest(personRequest, person);
         return savePersonToDatabase(person);
     }
 

@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -377,6 +378,16 @@ public class PersonServiceTest {
             assertThrows(EntityNotFoundException.class, () -> {
                 personService.updatePerson(1, testUpdatePersonRequest);
             });
+        }
+
+        @Test
+        void testUpdatePersonFromRequestMethodIsCalled() throws Exception {
+            // Arrange
+            when(personRepository.findById(anyInt())).thenReturn(Optional.of(testPerson));
+            // Act
+            personService.updatePerson(1, testUpdatePersonRequest);
+            // Assert
+            assertEquals(testPerson.getFirstName(), testUpdatePersonRequest.getFirstName());
         }
 
         @Test
