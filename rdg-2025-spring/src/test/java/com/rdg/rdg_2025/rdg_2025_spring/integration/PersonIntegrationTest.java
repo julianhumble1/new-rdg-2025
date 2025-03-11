@@ -773,5 +773,22 @@ public class PersonIntegrationTest {
                             .content(objectMapper.writeValueAsString(requestJson)))
                     .andExpect(status().isOk());
         }
+
+        @Test
+        void testOnlyFirstLastNameNotMissingResponds200() throws Exception {
+            // Arrange
+            requestJson.remove("summary");
+            requestJson.remove("homePhone");
+            requestJson.remove("mobilePhone");
+            requestJson.remove("addressStreet");
+            requestJson.remove("addressTown");
+            requestJson.remove("addressPostcode");
+            // Act & Assert
+            mockMvc.perform(patch("/people/" + testPersonId)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", adminToken)
+                            .content(objectMapper.writeValueAsString(requestJson)))
+                    .andExpect(status().isOk());
+        }
     }
 }
