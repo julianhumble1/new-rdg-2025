@@ -814,5 +814,16 @@ public class PersonIntegrationTest {
                             .content(objectMapper.writeValueAsString(requestJson)))
                     .andExpect(status().isUnauthorized());
         }
+
+        @Test
+        void testNoTokenResponds401() throws Exception {
+            // Arrange
+
+            // Act & Assert
+            mockMvc.perform(patch("/people/" + testPersonId)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(requestJson)))
+                    .andExpect(status().isUnauthorized());
+        }
     }
 }
