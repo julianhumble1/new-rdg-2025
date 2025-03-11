@@ -400,6 +400,7 @@ public class PersonControllerTest {
         @Test
         void testGetPersonServiceMethodIsCalled() throws Exception {
             // Arrange
+            when(personService.getPersonById(anyInt())).thenReturn(testPerson);
             // Act
             mockMvc.perform(get("/people/1"));
             // Assert
@@ -430,6 +431,7 @@ public class PersonControllerTest {
         @Test
         void testSuccessfulGetResponds200() throws Exception {
             // Arrange
+            when(jwtUtils.checkAdmin()).thenReturn(true);
             when(personService.getPersonById(anyInt())).thenReturn(testPerson);
             // Act & Assert
             mockMvc.perform(get("/people/1"))
@@ -440,9 +442,11 @@ public class PersonControllerTest {
         @Test
         void testSuccessfulAdminGetRespondsFullPersonDetails() throws Exception {
             // Arrange
+            when(jwtUtils.checkAdmin()).thenReturn(true);
             when(personService.getPersonById(anyInt())).thenReturn(testPerson);
             // Act & Assert
             mockMvc.perform(get("/people/1"))
+                    .andExpect(jsonPath("$.responseType").value("DETAILED"))
                     .andExpect(jsonPath("$.person.firstName").value(testPerson.getFirstName()))
                     .andExpect(jsonPath("$.person.lastName").value(testPerson.getLastName()))
                     .andExpect(jsonPath("$.person.summary").value(testPerson.getSummary()))
@@ -451,6 +455,25 @@ public class PersonControllerTest {
                     .andExpect(jsonPath("$.person.addressStreet").value(testPerson.getAddressStreet()))
                     .andExpect(jsonPath("$.person.addressTown").value(testPerson.getAddressTown()))
                     .andExpect(jsonPath("$.person.addressPostcode").value(testPerson.getAddressPostcode()));
+
+        }
+
+        @Test
+        void testSuccessfulNonAdminGetRespondsPublicPersonDetails() throws Exception {
+            // Arrange
+            when(jwtUtils.checkAdmin()).thenReturn(false);
+            when(personService.getPersonById(anyInt())).thenReturn(testPerson);
+            // Act & Assert
+            mockMvc.perform(get("/people/1"))
+                    .andExpect(jsonPath("$.responseType").value("PUBLIC"))
+                    .andExpect(jsonPath("$.person.firstName").value(testPerson.getFirstName()))
+                    .andExpect(jsonPath("$.person.lastName").value(testPerson.getLastName()))
+                    .andExpect(jsonPath("$.person.summary").value(testPerson.getSummary()))
+                    .andExpect(jsonPath("$.person.homePhone").value(""))
+                    .andExpect(jsonPath("$.person.mobilePhone").value(""))
+                    .andExpect(jsonPath("$.person.addressStreet").value(""))
+                    .andExpect(jsonPath("$.person.addressTown").value(""))
+                    .andExpect(jsonPath("$.person.addressPostcode").value(""));
 
         }
 

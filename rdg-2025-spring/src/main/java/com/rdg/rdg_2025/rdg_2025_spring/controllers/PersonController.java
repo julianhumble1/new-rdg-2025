@@ -4,13 +4,13 @@ import com.rdg.rdg_2025.rdg_2025_spring.exception.DatabaseException;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Person;
 import com.rdg.rdg_2025.rdg_2025_spring.payload.request.person.PersonRequest;
 import com.rdg.rdg_2025.rdg_2025_spring.payload.response.person.DetailedPeopleResponse;
-import com.rdg.rdg_2025.rdg_2025_spring.payload.response.person.PersonResponse;
+import com.rdg.rdg_2025.rdg_2025_spring.payload.response.person.DetailedPersonResponse;
 import com.rdg.rdg_2025.rdg_2025_spring.payload.response.person.PublicPeopleResponse;
+import com.rdg.rdg_2025.rdg_2025_spring.payload.response.person.PublicPersonResponse;
 import com.rdg.rdg_2025.rdg_2025_spring.security.jwt.JwtUtils;
 import com.rdg.rdg_2025.rdg_2025_spring.services.PersonService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -39,7 +39,7 @@ public class PersonController {
         try {
             Person person = personService.addNewPerson(personRequest);
             URI location = URI.create("/people/" + person.getId());
-            return ResponseEntity.created(location).body(new PersonResponse(person));
+            return ResponseEntity.created(location).body(new DetailedPersonResponse(person));
         } catch (DataIntegrityViolationException ex) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
         } catch (DatabaseException ex) {
@@ -82,7 +82,11 @@ public class PersonController {
 
         try {
             Person person = personService.getPersonById(personId);
-            return ResponseEntity.ok(new PersonResponse(person));
+            if (jwtUtils.checkAdmin()) {
+                return ResponseEntity.ok(new DetailedPersonResponse(person));
+            } else {
+                return ResponseEntity.ok(new PublicPersonResponse(person));
+            }
         } catch (DatabaseException ex) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
         } catch (EntityNotFoundException ex) {

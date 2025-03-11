@@ -5,11 +5,13 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Getter @Setter
-public class PersonResponse {
+public class DetailedPersonResponse {
 
     private Person person;
 
-    public PersonResponse(Person person) {
+    private PersonResponseType responseType = PersonResponseType.DETAILED;
+
+    public DetailedPersonResponse(Person person) {
         this.person = person;
     }
 }
