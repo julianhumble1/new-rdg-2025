@@ -102,7 +102,15 @@ export default class ProductionService {
 
             return response;
         } catch (e) {
-            throw new Error(e.response.message)
+            if (e.response.status === 500) {
+                throw new Error("Internal Server Error.")
+            } else if (e.response.status === 404) {
+                throw new Error("No Production/Venue with this id.")
+            } else if (e.response.status === 409) {
+                throw new Error("Production with this name already exists.")
+            } else if (e.response.status === 401 || e.response.status === 403) {
+                throw new Error("Failed to authenticate as administrator.")
+            }
         }
 
     }
@@ -120,7 +128,13 @@ export default class ProductionService {
             )
             return response
         } catch (e) {
-            console.log(e)
+            if (e.response.status === 500) {
+                throw new Error("Internal Server Error.")
+            } else if (e.response.status === 404) {
+                throw new Error("No Production/Venue with this id.")
+            } else if (e.response.status === 401 || e.response.status === 403) {
+                throw new Error("Failed to authenticate as administrator.")
+            }
         }
     }
 

@@ -26,7 +26,15 @@ export default class PersonService {
             )
             return response
         } catch (e) {
-            throw new Error(e.message)
+            if (e.response.status === 500) {
+                throw new Error("Internal server error")
+            } else if (e.response.status === 409) {
+                throw new Error("Person with this name already exists.")
+            } else if (e.response.status === 401 || e.response.status === 403) {
+                throw new Error("Failed to authenticate as administrator.")
+            } else if (e.response.status === 400) {
+                throw new Error("Bad Request: Details not in expected format.")
+            }
         }
 
     }
@@ -45,7 +53,9 @@ export default class PersonService {
             )
             return response
         } catch (e) {
-            throw new Error(e.message)
+            if (e.response.status === 500) {
+                throw new Error("Internal server error")
+            }
         }
     }
 
@@ -62,7 +72,13 @@ export default class PersonService {
             )
             return response
         } catch (e) {
-            throw new Error(e.message)
+            if (e.response.status === 500) {
+                throw new Error("Internal server error")
+            } else if (e.response.status === 401 || e.response.status === 403) {
+                throw new Error("Failed to authenticate as administrator.")
+            } else if (e.response.status === 404) {
+                throw new Error("No Person with this id.")
+            } 
         }
     }
 
@@ -79,7 +95,13 @@ export default class PersonService {
             )
             return response
         } catch (e) {
-            throw new Error(e.message)
+            if (e.response.status === 500) {
+                throw new Error("Internal server error")
+            } else if (e.response.status === 404) {
+                throw new Error("No Person with this id.")
+            } else if (e.response.status === 400) {
+                throw new Error("Bad Request: Details not in expected format.")
+            }
         }
     }
 
@@ -106,7 +128,17 @@ export default class PersonService {
             )
             return response
         } catch (e) {
-            throw new Error(e.message)
+            if (e.response.status === 500) {
+                throw new Error("Internal server error")
+            } else if (e.response.status === 409) {
+                throw new Error("Person with this name already exists.")
+            } else if (e.response.status === 404) {
+                throw new Error("No Person with this id.")
+            } else if (e.response.status === 400) {
+                throw new Error("Bad Request: Details not in expected format.")
+            } else if (e.response.status === 401 || e.response.status === 403) {
+                throw new Error("Failed to authenticate as administrator.")
+            }
         }
     }
 

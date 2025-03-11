@@ -30,7 +30,9 @@ export default class FestivalService {
                 throw new Error("Internal server error")
             } else if (e.response.status === 400) {
                 throw new Error("Bad request: details are not in expected format")
-            }
+            } else if (e.response.status === 404) {
+                throw new Error("No Venue with this id.")
+            } 
         }
     }
 
@@ -65,7 +67,13 @@ export default class FestivalService {
             const response = await axios.get(`http://localhost:8080/festivals/${festivalId}`)
             return response
         } catch (e) {
-            throw new Error(e.message)
+            if (e.response.status === 401 || e.response.status === 403) {
+                throw new Error("Failed to authenticate as administrator")
+            } else if (e.response.status === 500) {
+                throw new Error("Internal server error")
+            } else if (e.response.status === 404) {
+                throw new Error("No Festival with this id.")
+            }
         }
     }
 
@@ -81,7 +89,13 @@ export default class FestivalService {
             })
             return response
         } catch (e) {
-            throw new Error(e.message)
+            if (e.response.status === 401 || e.response.status === 403) {
+                throw new Error("Failed to authenticate as administrator")
+            } else if (e.response.status === 500) {
+                throw new Error("Internal server error")
+            } else if (e.response.status === 404) {
+                throw new Error("No Festival with this id.")
+            }
         }
             
     }
@@ -107,7 +121,13 @@ export default class FestivalService {
             )
             return response;
         } catch (e) {
-            throw new Error(e.message)
+            if (e.response.status === 401 || e.response.status === 403) {
+                throw new Error("Failed to authenticate as administrator")
+            } else if (e.response.status === 500) {
+                throw new Error("Internal server error")
+            } else if (e.response.status === 404) {
+                throw new Error("No Festival/Venue with this id.")
+            } 
         }
 
     }

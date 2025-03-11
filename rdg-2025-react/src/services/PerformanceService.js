@@ -26,7 +26,15 @@ export default class PerformanceService {
             )
             return response
         } catch (e) {
-            throw new Error(e.message, e)
+            if (e.response.status === 500) {
+                throw new Error("Internal server error")
+            } else if (e.response.status === 404) {
+                throw new Error("No Production/Venue/Festival with this id.")
+            } else if (e.response.status === 400) {
+                throw new Error("Bad Request: Details not in expected format.")
+            } else if (e.response.status === 401 || e.response.status === 403) {
+                throw new Error("Failed to authenticate as administrator.")
+            } 
         }
 
     }
@@ -44,7 +52,15 @@ export default class PerformanceService {
             )
             return response
         } catch (e) {
-            throw new Error(e.message)
+            if (e.response.status === 500) {
+                throw new Error("Internal server error")
+            } else if (e.response.status === 404) {
+                throw new Error("No Performance with this id.")
+            } else if (e.response.status === 400) {
+                throw new Error("Bad Request: Details not in expected format.")
+            } else if (e.response.status === 401 || e.response.status === 403) {
+                throw new Error("Failed to authenticate as administrator.")
+            } 
         }
     }
 
