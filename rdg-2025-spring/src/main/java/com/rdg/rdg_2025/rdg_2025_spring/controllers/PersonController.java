@@ -78,6 +78,8 @@ public class PersonController {
 
     @GetMapping("/{personId}")
     public ResponseEntity<?> getPersonById(@PathVariable int personId) {
+
+        personService.getPersonById(personId);
         return ResponseEntity.ok().body("");
     }
 

@@ -397,6 +397,16 @@ public class PersonControllerTest {
 
         }
 
+        @Test
+        void testGetPersonServiceMethodIsCalled() throws Exception {
+            // Arrange
+            // Act
+            mockMvc.perform(get("/people/1"));
+            // Assert
+            verify(personService, times(1)).getPersonById(1);
+
+        }
+
     }
 
 }
