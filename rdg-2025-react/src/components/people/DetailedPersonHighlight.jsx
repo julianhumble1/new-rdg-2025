@@ -2,7 +2,7 @@ import { format } from "date-fns"
 import { Link } from "react-router-dom"
 import AddressHelper from "../../utils/AddressHelper.js"
 
-const DetailedPersonHighlight = ({ personData }) => {
+const DetailedPersonHighlight = ({ personData, setEditMode, handleDelete }) => {
     
     const fullAddress = AddressHelper.getFullAddress(personData.addressStreet, personData.addressTown, personData.addressPostcode)
 
@@ -11,6 +11,14 @@ const DetailedPersonHighlight = ({ personData }) => {
             <div className="text-black text-xl font-bold flex justify-between">
                 <div>
                     {personData.firstName} {personData.lastName}
+                </div>
+                <div className="flex gap-2">
+                    <button className="text-sm hover:underline" onClick={() => setEditMode(true)}>
+                        Edit
+                    </button>
+                    <button className="text-sm hover:underline" onClick={() => handleDelete(personData)}>
+                        Delete
+                    </button>
                 </div>
             </div>
             {personData.summary &&

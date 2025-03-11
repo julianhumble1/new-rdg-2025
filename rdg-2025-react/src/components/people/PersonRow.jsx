@@ -27,7 +27,12 @@ const PersonRow = ({person, responseType, handleDelete}) => {
                     {person.addressPostcode}
                 </Table.Cell>
                 <Table.Cell>
+                <div className='flex gap-2'>
+                    <Link className="text-medium text-black hover:underline font-bold text-end" to={`/people/${person.id}?edit=true`}>
+                        Edit
+                    </Link>
                     <button className="text-medium text-black hover:underline font-bold text-end" onClick={() => handleDelete(person)}>Delete</button>
+                </div>
                 </Table.Cell>
                 
     
