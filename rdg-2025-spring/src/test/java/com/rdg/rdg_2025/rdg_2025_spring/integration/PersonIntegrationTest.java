@@ -732,5 +732,17 @@ public class PersonIntegrationTest {
                             .content(objectMapper.writeValueAsString(requestJson)))
                     .andExpect(status().isBadRequest());
         }
+
+        @Test
+        void testLastNameEmptyResponds400() throws Exception {
+            // Arrange
+            requestJson.put("lastName", "");
+            // Act & Assert
+            mockMvc.perform(patch("/people/1")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", adminToken)
+                            .content(objectMapper.writeValueAsString(requestJson)))
+                    .andExpect(status().isBadRequest());
+        }
     }
 }
