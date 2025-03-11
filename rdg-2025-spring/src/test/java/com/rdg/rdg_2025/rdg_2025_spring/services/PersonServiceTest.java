@@ -294,6 +294,27 @@ public class PersonServiceTest {
             });
         }
 
+        @Test
+        void testSuccessfulGetReturnsExpectedPersonObject() {
+            // Arrange
+            Person testPerson = new Person(
+                    "Test First Name",
+                    "Test Last Name",
+                    "Test Summary",
+                    "01111 111111",
+                    "07111 111111",
+                    "Test Street",
+                    "Test Town",
+                    "Test Postcode"
+            );
+            when(personRepository.findById(anyInt())).thenReturn(Optional.of(testPerson));
+            // Act
+            Person result = personService.getPersonById(1);
+            // Assert
+            assertEquals(testPerson, result);
+
+        }
+
 
     }
 }
