@@ -379,5 +379,15 @@ public class PersonServiceTest {
             });
         }
 
+        @Test
+        void testRepositorySaveMethodIsCalled() {
+            // Arrange
+            when(personRepository.findById(anyInt())).thenReturn(Optional.of(testPerson));
+            // Act
+            personService.updatePerson(1, testUpdatePersonRequest);
+            // Assert
+            verify(personRepository, times(1)).save(any());
+        }
+
     }
 }

@@ -54,8 +54,9 @@ public class PersonService {
         deletePersonInDatabase(person);
     }
 
-    public void updatePerson(int personId, PersonRequest personRequest) {
+    public Person updatePerson(int personId, PersonRequest personRequest) {
         Person person = getPersonById(personId);
+        return savePersonToDatabase(person);
     }
 
     // PRIVATE HELPER METHODS
