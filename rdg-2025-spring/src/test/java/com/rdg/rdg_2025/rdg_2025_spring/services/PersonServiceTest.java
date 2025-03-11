@@ -274,6 +274,16 @@ public class PersonServiceTest {
             verify(personRepository, times(1)).findById(anyInt());
         }
 
+        @Test
+        void testDataAccessExceptionThrowsDatabaseException() {
+            // Arrange
+            when(personRepository.findById(anyInt())).thenThrow(new DataAccessException("data access exception") {});
+            // Act & Assert
+            assertThrows(DatabaseException.class, () -> {
+                personService.getPersonById(1);
+            });
+        }
+
 
     }
 }
