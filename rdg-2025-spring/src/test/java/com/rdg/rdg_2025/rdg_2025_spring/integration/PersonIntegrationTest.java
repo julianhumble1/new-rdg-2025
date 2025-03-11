@@ -503,4 +503,17 @@ public class PersonIntegrationTest {
 
 
     }
+
+    @Nested
+    @DisplayName("GET get person by id integration tests")
+    class GetPersonByIdIntegrationTests {
+
+        @Test
+        void testPersonIdNotIntResponds400() throws Exception {
+            // Arrange
+            // Act & Assert
+            mockMvc.perform(get("/people/notanint"))
+                    .andExpect(status().isBadRequest());
+        }
+    }
 }
