@@ -381,7 +381,7 @@ public class PersonServiceTest {
         }
 
         @Test
-        void testUpdatePersonFromRequestMethodIsCalled() throws Exception {
+        void testPersonDetailsAreUpdated() throws Exception {
             // Arrange
             when(personRepository.findById(anyInt())).thenReturn(Optional.of(testPerson));
             // Act
@@ -431,6 +431,18 @@ public class PersonServiceTest {
             assertThrows(DatabaseException.class, () -> {
                 personService.updatePerson(1, testUpdatePersonRequest);
             });
+        }
+
+        @Test
+        void testSuccessfulUpdateReturnsExpectedPerson() throws Exception {
+            // Arrange
+            when(personRepository.findById(anyInt())).thenReturn(Optional.of(testPerson));
+            Person updatedPerson = new Person();
+            when(personRepository.save(any())).thenReturn(updatedPerson);
+            // Act
+            Person result = personService.updatePerson(1, testUpdatePersonRequest);
+            // Assert
+            assertEquals(updatedPerson, result);
         }
 
     }
