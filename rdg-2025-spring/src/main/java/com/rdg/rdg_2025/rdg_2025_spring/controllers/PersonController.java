@@ -97,7 +97,11 @@ public class PersonController {
     @PatchMapping("/{personId}")
     public ResponseEntity<?> updatePerson(@PathVariable int personId, @Valid @RequestBody PersonRequest personRequest) {
 
-        personService.updatePerson(personId, personRequest);
+        try {
+            personService.updatePerson(personId, personRequest);
+        } catch (DatabaseException ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
+        }
 
         return ResponseEntity.ok().build();
     }

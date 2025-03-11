@@ -594,6 +594,16 @@ public class PersonControllerTest {
             verify(personService, times(1)).updatePerson(anyInt(), any());
         }
 
+        @Test
+        void testDatabaseExceptionResponds500() throws Exception {
+            // Arrange
+            when(personService.updatePerson(anyInt(), any())).thenThrow(new DatabaseException(""));
+            // Act & Assert
+            mockMvc.perform(patch("/people/1")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(requestJson)))
+                    .andExpect(status().isInternalServerError());
+        }
 
     }
 }
