@@ -605,5 +605,16 @@ public class PersonControllerTest {
                     .andExpect(status().isInternalServerError());
         }
 
+        @Test
+        void testEntityNotFoundExceptionResponds404() throws Exception {
+            // Arrange
+            when(personService.updatePerson(anyInt(), any())).thenThrow(new EntityNotFoundException(""));
+            // Act & Assert
+            mockMvc.perform(patch("/people/1")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(requestJson)))
+                    .andExpect(status().isNotFound());
+        }
+
     }
 }
