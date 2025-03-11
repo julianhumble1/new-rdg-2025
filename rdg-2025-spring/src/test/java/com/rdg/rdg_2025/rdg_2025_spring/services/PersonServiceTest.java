@@ -389,5 +389,16 @@ public class PersonServiceTest {
             verify(personRepository, times(1)).save(any());
         }
 
+        @Test
+        void testDataIntegrityViolationThrowsDataIntegrityViolationException() {
+            // Arrange
+            when(personRepository.findById(anyInt())).thenReturn(Optional.of(testPerson));
+            when(personRepository.save(any(Person.class))).thenThrow(new DataIntegrityViolationException(""));
+            // Act & Assert
+            assertThrows(DataIntegrityViolationException.class, () -> {
+                personService.updatePerson(1, testUpdatePersonRequest);
+            });
+        }
+
     }
 }
