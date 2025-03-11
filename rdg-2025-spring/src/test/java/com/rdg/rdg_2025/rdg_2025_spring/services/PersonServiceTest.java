@@ -317,4 +317,47 @@ public class PersonServiceTest {
 
 
     }
+
+    @Nested
+    @DisplayName("updatePerson service tests")
+    class UpdatePersonServiceTests {
+
+        private PersonRequest testUpdatePersonRequest;
+        private Person testPerson;
+
+        @BeforeEach
+        void setup() {
+            testUpdatePersonRequest = new PersonRequest(
+                    "Updated First Name",
+                    "Updated Last Name",
+                    "Updated Summary",
+                    "01222 222222",
+                    "07222 222222",
+                    "Updated Street",
+                    "Updated Town",
+                    "Updated Postcode"
+            );
+            testPerson = new Person(
+                    "Test First Name",
+                    "Test Last Name",
+                    "Test Summary",
+                    "01111 111111",
+                    "07111 111111",
+                    "Test Street",
+                    "Test Town",
+                    "Test Postcode"
+            );
+        }
+
+        @Test
+        void testRepositoryFindMethodIsCalled() {
+            // Arrange
+            when(personRepository.findById(anyInt())).thenReturn(Optional.of(testPerson));
+            // Act
+            personService.updatePerson(1, testUpdatePersonRequest);
+            // Assert
+            verify(personRepository, times(1)).findById(1);
+        }
+
+    }
 }
