@@ -714,7 +714,7 @@ public class PersonIntegrationTest {
             // Arrange
             requestJson.put("firstName", "");
             // Act & Assert
-            mockMvc.perform(patch("/people/1")
+            mockMvc.perform(patch("/people/" + testPersonId)
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", adminToken)
                             .content(objectMapper.writeValueAsString(requestJson)))
@@ -726,7 +726,7 @@ public class PersonIntegrationTest {
             // Arrange
             requestJson.remove("firstName");
             // Act & Assert
-            mockMvc.perform(patch("/people/1")
+            mockMvc.perform(patch("/people/" + testPersonId)
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", adminToken)
                             .content(objectMapper.writeValueAsString(requestJson)))
@@ -738,7 +738,7 @@ public class PersonIntegrationTest {
             // Arrange
             requestJson.put("lastName", "");
             // Act & Assert
-            mockMvc.perform(patch("/people/1")
+            mockMvc.perform(patch("/people/" + testPersonId)
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", adminToken)
                             .content(objectMapper.writeValueAsString(requestJson)))
@@ -750,11 +750,28 @@ public class PersonIntegrationTest {
             // Arrange
             requestJson.remove("lastName");
             // Act & Assert
-            mockMvc.perform(patch("/people/1")
+            mockMvc.perform(patch("/people/" + testPersonId)
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", adminToken)
                             .content(objectMapper.writeValueAsString(requestJson)))
                     .andExpect(status().isBadRequest());
+        }
+
+        @Test
+        void testOnlyFirstLastNameNotEmptyResponds200() throws Exception {
+            // Arrange
+            requestJson.put("summary", "");
+            requestJson.put("homePhone", "");
+            requestJson.put("mobilePhone" ,"");
+            requestJson.put("addressStreet", "");
+            requestJson.put("addressTown", "");
+            requestJson.put("addressPostcode", "");
+            // Act & Assert
+            mockMvc.perform(patch("/people/" + testPersonId)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", adminToken)
+                            .content(objectMapper.writeValueAsString(requestJson)))
+                    .andExpect(status().isOk());
         }
     }
 }
