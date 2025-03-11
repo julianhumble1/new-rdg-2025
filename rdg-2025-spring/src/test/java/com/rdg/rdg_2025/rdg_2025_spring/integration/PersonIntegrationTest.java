@@ -602,4 +602,53 @@ public class PersonIntegrationTest {
                     .andExpect(jsonPath("$.person.addressPostcode").value(""));
         }
     }
+
+    @Nested
+    @DisplayName("PATCH update person integration tests")
+    class UpdatePersonIntegrationTests {
+
+        private Person testPerson;
+        private int testPersonId;
+
+
+        @BeforeEach
+        void setup() {
+            testPerson = new Person(
+                    "Test First Name",
+                    "Test Last Name",
+                    "Test Summary",
+                    "01111 111111",
+                    "07111 111111",
+                    "Test Street",
+                    "Test Town",
+                    "Test Postcode"
+            );
+            personRepository.save(testPerson);
+            testPersonId = testPerson.getId();
+
+            requestJson = objectMapper.createObjectNode();
+            requestJson.put("firstName", "Updated First Name");
+            requestJson.put("lastName", "Updated Last Name");
+            requestJson.put("summary", "Updated Summary");
+            requestJson.put("homePhone", "01222 222222");
+            requestJson.put("mobilePhone" ,"07222 222222");
+            requestJson.put("addressStreet", "Updated Street");
+            requestJson.put("addressTown", "Updated Town");
+            requestJson.put("addressPostcode", "Updated Postcode");
+        }
+
+        @Test
+        void testSuccessfulUpdateWithAllFieldsResponds201() throws Exception {
+            // Arrange
+            // Act & Assert
+            mockMvc.perform(patch("/people/" + testPersonId)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", adminToken)
+                            .content(objectMapper.writeValueAsString(requestJson)))
+                    .andExpect(status().isOk());
+
+        }
+
+
+    }
 }
