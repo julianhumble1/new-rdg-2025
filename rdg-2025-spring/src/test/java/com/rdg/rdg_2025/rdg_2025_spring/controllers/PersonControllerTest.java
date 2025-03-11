@@ -437,6 +437,23 @@ public class PersonControllerTest {
 
         }
 
+        @Test
+        void testSuccessfulAdminGetRespondsFullPersonDetails() throws Exception {
+            // Arrange
+            when(personService.getPersonById(anyInt())).thenReturn(testPerson);
+            // Act & Assert
+            mockMvc.perform(get("/people/1"))
+                    .andExpect(jsonPath("$.person.firstName").value(testPerson.getFirstName()))
+                    .andExpect(jsonPath("$.person.lastName").value(testPerson.getLastName()))
+                    .andExpect(jsonPath("$.person.summary").value(testPerson.getSummary()))
+                    .andExpect(jsonPath("$.person.homePhone").value(testPerson.getHomePhone()))
+                    .andExpect(jsonPath("$.person.mobilePhone").value(testPerson.getMobilePhone()))
+                    .andExpect(jsonPath("$.person.addressStreet").value(testPerson.getAddressStreet()))
+                    .andExpect(jsonPath("$.person.addressTown").value(testPerson.getAddressTown()))
+                    .andExpect(jsonPath("$.person.addressPostcode").value(testPerson.getAddressPostcode()));
+
+        }
+
     }
 
 }

@@ -10,6 +10,7 @@ import com.rdg.rdg_2025.rdg_2025_spring.security.jwt.JwtUtils;
 import com.rdg.rdg_2025.rdg_2025_spring.services.PersonService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -80,13 +81,13 @@ public class PersonController {
     public ResponseEntity<?> getPersonById(@PathVariable int personId) {
 
         try {
-            personService.getPersonById(personId);
+            Person person = personService.getPersonById(personId);
+            return ResponseEntity.ok(new PersonResponse(person));
         } catch (DatabaseException ex) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
         } catch (EntityNotFoundException ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
         }
-        return ResponseEntity.ok().body("");
     }
 
 
