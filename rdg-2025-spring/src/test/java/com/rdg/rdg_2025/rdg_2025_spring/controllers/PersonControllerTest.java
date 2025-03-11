@@ -616,5 +616,16 @@ public class PersonControllerTest {
                     .andExpect(status().isNotFound());
         }
 
+        @Test
+        void testDataIntegrityViolationExceptionResponds409() throws Exception {
+            // Arrange
+            when(personService.updatePerson(anyInt(), any())).thenThrow(new DataIntegrityViolationException(""));
+            // Act & Assert
+            mockMvc.perform(patch("/people/1")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(requestJson)))
+                    .andExpect(status().isConflict());
+        }
+
     }
 }
