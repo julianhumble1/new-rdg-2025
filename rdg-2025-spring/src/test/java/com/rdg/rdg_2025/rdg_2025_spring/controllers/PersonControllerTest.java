@@ -407,6 +407,16 @@ public class PersonControllerTest {
 
         }
 
+        @Test
+        void testDatabaseExceptionResponds500() throws Exception {
+            // Arrange
+            when(personService.getPersonById(anyInt())).thenThrow(new DatabaseException("database exception"));
+            // Act & Assert
+            mockMvc.perform(get("/people/1"))
+                    .andExpect(status().isInternalServerError());
+
+        }
+
     }
 
 }

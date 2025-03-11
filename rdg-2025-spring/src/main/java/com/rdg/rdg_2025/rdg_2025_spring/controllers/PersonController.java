@@ -79,7 +79,11 @@ public class PersonController {
     @GetMapping("/{personId}")
     public ResponseEntity<?> getPersonById(@PathVariable int personId) {
 
-        personService.getPersonById(personId);
+        try {
+            personService.getPersonById(personId);
+        } catch (DatabaseException ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
+        }
         return ResponseEntity.ok().body("");
     }
 
