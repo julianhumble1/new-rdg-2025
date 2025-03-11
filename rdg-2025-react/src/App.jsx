@@ -2,7 +2,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-d
 import { useEffect, useState } from "react"
 import Cookies from "js-cookie"
 import Login from "./components/Login.jsx"
-import Home from "./components/Home.jsx"
+import Home from "./components/home/Home.jsx"
 import Header from "./components/header/Header.jsx"
 import Dashboard from "./components/dashboards/Dashboard.jsx"
 import UserDashboard from "./components/dashboards/UserDashboard.jsx"
@@ -22,7 +22,7 @@ import NewPersonForm from "./components/people/NewPersonForm.jsx"
 import AllPeople from "./components/people/AllPeople.jsx"
 
 import FacebookFeed from "./components/FacebookFeed.jsx"
-
+import PersonPage from "./components/people/PersonPage.jsx"
 
 
 function App() {
@@ -71,7 +71,7 @@ function App() {
 
         <Route path="/performances/new" element={<NewPerformanceForm />} />
 
-
+        <Route path="/people/:id" element={<PersonPage />} />
         <Route path="/people/new" element={<NewPersonForm />} />
         <Route path="/people" element={<AllPeople />} />
 

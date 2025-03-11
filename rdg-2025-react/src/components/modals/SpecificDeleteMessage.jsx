@@ -21,6 +21,10 @@ const SpecificDeleteMessage = ({ itemToDelete }) => {
             setMessage(<>
                 When deleting a performance, no other objects will be deleted.
             </>)
+        } else if (itemToDelete.firstName != null) {
+            setMessage(<>
+                When deleting a person, no other objects will be deleted.
+            </>)
         }
 
     }, [itemToDelete])

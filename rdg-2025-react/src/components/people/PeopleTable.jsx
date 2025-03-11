@@ -3,7 +3,7 @@ import { Table } from "flowbite-react"
 import { Link } from "react-router-dom"
 import PersonRow from "./PersonRow.jsx"
 
-const PeopleTable = ({ people, responseType }) => {
+const PeopleTable = ({ people, responseType, handleDelete }) => {
 
     if (people.length > 0) {
         return (
@@ -16,6 +16,7 @@ const PeopleTable = ({ people, responseType }) => {
                         <Table.HeadCell>Address</Table.HeadCell>
                         <Table.HeadCell>Street</Table.HeadCell>
                         <Table.HeadCell>Postcode</Table.HeadCell>
+                        <Table.HeadCell>Actions</Table.HeadCell>
                     </Table.Head>
                     :
                     <Table.Head className='text-lg'>
@@ -37,7 +38,7 @@ const PeopleTable = ({ people, responseType }) => {
                         </Table.Row>
                     }
                     {people.map((person, index) => (
-                        <PersonRow key={index} responseType={responseType} person={person } />
+                        <PersonRow key={index} responseType={responseType} person={person } handleDelete={handleDelete} />
                     ))}
                 </Table.Body>
             </Table>

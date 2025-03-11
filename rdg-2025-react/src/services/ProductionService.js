@@ -51,6 +51,19 @@ export default class ProductionService {
         }
     }
 
+    static getFutureProductions = async () => {
+        try {
+            const response = await axios.get("http://localhost:8080/productions/future")
+            return response
+        } catch (e) {
+            if (e.response.status === 500) {
+                throw new Error("Internal server error")
+            } else {
+                throw new Error(e.message)
+            }
+        }
+    }
+
     static getProductionById = async (productionId) => {
         try {
             const response = await axios.get(`http://localhost:8080/productions/${productionId}`)

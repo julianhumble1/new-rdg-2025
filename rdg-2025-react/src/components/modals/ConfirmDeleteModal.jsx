@@ -11,10 +11,14 @@ const ConfirmDeleteModal = ({ setShowConfirmDelete, itemToDelete, handleConfirmD
 
         		<div className="my-8 text-center">
           			<TrashIcon className="h-16 w-16 mx-auto text-red-500"/>
-					{(itemToDelete.name != null) ?
-					  	<div className="text-gray-800 text-lg font-semibold mt-4">Are you sure you want to delete &apos;{itemToDelete.name}&apos;?</div>
-					  	:
-					  	<div className="text-gray-800 text-lg font-semibold mt-4">Are you sure you want to delete this?</div>
+					{(itemToDelete.name != null) &&
+						<div className="text-gray-800 text-lg font-semibold mt-4">Are you sure you want to delete &apos;{itemToDelete.name}&apos;?</div>
+					}
+					{(itemToDelete.firstName != null) &&
+						<div className="text-gray-800 text-lg font-semibold mt-4">Are you sure you want to delete &apos;{itemToDelete.firstName} {itemToDelete.lastName}&apos;?</div>
+					}
+					{(itemToDelete.firstName == null && itemToDelete.name == null) &&
+						<div className="text-gray-800 text-lg font-semibold mt-4">Are you sure you want to delete this?</div>
 					}
           			<SpecificDeleteMessage itemToDelete={itemToDelete} />
         		</div>

@@ -1,7 +1,7 @@
 import { Table } from 'flowbite-react'
 import { Link } from 'react-router-dom'
 
-const PersonRow = ({person, responseType}) => {
+const PersonRow = ({person, responseType, handleDelete}) => {
     if (responseType === "DETAILED") {
 
         return (
@@ -26,6 +26,10 @@ const PersonRow = ({person, responseType}) => {
                 <Table.Cell >
                     {person.addressPostcode}
                 </Table.Cell>
+                <Table.Cell>
+                    <button className="text-medium text-black hover:underline font-bold text-end" onClick={() => handleDelete(person)}>Delete</button>
+                </Table.Cell>
+                
     
             </Table.Row>
         

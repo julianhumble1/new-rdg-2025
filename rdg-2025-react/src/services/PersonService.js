@@ -33,7 +33,6 @@ export default class PersonService {
 
     static getAllPeople = async () => {
         const token = Cookies.get("token")
-        console.log(token)
 
         try {
             const response = await axios.get("http://localhost:8080/people",
@@ -50,5 +49,38 @@ export default class PersonService {
         }
     }
 
+    static deletePersonById = async (personId) => {
+        const token = Cookies.get("token")
+
+        try {
+            const response = await axios.delete(`http://localhost:8080/people/${personId}`,
+               {
+                    headers: {
+                        "Authorization": `Bearer ${token}`
+                    }
+                }
+            )
+            return response
+        } catch (e) {
+            throw new Error(e.message)
+        }
+    }
+
+    static getPersonById = async (personId) => {
+        const token = Cookies.get("token")
+
+        try {
+            const response = await axios.get(`http://localhost:8080/people/${personId}`,
+               {
+                    headers: {
+                        "Authorization": `Bearer ${token}`
+                    }
+                }
+            )
+            return response
+        } catch (e) {
+            throw new Error(e.message)
+        }
+    }
 
 }
