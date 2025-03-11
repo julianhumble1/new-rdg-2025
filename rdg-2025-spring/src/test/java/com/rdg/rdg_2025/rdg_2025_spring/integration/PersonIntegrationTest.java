@@ -543,5 +543,13 @@ public class PersonIntegrationTest {
             mockMvc.perform(get("/people/" + (testPersonId + 1)))
                     .andExpect(status().isNotFound());
         }
+
+        @Test
+        void testSuccessfulGetResponds200() throws Exception {
+            // Arrange
+            // Act & Assert
+            mockMvc.perform(get("/people/" + testPersonId))
+                    .andExpect(status().isOk());
+        }
     }
 }
