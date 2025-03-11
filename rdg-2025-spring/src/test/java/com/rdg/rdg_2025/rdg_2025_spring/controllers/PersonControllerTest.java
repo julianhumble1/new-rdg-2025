@@ -583,5 +583,17 @@ public class PersonControllerTest {
                     .andExpect(status().isOk());
         }
 
+        @Test
+        void testUpdatePersonServiceMethodIsCalled() throws Exception {
+            // Arrange
+            // Act
+            mockMvc.perform(patch("/people/1")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(requestJson)));
+            // Assert
+            verify(personService, times(1)).updatePerson(anyInt(), any());
+        }
+
+
     }
 }
