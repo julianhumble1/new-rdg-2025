@@ -585,5 +585,21 @@ public class PersonIntegrationTest {
                     .andExpect(jsonPath("$.person.addressTown").value(""))
                     .andExpect(jsonPath("$.person.addressPostcode").value(""));
         }
+
+        @Test
+        void testNoTokenProvidedRespondsPublicPerson() throws Exception {
+            // Arrange
+            // Act & Assert
+            mockMvc.perform(get("/people/" + testPersonId))
+                    .andExpect(jsonPath("$.responseType").value("PUBLIC"))
+                    .andExpect(jsonPath("$.person.firstName").value(testPerson.getFirstName()))
+                    .andExpect(jsonPath("$.person.lastName").value(testPerson.getLastName()))
+                    .andExpect(jsonPath("$.person.summary").value(testPerson.getSummary()))
+                    .andExpect(jsonPath("$.person.homePhone").value(""))
+                    .andExpect(jsonPath("$.person.mobilePhone").value(""))
+                    .andExpect(jsonPath("$.person.addressStreet").value(""))
+                    .andExpect(jsonPath("$.person.addressTown").value(""))
+                    .andExpect(jsonPath("$.person.addressPostcode").value(""));
+        }
     }
 }
