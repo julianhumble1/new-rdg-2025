@@ -685,5 +685,17 @@ public class PersonIntegrationTest {
             assertTrue(personRepository.findById(testPersonId).get().getFirstName().equals("Updated First Name"));
 
         }
+
+        @Test
+        void testNonExistentPersonIdResponds404() throws Exception {
+            // Arrange
+            assertFalse(personRepository.existsById(testPersonId + 1));
+            // Act & Assert
+            mockMvc.perform(patch("/people/" + (testPersonId + 1))
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", adminToken)
+                            .content(objectMapper.writeValueAsString(requestJson)))
+                    .andExpect(status().isNotFound());
+        }
     }
 }
