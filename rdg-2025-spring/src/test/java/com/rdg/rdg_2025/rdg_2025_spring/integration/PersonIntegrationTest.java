@@ -649,6 +649,29 @@ public class PersonIntegrationTest {
 
         }
 
+        @Test
+        void testSuccessfulUpdateWithAllFieldsRespondsExpectedJson() throws Exception {
+            // Arrange
+            // Act & Assert
+            mockMvc.perform(patch("/people/" + testPersonId)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", adminToken)
+                            .content(objectMapper.writeValueAsString(requestJson)))
+                    .andExpect(jsonPath("$.person.firstName").value("Updated First Name"))
+                    .andExpect(jsonPath("$.person.lastName").value("Updated Last Name"))
+                    .andExpect(jsonPath("$.person.summary").value("Updated Summary"))
+                    .andExpect(jsonPath("$.person.homePhone").value("01222 222222"))
+                    .andExpect(jsonPath("$.person.mobilePhone").value("07222 222222"))
+                    .andExpect(jsonPath("$.person.addressStreet").value("Updated Street"))
+                    .andExpect(jsonPath("$.person.addressTown").value("Updated Town"))
+                    .andExpect(jsonPath("$.person.addressPostcode").value("Updated Postcode"))
+                    .andExpect(jsonPath("$.person.id").isNumber())
+                    .andExpect(jsonPath("$.person.slug").value("updated-first-name-updated-last-name"))
+                    .andExpect(jsonPath("$.person.createdAt").isNotEmpty())
+                    .andExpect(jsonPath("$.person.updatedAt").isNotEmpty());
+
+        }
+
 
     }
 }
