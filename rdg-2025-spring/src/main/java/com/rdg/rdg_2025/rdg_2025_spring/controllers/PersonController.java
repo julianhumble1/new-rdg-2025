@@ -94,5 +94,10 @@ public class PersonController {
         }
     }
 
+    @PatchMapping("/{personId}")
+    public ResponseEntity<?> updatePerson(@PathVariable int personId) {
+        return ResponseEntity.ok().build();
+    }
+
 
 }

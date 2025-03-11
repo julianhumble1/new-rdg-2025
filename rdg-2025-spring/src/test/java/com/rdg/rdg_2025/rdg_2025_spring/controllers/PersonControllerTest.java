@@ -1,5 +1,6 @@
 package com.rdg.rdg_2025.rdg_2025_spring.controllers;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.rdg.rdg_2025.rdg_2025_spring.exception.DatabaseException;
@@ -479,4 +480,34 @@ public class PersonControllerTest {
 
     }
 
+    @Nested
+    @DisplayName("updatePerson controller tests")
+    class UpdatePersonControllerTests {
+
+        @BeforeEach
+        void setup() {
+            requestJson = objectMapper.createObjectNode();
+            requestJson.put("firstName", "Updated First Name");
+            requestJson.put("lastName", "Updated Last Name");
+            requestJson.put("summary", "Updated Summary");
+            requestJson.put("homePhone", "01222 222222");
+            requestJson.put("mobilePhone" ,"07222 222222");
+            requestJson.put("addressStreet", "Updated Street");
+            requestJson.put("addressTown", "Updated Town");
+            requestJson.put("addressPostcode", "Updated Postcode");
+        }
+
+        @Test
+        void testPersonIdNotIntResponds400() throws Exception {
+            // Arrange
+            // Act & Assert
+            mockMvc.perform(patch("/people/notanint")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(requestJson)))
+                    .andExpect(status().isBadRequest());
+
+
+        }
+
+    }
 }
