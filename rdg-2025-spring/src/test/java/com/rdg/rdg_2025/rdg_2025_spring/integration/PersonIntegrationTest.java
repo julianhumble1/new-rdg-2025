@@ -1,5 +1,6 @@
 package com.rdg.rdg_2025.rdg_2025_spring.integration;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Person;
@@ -21,6 +22,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -646,7 +648,6 @@ public class PersonIntegrationTest {
                             .header("Authorization", adminToken)
                             .content(objectMapper.writeValueAsString(requestJson)))
                     .andExpect(status().isOk());
-
         }
 
         @Test
@@ -669,9 +670,20 @@ public class PersonIntegrationTest {
                     .andExpect(jsonPath("$.person.slug").value("updated-first-name-updated-last-name"))
                     .andExpect(jsonPath("$.person.createdAt").isNotEmpty())
                     .andExpect(jsonPath("$.person.updatedAt").isNotEmpty());
-
         }
 
+        @Test
+        void testSuccessfulUpdateEditsRowInDatabase() throws Exception {
+            // Arrange
+            // Act
+            mockMvc.perform(patch("/people/" + testPersonId)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .header("Authorization", adminToken)
+                    .content(objectMapper.writeValueAsString(requestJson)))
+                    .andExpect(status().isOk());
+            // Assert
+            assertTrue(personRepository.findById(testPersonId).get().getFirstName().equals("Updated First Name"));
 
+        }
     }
 }
