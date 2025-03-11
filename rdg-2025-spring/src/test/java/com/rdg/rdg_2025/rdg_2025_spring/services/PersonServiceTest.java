@@ -203,7 +203,7 @@ public class PersonServiceTest {
         @Test
         void testFindDataAccessExceptionThrowsDatabaseException() {
             // Arrange
-            when(personRepository.findById(anyInt())).thenThrow(new DatabaseException("data access failed"));
+            when(personRepository.findById(anyInt())).thenThrow(new DataAccessException("data access failed"){});
             // Act & Assert
             assertThrows(DatabaseException.class, () -> {
                 personService.deletePersonById(1);
@@ -255,6 +255,23 @@ public class PersonServiceTest {
                 personService.deletePersonById(1);
             });
 
+        }
+
+
+    }
+
+    @Nested
+    @DisplayName("getPersonById service tests")
+    class GetPersonByIdServiceTests {
+
+        @Test
+        void testRepositoryFindByIdMethodCalled() {
+            // Arrange
+            when(personRepository.findById(anyInt())).thenReturn(Optional.of(new Person()));
+            // Act
+            personService.getPersonById(1);
+            // Assert
+            verify(personRepository, times(1)).findById(anyInt());
         }
 
 
