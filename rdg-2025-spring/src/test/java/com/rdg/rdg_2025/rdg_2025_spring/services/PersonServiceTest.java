@@ -369,5 +369,15 @@ public class PersonServiceTest {
             });
         }
 
+        @Test
+        void testInvalidPersonIdThrowsEntityNotFoundException() {
+            // Arrange
+            when(personRepository.findById(anyInt())).thenReturn(Optional.empty());
+            // Act & Assert
+            assertThrows(EntityNotFoundException.class, () -> {
+                personService.updatePerson(1, testUpdatePersonRequest);
+            });
+        }
+
     }
 }
