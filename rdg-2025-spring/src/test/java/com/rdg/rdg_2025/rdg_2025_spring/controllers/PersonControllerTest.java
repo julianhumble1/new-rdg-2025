@@ -384,5 +384,19 @@ public class PersonControllerTest {
 
     }
 
+    @Nested
+    @DisplayName("getPersonById controller tests")
+    class GetPersonByIdControllerTests {
+
+        @Test
+        void testIdNotIntResponds400() throws Exception {
+            // Arrange
+            // Act & Assert
+            mockMvc.perform(get("/people/notanint"))
+                    .andExpect(status().isBadRequest());
+
+        }
+
+    }
 
 }
