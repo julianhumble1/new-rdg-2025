@@ -359,5 +359,15 @@ public class PersonServiceTest {
             verify(personRepository, times(1)).findById(1);
         }
 
+        @Test
+        void testFindDataAccessExceptionThrowsDatabaseException() {
+            // Arrange
+            when(personRepository.findById(anyInt())).thenThrow(new DataAccessException("data access failed") {});
+            // Act & Assert
+            assertThrows(DatabaseException.class, () -> {
+                personService.updatePerson(1, testUpdatePersonRequest);
+            });
+        }
+
     }
 }
