@@ -417,6 +417,16 @@ public class PersonControllerTest {
 
         }
 
+        @Test
+        void testEntityNotFoundExceptionResponds404() throws Exception {
+            // Arrange
+            when(personService.getPersonById(anyInt())).thenThrow(new EntityNotFoundException("no person with this id"));
+            // Act & Assert
+            mockMvc.perform(get("/people/1"))
+                    .andExpect(status().isNotFound());
+
+        }
+
     }
 
 }
