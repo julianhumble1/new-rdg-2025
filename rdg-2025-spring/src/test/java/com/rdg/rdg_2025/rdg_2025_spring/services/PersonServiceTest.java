@@ -400,5 +400,16 @@ public class PersonServiceTest {
             });
         }
 
+        @Test
+        void testSaveAccessExceptionThrowsDatabaseException() {
+            // Arrange
+            when(personRepository.findById(anyInt())).thenReturn(Optional.of(testPerson));
+            when(personRepository.save(any(Person.class))).thenThrow(new DataAccessException("") {});
+            // Act & Assert
+            assertThrows(DatabaseException.class, () -> {
+                personService.updatePerson(1, testUpdatePersonRequest);
+            });
+        }
+
     }
 }
