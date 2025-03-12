@@ -298,6 +298,19 @@ public class CreditControllerTest {
                     .andExpect(status().isCreated());
         }
 
+        @Test
+        void testSummaryAndPersonIdMissingResponds201() throws Exception {
+            // Arrange
+            when(creditService.addNewCredit(any())).thenReturn(testCredit);
+            requestJson.remove("summary");
+            requestJson.remove("personId");
+            // Act & Assert
+            mockMvc.perform(post("/credits")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(requestJson)))
+                    .andExpect(status().isCreated());
+        }
+
 
     }
 
