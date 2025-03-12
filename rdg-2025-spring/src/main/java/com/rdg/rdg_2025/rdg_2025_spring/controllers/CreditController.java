@@ -1,6 +1,7 @@
 package com.rdg.rdg_2025.rdg_2025_spring.controllers;
 
 import com.rdg.rdg_2025.rdg_2025_spring.exception.DatabaseException;
+import com.rdg.rdg_2025.rdg_2025_spring.models.credit.Credit;
 import com.rdg.rdg_2025.rdg_2025_spring.payload.request.credit.CreditRequest;
 import com.rdg.rdg_2025.rdg_2025_spring.services.CreditService;
 import jakarta.persistence.EntityNotFoundException;
@@ -11,6 +12,8 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.net.URI;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -25,13 +28,14 @@ public class CreditController {
     public ResponseEntity<?> addNewCredit(@Valid @RequestBody CreditRequest creditRequest) {
 
         try {
-            creditService.addNewCredit(creditRequest);
+            Credit credit = creditService.addNewCredit(creditRequest);
+            URI location = URI.create("/credits/" + credit.getId());
+            return ResponseEntity.created(location).body("");
         } catch (DatabaseException ex) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
         } catch (EntityNotFoundException ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
         }
 
-        return ResponseEntity.ok().body("");
     }
 }

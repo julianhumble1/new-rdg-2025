@@ -77,6 +77,8 @@ public class CreditControllerTest {
             requestJson.put("productionId", 1);
             requestJson.put("personId", 1);
             requestJson.put("summary", "Test Summary");
+
+
         }
 
         @Test
@@ -193,6 +195,7 @@ public class CreditControllerTest {
         @Test
         void testCreditServiceMethodIsCalled() throws Exception {
             // Arrange
+            when(creditService.addNewCredit(any())).thenReturn(testCredit);
             // Act
             mockMvc.perform(post("/credits")
                             .contentType(MediaType.APPLICATION_JSON)
@@ -222,7 +225,17 @@ public class CreditControllerTest {
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(requestJson)))
                     .andExpect(status().isNotFound());
+        }
 
+        @Test
+        void testSuccessfulAddResponds201() throws Exception {
+            // Arrange
+            when(creditService.addNewCredit(any())).thenReturn(testCredit);
+            // Act & Assert
+            mockMvc.perform(post("/credits")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(requestJson)))
+                    .andExpect(status().isCreated());
         }
 
 
