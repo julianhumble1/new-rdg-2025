@@ -3,6 +3,7 @@ package com.rdg.rdg_2025.rdg_2025_spring.controllers;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.rdg.rdg_2025.rdg_2025_spring.exception.DatabaseException;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Person;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Production;
 import com.rdg.rdg_2025.rdg_2025_spring.models.credit.Credit;
@@ -22,8 +23,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -198,6 +198,18 @@ public class CreditControllerTest {
                             .content(objectMapper.writeValueAsString(requestJson)));
             // Assert
             verify(creditService, times(1)).addNewCredit(any());
+        }
+
+        @Test
+        void testServiceDatabaseExceptionResponds500() throws Exception {
+            // Arrange
+            when(creditService.addNewCredit(any())).thenThrow(new DatabaseException(""));
+            // Act & Assert
+            mockMvc.perform(post("/credits")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(requestJson)))
+                    .andExpect(status().isInternalServerError());
+
         }
 
 

@@ -1,9 +1,12 @@
 package com.rdg.rdg_2025.rdg_2025_spring.controllers;
 
+import com.rdg.rdg_2025.rdg_2025_spring.exception.DatabaseException;
 import com.rdg.rdg_2025.rdg_2025_spring.payload.request.credit.CreditRequest;
 import com.rdg.rdg_2025.rdg_2025_spring.services.CreditService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +23,11 @@ public class CreditController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> addNewCredit(@Valid @RequestBody CreditRequest creditRequest) {
 
-        creditService.addNewCredit(creditRequest);
+        try {
+            creditService.addNewCredit(creditRequest);
+        } catch (DatabaseException ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
+        }
 
         return ResponseEntity.ok().body("");
     }
