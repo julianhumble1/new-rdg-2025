@@ -19,6 +19,9 @@ public class CreditController {
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> addNewCredit(@Valid @RequestBody CreditRequest creditRequest) {
+
+        creditService.addNewCredit(creditRequest);
+
         return ResponseEntity.ok().body("");
     }
 }
