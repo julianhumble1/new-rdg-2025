@@ -32,6 +32,8 @@ public class Credit {
     @ManyToOne
     private Production production;
 
+    private String summary;
+
     @Column(nullable = false)
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;

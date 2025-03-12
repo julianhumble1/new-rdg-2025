@@ -18,6 +18,7 @@ import org.springframework.dao.DataAccessException;
 
 import java.util.Locale;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -27,6 +28,9 @@ public class CreditServiceTest {
 
     @Mock
     private CreditRepository creditRepository;
+
+    @Mock
+    private ProductionService productionService;
 
     @InjectMocks
     private CreditService creditService;
@@ -49,32 +53,12 @@ public class CreditServiceTest {
         }
 
         @Test
-        void testRepositorySaveMethodIsCalled() {
+        void TestProductionServiceMethodIsCalled() {
             // Arrange
             // Act
             creditService.addNewCredit(creditRequest);
             // Assert
-            verify(creditRepository, times(1)).save(any(Credit.class));
-        }
-
-        @Test
-        void testDataAccessExceptionThrowsDatabaseException() {
-            // Arrange
-            when(creditRepository.save(any(Credit.class))).thenThrow(new DataAccessException("") {});
-            // Act & Assert
-            assertThrows(DatabaseException.class, () -> {
-                creditService.addNewCredit(creditRequest);
-            });
-        }
-
-        @Test
-        void testPersistenceExceptionThrowsDatabaseException() {
-            // Arrange
-            when(creditRepository.save(any(Credit.class))).thenThrow(new PersistenceException("") {});
-            // Act & Assert
-            assertThrows(DatabaseException.class, () -> {
-                creditService.addNewCredit(creditRequest);
-            });
+            verify(productionService, times(1)).getProductionById(anyInt());
         }
 
 

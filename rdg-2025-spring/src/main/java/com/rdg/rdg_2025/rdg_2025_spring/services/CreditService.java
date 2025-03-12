@@ -1,6 +1,7 @@
 package com.rdg.rdg_2025.rdg_2025_spring.services;
 
 import com.rdg.rdg_2025.rdg_2025_spring.exception.DatabaseException;
+import com.rdg.rdg_2025.rdg_2025_spring.models.Production;
 import com.rdg.rdg_2025.rdg_2025_spring.models.credit.Credit;
 import com.rdg.rdg_2025.rdg_2025_spring.payload.request.credit.CreditRequest;
 import com.rdg.rdg_2025.rdg_2025_spring.repository.CreditRepository;
@@ -15,13 +16,16 @@ public class CreditService {
     @Autowired
     private CreditRepository creditRepository;
 
-    public void addNewCredit(CreditRequest creditRequest) {
-        Credit credit = new Credit();
+    private ProductionService productionService;
 
-        try {
-            creditRepository.save(credit);
-        } catch (DataAccessException | PersistenceException ex) {
-            throw new DatabaseException(ex.getMessage(), ex);
-        }
+    public CreditService(ProductionService productionService) {
+        this.productionService = productionService;
     }
+
+    public void addNewCredit(CreditRequest creditRequest) {
+        Production production = productionService.getProductionById(creditRequest.getProductionId());
+
+
+    }
+
 }
