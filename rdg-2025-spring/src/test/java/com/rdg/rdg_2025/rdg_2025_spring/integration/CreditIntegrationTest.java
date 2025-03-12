@@ -201,6 +201,18 @@ public class CreditIntegrationTest {
                     .andExpect(status().isNotFound());
         }
 
+        @Test
+        void testNameEmptyResponds400() throws Exception {
+            // Arrange
+            requestJson.put("name", "");
+            // Act & Assert
+            mockMvc.perform(post("/credits")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", adminToken)
+                            .content(objectMapper.writeValueAsString(requestJson)))
+                    .andExpect(status().isBadRequest());
+        }
+
 
     }
 }
