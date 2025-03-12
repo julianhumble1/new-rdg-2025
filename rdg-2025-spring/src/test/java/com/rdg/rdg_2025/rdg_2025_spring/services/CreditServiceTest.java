@@ -28,6 +28,9 @@ public class CreditServiceTest {
     @Mock
     private ProductionService productionService;
 
+    @Mock
+    private PersonService personService;
+
     @InjectMocks
     private CreditService creditService;
 
@@ -75,6 +78,16 @@ public class CreditServiceTest {
             assertThrows(DatabaseException.class, () -> {
                 creditService.addNewCredit(testCreditRequest);
             });
+        }
+
+        @Test
+        void testIfNoPersonIdProvidedThenPersonServiceNotCalled() {
+            // Arrange
+            testCreditRequest.setPersonId(0);
+            // Act
+            creditService.addNewCredit(testCreditRequest);
+            // Assert
+            verify(personService, never()).getPersonById(anyInt());
         }
 
 
