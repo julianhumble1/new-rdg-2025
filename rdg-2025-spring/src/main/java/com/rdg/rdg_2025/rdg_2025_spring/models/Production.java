@@ -3,6 +3,7 @@ package com.rdg.rdg_2025.rdg_2025_spring.models;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.rdg.rdg_2025.rdg_2025_spring.helpers.SlugUtils;
+import com.rdg.rdg_2025.rdg_2025_spring.models.credit.Credit;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -56,6 +57,9 @@ public class Production {
     @OneToMany(mappedBy = "production", cascade = CascadeType.ALL)
     @JsonBackReference
     private List<Performance> performances = new ArrayList<>();
+
+    @OneToMany(mappedBy = "production")
+    private List<Credit> credits = new ArrayList<>();
 
     public Production(String name, Venue venue, String author, String description, LocalDateTime auditionDate, boolean sundowners, boolean notConfirmed, String flyerFile) {
         this.name = name;

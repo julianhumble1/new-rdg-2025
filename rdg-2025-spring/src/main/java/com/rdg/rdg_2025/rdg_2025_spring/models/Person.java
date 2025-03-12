@@ -1,12 +1,15 @@
 package com.rdg.rdg_2025.rdg_2025_spring.models;
 
 import com.rdg.rdg_2025.rdg_2025_spring.helpers.SlugUtils;
+import com.rdg.rdg_2025.rdg_2025_spring.models.credit.Credit;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name="people")
@@ -38,6 +41,9 @@ public class Person {
     @Column(nullable = false)
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+
+    @OneToMany(mappedBy = "person")
+    private List<Credit> credits = new ArrayList<>();
 
     public Person(String firstName, String lastName, String summary, String homePhone, String mobilePhone, String addressStreet, String addressTown, String addressPostcode) {
         this.firstName = firstName;
