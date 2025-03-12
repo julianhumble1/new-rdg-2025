@@ -321,7 +321,27 @@ public class CreditIntegrationTest {
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", adminToken)
                             .content(objectMapper.writeValueAsString(requestJson)))
-                    .andExpect(status().isCreated());
+                    .andExpect(status().isCreated())
+                    .andExpect(jsonPath("$.credit.name").value("Test Credit"))
+                    .andExpect(jsonPath("$.credit.type").value("ACTOR"))
+                    .andExpect(jsonPath("$.credit.summary").value(""))
+                    .andExpect(jsonPath("$.credit.person").isEmpty())
+                    .andExpect(jsonPath("$.credit.production.name").value("Test Production"))
+                    .andExpect(jsonPath("$.credit.createdAt").isNotEmpty())
+                    .andExpect(jsonPath("$.credit.updatedAt").isNotEmpty());
+        }
+
+        @Test
+        void testTypeMusicianResponds201() throws Exception {
+            // Arrange
+            requestJson.put("type", "MUSICIAN");
+            // Act & Assert
+            mockMvc.perform(post("/credits")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", adminToken)
+                            .content(objectMapper.writeValueAsString(requestJson)))
+                    .andExpect(status().isCreated())
+                    .andExpect(jsonPath("$.credit.type").value("MUSICIAN"));
         }
 
 
