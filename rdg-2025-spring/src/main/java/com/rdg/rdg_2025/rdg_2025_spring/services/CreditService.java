@@ -1,6 +1,7 @@
 package com.rdg.rdg_2025.rdg_2025_spring.services;
 
 import com.rdg.rdg_2025.rdg_2025_spring.exception.DatabaseException;
+import com.rdg.rdg_2025.rdg_2025_spring.models.Person;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Production;
 import com.rdg.rdg_2025.rdg_2025_spring.models.credit.Credit;
 import com.rdg.rdg_2025.rdg_2025_spring.payload.request.credit.CreditRequest;
@@ -18,14 +19,16 @@ public class CreditService {
     private CreditRepository creditRepository;
 
     private ProductionService productionService;
+    private PersonService personService;
 
-    public CreditService(ProductionService productionService) {
+    public CreditService(ProductionService productionService, PersonService personService) {
         this.productionService = productionService;
+        this.personService = personService;
     }
 
     public void addNewCredit(CreditRequest creditRequest) {
         Production production = retrieveProductionFromService(creditRequest.getProductionId());
-
+        Person person = retrievePersonFromService(creditRequest.getPersonId());
 
     }
 
@@ -37,6 +40,18 @@ public class CreditService {
         } catch (DataAccessException ex) {
             throw new DatabaseException(ex.getMessage(), ex);
         }
+    }
+
+    private Person retrievePersonFromService(int personId) {
+        if (personId > 0) {
+            try {
+                return personService.getPersonById(personId);
+            } catch (DatabaseException ex) {
+                throw new DatabaseException(ex.getMessage(), ex);
+            } catch (EntityNotFoundException ex) {
+                throw new EntityNotFoundException(ex.getMessage(),ex);
+            }
+        } else return null;
     }
 
 }

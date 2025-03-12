@@ -90,6 +90,15 @@ public class CreditServiceTest {
             verify(personService, never()).getPersonById(anyInt());
         }
 
+        @Test
+        void testIfPersonIdProvidedThenPersonServiceCalled() {
+            // Arrange
+            // Act
+            creditService.addNewCredit(testCreditRequest);
+            // Assert
+            verify(personService, times(1)).getPersonById(anyInt());
+        }
+
 
 
     }
