@@ -344,6 +344,19 @@ public class CreditIntegrationTest {
                     .andExpect(jsonPath("$.credit.type").value("MUSICIAN"));
         }
 
+        @Test
+        void testTypeProducerResponds201() throws Exception {
+            // Arrange
+            requestJson.put("type", "PRODUCER");
+            // Act & Assert
+            mockMvc.perform(post("/credits")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", adminToken)
+                            .content(objectMapper.writeValueAsString(requestJson)))
+                    .andExpect(status().isCreated())
+                    .andExpect(jsonPath("$.credit.type").value("PRODUCER"));
+        }
+
 
     }
 }
