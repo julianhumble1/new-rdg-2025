@@ -24,6 +24,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -137,8 +138,9 @@ public class CreditIntegrationTest {
                     .content(objectMapper.writeValueAsString(requestJson)))
                     .andExpect(status().isCreated());
         }
+
         @Test
-        void testSuccessfulRespondsExpectedJSON() throws Exception {
+        void testSuccessfulAddRespondsExpectedJSON() throws Exception {
             // Arrange
             // Act & Assert
             mockMvc.perform(post("/credits")
@@ -152,6 +154,19 @@ public class CreditIntegrationTest {
                     .andExpect(jsonPath("$.credit.production.name").value("Test Production"))
                     .andExpect(jsonPath("$.credit.createdAt").isNotEmpty())
                     .andExpect(jsonPath("$.credit.updatedAt").isNotEmpty());
+        }
+
+        @Test
+        void testNonExistentProductionId404() throws Exception {
+            // Arrange
+            requestJson.put("productionId", testProductionId + 1);
+            assertFalse(productionRepository.existsById(testProductionId + 1));
+            // Act & Assert
+            mockMvc.perform(post("/credits")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", adminToken)
+                            .content(objectMapper.writeValueAsString(requestJson)))
+                    .andExpect(status().isNotFound());
         }
 
 
