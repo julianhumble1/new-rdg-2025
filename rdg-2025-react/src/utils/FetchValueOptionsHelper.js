@@ -1,6 +1,7 @@
 import FestivalService from "../services/FestivalService.js"
 import ProductionService from "../services/ProductionService.js"
 import VenueService from "../services/VenueService.js"
+import PersonService from "../services/PersonService.js"
 
 export default class FetchValueOptionsHelper {
 
@@ -32,6 +33,16 @@ export default class FetchValueOptionsHelper {
             return festivalList.map((festival) => ({value: festival.id, label: `${festival.name} (${festival.year})`}))
         } catch (e) {
             throw new Error(e.message, e)
+        }
+    }
+
+    static fetchPersonOptions = async () => {
+        try {
+            const response = await PersonService.getAllPeople()
+            const personList = response.data.people
+            return personList.map((person) => ({value: person.id, label: `${person.firstName} ${person.lastName}`}))
+        } catch (e) {
+            throw new Error(e.message)
         }
     }
 

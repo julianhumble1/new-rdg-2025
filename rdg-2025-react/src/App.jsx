@@ -23,6 +23,7 @@ import AllPeople from "./components/people/AllPeople.jsx"
 
 import FacebookFeed from "./components/FacebookFeed.jsx"
 import PersonPage from "./components/people/PersonPage.jsx"
+import NewCreditForm from "./components/credits/NewCreditForm.jsx"
 
 
 function App() {
@@ -74,6 +75,8 @@ function App() {
         <Route path="/people/:id" element={<PersonPage />} />
         <Route path="/people/new" element={<NewPersonForm />} />
         <Route path="/people" element={<AllPeople />} />
+
+        <Route path="/credits/new" element={<NewCreditForm />} />
 
         <Route path="/facebook" element={<FacebookFeed />} />
 
