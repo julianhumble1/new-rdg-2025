@@ -99,6 +99,16 @@ public class CreditServiceTest {
             verify(personService, times(1)).getPersonById(anyInt());
         }
 
+        @Test
+        void testRetrievePersonDatabaseExceptionThrowsDatabaseException() {
+            // Arrange
+            when(productionService.getProductionById(anyInt())).thenThrow(new DatabaseException(""));
+            // Act & Assert
+            assertThrows(DatabaseException.class, () -> {
+                creditService.addNewCredit(testCreditRequest);
+            });
+        }
+
 
 
     }
