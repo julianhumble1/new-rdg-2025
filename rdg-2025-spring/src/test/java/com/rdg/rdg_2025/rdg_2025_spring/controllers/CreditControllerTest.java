@@ -86,6 +86,18 @@ public class CreditControllerTest {
                     .andExpect(status().isBadRequest());
         }
 
+        @Test
+        void testNameMissingResponds400() throws Exception {
+            // Arrange
+            requestJson.remove("name");
+
+            // Act & Assert
+            mockMvc.perform(post("/credits")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(requestJson)))
+                    .andExpect(status().isBadRequest());
+        }
+
 
     }
 
