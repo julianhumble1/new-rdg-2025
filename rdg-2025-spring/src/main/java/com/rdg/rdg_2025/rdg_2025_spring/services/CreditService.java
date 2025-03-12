@@ -7,7 +7,6 @@ import com.rdg.rdg_2025.rdg_2025_spring.models.credit.Credit;
 import com.rdg.rdg_2025.rdg_2025_spring.payload.request.credit.CreditRequest;
 import com.rdg.rdg_2025.rdg_2025_spring.repository.CreditRepository;
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.persistence.PersistenceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
@@ -29,6 +28,8 @@ public class CreditService {
     public void addNewCredit(CreditRequest creditRequest) {
         Production production = retrieveProductionFromService(creditRequest.getProductionId());
         Person person = retrievePersonFromService(creditRequest.getPersonId());
+
+        creditRepository.save(new Credit());
 
     }
 

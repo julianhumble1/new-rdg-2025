@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -33,6 +34,11 @@ public class CreditServiceTest {
 
     @InjectMocks
     private CreditService creditService;
+
+    @BeforeEach
+    void setupMocks() {
+        MockitoAnnotations.openMocks(this);
+    }
 
     @Nested
     @DisplayName("addNewCredit service tests")
@@ -117,6 +123,15 @@ public class CreditServiceTest {
             assertThrows(EntityNotFoundException.class, () -> {
                 creditService.addNewCredit(testCreditRequest);
             });
+        }
+
+        @Test
+        void testCreditRepositorySaveMethodIsCalled() {
+            // Arrange
+            // Act
+            creditService.addNewCredit(testCreditRequest);
+            // Assert
+            verify(creditRepository, times(1)).save(any());
         }
 
 
