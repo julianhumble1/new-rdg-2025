@@ -25,7 +25,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.time.LocalDateTime;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -138,14 +138,20 @@ public class CreditIntegrationTest {
                     .andExpect(status().isCreated());
         }
         @Test
-        void testSuccessfulAddExpectedURI() throws Exception {
+        void testSuccessfulRespondsExpectedJSON() throws Exception {
             // Arrange
             // Act & Assert
             mockMvc.perform(post("/credits")
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", adminToken)
                             .content(objectMapper.writeValueAsString(requestJson)))
-                    .andExpect(status().isCreated());
+                    .andExpect(jsonPath("$.credit.name").value("Test Credit"))
+                    .andExpect(jsonPath("$.credit.type").value("ACTOR"))
+                    .andExpect(jsonPath("$.credit.summary").value("Test Summary"))
+                    .andExpect(jsonPath("$.credit.person.firstName").value("Test First Name"))
+                    .andExpect(jsonPath("$.credit.production.name").value("Test Production"))
+                    .andExpect(jsonPath("$.credit.createdAt").isNotEmpty())
+                    .andExpect(jsonPath("$.credit.updatedAt").isNotEmpty());
         }
 
 
