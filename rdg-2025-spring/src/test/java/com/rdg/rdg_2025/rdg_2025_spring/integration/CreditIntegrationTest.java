@@ -273,6 +273,18 @@ public class CreditIntegrationTest {
                     .andExpect(status().isBadRequest());
         }
 
+        @Test
+        void testProductionIdNotIntResponds400() throws Exception {
+            // Arrange
+            requestJson.put("productionId", "not an int");
+            // Act & Assert
+            mockMvc.perform(post("/credits")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", adminToken)
+                            .content(objectMapper.writeValueAsString(requestJson)))
+                    .andExpect(status().isBadRequest());
+        }
+
 
     }
 }
