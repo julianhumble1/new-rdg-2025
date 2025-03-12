@@ -1,5 +1,6 @@
 package com.rdg.rdg_2025.rdg_2025_spring.models.credit;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Person;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Production;
 import jakarta.persistence.*;
@@ -27,9 +28,11 @@ public class Credit {
     private CreditType type;
 
     @ManyToOne
+    @JsonManagedReference
     private Person person;
 
     @ManyToOne
+    @JsonManagedReference
     private Production production;
 
     private String summary;

@@ -59,6 +59,7 @@ public class Production {
     private List<Performance> performances = new ArrayList<>();
 
     @OneToMany(mappedBy = "production")
+    @JsonBackReference
     private List<Credit> credits = new ArrayList<>();
 
     public Production(String name, Venue venue, String author, String description, LocalDateTime auditionDate, boolean sundowners, boolean notConfirmed, String flyerFile) {

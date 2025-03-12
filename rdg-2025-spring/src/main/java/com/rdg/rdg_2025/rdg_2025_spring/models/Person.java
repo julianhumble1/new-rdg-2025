@@ -1,5 +1,6 @@
 package com.rdg.rdg_2025.rdg_2025_spring.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.rdg.rdg_2025.rdg_2025_spring.helpers.SlugUtils;
 import com.rdg.rdg_2025.rdg_2025_spring.models.credit.Credit;
 import jakarta.persistence.*;
@@ -43,6 +44,7 @@ public class Person {
     private LocalDateTime updatedAt;
 
     @OneToMany(mappedBy = "person")
+    @JsonBackReference
     private List<Credit> credits = new ArrayList<>();
 
     public Person(String firstName, String lastName, String summary, String homePhone, String mobilePhone, String addressStreet, String addressTown, String addressPostcode) {
