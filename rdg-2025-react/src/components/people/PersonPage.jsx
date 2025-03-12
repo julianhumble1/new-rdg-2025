@@ -7,6 +7,9 @@ import PublicPersonHighlight from "./PublicPersonHighlight.jsx"
 import DetailedPersonHighlight from "./DetailedPersonHighlight.jsx"
 import EditPersonForm from "./EditPersonForm.jsx"
 import ConfirmDeleteModal from "../modals/ConfirmDeleteModal.jsx"
+import { Tabs } from "flowbite-react"
+import { FilmIcon, MusicalNoteIcon, ScaleIcon } from "@heroicons/react/16/solid"
+import CreditsTable from "../credits/CreditsTable.jsx"
 
 const PersonPage = () => {
 
@@ -15,6 +18,10 @@ const PersonPage = () => {
     const navigate = useNavigate()
 
     const [personData, setPersonData] = useState(null)
+
+    const [actingCredits, setActingCredits] = useState([])
+    const [musicianCredits, setMusicianCredits] = useState([])
+    const [producerCredits, setProducerCredits] = useState([])
 
     const [editMode, setEditMode] = useState(searchParams.get("edit"))
 
@@ -36,6 +43,9 @@ const PersonPage = () => {
             const response = await PersonService.getPersonById(personId)
             setViewType(response.data.responseType)
             setPersonData(response.data.person)
+            setActingCredits(response.data.actingCredits)
+            setMusicianCredits(response.data.musicianCredits)
+            setProducerCredits(response.data.producerCredits)
             console.log(response)
         } catch (e) {
             setErrorMessage(e.message)
@@ -86,6 +96,35 @@ const PersonPage = () => {
                     <DetailedPersonHighlight personData={personData} setEditMode={setEditMode} handleDelete={handleDelete} />)
                 }
             </div>
+            <Tabs variant="underline" className="m-3">
+                <Tabs.Item active title="Acting" icon={ScaleIcon}>
+                    {actingCredits.length > 0 ?
+                        <div className="m-2 overflow-auto">
+                            <CreditsTable credits={actingCredits} />
+                        </div>
+                        :
+                        <div className="text-md font-bold ml-3">No acting credits</div>
+                    }
+                </Tabs.Item>
+                <Tabs.Item active title="Musician" icon={MusicalNoteIcon}>
+                    {musicianCredits.length > 0 ?
+                        <div className="m-2 overflow-auto">
+                            <CreditsTable credits={musicianCredits} />
+                        </div>
+                        :
+                        <div className="text-md font-bold ml-3">No musician credits</div>
+                    }
+                </Tabs.Item>
+                <Tabs.Item active title="Producer" icon={FilmIcon}>
+                    {producerCredits.length > 0 ?
+                        <div className="m-2 overflow-auto">
+                            <CreditsTable credits={producerCredits} />
+                        </div>
+                        :
+                        <div className="text-md font-bold ml-3">No producing credits</div>
+                    }
+                </Tabs.Item>
+            </Tabs>
         </div>
     )
 }

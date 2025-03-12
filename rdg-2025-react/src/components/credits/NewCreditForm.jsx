@@ -45,7 +45,7 @@ const NewCreditForm = () => {
             const response = await CreditService.addNewCredit(
                 name, type.value, production.value, person ? person.value : 0, summary
             )
-            setSuccessMessage(`Successfully added ${response.data.credit.name}!` )
+            setSuccessMessage(`Successfully added ${response.data.credit.name} for ${response.data.credit.production.name}!` )
         } catch (e) {
             setErrorMessage(e.message)
         }
@@ -59,9 +59,9 @@ const NewCreditForm = () => {
             <form className="flex flex-col gap-2 max-w-md" onSubmit={(event) => handleSubmit(event)}>
                 <div>
                     <div className="mb-2 block italic">
-                        <Label value="Name (required)" />
+                        <Label value="Character Name / Musical Instrument / Producer Type (required)" />
                     </div>
-                    <TextInput placeholder="Bill Sykes" required value={name} onChange={(e) => setName(e.target.value)}/>
+                    <TextInput placeholder="Bill Sykes / Keyboards / Director" required value={name} onChange={(e) => setName(e.target.value)}/>
                 </div>
                 <div>
                     <div className="mb-2 block italic">
