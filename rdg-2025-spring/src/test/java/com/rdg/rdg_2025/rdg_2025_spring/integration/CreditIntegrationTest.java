@@ -24,6 +24,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -36,6 +37,9 @@ public class CreditIntegrationTest {
 
     @Autowired
     private MockMvc mockMvc;
+
+    @Autowired
+    private CreditRepository creditRepository;
 
     private static User testAdmin;
     private static String adminToken;
@@ -155,6 +159,22 @@ public class CreditIntegrationTest {
                     .andExpect(jsonPath("$.credit.createdAt").isNotEmpty())
                     .andExpect(jsonPath("$.credit.updatedAt").isNotEmpty());
         }
+
+        @Test
+        void testSuccessfulAddIncreasesNumberOfCredits() throws Exception {
+            // Arrange
+            int originalLength = creditRepository.findAll().size();
+            // Act
+            mockMvc.perform(post("/credits")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", adminToken)
+                            .content(objectMapper.writeValueAsString(requestJson)))
+                    .andExpect(status().isCreated());
+            // Assert
+            int finalLength = creditRepository.findAll().size();
+            assertEquals(originalLength + 1, finalLength);
+        }
+
 
         @Test
         void testNonExistentProductionId404() throws Exception {
