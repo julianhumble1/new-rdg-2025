@@ -261,6 +261,18 @@ public class CreditControllerTest {
                     .andExpect(jsonPath("$.credit.type").value("ACTOR"));
         }
 
+        @Test
+        void testTypeMusicianResponds201() throws Exception {
+            // Arrange
+            when(creditService.addNewCredit(any())).thenReturn(testCredit);
+            requestJson.put("type", "MUSICIAN");
+            // Act & Assert
+            mockMvc.perform(post("/credits")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(requestJson)))
+                    .andExpect(status().isCreated());
+        }
+
 
     }
 
