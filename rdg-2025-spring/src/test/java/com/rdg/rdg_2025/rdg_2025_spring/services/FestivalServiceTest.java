@@ -33,8 +33,6 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 public class FestivalServiceTest {
 
-    VenueRepository venueRepository;
-
     @Mock
     FestivalRepository festivalRepository;
 

@@ -18,12 +18,15 @@ public class Credit {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @Column(nullable = false)
     private String name;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private CreditType type;
 
     @ManyToOne
+    @Column(nullable = false)
     private Person person;
 
     @ManyToOne
