@@ -7,9 +7,12 @@ import com.rdg.rdg_2025.rdg_2025_spring.models.credit.Credit;
 import com.rdg.rdg_2025.rdg_2025_spring.payload.request.credit.CreditRequest;
 import com.rdg.rdg_2025.rdg_2025_spring.repository.CreditRepository;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.persistence.PersistenceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
 
 @Service
 public class CreditService {
@@ -25,11 +28,14 @@ public class CreditService {
         this.personService = personService;
     }
 
-    public void addNewCredit(CreditRequest creditRequest) {
+    public Credit addNewCredit(CreditRequest creditRequest) {
         Production production = retrieveProductionFromService(creditRequest.getProductionId());
         Person person = retrievePersonFromService(creditRequest.getPersonId());
+        Credit credit = new Credit();
 
-        creditRepository.save(new Credit());
+        updateCreditFromRequest(credit, creditRequest, production, person);
+
+        return saveCreditToDatabase(credit);
 
     }
 
@@ -53,6 +59,28 @@ public class CreditService {
                 throw new EntityNotFoundException(ex.getMessage(),ex);
             }
         } else return null;
+    }
+
+    private Credit saveCreditToDatabase(Credit credit) {
+        try {
+            return creditRepository.save(credit);
+        } catch (DataAccessException | PersistenceException ex) {
+            throw new DatabaseException(ex.getMessage(), ex);
+        }
+    }
+
+    private void updateCreditFromRequest(Credit credit, CreditRequest creditRequest, Production production, Person person) {
+        credit.setName(creditRequest.getName());
+        credit.setType(creditRequest.getType());
+        credit.setSummary(creditRequest.getSummary());
+        credit.setPerson(person);
+        credit.setProduction(production);
+        if (credit.getCreatedAt() == null) {
+            credit.setCreatedAt(LocalDateTime.now());
+        }
+        credit.setUpdatedAt(LocalDateTime.now());
+
+
     }
 
 }

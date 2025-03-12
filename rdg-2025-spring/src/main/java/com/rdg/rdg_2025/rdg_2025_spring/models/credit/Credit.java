@@ -38,10 +38,11 @@ public class Credit {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    public Credit(String name, CreditType type, Person person, Production production) {
+    public Credit(String name, CreditType type, Person person, Production production, String summary) {
         this.name = name;
         this.type = type;
         this.person = person;
         this.production = production;
+        this.summary = summary;
     }
 }

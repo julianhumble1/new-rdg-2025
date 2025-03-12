@@ -1,6 +1,9 @@
 package com.rdg.rdg_2025.rdg_2025_spring.services;
 
 import com.rdg.rdg_2025.rdg_2025_spring.exception.DatabaseException;
+import com.rdg.rdg_2025.rdg_2025_spring.models.Person;
+import com.rdg.rdg_2025.rdg_2025_spring.models.Production;
+import com.rdg.rdg_2025.rdg_2025_spring.models.credit.Credit;
 import com.rdg.rdg_2025.rdg_2025_spring.models.credit.CreditType;
 import com.rdg.rdg_2025.rdg_2025_spring.payload.request.credit.CreditRequest;
 import com.rdg.rdg_2025.rdg_2025_spring.repository.CreditRepository;
@@ -14,6 +17,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.core.parameters.P;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -52,8 +56,8 @@ public class CreditServiceTest {
                     "Test Credit",
                     CreditType.ACTOR,
                     1,
-                    "Test Summary",
-                    1
+                    1,
+                    "Test Summary"
             );
         }
 
@@ -134,7 +138,21 @@ public class CreditServiceTest {
             verify(creditRepository, times(1)).save(any());
         }
 
-
-
+        @Test
+        void testReturnsExpectedCreditObject() {
+            // Arrange
+            Credit testCredit = new Credit(
+                    "Test Credit",
+                    CreditType.ACTOR,
+                    new Person(),
+                    new Production(),
+                    "Test Summary"
+            );
+            when(creditRepository.save(any())).thenReturn(testCredit);
+            // Act
+            Credit result = creditService.addNewCredit(testCreditRequest);
+            // Assert
+            assertEquals("Test Credit", result.getName());
+        }
     }
 }

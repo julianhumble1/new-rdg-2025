@@ -19,14 +19,15 @@ public class CreditRequest {
     @Min(1)
     private int productionId;
 
-    private String summary;
     private int personId;
 
-    public CreditRequest(String name, CreditType type, int productionId, String summary, int personId) {
+    private String summary;
+
+    public CreditRequest(String name, CreditType type, int productionId, int personId, String summary) {
         this.name = name;
         this.type = type;
         this.productionId = productionId;
-        this.summary = summary;
         this.personId = personId;
+        this.summary = summary;
     }
 }
