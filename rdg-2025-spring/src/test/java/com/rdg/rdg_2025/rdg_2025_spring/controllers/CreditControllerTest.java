@@ -26,8 +26,7 @@ import org.springframework.web.context.WebApplicationContext;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(CreditController.class)
 public class CreditControllerTest {
@@ -248,6 +247,18 @@ public class CreditControllerTest {
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(requestJson)))
                     .andExpect(header().string("Location", "/credits/" + testCredit.getId()));
+        }
+
+        @Test
+        void testSuccessfulAddRespondsExpectedJSON() throws Exception {
+            // Arrange
+            when(creditService.addNewCredit(any())).thenReturn(testCredit);
+            // Act & Assert
+            mockMvc.perform(post("/credits")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(requestJson)))
+                    .andExpect(jsonPath("$.credit.name").value("Test Credit"))
+                    .andExpect(jsonPath("$.credit.type").value("ACTOR"));
         }
 
 
