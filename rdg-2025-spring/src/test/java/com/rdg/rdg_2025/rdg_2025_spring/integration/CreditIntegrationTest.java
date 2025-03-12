@@ -370,6 +370,17 @@ public class CreditIntegrationTest {
                     .andExpect(jsonPath("$.credit.person").isEmpty());
         }
 
+        @Test
+        void testUserTokenResponds403() throws Exception {
+            // Arrange
+            // Act & Assert
+            mockMvc.perform(post("/credits")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", userToken)
+                            .content(objectMapper.writeValueAsString(requestJson)))
+                    .andExpect(status().isForbidden());
+        }
+
 
     }
 }
