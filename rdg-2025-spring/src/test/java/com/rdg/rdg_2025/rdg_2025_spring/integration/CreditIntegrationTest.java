@@ -285,6 +285,18 @@ public class CreditIntegrationTest {
                     .andExpect(status().isBadRequest());
         }
 
+        @Test
+        void testProductionIdZeroResponds400() throws Exception {
+            // Arrange
+            requestJson.put("productionId", 0);
+            // Act & Assert
+            mockMvc.perform(post("/credits")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", adminToken)
+                            .content(objectMapper.writeValueAsString(requestJson)))
+                    .andExpect(status().isBadRequest());
+        }
+
 
     }
 }
