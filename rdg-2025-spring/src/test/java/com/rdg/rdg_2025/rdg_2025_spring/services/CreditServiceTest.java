@@ -1,5 +1,6 @@
 package com.rdg.rdg_2025.rdg_2025_spring.services;
 
+import com.rdg.rdg_2025.rdg_2025_spring.exception.DatabaseException;
 import com.rdg.rdg_2025.rdg_2025_spring.models.credit.CreditType;
 import com.rdg.rdg_2025.rdg_2025_spring.payload.request.credit.CreditRequest;
 import com.rdg.rdg_2025.rdg_2025_spring.repository.CreditRepository;
@@ -62,6 +63,16 @@ public class CreditServiceTest {
             when(productionService.getProductionById(1)).thenThrow(new EntityNotFoundException(""));
             // Act & Assert
             assertThrows(EntityNotFoundException.class, () -> {
+                creditService.addNewCredit(testCreditRequest);
+            });
+        }
+
+        @Test
+        void testRetrieveProductionDatabaseExceptionThrowsDatabaseException() {
+            // Arrange
+            when(productionService.getProductionById(1)).thenThrow(new DatabaseException(""));
+            // Act & Assert
+            assertThrows(DatabaseException.class, () -> {
                 creditService.addNewCredit(testCreditRequest);
             });
         }

@@ -34,6 +34,8 @@ public class CreditService {
             return productionService.getProductionById(productionId);
         } catch (EntityNotFoundException ex) {
             throw new EntityNotFoundException(ex.getMessage(), ex);
+        } catch (DataAccessException ex) {
+            throw new DatabaseException(ex.getMessage(), ex);
         }
     }
 
