@@ -27,7 +27,6 @@ public class Credit {
     private CreditType type;
 
     @ManyToOne
-    @JoinColumn(nullable = false)
     private Person person;
 
     @ManyToOne
