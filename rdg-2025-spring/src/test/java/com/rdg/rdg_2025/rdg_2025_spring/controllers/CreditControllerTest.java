@@ -311,6 +311,18 @@ public class CreditControllerTest {
                     .andExpect(status().isCreated());
         }
 
+        @Test
+        void testPersonIdZeroResponds201() throws Exception {
+            // Arrange
+            when(creditService.addNewCredit(any())).thenReturn(testCredit);
+            requestJson.put("personId", 0);
+            // Act & Assert
+            mockMvc.perform(post("/credits")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(requestJson)))
+                    .andExpect(status().isCreated());
+        }
+
 
     }
 
