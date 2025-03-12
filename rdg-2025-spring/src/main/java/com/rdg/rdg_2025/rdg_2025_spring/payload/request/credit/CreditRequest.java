@@ -2,6 +2,7 @@ package com.rdg.rdg_2025.rdg_2025_spring.payload.request.credit;
 
 import com.rdg.rdg_2025.rdg_2025_spring.models.credit.CreditType;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,7 +11,7 @@ import lombok.Setter;
 @Getter @Setter @NoArgsConstructor
 public class CreditRequest {
 
-    @NotNull
+    @NotBlank
     private String name;
 
     @NotNull
