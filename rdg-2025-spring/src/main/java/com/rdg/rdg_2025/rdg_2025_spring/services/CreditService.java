@@ -52,13 +52,12 @@ public class CreditService {
 
     public Credit updateCredit(int creditId, CreditRequest creditRequest) {
         Credit credit = getCreditById(creditId);
-
         Production production = retrieveProductionFromService(creditRequest.getProductionId());
         Person person = retrievePersonFromService(creditRequest.getPersonId());
 
         updateCreditFromRequest(credit, creditRequest, production, person);
 
-        return credit;
+        return saveCreditToDatabase(credit);
 
     }
 

@@ -398,5 +398,18 @@ public class CreditServiceTest {
 
         }
 
+        @Test
+        void testSaveRepositoryMethodIsCalled() {
+            // Arrange
+            when(creditRepository.findById(1)).thenReturn(Optional.of(testCredit));
+            when(productionService.getProductionById(anyInt())).thenReturn(testProduction);
+            when(personService.getPersonById(anyInt())).thenReturn(testPerson);
+            // Act
+            creditService.updateCredit(1, testCreditRequest);
+            // Assert
+            verify(creditRepository, times(1)).save(any());
+
+        }
+
     }
 }
