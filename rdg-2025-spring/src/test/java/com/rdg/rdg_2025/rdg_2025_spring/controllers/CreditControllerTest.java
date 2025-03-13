@@ -337,8 +337,6 @@ public class CreditControllerTest {
             // Act & Assert
             mockMvc.perform(get("/credits/notanint"))
                     .andExpect(status().isBadRequest());
-
-
         }
 
         @Test
@@ -349,7 +347,15 @@ public class CreditControllerTest {
             mockMvc.perform(get("/credits/1"));
             // Assert
             verify(creditService, times(1)).getCreditById(1);
+        }
 
+        @Test
+        void testEntityNotFoundExceptionResponds404() throws Exception {
+            // Arrange
+            when(creditService.getCreditById(1)).thenThrow(new EntityNotFoundException(""));
+            // Act & Assert
+            mockMvc.perform(get("/credits/1"))
+                    .andExpect(status().isNotFound());
         }
 
     }

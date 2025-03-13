@@ -42,7 +42,11 @@ public class CreditController {
 
     @GetMapping("/{creditId}")
     public ResponseEntity<?> getCreditById(@PathVariable int creditId) {
-        creditService.getCreditById(creditId);
+        try {
+            creditService.getCreditById(creditId);
+        } catch (EntityNotFoundException ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+        }
         return ResponseEntity.ok("");
     }
 }
