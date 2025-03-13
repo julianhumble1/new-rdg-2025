@@ -350,5 +350,16 @@ public class CreditServiceTest {
             verify(personService, never()).getPersonById(anyInt());
         }
 
+        @Test
+        void testPersonIdProvidedThenServiceCallIsMade() {
+            // Arrange
+            when(creditRepository.findById(1)).thenReturn(Optional.of(testCredit));
+            when(productionService.getProductionById(anyInt())).thenReturn(testProduction);
+            // Act
+            creditService.updateCredit(1, testCreditRequest);
+            // Assert
+            verify(personService, times(1)).getPersonById(anyInt());
+        }
+
     }
 }

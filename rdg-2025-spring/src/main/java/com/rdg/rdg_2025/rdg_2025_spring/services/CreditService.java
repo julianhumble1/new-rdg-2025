@@ -54,6 +54,7 @@ public class CreditService {
         Credit credit = getCreditById(creditId);
 
         Production production = retrieveProductionFromService(creditRequest.getProductionId());
+        Person person = retrievePersonFromService(creditRequest.getPersonId());
 
         return credit;
 
