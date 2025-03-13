@@ -3,6 +3,7 @@ package com.rdg.rdg_2025.rdg_2025_spring.services;
 import com.rdg.rdg_2025.rdg_2025_spring.exception.DatabaseException;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Person;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Production;
+import com.rdg.rdg_2025.rdg_2025_spring.models.Venue;
 import com.rdg.rdg_2025.rdg_2025_spring.models.credit.Credit;
 import com.rdg.rdg_2025.rdg_2025_spring.models.credit.CreditType;
 import com.rdg.rdg_2025.rdg_2025_spring.payload.request.credit.CreditRequest;
@@ -20,6 +21,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.dao.DataAccessException;
 import org.springframework.security.core.parameters.P;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -231,6 +233,10 @@ public class CreditServiceTest {
 
         private CreditRequest testCreditRequest;
 
+        private Production testProduction;
+
+        private Person testPerson;
+
         @BeforeEach
         void setup() {
             testCredit = new Credit(
@@ -246,6 +252,26 @@ public class CreditServiceTest {
                     2,
                     2,
                     "Updated Test Summary"
+            );
+            testPerson = new Person(
+                    "Test First Name",
+                    "Test Last Name",
+                    "Test Summary",
+                    "01111 111111",
+                    "07111 111111",
+                    "Test Street",
+                    "Test Town",
+                    "Test Postcode"
+            );
+            testProduction = new Production(
+                    "Test Production",
+                    new Venue(),
+                    "Test Author",
+                    "Test Description",
+                    LocalDateTime.now(),
+                    false,
+                    false,
+                    "Test File String"
             );
         }
 
@@ -277,6 +303,17 @@ public class CreditServiceTest {
             assertThrows(EntityNotFoundException.class, () -> {
                 creditService.updateCredit(1, testCreditRequest);
             });
+        }
+
+        @Test
+        void testFindProductionServiceMethodIsCalled() {
+            // Arrange
+            when(creditRepository.findById(1)).thenReturn(Optional.of(testCredit));
+            when(productionService.getProductionById(anyInt())).thenReturn(testProduction);
+            // Act
+            creditService.updateCredit(1, testCreditRequest);
+            // Assert
+            verify(productionService, times(1)).getProductionById(anyInt());
         }
 
     }
