@@ -671,6 +671,17 @@ public class CreditIntegrationTest {
                     .andExpect(status().isNotFound());
         }
 
+        @Test
+        void testCreditIdNotIntResponds400() throws Exception {
+            // Arrange
+            // Act & Assert
+            mockMvc.perform(patch("/credits/notanint")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", adminToken)
+                            .content(objectMapper.writeValueAsString(requestJson)))
+                    .andExpect(status().isBadRequest());
+        }
+
 
     }
 }
