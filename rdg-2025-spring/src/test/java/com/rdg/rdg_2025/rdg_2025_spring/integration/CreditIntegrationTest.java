@@ -864,6 +864,16 @@ public class CreditIntegrationTest {
                     .andExpect(status().isUnauthorized());
         }
 
+        @Test
+        void testMissingTokenResponds401() throws Exception {
+            // Arrange
+            // Act & Assert
+            mockMvc.perform(patch("/credits/" + existingCreditId)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(requestJson)))
+                    .andExpect(status().isUnauthorized());
+        }
+
 
     }
 }
