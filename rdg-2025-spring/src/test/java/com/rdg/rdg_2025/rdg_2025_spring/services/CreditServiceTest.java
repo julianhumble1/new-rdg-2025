@@ -17,6 +17,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.dao.DataAccessException;
 import org.springframework.security.core.parameters.P;
 
 import java.util.Optional;
@@ -192,6 +193,17 @@ public class CreditServiceTest {
             when(creditRepository.findById(anyInt())).thenReturn(Optional.empty());
             // Act & Assert
             assertThrows(EntityNotFoundException.class, () -> {
+                creditService.getCreditById(1);
+            });
+
+        }
+
+        @Test
+        void testDataAccessExceptionThrowsDatabaseException() {
+            // Arrange
+            when(creditRepository.findById(anyInt())).thenThrow(new DataAccessException("") {});
+            // Act & Assert
+            assertThrows(DatabaseException.class, () -> {
                 creditService.getCreditById(1);
             });
 

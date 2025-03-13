@@ -42,8 +42,12 @@ public class CreditService {
     }
 
     public Credit getCreditById(int creditId) {
-        return creditRepository.findById(creditId)
+        try {
+            return creditRepository.findById(creditId)
                 .orElseThrow(() -> new EntityNotFoundException("No Credit with this id: " + creditId));
+        } catch (DataAccessException ex) {
+            throw new DatabaseException(ex.getMessage(), ex);
+        }
     }
 
     // PRIVATE HELPER METHODS
