@@ -593,6 +593,18 @@ public class CreditControllerTest {
                     .andExpect(status().isOk());
         }
 
+        @Test
+        void testTypeProducerResponds201() throws Exception {
+            // Arrange
+            when(creditService.addNewCredit(any())).thenReturn(testCredit);
+            requestJson.put("type", "PRODUCER");
+            // Act & Assert
+            mockMvc.perform(patch("/credits/1")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(requestJson)))
+                    .andExpect(status().isOk());
+        }
+
     }
 
 }
