@@ -9,6 +9,7 @@ import com.rdg.rdg_2025.rdg_2025_spring.models.credit.CreditType;
 import com.rdg.rdg_2025.rdg_2025_spring.payload.request.credit.CreditRequest;
 import com.rdg.rdg_2025.rdg_2025_spring.repository.CreditRepository;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.persistence.PersistenceException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -418,6 +419,19 @@ public class CreditServiceTest {
             when(productionService.getProductionById(anyInt())).thenReturn(testProduction);
             when(personService.getPersonById(anyInt())).thenReturn(testPerson);
             when(creditRepository.save(any())).thenThrow(new DataAccessException("") {});
+            // Act & Assert
+            assertThrows(DatabaseException.class, () -> {
+                creditService.updateCredit(1, testCreditRequest);
+            });
+        }
+
+        @Test
+        void testSavePersistenceExceptionThrowsDatabaseException() {
+            // Arrange
+            when(creditRepository.findById(1)).thenReturn(Optional.of(testCredit));
+            when(productionService.getProductionById(anyInt())).thenReturn(testProduction);
+            when(personService.getPersonById(anyInt())).thenReturn(testPerson);
+            when(creditRepository.save(any())).thenThrow(new PersistenceException(""));
             // Act & Assert
             assertThrows(DatabaseException.class, () -> {
                 creditService.updateCredit(1, testCreditRequest);
