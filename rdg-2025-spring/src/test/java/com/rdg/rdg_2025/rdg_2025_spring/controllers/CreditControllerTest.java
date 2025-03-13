@@ -1,6 +1,5 @@
 package com.rdg.rdg_2025.rdg_2025_spring.controllers;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.rdg.rdg_2025.rdg_2025_spring.exception.DatabaseException;
@@ -356,6 +355,15 @@ public class CreditControllerTest {
             // Act & Assert
             mockMvc.perform(get("/credits/1"))
                     .andExpect(status().isNotFound());
+        }
+
+        @Test
+        void testDatabaseExceptionResponds500() throws Exception {
+            // Arrange
+            when(creditService.getCreditById(1)).thenThrow(new DatabaseException(""));
+            // Act & Assert
+            mockMvc.perform(get("/credits/1"))
+                    .andExpect(status().isInternalServerError());
         }
 
     }
