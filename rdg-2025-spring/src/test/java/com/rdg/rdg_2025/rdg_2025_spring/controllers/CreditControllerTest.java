@@ -582,7 +582,7 @@ public class CreditControllerTest {
         }
 
         @Test
-        void testTypeMusicianResponds201() throws Exception {
+        void testTypeMusicianResponds200() throws Exception {
             // Arrange
             when(creditService.addNewCredit(any())).thenReturn(testCredit);
             requestJson.put("type", "MUSICIAN");
@@ -594,7 +594,7 @@ public class CreditControllerTest {
         }
 
         @Test
-        void testTypeProducerResponds201() throws Exception {
+        void testTypeProducerResponds200() throws Exception {
             // Arrange
             when(creditService.addNewCredit(any())).thenReturn(testCredit);
             requestJson.put("type", "PRODUCER");
@@ -606,7 +606,7 @@ public class CreditControllerTest {
         }
 
         @Test
-        void testSummaryAndPersonIdEmptyResponds201() throws Exception {
+        void testSummaryAndPersonIdEmptyResponds200() throws Exception {
             // Arrange
             when(creditService.addNewCredit(any())).thenReturn(testCredit);
             requestJson.put("summary", "");
@@ -619,11 +619,23 @@ public class CreditControllerTest {
         }
 
         @Test
-        void testSummaryAndPersonIdMissingResponds201() throws Exception {
+        void testSummaryAndPersonIdMissingResponds200() throws Exception {
             // Arrange
             when(creditService.addNewCredit(any())).thenReturn(testCredit);
             requestJson.remove("summary");
             requestJson.remove("personId");
+            // Act & Assert
+            mockMvc.perform(patch("/credits/1")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(requestJson)))
+                    .andExpect(status().isOk());
+        }
+
+        @Test
+        void testPersonIdZeroResponds200() throws Exception {
+            // Arrange
+            when(creditService.addNewCredit(any())).thenReturn(testCredit);
+            requestJson.put("personId", 0);
             // Act & Assert
             mockMvc.perform(patch("/credits/1")
                             .contentType(MediaType.APPLICATION_JSON)
