@@ -209,6 +209,17 @@ public class CreditServiceTest {
 
         }
 
+        @Test
+        void testExpectedCreditIsReturned() {
+            // Arrange
+            when(creditRepository.findById(anyInt())).thenReturn(Optional.of(testCredit));
+            // Act
+            Credit result = creditService.getCreditById(1);
+            // Assert
+            assertEquals(testCredit, result);
+
+        }
+
 
     }
 }
