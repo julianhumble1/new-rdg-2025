@@ -1,5 +1,6 @@
 package com.rdg.rdg_2025.rdg_2025_spring.payload.response.person;
 
+import com.rdg.rdg_2025.rdg_2025_spring.helpers.CreditFilter;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Person;
 import com.rdg.rdg_2025.rdg_2025_spring.models.credit.Credit;
 import com.rdg.rdg_2025.rdg_2025_spring.models.credit.CreditType;
@@ -23,14 +24,9 @@ public class DetailedPersonResponse {
     public DetailedPersonResponse(Person person) {
         this.person = person;
 
-        this.actingCredits = filterCreditTypes(person.getCredits(), CreditType.ACTOR);
-        this.musicianCredits = filterCreditTypes(person.getCredits(), CreditType.MUSICIAN);
-        this.producerCredits = filterCreditTypes(person.getCredits(), CreditType.PRODUCER);
+        this.actingCredits = CreditFilter.filterCreditTypes(person.getCredits(), CreditType.ACTOR);
+        this.musicianCredits = CreditFilter.filterCreditTypes(person.getCredits(), CreditType.MUSICIAN);
+        this.producerCredits = CreditFilter.filterCreditTypes(person.getCredits(), CreditType.PRODUCER);
     }
 
-    private List<Credit> filterCreditTypes(List<Credit> creditList, CreditType typeToFilter) {
-        return creditList.stream()
-                .filter(credit -> credit.getType() == typeToFilter)
-                .collect(Collectors.toList());
-    }
 }

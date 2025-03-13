@@ -1,6 +1,5 @@
 package com.rdg.rdg_2025.rdg_2025_spring.controllers;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.rdg.rdg_2025.rdg_2025_spring.exception.DatabaseException;
@@ -560,6 +559,7 @@ public class PersonControllerTest {
             requestJson.put("addressStreet", "");
             requestJson.put("addressTown", "");
             requestJson.put("addressPostcode", "");
+            when(personService.updatePerson(anyInt(), any())).thenReturn(testPerson);
             // Act & Assert
             mockMvc.perform(patch("/people/1")
                             .contentType(MediaType.APPLICATION_JSON)
@@ -576,6 +576,7 @@ public class PersonControllerTest {
             requestJson.remove("addressStreet");
             requestJson.remove("addressTown");
             requestJson.remove("addressPostcode");
+            when(personService.updatePerson(anyInt(), any())).thenReturn(testPerson);
             // Act & Assert
             mockMvc.perform(patch("/people/1")
                             .contentType(MediaType.APPLICATION_JSON)
@@ -586,6 +587,7 @@ public class PersonControllerTest {
         @Test
         void testUpdatePersonServiceMethodIsCalled() throws Exception {
             // Arrange
+            when(personService.updatePerson(anyInt(), any())).thenReturn(testPerson);
             // Act
             mockMvc.perform(patch("/people/1")
                             .contentType(MediaType.APPLICATION_JSON)
