@@ -830,6 +830,18 @@ public class CreditIntegrationTest {
                     .andExpect(status().isOk());
         }
 
+        @Test
+        void testPersonIdZeroResponds200() throws Exception {
+            // Arrange
+            requestJson.put("personId", 0);
+            // Act & Assert
+            mockMvc.perform(patch("/credits/" + existingCreditId)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", adminToken)
+                            .content(objectMapper.writeValueAsString(requestJson)))
+                    .andExpect(status().isOk());
+        }
+
 
     }
 }
