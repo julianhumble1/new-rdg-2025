@@ -633,6 +633,19 @@ public class CreditIntegrationTest {
             assertEquals("Updated Test Credit", creditRepository.findById(existingCreditId).get().getName());
         }
 
+        @Test
+        void testInvalidPersonIdResponds404() throws Exception {
+            // Arrange
+            assertFalse(personRepository.existsById(testPerson2Id + 1));
+            requestJson.put("personId", testPerson2Id + 1);
+            // Act & Assert
+            mockMvc.perform(patch("/credits/" + existingCreditId)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", adminToken)
+                            .content(objectMapper.writeValueAsString(requestJson)))
+                    .andExpect(status().isNotFound());
+        }
+
 
     }
 }
