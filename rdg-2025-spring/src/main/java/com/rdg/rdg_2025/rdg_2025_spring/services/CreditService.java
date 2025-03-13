@@ -28,6 +28,8 @@ public class CreditService {
         this.personService = personService;
     }
 
+    // PUBLIC CRUD METHODS
+
     public Credit addNewCredit(CreditRequest creditRequest) {
         Production production = retrieveProductionFromService(creditRequest.getProductionId());
         Person person = retrievePersonFromService(creditRequest.getPersonId());
@@ -38,6 +40,13 @@ public class CreditService {
         return saveCreditToDatabase(credit);
 
     }
+
+    public Credit getCreditById(int creditId) {
+        return creditRepository.findById(creditId)
+                .orElseThrow(() -> new EntityNotFoundException("No Credit with this id: " + creditId));
+    }
+
+    // PRIVATE HELPER METHODS
 
     private Production retrieveProductionFromService(int productionId) {
         try {

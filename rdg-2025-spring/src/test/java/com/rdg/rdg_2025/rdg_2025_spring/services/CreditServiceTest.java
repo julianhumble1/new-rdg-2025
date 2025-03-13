@@ -19,6 +19,8 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.core.parameters.P;
 
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
@@ -154,5 +156,35 @@ public class CreditServiceTest {
             // Assert
             assertEquals("Test Credit", result.getName());
         }
+    }
+
+    @Nested
+    @DisplayName("getCreditById service tests")
+    class GetCreditByIdServiceTests {
+
+        private Credit testCredit;
+
+        @BeforeEach
+        void setup() {
+            testCredit = new Credit(
+                    "Test Credit",
+                    CreditType.ACTOR,
+                    new Person(),
+                    new Production(),
+                    "Test Summary"
+            );
+        }
+
+        @Test
+        void testRepositoryFindByIdMethodIsCalled() {
+            // Arrange
+            when(creditRepository.findById(anyInt())).thenReturn(Optional.of(testCredit));
+            // Act
+            creditService.getCreditById(1);
+            // Assert
+            verify(creditRepository, times(1)).findById(1);
+
+        }
+
     }
 }
