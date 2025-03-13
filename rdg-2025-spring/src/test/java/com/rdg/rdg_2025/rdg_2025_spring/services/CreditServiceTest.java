@@ -327,5 +327,16 @@ public class CreditServiceTest {
             });
         }
 
+        @Test
+        void testProductionDoesNotExistThrowsEntityNotFoundException() {
+            // Arrange
+            when(creditRepository.findById(1)).thenReturn(Optional.of(testCredit));
+            when(productionService.getProductionById(anyInt())).thenThrow(new EntityNotFoundException(""));
+            // Act & Assert
+            assertThrows(EntityNotFoundException.class, () -> {
+                creditService.updateCredit(1, testCreditRequest);
+            });
+        }
+
     }
 }
