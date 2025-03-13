@@ -422,6 +422,28 @@ public class CreditControllerTest {
                     .andExpect(status().isBadRequest());
         }
 
+        @Test
+        void testNameMissingResponds400() throws Exception {
+            // Arrange
+            requestJson.remove("name");
+            // Act & Assert
+            mockMvc.perform(patch("/credits/1")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(requestJson)))
+                    .andExpect(status().isBadRequest());
+        }
+
+        @Test
+        void testTypeEmptyResponds400() throws Exception {
+            // Arrange
+            requestJson.put("type", "");
+            // Act & Assert
+            mockMvc.perform(patch("/credits/1")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(requestJson)))
+                    .andExpect(status().isBadRequest());
+        }
+
     }
 
 }
