@@ -50,6 +50,13 @@ public class CreditService {
         }
     }
 
+    public Credit updateCredit(int creditId, CreditRequest creditRequest) {
+        Credit credit = getCreditById(creditId);
+
+        return credit;
+
+    }
+
     // PRIVATE HELPER METHODS
 
     private Production retrieveProductionFromService(int productionId) {

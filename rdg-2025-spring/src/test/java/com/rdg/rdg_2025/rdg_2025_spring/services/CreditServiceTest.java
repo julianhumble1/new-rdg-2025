@@ -222,4 +222,42 @@ public class CreditServiceTest {
 
 
     }
+
+    @Nested
+    @DisplayName("updateCredit service tests")
+    class UpdateCreditServiceTests {
+
+        private Credit testCredit;
+
+        private CreditRequest testCreditRequest;
+
+        @BeforeEach
+        void setup() {
+            testCredit = new Credit(
+                    "Test Credit",
+                    CreditType.ACTOR,
+                    new Person(),
+                    new Production(),
+                    "Test Summary"
+            );
+            testCreditRequest = new CreditRequest(
+                    "Updated Test Credit",
+                    CreditType.MUSICIAN,
+                    2,
+                    2,
+                    "Updated Test Summary"
+            );
+        }
+
+        @Test
+        void testFindCreditRepositoryMethodIsCalled() {
+            // Arrange
+            when(creditRepository.findById(1)).thenReturn(Optional.of(testCredit));
+            // Act
+            creditService.updateCredit(1, testCreditRequest);
+            // Assert
+            verify(creditRepository, times(1)).findById(1);
+        }
+
+    }
 }
