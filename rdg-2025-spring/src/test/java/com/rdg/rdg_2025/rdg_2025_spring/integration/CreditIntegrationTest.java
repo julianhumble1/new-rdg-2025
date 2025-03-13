@@ -634,10 +634,23 @@ public class CreditIntegrationTest {
         }
 
         @Test
-        void testInvalidPersonIdResponds404() throws Exception {
+        void testNonExistentPersonIdResponds404() throws Exception {
             // Arrange
             assertFalse(personRepository.existsById(testPerson2Id + 1));
             requestJson.put("personId", testPerson2Id + 1);
+            // Act & Assert
+            mockMvc.perform(patch("/credits/" + existingCreditId)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", adminToken)
+                            .content(objectMapper.writeValueAsString(requestJson)))
+                    .andExpect(status().isNotFound());
+        }
+
+        @Test
+        void testNonExistentProductionIdResponds404() throws Exception {
+            // Arrange
+            assertFalse(productionRepository.existsById(testProduction2Id + 1));
+            requestJson.put("productionId", testProduction2Id + 1);
             // Act & Assert
             mockMvc.perform(patch("/credits/" + existingCreditId)
                             .contentType(MediaType.APPLICATION_JSON)
