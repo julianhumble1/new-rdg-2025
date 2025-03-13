@@ -411,5 +411,18 @@ public class CreditServiceTest {
 
         }
 
+        @Test
+        void testSaveDataAccessExceptionThrowsDatabaseException() {
+            // Arrange
+            when(creditRepository.findById(1)).thenReturn(Optional.of(testCredit));
+            when(productionService.getProductionById(anyInt())).thenReturn(testProduction);
+            when(personService.getPersonById(anyInt())).thenReturn(testPerson);
+            when(creditRepository.save(any())).thenThrow(new DataAccessException("") {});
+            // Act & Assert
+            assertThrows(DatabaseException.class, () -> {
+                creditService.updateCredit(1, testCreditRequest);
+            });
+        }
+
     }
 }
