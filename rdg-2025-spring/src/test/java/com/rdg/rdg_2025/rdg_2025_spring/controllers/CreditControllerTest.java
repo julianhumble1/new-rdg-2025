@@ -375,6 +375,15 @@ public class CreditControllerTest {
                     .andExpect(status().isOk());
         }
 
+        @Test
+        void testSuccessfulGetRespondsExpectedJson() throws Exception {
+            // Arrange
+            when(creditService.getCreditById(1)).thenReturn(testCredit);
+            // Act & Assert
+            mockMvc.perform(get("/credits/1"))
+                    .andExpect(jsonPath("$.credit.name").value("Test Credit"));
+        }
+
     }
 
 }
