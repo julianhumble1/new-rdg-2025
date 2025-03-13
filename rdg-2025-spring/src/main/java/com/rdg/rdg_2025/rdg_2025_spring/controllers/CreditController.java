@@ -55,7 +55,11 @@ public class CreditController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> updateCredit(@PathVariable int creditId, @Valid @RequestBody CreditRequest creditRequest) {
 
-        creditService.updateCredit(creditId, creditRequest);
+        try {
+            creditService.updateCredit(creditId, creditRequest);
+        } catch (DatabaseException ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
+        }
 
         return ResponseEntity.ok("");
 

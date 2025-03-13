@@ -533,6 +533,18 @@ public class CreditControllerTest {
 
         }
 
+        @Test
+        void testServiceDatabaseExceptionResponds500() throws Exception {
+            // Arrange
+            when(creditService.updateCredit(anyInt(), any())).thenThrow(new DatabaseException(""));
+            // Act & Assert
+            mockMvc.perform(patch("/credits/1")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(requestJson)))
+                    .andExpect(status().isInternalServerError());
+
+        }
+
     }
 
 }
