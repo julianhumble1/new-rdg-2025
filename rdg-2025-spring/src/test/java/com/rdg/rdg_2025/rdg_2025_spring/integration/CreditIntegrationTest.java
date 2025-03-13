@@ -853,6 +853,17 @@ public class CreditIntegrationTest {
                     .andExpect(status().isForbidden());
         }
 
+        @Test
+        void testBadTokenResponds401() throws Exception {
+            // Arrange
+            // Act & Assert
+            mockMvc.perform(patch("/credits/" + existingCreditId)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", "bad token")
+                            .content(objectMapper.writeValueAsString(requestJson)))
+                    .andExpect(status().isUnauthorized());
+        }
+
 
     }
 }
