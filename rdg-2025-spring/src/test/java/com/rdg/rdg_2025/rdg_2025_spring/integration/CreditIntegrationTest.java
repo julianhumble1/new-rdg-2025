@@ -1,11 +1,12 @@
 package com.rdg.rdg_2025.rdg_2025_spring.integration;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Person;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Production;
 import com.rdg.rdg_2025.rdg_2025_spring.models.auth.User;
+import com.rdg.rdg_2025.rdg_2025_spring.models.credit.Credit;
+import com.rdg.rdg_2025.rdg_2025_spring.models.credit.CreditType;
 import com.rdg.rdg_2025.rdg_2025_spring.repository.*;
 import com.rdg.rdg_2025.rdg_2025_spring.security.jwt.JwtUtils;
 import com.rdg.rdg_2025.rdg_2025_spring.utils.AuthTestUtils;
@@ -18,6 +19,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.parameters.P;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
@@ -26,8 +28,7 @@ import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -402,6 +403,70 @@ public class CreditIntegrationTest {
                     .andExpect(status().isUnauthorized());
         }
 
+
+    }
+
+    @Nested
+    @DisplayName("GET get credit by id integration tests")
+    class GetCreditByIdIntegrationTests {
+
+        private Credit testCredit;
+        private int testCreditId;
+
+        private Production testProduction;
+        private Person testPerson;
+
+        @Autowired
+        private ProductionRepository productionRepository;
+
+        @Autowired
+        private PersonRepository personRepository;
+
+        @BeforeEach
+        void setup() {
+            testProduction = new Production(
+                    "Test Production",
+                    null,
+                    "Test Author",
+                    "Test Description",
+                    LocalDateTime.now(),
+                    false,
+                    false,
+                    "Test File String"
+            );
+            productionRepository.save(testProduction);
+            testPerson = new Person(
+                    "Test First Name",
+                    "Test Last Name",
+                    "Test Summary",
+                    "01111 111111",
+                    "07111 111111",
+                    "Test Street",
+                    "Test Town",
+                    "Test Postcode"
+            );
+            personRepository.save(testPerson);
+
+            testCredit = new Credit(
+                    "Test Credit",
+                    CreditType.ACTOR,
+                    testPerson,
+                    testProduction,
+                    "Test Summary"
+            );
+            creditRepository.save(testCredit);
+            testCreditId = testCredit.getId();
+        }
+
+        @Test
+        void testSuccessfulGetResponds200() throws Exception {
+            // Arrange
+            // Act & Assert
+            mockMvc.perform(get("/credits/" + testCreditId))
+                    .andExpect(status().isOk());
+
+
+        }
 
     }
 }

@@ -47,5 +47,8 @@ public class Credit {
         this.person = person;
         this.production = production;
         this.summary = summary;
+
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
     }
 }
