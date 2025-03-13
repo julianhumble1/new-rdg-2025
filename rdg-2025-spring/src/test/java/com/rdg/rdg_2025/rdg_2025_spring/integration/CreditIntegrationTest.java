@@ -687,7 +687,7 @@ public class CreditIntegrationTest {
             // Arrange
             requestJson.put("name", "");
             // Act & Assert
-            mockMvc.perform(patch("/credits/1")
+            mockMvc.perform(patch("/credits/" + existingCreditId)
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", adminToken)
                             .content(objectMapper.writeValueAsString(requestJson)))
@@ -699,7 +699,7 @@ public class CreditIntegrationTest {
             // Arrange
             requestJson.remove("name");
             // Act & Assert
-            mockMvc.perform(patch("/credits/1")
+            mockMvc.perform(patch("/credits/" + existingCreditId)
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", adminToken)
                             .content(objectMapper.writeValueAsString(requestJson)))
@@ -711,7 +711,7 @@ public class CreditIntegrationTest {
             // Arrange
             requestJson.put("type", "");
             // Act & Assert
-            mockMvc.perform(patch("/credits/1")
+            mockMvc.perform(patch("/credits/" + existingCreditId)
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", adminToken)
                             .content(objectMapper.writeValueAsString(requestJson)))
@@ -723,7 +723,7 @@ public class CreditIntegrationTest {
             // Arrange
             requestJson.remove("type");
             // Act & Assert
-            mockMvc.perform(patch("/credits/1")
+            mockMvc.perform(patch("/credits/" + existingCreditId)
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", adminToken)
                             .content(objectMapper.writeValueAsString(requestJson)))
@@ -735,7 +735,7 @@ public class CreditIntegrationTest {
             // Arrange
             requestJson.put("type", "not actor musician or producer");
             // Act & Assert
-            mockMvc.perform(patch("/credits/1")
+            mockMvc.perform(patch("/credits/" + existingCreditId)
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", adminToken)
                             .content(objectMapper.writeValueAsString(requestJson)))
@@ -747,7 +747,7 @@ public class CreditIntegrationTest {
             // Arrange
             requestJson.put("productionId", "");
             // Act & Assert
-            mockMvc.perform(patch("/credits/1")
+            mockMvc.perform(patch("/credits/" + existingCreditId)
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", adminToken)
                             .content(objectMapper.writeValueAsString(requestJson)))
@@ -759,7 +759,19 @@ public class CreditIntegrationTest {
             // Arrange
             requestJson.remove("productionId");
             // Act & Assert
-            mockMvc.perform(patch("/credits/1")
+            mockMvc.perform(patch("/credits/" + existingCreditId)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", adminToken)
+                            .content(objectMapper.writeValueAsString(requestJson)))
+                    .andExpect(status().isBadRequest());
+        }
+
+        @Test
+        void testProductionIdNotIntResponds400() throws Exception {
+            // Arrange
+            requestJson.put("productionId", "not an int");
+            // Act & Assert
+            mockMvc.perform(patch("/credits/" + existingCreditId)
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", adminToken)
                             .content(objectMapper.writeValueAsString(requestJson)))
