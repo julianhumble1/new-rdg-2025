@@ -595,7 +595,7 @@ public class CreditIntegrationTest {
         @Test
         void testSuccessfulUpdateResponds200() throws Exception {
             // Arrange
-            // Act
+            // Act & Assert
             mockMvc.perform(patch("/credits/" + existingCreditId)
                     .contentType(MediaType.APPLICATION_JSON)
                     .header("Authorization", adminToken)
@@ -606,7 +606,7 @@ public class CreditIntegrationTest {
         @Test
         void testSuccessfulUpdateRespondsExpectedJSON() throws Exception {
             // Arrange
-            // Act
+            // Act & Assert
             mockMvc.perform(patch("/credits/" + existingCreditId)
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", adminToken)
@@ -618,6 +618,19 @@ public class CreditIntegrationTest {
                     .andExpect(jsonPath("$.credit.production.name").value("Another Test Production"))
                     .andExpect(jsonPath("$.credit.createdAt").isNotEmpty())
                     .andExpect(jsonPath("$.credit.updatedAt").isNotEmpty());
+        }
+
+        @Test
+        void testCreditIsUpdatedInDatabase() throws Exception {
+            // Arrange
+            // Act
+            mockMvc.perform(patch("/credits/" + existingCreditId)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", adminToken)
+                            .content(objectMapper.writeValueAsString(requestJson)))
+                    .andExpect(status().isOk());
+            // Assert
+            assertEquals("Updated Test Credit", creditRepository.findById(existingCreditId).get().getName());
         }
 
 
