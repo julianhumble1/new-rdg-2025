@@ -361,5 +361,17 @@ public class CreditServiceTest {
             verify(personService, times(1)).getPersonById(anyInt());
         }
 
+        @Test
+        void testPersonServiceDatabaseExceptionThrowsDatabaseException() {
+            // Arrange
+            when(creditRepository.findById(1)).thenReturn(Optional.of(testCredit));
+            when(productionService.getProductionById(anyInt())).thenReturn(testProduction);
+            when(personService.getPersonById(anyInt())).thenThrow(new DatabaseException(""));
+            // Act & Assert
+            assertThrows(DatabaseException.class, () -> {
+                creditService.updateCredit(1, testCreditRequest);
+            });
+        }
+
     }
 }
