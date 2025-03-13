@@ -521,6 +521,18 @@ public class CreditControllerTest {
                     .andExpect(status().isBadRequest());
         }
 
+        @Test
+        void testCreditServiceMethodIsCalled() throws Exception {
+            // Arrange
+            // Act
+            mockMvc.perform(patch("/credits/1")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(requestJson)));
+            // Assert
+            verify(creditService, times(1)).updateCredit(anyInt(), any());
+
+        }
+
     }
 
 }

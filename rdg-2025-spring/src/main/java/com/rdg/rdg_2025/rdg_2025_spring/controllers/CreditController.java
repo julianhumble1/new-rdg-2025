@@ -54,6 +54,9 @@ public class CreditController {
     @PatchMapping("/{creditId}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> updateCredit(@PathVariable int creditId, @Valid @RequestBody CreditRequest creditRequest) {
+
+        creditService.updateCredit(creditId, creditRequest);
+
         return ResponseEntity.ok("");
 
     }
