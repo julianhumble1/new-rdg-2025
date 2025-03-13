@@ -338,5 +338,17 @@ public class CreditServiceTest {
             });
         }
 
+        @Test
+        void testNoPersonIdProvidedThenNoServiceCallMade() {
+            // Arrange
+            testCreditRequest.setPersonId(0);
+            when(creditRepository.findById(1)).thenReturn(Optional.of(testCredit));
+            when(productionService.getProductionById(anyInt())).thenReturn(testProduction);
+            // Act
+            creditService.updateCredit(1, testCreditRequest);
+            // Assert
+            verify(personService, never()).getPersonById(anyInt());
+        }
+
     }
 }
