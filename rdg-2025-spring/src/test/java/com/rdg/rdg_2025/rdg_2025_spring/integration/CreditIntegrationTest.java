@@ -464,8 +464,20 @@ public class CreditIntegrationTest {
             // Act & Assert
             mockMvc.perform(get("/credits/" + testCreditId))
                     .andExpect(status().isOk());
+        }
 
-
+        @Test
+        void testSuccessfulGetRespondsExpectedJson() throws Exception {
+            // Arrange
+            // Act & Assert
+            mockMvc.perform(get("/credits/" + testCreditId))
+                    .andExpect(jsonPath("$.credit.name").value("Test Credit"))
+                    .andExpect(jsonPath("$.credit.type").value("ACTOR"))
+                    .andExpect(jsonPath("$.credit.summary").value("Test Summary"))
+                    .andExpect(jsonPath("$.credit.person.firstName").value("Test First Name"))
+                    .andExpect(jsonPath("$.credit.production.name").value("Test Production"))
+                    .andExpect(jsonPath("$.credit.createdAt").isNotEmpty())
+                    .andExpect(jsonPath("$.credit.updatedAt").isNotEmpty());
         }
 
     }
