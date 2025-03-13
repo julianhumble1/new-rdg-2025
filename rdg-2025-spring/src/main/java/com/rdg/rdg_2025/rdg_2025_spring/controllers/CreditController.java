@@ -56,14 +56,14 @@ public class CreditController {
     public ResponseEntity<?> updateCredit(@PathVariable int creditId, @Valid @RequestBody CreditRequest creditRequest) {
 
         try {
-            creditService.updateCredit(creditId, creditRequest);
+            Credit credit = creditService.updateCredit(creditId, creditRequest);
+            return ResponseEntity.ok(new CreditResponse(credit));
         } catch (DatabaseException ex) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
         } catch (EntityNotFoundException ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
         }
 
-        return ResponseEntity.ok("");
 
     }
 }
