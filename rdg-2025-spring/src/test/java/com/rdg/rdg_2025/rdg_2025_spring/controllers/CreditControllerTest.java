@@ -545,6 +545,18 @@ public class CreditControllerTest {
 
         }
 
+        @Test
+        void testServiceEntityNotFoundExceptionResponds404() throws Exception {
+            // Arrange
+            when(creditService.updateCredit(anyInt(), any())).thenThrow(new EntityNotFoundException(""));
+            // Act & Assert
+            mockMvc.perform(patch("/credits/1")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(requestJson)))
+                    .andExpect(status().isNotFound());
+
+        }
+
     }
 
 }

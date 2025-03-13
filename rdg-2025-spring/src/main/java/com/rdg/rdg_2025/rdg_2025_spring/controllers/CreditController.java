@@ -59,6 +59,8 @@ public class CreditController {
             creditService.updateCredit(creditId, creditRequest);
         } catch (DatabaseException ex) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
+        } catch (EntityNotFoundException ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
         }
 
         return ResponseEntity.ok("");
