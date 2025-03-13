@@ -97,7 +97,7 @@ const PersonPage = () => {
                     <DetailedPersonHighlight personData={personData} setEditMode={setEditMode} handleDelete={handleDelete} />)
                 }
             </div>
-            <CreditsTabs actingCredits={actingCredits} musicianCredits={musicianCredits} producerCredits={producerCredits} />
+            <CreditsTabs actingCredits={actingCredits} musicianCredits={musicianCredits} producerCredits={producerCredits} creditsParent={"person"}/>
         </div>
     )
 }

@@ -1,20 +1,22 @@
-import { useEffect, useState } from "react"
-
+import { useEffect, useMemo, useState } from "react"
+import { Link, Navigate, useNavigate, useParams } from "react-router-dom"
+import CreditService from "../../services/CreditService.js"
 import SuccessMessage from "../modals/SuccessMessage.jsx"
 import ErrorMessage from "../modals/ErrorMessage.jsx"
-import Select from "react-select"
 import { Label, Textarea, TextInput } from "flowbite-react"
+import Select from "react-select"
 import FetchValueOptionsHelper from "../../utils/FetchValueOptionsHelper.js"
-import { Link } from "react-router-dom"
-import CreditService from "../../services/CreditService.js"
 
-const NewCreditForm = () => {
+const EditCreditForm = () => {
 
-    const typeOptions = [
+    const creditId = useParams().id
+    const navigate = useNavigate()
+
+    const typeOptions = useMemo(() => [
         { value: "ACTOR", label: "Acting" },
         { value: "MUSICIAN", label: "Musician" },
         { value: "PRODUCER", label: "Producing" }
-    ]
+    ], [])
     const [productionOptions, setProductionOptions] = useState([])
     const [personOptions, setPersonOptions] = useState([])
     
@@ -22,35 +24,50 @@ const NewCreditForm = () => {
     const [errorMessage, setErrorMessage] = useState("")
 
     const [name, setName] = useState("")
-    const [type, setType] = useState(typeOptions[0])
+    const [type, setType] = useState(null)
     const [production, setProduction] = useState(null)
     const [person, setPerson] = useState(null)
     const [summary, setSummary] = useState("")
 
+    const setOptions = async () => {
+        setProductionOptions(await FetchValueOptionsHelper.fetchProductionOptions())
+        setPersonOptions(await FetchValueOptionsHelper.fetchPersonOptions())
+    }
+
     useEffect(() => {
-        const setOptions = async () => {
-            setProductionOptions(await FetchValueOptionsHelper.fetchProductionOptions())
-            setPersonOptions(await FetchValueOptionsHelper.fetchPersonOptions())
+        const fetchCreditData = async (creditId) => {
+            const response = await CreditService.getCreditById(creditId);
+            console.log(response)
+            setName(response.data.credit.name)
+            for (let i = 0; i < 3; i++) {
+                if (response.data.credit.type === typeOptions[i].value) {
+                    setType(typeOptions[i])
+                }
+            }
+            setProduction({value: response.data.credit.production.id, label: response.data.credit.production.name})
+            response.data.credit.person &&
+                setPerson({ value: response.data.credit.person.id, label: `${response.data.credit.person.firstName} ${response.data.credit.person.lastName}` })
+            setSummary(response.data.credit.summary)
         }
+
         try {
             setOptions()
+            fetchCreditData(creditId)
         } catch (e) {
             setErrorMessage(e.message)
         }
-    }, [])
+    }, [creditId, typeOptions])
 
     const handleSubmit = async (event) => {
         event.preventDefault()
         try {
-            const response = await CreditService.addNewCredit(
-                name, type.value, production.value, person ? person.value : 0, summary
-            )
-            setSuccessMessage(`Successfully added ${response.data.credit.name} for ${response.data.credit.production.name}!` )
+            console.log(creditId)
+            const response = await CreditService.updateCredit(creditId, name, type.value, production.value, person.value, summary)
+            navigate(`/productions/${response.data.credit.production.id}`)
         } catch (e) {
             setErrorMessage(e.message)
         }
     }
-
 
     return (
         <div className="bg-sky-900 bg-opacity-35 lg:w-1/2 md:w-2/3 rounded p-4 m-2 flex flex-col gap-2 shadow-md">
@@ -67,7 +84,7 @@ const NewCreditForm = () => {
                     <div className="mb-2 block italic">
                         <Label value="Type (required)" />
                     </div>
-                    <Select options={typeOptions} onChange={setType} required className="w-full text-sm" defaultValue={type} styles={{control: (baseStyles) => ({...baseStyles, borderRadius: 8, padding: 1 })}}/>
+                    <Select options={typeOptions} onChange={setType} required className="w-full text-sm" value={type} styles={{control: (baseStyles) => ({...baseStyles, borderRadius: 8, padding: 1 })}}/>
                 </div>
                 <div>
                     <div className="mb-2 block">
@@ -101,4 +118,4 @@ const NewCreditForm = () => {
     )
 }
 
-export default NewCreditForm
+export default EditCreditForm

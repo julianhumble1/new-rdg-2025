@@ -125,7 +125,7 @@ const ProductionPage = () => {
                 }
             </div>
 
-            <CreditsTabs actingCredits={actingCredits} musicianCredits={musicianCredits} producerCredits={producerCredits} />
+            <CreditsTabs actingCredits={actingCredits} musicianCredits={musicianCredits} producerCredits={producerCredits} creditsParent={"production"} />
         
         </div>
     )

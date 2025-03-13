@@ -1,12 +1,14 @@
 import { Table } from "flowbite-react"
-import { Link } from "react-router-dom"
 import CreditRow from "./CreditRow.jsx"
+import Cookies from "js-cookie"
 
 const CreditsTable = ({ credits }) => {
     
     if (credits.length > 0) {
 
         const creditType = credits[0].type
+
+        const role = Cookies.get("role")
 
         return (
             <Table hoverable className='border overflow-auto max-w-screen'>
@@ -24,7 +26,9 @@ const CreditsTable = ({ credits }) => {
                     </Table.HeadCell>
                     <Table.HeadCell>Played By</Table.HeadCell>
                     <Table.HeadCell>Production</Table.HeadCell>
-                    <Table.HeadCell>Summary</Table.HeadCell>
+                    {role === "ROLE_ADMIN" && 
+                        <Table.HeadCell>Actions</Table.HeadCell>
+                    }
                 </Table.Head>
                 <Table.Body className="divide-y">
                     {credits.map((credit, index) => (
