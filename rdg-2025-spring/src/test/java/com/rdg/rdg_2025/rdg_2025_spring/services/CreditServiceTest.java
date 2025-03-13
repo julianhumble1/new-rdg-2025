@@ -259,5 +259,15 @@ public class CreditServiceTest {
             verify(creditRepository, times(1)).findById(1);
         }
 
+        @Test
+        void testFindCreditDataAccessExceptionThrowsDatabaseException() {
+            // Arrange
+            when(creditRepository.findById(1)).thenThrow(new DataAccessException("") {});
+            // Act & Assert
+            assertThrows(DatabaseException.class, () -> {
+                creditService.updateCredit(1, testCreditRequest);
+            });
+        }
+
     }
 }
