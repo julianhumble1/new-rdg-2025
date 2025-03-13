@@ -19,7 +19,6 @@ import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.parameters.P;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
@@ -28,8 +27,7 @@ import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
@@ -496,6 +494,132 @@ public class CreditIntegrationTest {
             mockMvc.perform(get("/credits/notanint" ))
                     .andExpect(status().isBadRequest());
         }
+
+    }
+
+    @Nested
+    @DisplayName("PATCH update credit integration tests")
+    class UpdateCreditIntegrationTests {
+
+        private Production testProduction1;
+        private int testProduction1Id;
+        private Production testProduction2;
+        private int testProduction2Id;
+
+        private Person testPerson1;
+        private int testPerson1Id;
+        private Person testPerson2;
+        private int testPerson2Id;
+
+        private Credit existingCredit;
+        private int existingCreditId;
+
+        @Autowired
+        private ProductionRepository productionRepository;
+
+        @Autowired
+        private PersonRepository personRepository;
+
+        @BeforeEach
+        void setup() {
+            testProduction1 = new Production(
+                    "Test Production",
+                    null,
+                    "Test Author",
+                    "Test Description",
+                    LocalDateTime.now(),
+                    false,
+                    false,
+                    "Test File String"
+            );
+            productionRepository.save(testProduction1);
+            testProduction2 = new Production(
+                    "Another Test Production",
+                    null,
+                    "Test Author",
+                    "Test Description",
+                    LocalDateTime.now(),
+                    false,
+                    false,
+                    "Test File String"
+            );
+            productionRepository.save(testProduction2);
+
+            testProduction1Id = testProduction1.getId();
+            testProduction2Id = testProduction2.getId();
+
+            testPerson1 = new Person(
+                    "Test First Name",
+                    "Test Last Name",
+                    "Test Summary",
+                    "01111 111111",
+                    "07111 111111",
+                    "Test Street",
+                    "Test Town",
+                    "Test Postcode"
+            );
+            personRepository.save(testPerson1);
+            testPerson2 = new Person(
+                    "Another Test First Name",
+                    "Test Last Name",
+                    "Test Summary",
+                    "01111 111111",
+                    "07111 111111",
+                    "Test Street",
+                    "Test Town",
+                    "Test Postcode"
+            );
+            personRepository.save(testPerson2);
+
+            testPerson1Id = testPerson1.getId();
+            testPerson2Id = testPerson2.getId();
+
+            existingCredit = new Credit(
+                    "Test Credit",
+                    CreditType.ACTOR,
+                    testPerson1,
+                    testProduction1,
+                    "Test Summary"
+            );
+            creditRepository.save(existingCredit);
+            existingCreditId = existingCredit.getId();
+
+            requestJson = objectMapper.createObjectNode();
+            requestJson.put("name", "Updated Test Credit");
+            requestJson.put("type", "MUSICIAN");
+            requestJson.put("productionId", testProduction2Id);
+            requestJson.put("personId", testPerson2Id);
+            requestJson.put("summary", "Updated Test Summary");
+        }
+
+        @Test
+        void testSuccessfulUpdateResponds200() throws Exception {
+            // Arrange
+            // Act
+            mockMvc.perform(patch("/credits/" + existingCreditId)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .header("Authorization", adminToken)
+                    .content(objectMapper.writeValueAsString(requestJson)))
+                    .andExpect(status().isOk());
+        }
+
+        @Test
+        void testSuccessfulUpdateRespondsExpectedJSON() throws Exception {
+            // Arrange
+            // Act
+            mockMvc.perform(patch("/credits/" + existingCreditId)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", adminToken)
+                            .content(objectMapper.writeValueAsString(requestJson)))
+                    .andExpect(jsonPath("$.credit.name").value("Updated Test Credit"))
+                    .andExpect(jsonPath("$.credit.type").value("MUSICIAN"))
+                    .andExpect(jsonPath("$.credit.summary").value("Updated Test Summary"))
+                    .andExpect(jsonPath("$.credit.person.firstName").value("Another Test First Name"))
+                    .andExpect(jsonPath("$.credit.production.name").value("Another Test Production"))
+                    .andExpect(jsonPath("$.credit.createdAt").isNotEmpty())
+                    .andExpect(jsonPath("$.credit.updatedAt").isNotEmpty());
+        }
+
 
     }
 }
