@@ -557,6 +557,18 @@ public class CreditControllerTest {
 
         }
 
+        @Test
+        void testSuccessfulUpdateResponds200() throws Exception {
+            // Arrange
+            when(creditService.updateCredit(anyInt(), any())).thenReturn(testCredit);
+            // Act & Assert
+            mockMvc.perform(patch("/credits/1")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(requestJson)))
+                    .andExpect(status().isOk());
+
+        }
+
     }
 
 }
