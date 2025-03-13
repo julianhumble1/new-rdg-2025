@@ -366,6 +366,15 @@ public class CreditControllerTest {
                     .andExpect(status().isInternalServerError());
         }
 
+        @Test
+        void testSuccessfulGetResponds200() throws Exception {
+            // Arrange
+            when(creditService.getCreditById(1)).thenReturn(testCredit);
+            // Act & Assert
+            mockMvc.perform(get("/credits/1"))
+                    .andExpect(status().isOk());
+        }
+
     }
 
 }
