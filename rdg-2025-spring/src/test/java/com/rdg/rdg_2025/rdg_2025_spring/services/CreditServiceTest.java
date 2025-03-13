@@ -438,5 +438,18 @@ public class CreditServiceTest {
             });
         }
 
+        @Test
+        void testReturnsExpectedCreditObject() {
+            // Arrange
+            when(creditRepository.findById(1)).thenReturn(Optional.of(testCredit));
+            when(productionService.getProductionById(anyInt())).thenReturn(testProduction);
+            when(personService.getPersonById(anyInt())).thenReturn(testPerson);
+            when(creditRepository.save(any())).thenReturn(testCredit);
+            // Act
+            Credit result = creditService.updateCredit(1, testCreditRequest);
+            // Assert
+            assertEquals(testCredit, result);
+        }
+
     }
 }
