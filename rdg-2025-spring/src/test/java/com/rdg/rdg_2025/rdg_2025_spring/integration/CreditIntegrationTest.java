@@ -480,5 +480,14 @@ public class CreditIntegrationTest {
                     .andExpect(jsonPath("$.credit.updatedAt").isNotEmpty());
         }
 
+        @Test
+        void testNonExistentCreditIdResponds404() throws Exception {
+            // Arrange
+            assertFalse(creditRepository.existsById(testCreditId + 1));
+            // Act & Assert
+            mockMvc.perform(get("/credits/" + (testCreditId + 1)))
+                    .andExpect(status().isNotFound());
+        }
+
     }
 }
