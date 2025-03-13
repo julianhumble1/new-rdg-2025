@@ -1,5 +1,6 @@
 package com.rdg.rdg_2025.rdg_2025_spring.controllers;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.rdg.rdg_2025.rdg_2025_spring.exception.DatabaseException;
@@ -24,8 +25,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(CreditController.class)
@@ -382,6 +382,33 @@ public class CreditControllerTest {
             // Act & Assert
             mockMvc.perform(get("/credits/1"))
                     .andExpect(jsonPath("$.credit.name").value("Test Credit"));
+        }
+
+    }
+
+    @Nested
+    @DisplayName("updateCredit controller tests")
+    class UpdateCreditControllerTests {
+
+        @BeforeEach
+        void setup() {
+            requestJson = objectMapper.createObjectNode();
+            requestJson.put("name", "Updated Test Credit");
+            requestJson.put("type", "MUSICIAN");
+            requestJson.put("productionId", 2);
+            requestJson.put("personId", 2);
+            requestJson.put("summary", "Updated Test Summary");
+        }
+
+
+        @Test
+        void testCreditIdNotIntResponds400() throws Exception {
+            // Arrange
+            // Act & Assert
+            mockMvc.perform(patch("/credits/notanint")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(requestJson)))
+                    .andExpect(status().isBadRequest());
         }
 
     }

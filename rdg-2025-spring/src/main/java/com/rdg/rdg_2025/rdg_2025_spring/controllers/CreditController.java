@@ -50,4 +50,11 @@ public class CreditController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
         }
     }
+
+    @PatchMapping("/{creditId}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> updateCredit(@PathVariable int creditId, @Valid @RequestBody CreditRequest creditRequest) {
+        return ResponseEntity.ok("");
+
+    }
 }
