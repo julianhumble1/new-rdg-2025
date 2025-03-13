@@ -9,6 +9,7 @@ import { format } from "date-fns";
 import ProductionHighlight from "./ProductionHighlight.jsx";
 import PerformancesTable from "../performances/PerformancesTable.jsx";
 import PerformanceService from "../../services/PerformanceService.js";
+import CreditsTabs from "../credits/CreditsTabs.jsx";
 
 const ProductionPage = () => {
 
@@ -18,6 +19,10 @@ const ProductionPage = () => {
 
     const [productionData, setProductionData] = useState(null);
     const [performances, setPerformances] = useState([])
+
+    const [actingCredits, setActingCredits] = useState([])
+    const [musicianCredits, setMusicianCredits] = useState([])
+    const [producerCredits, setProducerCredits] = useState([])
 
     const [editMode, setEditMode] = useState(searchParams.get("edit"))
 
@@ -33,6 +38,9 @@ const ProductionPage = () => {
             const response = await ProductionService.getProductionById(productionId);
             setProductionData(response.data.production)
             setPerformances(response.data.performances)
+            setActingCredits(response.data.actingCredits)
+            setMusicianCredits(response.data.musicianCredits)
+            setProducerCredits(response.data.producerCredits)
         } catch (e) {
             setErrorMessage(e.message)
         }
@@ -116,6 +124,8 @@ const ProductionPage = () => {
                     <EditProductionForm productionData={productionData} handleEdit={handleEdit} setEditMode={setEditMode} />
                 }
             </div>
+
+            <CreditsTabs actingCredits={actingCredits} musicianCredits={musicianCredits} producerCredits={producerCredits} />
         
         </div>
     )

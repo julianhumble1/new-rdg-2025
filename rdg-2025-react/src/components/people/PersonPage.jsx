@@ -10,6 +10,7 @@ import ConfirmDeleteModal from "../modals/ConfirmDeleteModal.jsx"
 import { Tabs } from "flowbite-react"
 import { FilmIcon, MusicalNoteIcon, ScaleIcon } from "@heroicons/react/16/solid"
 import CreditsTable from "../credits/CreditsTable.jsx"
+import CreditsTabs from "../credits/CreditsTabs.jsx"
 
 const PersonPage = () => {
 
@@ -96,35 +97,7 @@ const PersonPage = () => {
                     <DetailedPersonHighlight personData={personData} setEditMode={setEditMode} handleDelete={handleDelete} />)
                 }
             </div>
-            <Tabs variant="underline" className="m-3">
-                <Tabs.Item active title="Acting" icon={ScaleIcon}>
-                    {actingCredits.length > 0 ?
-                        <div className="m-2 overflow-auto">
-                            <CreditsTable credits={actingCredits} />
-                        </div>
-                        :
-                        <div className="text-md font-bold ml-3">No acting credits</div>
-                    }
-                </Tabs.Item>
-                <Tabs.Item active title="Musician" icon={MusicalNoteIcon}>
-                    {musicianCredits.length > 0 ?
-                        <div className="m-2 overflow-auto">
-                            <CreditsTable credits={musicianCredits} />
-                        </div>
-                        :
-                        <div className="text-md font-bold ml-3">No musician credits</div>
-                    }
-                </Tabs.Item>
-                <Tabs.Item active title="Producer" icon={FilmIcon}>
-                    {producerCredits.length > 0 ?
-                        <div className="m-2 overflow-auto">
-                            <CreditsTable credits={producerCredits} />
-                        </div>
-                        :
-                        <div className="text-md font-bold ml-3">No producing credits</div>
-                    }
-                </Tabs.Item>
-            </Tabs>
+            <CreditsTabs actingCredits={actingCredits} musicianCredits={musicianCredits} producerCredits={producerCredits} />
         </div>
     )
 }
