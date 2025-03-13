@@ -489,5 +489,13 @@ public class CreditIntegrationTest {
                     .andExpect(status().isNotFound());
         }
 
+        @Test
+        void testCreditIdNotIntResponds400() throws Exception {
+            // Arrange
+            // Act & Assert
+            mockMvc.perform(get("/credits/notanint" ))
+                    .andExpect(status().isBadRequest());
+        }
+
     }
 }
