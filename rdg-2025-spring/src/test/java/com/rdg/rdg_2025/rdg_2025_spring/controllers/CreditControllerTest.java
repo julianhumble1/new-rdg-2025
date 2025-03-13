@@ -341,6 +341,17 @@ public class CreditControllerTest {
 
         }
 
+        @Test
+        void testServiceMethodIsCalled() throws Exception {
+            // Arrange
+            when(creditService.getCreditById(1)).thenReturn(testCredit);
+            // Act
+            mockMvc.perform(get("/credits/1"));
+            // Assert
+            verify(creditService, times(1)).getCreditById(1);
+
+        }
+
     }
 
 }
