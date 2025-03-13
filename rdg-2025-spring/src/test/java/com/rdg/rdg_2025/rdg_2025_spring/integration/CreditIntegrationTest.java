@@ -27,6 +27,8 @@ import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -800,6 +802,19 @@ public class CreditIntegrationTest {
                             .header("Authorization", adminToken)
                             .content(objectMapper.writeValueAsString(requestJson)))
                     .andExpect(status().isBadRequest());
+        }
+
+        @Test
+        void testSummaryAndPersonIdEmptyResponds200() throws Exception {
+            // Arrange
+            requestJson.put("summary", "");
+            requestJson.put("personId", "");
+            // Act & Assert
+            mockMvc.perform(patch("/credits/" + existingCreditId)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", adminToken)
+                            .content(objectMapper.writeValueAsString(requestJson)))
+                    .andExpect(status().isOk());
         }
 
 
