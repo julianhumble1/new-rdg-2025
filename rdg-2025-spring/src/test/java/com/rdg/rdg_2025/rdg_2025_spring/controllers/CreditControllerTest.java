@@ -25,6 +25,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -323,6 +324,22 @@ public class CreditControllerTest {
                     .andExpect(status().isCreated());
         }
 
+
+    }
+
+    @Nested
+    @DisplayName("getCreditById controller tests")
+    class GetCreditByIdControllerTests {
+
+        @Test
+        void testCreditIdNotIntResponds400() throws Exception {
+            // Arrange
+            // Act & Assert
+            mockMvc.perform(get("/credits/notanint"))
+                    .andExpect(status().isBadRequest());
+
+
+        }
 
     }
 

@@ -39,4 +39,9 @@ public class CreditController {
         }
 
     }
+
+    @GetMapping("/{creditId}")
+    public ResponseEntity<?> getCreditById(@PathVariable int creditId) {
+        return ResponseEntity.ok("");
+    }
 }
