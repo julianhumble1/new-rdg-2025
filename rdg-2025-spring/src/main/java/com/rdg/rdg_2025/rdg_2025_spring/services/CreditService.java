@@ -66,6 +66,13 @@ public class CreditService {
         deleteCreditInDatabase(credit);
     }
 
+    // ADDITIONAL PUBLIC METHODS
+
+    public void setAssociatedPersonToNull(Credit credit) {
+        credit.setPerson(null);
+        saveCreditToDatabase(credit);
+    }
+
     // PRIVATE HELPER METHODS
 
     private Production retrieveProductionFromService(int productionId) {

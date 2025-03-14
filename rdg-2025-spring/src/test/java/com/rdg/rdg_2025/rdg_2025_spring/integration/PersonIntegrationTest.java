@@ -4,10 +4,11 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Person;
+import com.rdg.rdg_2025.rdg_2025_spring.models.Production;
 import com.rdg.rdg_2025.rdg_2025_spring.models.auth.User;
-import com.rdg.rdg_2025.rdg_2025_spring.repository.PersonRepository;
-import com.rdg.rdg_2025.rdg_2025_spring.repository.RoleRepository;
-import com.rdg.rdg_2025.rdg_2025_spring.repository.UserRepository;
+import com.rdg.rdg_2025.rdg_2025_spring.models.credit.Credit;
+import com.rdg.rdg_2025.rdg_2025_spring.models.credit.CreditType;
+import com.rdg.rdg_2025.rdg_2025_spring.repository.*;
 import com.rdg.rdg_2025.rdg_2025_spring.security.jwt.JwtUtils;
 import com.rdg.rdg_2025.rdg_2025_spring.utils.AuthTestUtils;
 import jakarta.transaction.Transactional;
@@ -23,6 +24,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -419,6 +424,12 @@ public class PersonIntegrationTest {
         private Person testPerson;
         private int testPersonId;
 
+        @Autowired
+        private ProductionRepository productionRepository;
+
+        @Autowired
+        private CreditRepository creditRepository;
+
         @BeforeEach
         void setup() {
             testPerson = new Person(
@@ -499,6 +510,45 @@ public class PersonIntegrationTest {
                     .andExpect(status().isNoContent());
             // Assert
             assertFalse(personRepository.existsById(testPersonId));
+        }
+
+        @Test
+        void testAssociateCreditStillExistsFollowingDeletion() throws Exception {
+            // Arrange
+            Production testProduction = new Production(
+                    "Test Production",
+                    null,
+                    "Test Author",
+                    "Test Description",
+                    LocalDateTime.now(),
+                    false,
+                    false,
+                    "Test File String"
+            );
+            Credit testCredit = new Credit(
+                    "Test Credit",
+                    CreditType.ACTOR,
+                    testPerson,
+                    testProduction,
+                    "Test Summary"
+            );
+            List<Credit> creditList = new ArrayList<>();
+            creditList.add(testCredit);
+            testProduction.setCredits(creditList);
+            testPerson.setCredits(creditList);
+
+            creditRepository.save(testCredit);
+            productionRepository.save(testProduction);
+            personRepository.save(testPerson);
+
+            assertTrue(creditRepository.existsById(testCredit.getId()));
+            System.out.println(testCredit);
+            // Act
+            mockMvc.perform(delete("/people/" + testPersonId)
+                            .header("Authorization", adminToken))
+                    .andExpect(status().isNoContent());
+            // Assert
+            assertTrue(creditRepository.existsById(testCredit.getId()));
         }
 
 

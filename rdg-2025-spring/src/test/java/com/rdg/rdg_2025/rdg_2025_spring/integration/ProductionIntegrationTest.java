@@ -1056,9 +1056,18 @@ public class ProductionIntegrationTest {
         @Test
         void testAssociatedCreditIsDeletedFollowingDeletion() throws Exception {
             // Arrange
-            Person testPerson = new Person();
-            testPerson.setFirstName("Test First Name");
-            testPerson.setLastName("Test Last Name");
+            Person testPerson = new Person(
+                    "Test First Name",
+                    "Test Last Name",
+                    "Test Summary",
+                    "01111 111111",
+                    "07111 111111",
+                    "Test Street",
+                    "Test Town",
+                    "Test Postcode"
+            );
+
+
             Credit testCredit = new Credit(
                     "Test Credit",
                     CreditType.ACTOR,
@@ -1066,20 +1075,21 @@ public class ProductionIntegrationTest {
                     testProduction,
                     "Test Summary"
             );
+            creditRepository.save(testCredit);
             List<Credit> creditList = new ArrayList<>();
             creditList.add(testCredit);
             testPerson.setCredits(creditList);
+            personRepository.save(testPerson);
             testProduction.setCredits(creditList);
 
             productionRepository.save(testProduction);
-            personRepository.save(testPerson);
-            creditRepository.save(testCredit);
 
             assertTrue(creditRepository.existsById(testCredit.getId()));
             // Act
             mockMvc.perform(delete("/productions/" + testProductionId)
                     .header("Authorization", adminToken));
             // Assert
+            assertFalse(productionRepository.existsById(testProductionId));
             assertFalse(creditRepository.existsById(testCredit.getId()));
 
 

@@ -3,11 +3,13 @@ package com.rdg.rdg_2025.rdg_2025_spring.services;
 import com.rdg.rdg_2025.rdg_2025_spring.exception.DatabaseException;
 import com.rdg.rdg_2025.rdg_2025_spring.helpers.SlugUtils;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Person;
+import com.rdg.rdg_2025.rdg_2025_spring.models.credit.Credit;
 import com.rdg.rdg_2025.rdg_2025_spring.payload.request.person.PersonRequest;
 import com.rdg.rdg_2025.rdg_2025_spring.repository.PersonRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.PersistenceException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
@@ -21,6 +23,13 @@ public class PersonService {
 
     @Autowired
     private PersonRepository personRepository;
+
+    private CreditService creditService;
+
+    @Autowired
+    public PersonService(@Lazy  CreditService creditService) {
+        this.creditService = creditService;
+    }
 
     // CRUD METHODS
 
@@ -51,6 +60,7 @@ public class PersonService {
 
     public void deletePersonById(int personId) {
         Person person = getPersonById(personId);
+        setAssociatedCreditsPersonToNull(person);
         deletePersonInDatabase(person);
     }
 
@@ -96,6 +106,13 @@ public class PersonService {
         } catch (DataAccessException | PersistenceException ex) {
             throw new DatabaseException(ex.getMessage(), ex);
         }
+    }
+
+    private void setAssociatedCreditsPersonToNull(Person person) {
+        List<Credit> creditList = person.getCredits();
+        creditList.forEach((credit -> {
+            creditService.setAssociatedPersonToNull(credit);
+        }));
     }
 
 }

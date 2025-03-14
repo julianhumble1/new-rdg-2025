@@ -14,6 +14,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
+import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -31,8 +32,16 @@ public class PersonServiceTest {
     @InjectMocks
     private PersonService personService;
 
+    @InjectMocks
+    private CreditService creditService;
+
     @Mock
     private PersonRepository personRepository;
+
+    @BeforeEach
+    void setupMocks() {
+        MockitoAnnotations.openMocks(this);
+    }
 
     @Nested
     @DisplayName("addNewPerson service tests")

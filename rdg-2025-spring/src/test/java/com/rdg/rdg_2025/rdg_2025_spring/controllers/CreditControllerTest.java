@@ -18,6 +18,7 @@ import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.parameters.P;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -687,6 +688,7 @@ public class CreditControllerTest {
         @Test
         void testSuccessfulDeleteResponds204() throws Exception{
             // Arrange
+            Production production = new Production();
             // Act & Assert
             mockMvc.perform(delete("/credits/1"))
                     .andExpect(status().isNoContent());

@@ -17,7 +17,7 @@ import java.util.List;
 
 @Entity
 @Table(name="productions")
-@Getter @Setter @NoArgsConstructor @ToString
+@Getter @Setter @NoArgsConstructor @ToString(exclude = "credits")
 public class Production {
 
     @Id
@@ -58,7 +58,7 @@ public class Production {
     @JsonBackReference
     private List<Performance> performances = new ArrayList<>();
 
-    @OneToMany(mappedBy = "production")
+    @OneToMany(mappedBy = "production", cascade = CascadeType.REMOVE)
     @JsonBackReference
     private List<Credit> credits = new ArrayList<>();
 
