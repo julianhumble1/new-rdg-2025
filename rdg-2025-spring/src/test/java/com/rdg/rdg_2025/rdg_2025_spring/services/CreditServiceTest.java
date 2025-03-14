@@ -480,6 +480,16 @@ public class CreditServiceTest {
             verify(creditRepository, times(1)).findById(anyInt());
         }
 
+        @Test
+        void testFindDataAccessExceptionThrowsDatabaseException() {
+            // Arrange
+            when(creditRepository.findById(anyInt())).thenThrow(new DataAccessException("") {});
+            // Act & Assert
+            assertThrows(DatabaseException.class, () -> {
+                creditService.deleteCreditById(1);
+            });
+        }
+
 
 
     }
