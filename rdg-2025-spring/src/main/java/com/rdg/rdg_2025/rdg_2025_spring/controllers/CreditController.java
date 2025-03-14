@@ -70,7 +70,7 @@ public class CreditController {
     public ResponseEntity<?> deleteCreditById(@PathVariable int creditId) {
         try {
             creditService.deleteCreditById(creditId);
-            return ResponseEntity.ok().body("");
+            return ResponseEntity.noContent().build();
         } catch (DatabaseException ex) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
         } catch (EntityNotFoundException ex) {

@@ -684,6 +684,14 @@ public class CreditControllerTest {
                     .andExpect(status().isNotFound());
         }
 
+        @Test
+        void testSuccessfulDeleteResponds204() throws Exception{
+            // Arrange
+            // Act & Assert
+            mockMvc.perform(delete("/credits/1"))
+                    .andExpect(status().isNoContent());
+        }
+
 
     }
 
