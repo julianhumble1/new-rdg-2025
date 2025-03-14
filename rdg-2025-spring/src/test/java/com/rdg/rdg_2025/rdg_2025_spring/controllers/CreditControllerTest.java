@@ -675,6 +675,15 @@ public class CreditControllerTest {
                     .andExpect(status().isInternalServerError());
         }
 
+        @Test
+        void testEntityNotFoundExceptionResponds404() throws Exception{
+            // Arrange
+            doThrow(new EntityNotFoundException("")).when(creditService).deleteCreditById(anyInt());
+            // Act & Assert
+            mockMvc.perform(delete("/credits/1"))
+                    .andExpect(status().isNotFound());
+        }
+
 
     }
 
