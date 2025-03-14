@@ -510,6 +510,17 @@ public class CreditServiceTest {
             verify(creditRepository, times(1)).delete(any());
         }
 
+        @Test
+        void testDeleteDataAccessExceptionThrowsDatabaseException() {
+            // Arrange
+            when(creditRepository.findById(anyInt())).thenReturn(Optional.of(testCredit));
+            doThrow(new DataAccessException("") {}).when(creditRepository).delete(any());
+            // Act & Assert
+            assertThrows(DatabaseException.class, () -> {
+                creditService.deleteCreditById(1);
+            });
+        }
+
 
 
     }

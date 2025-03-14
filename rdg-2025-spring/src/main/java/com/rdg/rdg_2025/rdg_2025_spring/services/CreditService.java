@@ -64,7 +64,11 @@ public class CreditService {
     public void deleteCreditById(int creditId) {
         Credit credit = getCreditById(creditId);
 
-        creditRepository.delete(credit);
+        try {
+            creditRepository.delete(credit);
+        } catch (DataAccessException ex) {
+            throw new DatabaseException(ex.getMessage(), ex);
+        }
     }
 
     // PRIVATE HELPER METHODS
