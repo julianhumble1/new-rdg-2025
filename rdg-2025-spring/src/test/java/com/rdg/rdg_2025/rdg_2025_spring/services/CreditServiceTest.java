@@ -490,6 +490,16 @@ public class CreditServiceTest {
             });
         }
 
+        @Test
+        void testNonExistentCreditIdThrowsEntityNotFoundException() {
+            // Arrange
+            when(creditRepository.findById(anyInt())).thenReturn(Optional.empty());
+            // Act & Assert
+            assertThrows(EntityNotFoundException.class, () -> {
+                creditService.deleteCreditById(1);
+            });
+        }
+
 
 
     }
