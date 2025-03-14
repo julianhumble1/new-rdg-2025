@@ -460,5 +460,17 @@ public class PerformanceServiceTest {
             verify(productionService, times(1)).getProductionById(1);
         }
 
+        @Test
+        void testRetrieveProductionDatabaseExceptionThrowsDatabaseException() {
+            // Arrange
+            when(performanceRepository.findById(1)).thenReturn(Optional.of(new Performance()));
+            when(venueService.getVenueById(1)).thenReturn(new Venue());
+            when(productionService.getProductionById(1)).thenThrow(new DatabaseException(""));
+            // Act & Assert
+            assertThrows(DatabaseException.class, () -> {
+                performanceService.updatePerformance(1, testPerformanceRequest);
+            });
+        }
+
     }
 }
