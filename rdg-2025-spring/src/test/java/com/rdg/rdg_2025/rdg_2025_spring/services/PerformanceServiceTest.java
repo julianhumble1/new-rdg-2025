@@ -20,6 +20,7 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.dao.DataAccessException;
+import org.springframework.security.core.parameters.P;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -483,6 +484,20 @@ public class PerformanceServiceTest {
                 performanceService.updatePerformance(1, testPerformanceRequest);
             });
         }
+
+        @Test
+        void testNoFestivalIdProvidedThenNoFestivalServiceCallMade() {
+            // Arrange
+            testPerformanceRequest.setFestivalId(0);
+            when(performanceRepository.findById(1)).thenReturn(Optional.of(new Performance()));
+            when(venueService.getVenueById(1)).thenReturn(new Venue());
+            when(productionService.getProductionById(1)).thenReturn(new Production());
+            // Act
+            performanceService.updatePerformance(1, testPerformanceRequest);
+            // Assert
+            verify(festivalService, never()).getFestivalById(anyInt());
+        }
+
 
     }
 }
