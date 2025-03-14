@@ -61,6 +61,10 @@ public class CreditService {
 
     }
 
+    public void deleteCreditById(int creditId) {
+        Credit credit = getCreditById(creditId);
+    }
+
     // PRIVATE HELPER METHODS
 
     private Production retrieveProductionFromService(int productionId) {

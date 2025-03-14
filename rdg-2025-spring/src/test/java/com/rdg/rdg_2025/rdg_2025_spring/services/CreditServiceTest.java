@@ -452,4 +452,35 @@ public class CreditServiceTest {
         }
 
     }
+
+    @Nested
+    @DisplayName("deleteCreditById service tests")
+    class DeleteCreditByIdServiceTests {
+
+        private Credit testCredit;
+
+        @BeforeEach
+        void setup() {
+            testCredit = new Credit(
+                    "Test Credit",
+                    CreditType.ACTOR,
+                    new Person(),
+                    new Production(),
+                    "Test Summary"
+            );
+        }
+
+        @Test
+        void testRepositoryFindMethodIsCalled() {
+            // Arrange
+            when(creditRepository.findById(anyInt())).thenReturn(Optional.of(testCredit));
+            // Act
+            creditService.deleteCreditById(1);
+            // Assert
+            verify(creditRepository, times(1)).findById(anyInt());
+        }
+
+
+
+    }
 }
