@@ -63,7 +63,11 @@ public class CreditController {
         } catch (EntityNotFoundException ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
         }
+    }
 
-
+    @DeleteMapping("/{creditId}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> deleteCreditById(@PathVariable int creditId) {
+        return ResponseEntity.ok().body("");
     }
 }

@@ -63,12 +63,7 @@ public class CreditService {
 
     public void deleteCreditById(int creditId) {
         Credit credit = getCreditById(creditId);
-
-        try {
-            creditRepository.delete(credit);
-        } catch (DataAccessException | PersistenceException ex) {
-            throw new DatabaseException(ex.getMessage(), ex);
-        }
+        deleteCreditInDatabase(credit);
     }
 
     // PRIVATE HELPER METHODS
@@ -113,8 +108,14 @@ public class CreditService {
             credit.setCreatedAt(LocalDateTime.now());
         }
         credit.setUpdatedAt(LocalDateTime.now());
+    }
 
-
+    private void deleteCreditInDatabase(Credit credit) {
+        try {
+            creditRepository.delete(credit);
+        } catch (DataAccessException | PersistenceException ex) {
+            throw new DatabaseException(ex.getMessage(), ex);
+        }
     }
 
 }

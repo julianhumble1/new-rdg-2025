@@ -645,4 +645,18 @@ public class CreditControllerTest {
 
     }
 
+    @Nested
+    @DisplayName("deleteCreditById controller tests")
+    class DeleteCreditByIdControllerTests {
+
+        @Test
+        void testCreditIdNotIntResponds400() throws Exception{
+            // Arrange
+            // Act & Assert
+            mockMvc.perform(delete("/credits/notanint"))
+                    .andExpect(status().isBadRequest());
+        }
+
+    }
+
 }
