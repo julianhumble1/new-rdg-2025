@@ -53,6 +53,12 @@ public class PerformanceService {
         deletePerformanceInDatabase(performance);
     }
 
+    public Performance updatePerformance(int performanceId, PerformanceRequest performanceRequest) {
+        Performance performance = getPerformanceById(performanceId);
+
+        return new Performance();
+    }
+
     // ADDITIONAL PUBLIC METHODS
 
     public void setPerformanceFestivalFieldToNull(Performance performance) {

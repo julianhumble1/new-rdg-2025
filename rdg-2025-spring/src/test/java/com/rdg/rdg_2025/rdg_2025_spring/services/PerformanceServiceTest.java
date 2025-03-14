@@ -231,7 +231,6 @@ public class PerformanceServiceTest {
 
     }
 
-
     @Nested
     @DisplayName("deletePerformanceById service tests")
     class DeletePerformanceByIdServiceTests {
@@ -366,4 +365,19 @@ public class PerformanceServiceTest {
 
     }
 
+    @Nested
+    @DisplayName("updatePerformance service tests")
+    class UpdatePerformanceServiceTests {
+
+        @Test
+        void testRepositoryFindMethodIsCalled() {
+            // Arrange
+            when(performanceRepository.findById(1)).thenReturn(Optional.of(new Performance()));
+            // Act
+            performanceService.updatePerformance(1, testPerformanceRequest);
+            // Assert
+            verify(performanceRepository, times(1)).findById(1);
+        }
+
+    }
 }
