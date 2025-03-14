@@ -68,7 +68,11 @@ public class CreditController {
     @DeleteMapping("/{creditId}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> deleteCreditById(@PathVariable int creditId) {
-        creditService.deleteCreditById(creditId);
-        return ResponseEntity.ok().body("");
+        try {
+            creditService.deleteCreditById(creditId);
+            return ResponseEntity.ok().body("");
+        } catch (DatabaseException ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
+        }
     }
 }

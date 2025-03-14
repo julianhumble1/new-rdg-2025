@@ -666,6 +666,16 @@ public class CreditControllerTest {
             verify(creditService, times(1)).deleteCreditById(1);
         }
 
+        @Test
+        void testDatabaseExceptionResponds500() throws Exception{
+            // Arrange
+            doThrow(new DatabaseException("")).when(creditService).deleteCreditById(anyInt());
+            // Act & Assert
+            mockMvc.perform(delete("/credits/1"))
+                    .andExpect(status().isInternalServerError());
+        }
+
+
     }
 
 }
