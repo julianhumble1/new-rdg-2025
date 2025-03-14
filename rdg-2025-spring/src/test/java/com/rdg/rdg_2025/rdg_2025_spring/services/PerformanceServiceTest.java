@@ -566,6 +566,20 @@ public class PerformanceServiceTest {
         }
 
         @Test
+        void testSaveDataAccessExceptionThrowsDatabaseException() {
+            // Arrange
+            when(performanceRepository.findById(1)).thenReturn(Optional.of(testPerformance));
+            when(venueService.getVenueById(anyInt())).thenReturn(new Venue());
+            when(productionService.getProductionById(1)).thenReturn(new Production());
+            when(festivalService.getFestivalById(1)).thenReturn(new Festival());
+            when(performanceRepository.save(any())).thenThrow(new DataAccessException("") {});
+            // Act & Assert
+            assertThrows(DatabaseException.class, () -> {
+                performanceService.updatePerformance(1, testPerformanceRequest);
+            });
+        }
+
+        @Test
         void testReturnsExpectedPerformanceObject() {
             // Arrange
             when(performanceRepository.findById(1)).thenReturn(Optional.of(testPerformance));
