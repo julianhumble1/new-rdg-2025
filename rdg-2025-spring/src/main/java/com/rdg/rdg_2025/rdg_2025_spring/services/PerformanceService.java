@@ -59,6 +59,14 @@ public class PerformanceService {
         return new Performance();
     }
 
+    public Performance getPerformanceById(int performanceId) {
+        try {
+            return performanceRepository.findById(performanceId).orElseThrow(() -> new EntityNotFoundException());
+        } catch (DataAccessException ex) {
+            throw new DatabaseException(ex.getMessage(), ex);
+        }
+    }
+
     // ADDITIONAL PUBLIC METHODS
 
     public void setPerformanceFestivalFieldToNull(Performance performance) {
@@ -137,14 +145,6 @@ public class PerformanceService {
         venueService.removePerformanceFromVenuePerformanceList(performance);
         festivalService.removePerformanceFromFestivalPerformanceList(performance);
 
-    }
-
-    private Performance getPerformanceById(int performanceId) {
-        try {
-            return performanceRepository.findById(performanceId).orElseThrow(() -> new EntityNotFoundException());
-        } catch (DataAccessException ex) {
-            throw new DatabaseException(ex.getMessage(), ex);
-        }
     }
 
     private void deletePerformanceInDatabase(Performance performance) {

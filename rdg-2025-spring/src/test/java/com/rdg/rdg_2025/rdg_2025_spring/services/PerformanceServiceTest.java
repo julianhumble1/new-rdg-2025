@@ -17,6 +17,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.dao.DataAccessException;
 
@@ -44,6 +45,7 @@ public class PerformanceServiceTest {
     FestivalService festivalService;
 
     @InjectMocks
+    @Spy
     PerformanceService performanceService;
 
     @BeforeEach
@@ -366,8 +368,8 @@ public class PerformanceServiceTest {
     }
 
     @Nested
-    @DisplayName("updatePerformance service tests")
-    class UpdatePerformanceServiceTests {
+    @DisplayName("getPerformanceById service tests")
+    class GetPerformanceByIdServiceTests {
 
         @Test
         void testRepositoryFindMethodIsCalled() {
@@ -377,6 +379,42 @@ public class PerformanceServiceTest {
             performanceService.updatePerformance(1, testPerformanceRequest);
             // Assert
             verify(performanceRepository, times(1)).findById(1);
+        }
+
+        @Test
+        void testDataAccessExceptionThrowsDatabaseException() {
+            // Arrange
+            when(performanceRepository.findById(1)).thenThrow(new DataAccessException("") {});
+            // Act & Assert
+            assertThrows(DatabaseException.class, () -> {
+                performanceService.getPerformanceById(1);
+            });
+        }
+
+        @Test
+        void testPerformanceDoesNotExistsThrowsEntityNotFoundException() {
+            // Arrange
+            when(performanceRepository.findById(1)).thenReturn(Optional.empty());
+            // Act & Assert
+            assertThrows(EntityNotFoundException.class, () -> {
+                performanceService.getPerformanceById(1);
+            });
+        }
+
+    }
+
+    @Nested
+    @DisplayName("updatePerformance service tests")
+    class UpdatePerformanceServiceTests {
+
+        @Test
+        void testGetPerformanceByIdIsCalled() {
+            // Arrange
+            when(performanceRepository.findById(1)).thenReturn(Optional.of(new Performance()));
+            // Act
+            performanceService.updatePerformance(1, testPerformanceRequest);
+            // Assert
+            verify(performanceService, times(1)).getPerformanceById(1);
         }
 
     }
