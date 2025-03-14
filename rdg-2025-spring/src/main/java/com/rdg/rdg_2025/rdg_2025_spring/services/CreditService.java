@@ -63,6 +63,8 @@ public class CreditService {
 
     public void deleteCreditById(int creditId) {
         Credit credit = getCreditById(creditId);
+
+        creditRepository.delete(credit);
     }
 
     // PRIVATE HELPER METHODS

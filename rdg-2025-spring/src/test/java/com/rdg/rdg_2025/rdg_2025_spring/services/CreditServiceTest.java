@@ -500,6 +500,16 @@ public class CreditServiceTest {
             });
         }
 
+        @Test
+        void testIfCreditExistsThenDeleteMethodIsCalled() {
+            // Arrange
+            when(creditRepository.findById(anyInt())).thenReturn(Optional.of(testCredit));
+            // Act
+            creditService.deleteCreditById(1);
+            // Assert
+            verify(creditRepository, times(1)).delete(any());
+        }
+
 
 
     }
