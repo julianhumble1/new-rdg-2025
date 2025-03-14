@@ -969,5 +969,17 @@ public class CreditIntegrationTest {
             assertTrue(personRepository.existsById(testPerson.getId()));
         }
 
+        @Test
+        void testAssociatedProductionStillExistsInDatabase() throws Exception {
+            // Arrange
+            assertTrue(productionRepository.existsById(testProduction.getId()));
+            // Act
+            mockMvc.perform(delete("/credits/" + existingCreditId)
+                            .header("Authorization", adminToken))
+                    .andExpect(status().isNoContent());
+            // Assert
+            assertTrue(productionRepository.existsById(testProduction.getId()));
+        }
+
     }
 }
