@@ -981,5 +981,15 @@ public class CreditIntegrationTest {
             assertTrue(productionRepository.existsById(testProduction.getId()));
         }
 
+        @Test
+        void testNonExistentCreditIdResponds404() throws Exception {
+            // Arrange
+            assertFalse(creditRepository.existsById(existingCreditId + 1));
+            // Act & Assert
+            mockMvc.perform(delete("/credits/" + (existingCreditId + 1))
+                            .header("Authorization", adminToken))
+                    .andExpect(status().isNotFound());
+        }
+
     }
 }
