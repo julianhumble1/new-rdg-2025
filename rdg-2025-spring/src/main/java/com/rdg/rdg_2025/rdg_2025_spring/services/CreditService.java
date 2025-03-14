@@ -66,7 +66,7 @@ public class CreditService {
 
         try {
             creditRepository.delete(credit);
-        } catch (DataAccessException ex) {
+        } catch (DataAccessException | PersistenceException ex) {
             throw new DatabaseException(ex.getMessage(), ex);
         }
     }

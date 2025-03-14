@@ -521,6 +521,17 @@ public class CreditServiceTest {
             });
         }
 
+        @Test
+        void testDeletePersistenceExceptionThrowsDatabaseException() {
+            // Arrange
+            when(creditRepository.findById(anyInt())).thenReturn(Optional.of(testCredit));
+            doThrow(new PersistenceException("")).when(creditRepository).delete(any());
+            // Act & Assert
+            assertThrows(DatabaseException.class, () -> {
+                creditService.deleteCreditById(1);
+            });
+        }
+
 
 
     }
