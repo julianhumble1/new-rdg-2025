@@ -57,6 +57,7 @@ public class PerformanceService {
         Performance performance = getPerformanceById(performanceId);
         Venue venue = retrieveVenueFromService(performanceRequest);
         Production production = retrieveProductionFromService(performanceRequest);
+        Festival festival = retrieveFestivalFromService(performanceRequest);
 
         return new Performance();
     }

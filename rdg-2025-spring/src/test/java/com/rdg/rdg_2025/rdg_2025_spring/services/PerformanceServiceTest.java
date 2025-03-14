@@ -498,6 +498,18 @@ public class PerformanceServiceTest {
             verify(festivalService, never()).getFestivalById(anyInt());
         }
 
+        @Test
+        void testFestivalIdProvidedThenNoFestivalServiceCallMade() {
+            // Arrange
+            when(performanceRepository.findById(1)).thenReturn(Optional.of(new Performance()));
+            when(venueService.getVenueById(1)).thenReturn(new Venue());
+            when(productionService.getProductionById(1)).thenReturn(new Production());
+            // Act
+            performanceService.updatePerformance(1, testPerformanceRequest);
+            // Assert
+            verify(festivalService, times(1)).getFestivalById(anyInt());
+        }
+
 
     }
 }
