@@ -1,9 +1,12 @@
 package com.rdg.rdg_2025.rdg_2025_spring.integration;
 
 import com.rdg.rdg_2025.rdg_2025_spring.models.Performance;
+import com.rdg.rdg_2025.rdg_2025_spring.models.Person;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Production;
 import com.rdg.rdg_2025.rdg_2025_spring.models.auth.User;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Venue;
+import com.rdg.rdg_2025.rdg_2025_spring.models.credit.Credit;
+import com.rdg.rdg_2025.rdg_2025_spring.models.credit.CreditType;
 import com.rdg.rdg_2025.rdg_2025_spring.repository.*;
 import com.rdg.rdg_2025.rdg_2025_spring.security.jwt.JwtUtils;
 import com.rdg.rdg_2025.rdg_2025_spring.utils.AuthTestUtils;
@@ -45,6 +48,12 @@ public class ProductionIntegrationTest {
 
     @Autowired
     private VenueRepository venueRepository;
+
+    @Autowired
+    private PersonRepository personRepository;
+
+    @Autowired
+    private CreditRepository creditRepository;
 
     private static User testAdmin;
     private static String adminToken;
@@ -1041,6 +1050,38 @@ public class ProductionIntegrationTest {
             mockMvc.perform(delete("/productions/" +  testProductionId)
                     .header("Authorization", userToken))
                     .andExpect(status().isForbidden());
+
+        }
+
+        @Test
+        void testAssociatedCreditIsDeletedFollowingDeletion() throws Exception {
+            // Arrange
+            Person testPerson = new Person();
+            testPerson.setFirstName("Test First Name");
+            testPerson.setLastName("Test Last Name");
+            Credit testCredit = new Credit(
+                    "Test Credit",
+                    CreditType.ACTOR,
+                    testPerson,
+                    testProduction,
+                    "Test Summary"
+            );
+            List<Credit> creditList = new ArrayList<>();
+            creditList.add(testCredit);
+            testPerson.setCredits(creditList);
+            testProduction.setCredits(creditList);
+
+            productionRepository.save(testProduction);
+            personRepository.save(testPerson);
+            creditRepository.save(testCredit);
+
+            assertTrue(creditRepository.existsById(testCredit.getId()));
+            // Act
+            mockMvc.perform(delete("/productions/" + testProductionId)
+                    .header("Authorization", adminToken));
+            // Assert
+            assertFalse(creditRepository.existsById(testCredit.getId()));
+
 
         }
 
