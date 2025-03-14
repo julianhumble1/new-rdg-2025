@@ -1000,5 +1000,14 @@ public class CreditIntegrationTest {
                     .andExpect(status().isBadRequest());
         }
 
+        @Test
+        void testUserTokenResponds403() throws Exception {
+            // Arrange
+            // Act & Assert
+            mockMvc.perform(delete("/credits/" + existingCreditId)
+                            .header("Authorization", userToken))
+                    .andExpect(status().isForbidden());
+        }
+
     }
 }
