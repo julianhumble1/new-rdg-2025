@@ -472,5 +472,17 @@ public class PerformanceServiceTest {
             });
         }
 
+        @Test
+        void testRetrieveProductionEntityNotFoundThrowsEntityNotFoundException() {
+            // Arrange
+            when(performanceRepository.findById(1)).thenReturn(Optional.of(new Performance()));
+            when(venueService.getVenueById(1)).thenReturn(new Venue());
+            when(productionService.getProductionById(1)).thenThrow(new EntityNotFoundException(""));
+            // Act & Assert
+            assertThrows(EntityNotFoundException.class, () -> {
+                performanceService.updatePerformance(1, testPerformanceRequest);
+            });
+        }
+
     }
 }
