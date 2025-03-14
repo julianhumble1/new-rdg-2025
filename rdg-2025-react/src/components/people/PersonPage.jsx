@@ -11,6 +11,7 @@ import { Tabs } from "flowbite-react"
 import { FilmIcon, MusicalNoteIcon, ScaleIcon } from "@heroicons/react/16/solid"
 import CreditsTable from "../credits/CreditsTable.jsx"
 import CreditsTabs from "../credits/CreditsTabs.jsx"
+import CreditService from "../../services/CreditService.js"
 
 const PersonPage = () => {
 
@@ -71,12 +72,23 @@ const PersonPage = () => {
     }
 
     const handleConfirmDelete = async () => {
-        try {
-            const response = await PersonService.deletePersonById(personId)
-            navigate("/people")
-        } catch (e) {
-            setErrorMessage(e.message)
-        }
+        if (itemToDelete.firstName != null) {
+            try {
+                const response = await PersonService.deletePersonById(personId)
+                navigate("/people")
+            } catch (e) {
+                setErrorMessage(e.message)
+            }
+        } else if (itemToDelete.type != null) {
+            try {
+                const response = await CreditService.deleteCreditById(itemToDelete.id)
+                fetchPersonData()
+                setSuccessMessage(`Successfully deleted credit.`)
+                setShowConfirmDelete(false)
+            } catch (e) {
+                setErrorMessage(e.message)
+            }
+        }   
     }
 
     return (
@@ -97,7 +109,7 @@ const PersonPage = () => {
                     <DetailedPersonHighlight personData={personData} setEditMode={setEditMode} handleDelete={handleDelete} />)
                 }
             </div>
-            <CreditsTabs actingCredits={actingCredits} musicianCredits={musicianCredits} producerCredits={producerCredits} creditsParent={"person"}/>
+            <CreditsTabs actingCredits={actingCredits} musicianCredits={musicianCredits} producerCredits={producerCredits} creditsParent={"person"} handleDelete={handleDelete}/>
         </div>
     )
 }

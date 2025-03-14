@@ -78,5 +78,26 @@ export default class CreditService {
         }
     }
 
+    static deleteCreditById = async (creditId) => {
+
+        const token = Cookies.get("token")
+        try {
+            const response = await axios.delete(`http://localhost:8080/credits/${creditId}`,{
+                    headers: {
+                        "Authorization": `Bearer ${token}`
+                    }
+            })
+            return response
+        } catch (e) {
+            if (e.response.status === 401 || e.response.status === 403) {
+                throw new Error("Failed to authenticate as administrator")
+            } else if (e.response.status === 500) {
+                throw new Error("Internal server error")
+            } else if (e.response.status === 404) {
+                throw new Error("No Credit with this id.")
+            }
+        }
+    }
+
 
 }

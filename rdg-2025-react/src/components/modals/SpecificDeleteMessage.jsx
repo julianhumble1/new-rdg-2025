@@ -11,7 +11,7 @@ const SpecificDeleteMessage = ({ itemToDelete }) => {
                 </>)
         } else if (itemToDelete.auditionDate != null) {
             setMessage(<>
-                    When deleting a production, any <strong>performances</strong> associated with the venue will also be deleted.
+                    When deleting a production, any <strong>performances</strong> and <strong>credits</strong> associated with the venue will also be deleted.
                 </>)
         } else if (itemToDelete.year != null) {
             setMessage(<>
@@ -24,6 +24,10 @@ const SpecificDeleteMessage = ({ itemToDelete }) => {
         } else if (itemToDelete.firstName != null) {
             setMessage(<>
                 When deleting a person, no other objects will be deleted.
+            </>)
+        } else if (itemToDelete.type != null) {
+            setMessage(<>
+                When deleting a credit, no other objects will be deleted.
             </>)
         }
 

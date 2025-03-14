@@ -2,7 +2,7 @@ import { Table } from "flowbite-react"
 import CreditRow from "./CreditRow.jsx"
 import Cookies from "js-cookie"
 
-const CreditsTable = ({ credits }) => {
+const CreditsTable = ({ credits, handleDelete }) => {
     
     if (credits.length > 0) {
 
@@ -32,7 +32,7 @@ const CreditsTable = ({ credits }) => {
                 </Table.Head>
                 <Table.Body className="divide-y">
                     {credits.map((credit, index) => (
-                        <CreditRow credit={credit} key={index} />
+                        <CreditRow credit={credit} key={index} handleDelete={handleDelete}/>
                     ))}
                 </Table.Body>
             </Table>

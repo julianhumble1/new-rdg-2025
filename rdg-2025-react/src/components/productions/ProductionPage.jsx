@@ -10,6 +10,7 @@ import ProductionHighlight from "./ProductionHighlight.jsx";
 import PerformancesTable from "../performances/PerformancesTable.jsx";
 import PerformanceService from "../../services/PerformanceService.js";
 import CreditsTabs from "../credits/CreditsTabs.jsx";
+import CreditService from "../../services/CreditService.js";
 
 const ProductionPage = () => {
 
@@ -62,13 +63,22 @@ const ProductionPage = () => {
                 await ProductionService.deleteProduction(item.id)
                 setShowConfirmDelete(false)
                 navigate("/productions")
-            } else {
+            } else if (item.time != null) {
                 await PerformanceService.deletePerformance(item.id)
                 setShowConfirmDelete(false)
                 setErrorMessage("")
                 setSuccessMessage("Successfully deleted performance")
                 fetchProductionData()
+            } else if (itemToDelete.type != null) {
+            try {
+                const response = await CreditService.deleteCreditById(item.id)
+                fetchProductionData()
+                setSuccessMessage(`Successfully deleted credit.`)
+                setShowConfirmDelete(false)
+            } catch (e) {
+                setErrorMessage(e.message)
             }
+        }  
         } catch (e) {
             setSuccessMessage("")
             setErrorMessage(e.message)
@@ -125,7 +135,7 @@ const ProductionPage = () => {
                 }
             </div>
 
-            <CreditsTabs actingCredits={actingCredits} musicianCredits={musicianCredits} producerCredits={producerCredits} creditsParent={"production"} />
+            <CreditsTabs actingCredits={actingCredits} musicianCredits={musicianCredits} producerCredits={producerCredits} creditsParent={"production"} handleDelete={handleDelete}/>
         
         </div>
     )
