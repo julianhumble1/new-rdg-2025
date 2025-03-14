@@ -552,6 +552,20 @@ public class PerformanceServiceTest {
         }
 
         @Test
+        void testPerformanceRepositorySaveMethodCalled() {
+            // Arrange
+            when(performanceRepository.findById(1)).thenReturn(Optional.of(testPerformance));
+            when(venueService.getVenueById(anyInt())).thenReturn(new Venue());
+            when(productionService.getProductionById(1)).thenReturn(new Production());
+            when(festivalService.getFestivalById(1)).thenReturn(new Festival());
+            when(performanceRepository.save(any())).thenReturn(testPerformance);
+            // Act
+            performanceService.updatePerformance(1, testPerformanceRequest);
+            // Assert
+            verify(performanceRepository, times(1)).save(any());
+        }
+
+        @Test
         void testReturnsExpectedPerformanceObject() {
             // Arrange
             when(performanceRepository.findById(1)).thenReturn(Optional.of(testPerformance));
