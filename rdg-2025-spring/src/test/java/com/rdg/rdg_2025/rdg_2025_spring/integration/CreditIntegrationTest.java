@@ -24,6 +24,8 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -874,6 +876,75 @@ public class CreditIntegrationTest {
                     .andExpect(status().isUnauthorized());
         }
 
+
+    }
+
+    @Nested
+    @DisplayName("DELETE delete credit by id integration tests")
+    class DeleteCreditByIdIntegrationTests {
+
+        private Credit existingCredit;
+        private int existingCreditId;
+
+        private Production testProduction;
+        private Person testPerson;
+
+        @Autowired
+        private ProductionRepository productionRepository;
+
+        @Autowired
+        private PersonRepository personRepository;
+
+        @BeforeEach
+        void setup() {
+            testProduction = new Production(
+                    "Test Production",
+                    null,
+                    "Test Author",
+                    "Test Description",
+                    LocalDateTime.now(),
+                    false,
+                    false,
+                    "Test File String"
+            );
+            testPerson = new Person(
+                    "Test First Name",
+                    "Test Last Name",
+                    "Test Summary",
+                    "01111 111111",
+                    "07111 111111",
+                    "Test Street",
+                    "Test Town",
+                    "Test Postcode"
+            );
+
+            existingCredit = new Credit(
+                    "Test Credit",
+                    CreditType.ACTOR,
+                    testPerson,
+                    testProduction,
+                    "Test Summary"
+            );
+            List<Credit> creditList = new ArrayList<>();
+            creditList.add(existingCredit);
+            testPerson.setCredits(creditList);
+            testProduction.setCredits(creditList);
+
+            personRepository.save(testPerson);
+            productionRepository.save(testProduction);
+            creditRepository.save(existingCredit);
+            existingCreditId = existingCredit.getId();
+        }
+
+        @Test
+        void testSuccessfulDeleteResponds204() throws Exception {
+            // Arrange
+            // Act & Assert
+            mockMvc.perform(delete("/credits/" + existingCreditId)
+                    .header("Authorization", adminToken))
+                    .andExpect(status().isNoContent());
+
+        }
 
     }
 }
