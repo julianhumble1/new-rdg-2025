@@ -438,5 +438,16 @@ public class PerformanceServiceTest {
             });
         }
 
+        @Test
+        void testVenueServiceEntityNotFoundExceptionThrowsEntityNotFoundException() {
+            // Arrange
+            when(performanceRepository.findById(1)).thenReturn(Optional.of(new Performance()));
+            when(venueService.getVenueById(1)).thenThrow(new EntityNotFoundException(""));
+            // Act & Assert
+            assertThrows(EntityNotFoundException.class, () -> {
+                performanceService.updatePerformance(1, testPerformanceRequest);
+            });
+        }
+
     }
 }
