@@ -657,6 +657,15 @@ public class CreditControllerTest {
                     .andExpect(status().isBadRequest());
         }
 
+        @Test
+        void testCreditServiceMethodIsCalled() throws Exception{
+            // Arrange
+            // Act
+            mockMvc.perform(delete("/credits/1"));
+            // Assert
+            verify(creditService, times(1)).deleteCreditById(1);
+        }
+
     }
 
 }

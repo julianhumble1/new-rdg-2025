@@ -68,6 +68,7 @@ public class CreditController {
     @DeleteMapping("/{creditId}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> deleteCreditById(@PathVariable int creditId) {
+        creditService.deleteCreditById(creditId);
         return ResponseEntity.ok().body("");
     }
 }
