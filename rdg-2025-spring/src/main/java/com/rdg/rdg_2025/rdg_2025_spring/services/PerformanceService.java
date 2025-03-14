@@ -55,6 +55,7 @@ public class PerformanceService {
 
     public Performance updatePerformance(int performanceId, PerformanceRequest performanceRequest) {
         Performance performance = getPerformanceById(performanceId);
+        Venue venue = retrieveVenueFromService(performanceRequest);
 
         return new Performance();
     }

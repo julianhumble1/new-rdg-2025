@@ -417,5 +417,15 @@ public class PerformanceServiceTest {
             verify(performanceService, times(1)).getPerformanceById(1);
         }
 
+        @Test
+        void testRetrieveVenueServiceMethodIsCalled() {
+            // Arrange
+            when(performanceRepository.findById(1)).thenReturn(Optional.of(new Performance()));
+            // Act
+            performanceService.updatePerformance(1, testPerformanceRequest);
+            // Assert
+            verify(venueService, times(1)).getVenueById(1);
+        }
+
     }
 }
