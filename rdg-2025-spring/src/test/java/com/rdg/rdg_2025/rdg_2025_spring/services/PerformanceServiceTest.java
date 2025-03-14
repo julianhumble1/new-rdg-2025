@@ -551,6 +551,20 @@ public class PerformanceServiceTest {
             assertEquals(testPerformanceRequest.getDescription(), testPerformance.getDescription());
         }
 
+        @Test
+        void testReturnsExpectedPerformanceObject() {
+            // Arrange
+            when(performanceRepository.findById(1)).thenReturn(Optional.of(testPerformance));
+            when(venueService.getVenueById(anyInt())).thenReturn(new Venue());
+            when(productionService.getProductionById(1)).thenReturn(new Production());
+            when(festivalService.getFestivalById(1)).thenReturn(new Festival());
+            when(performanceRepository.save(any())).thenReturn(testPerformance);
+            // Act
+            Performance result = performanceService.updatePerformance(1, testPerformanceRequest);
+            // Assert
+            assertEquals(testPerformance, result);
+        }
+
 
     }
 }

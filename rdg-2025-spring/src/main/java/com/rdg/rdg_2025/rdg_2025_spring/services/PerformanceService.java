@@ -61,7 +61,7 @@ public class PerformanceService {
 
         updatePerformanceFromRequest(performanceRequest, venue, production, festival,performance);
 
-        return new Performance();
+        return savePerformanceToDatabase(performance);
     }
 
     public Performance getPerformanceById(int performanceId) {
