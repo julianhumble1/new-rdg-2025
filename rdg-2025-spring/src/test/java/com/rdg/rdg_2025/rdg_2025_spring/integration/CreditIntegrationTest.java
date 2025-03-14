@@ -27,8 +27,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -944,6 +943,18 @@ public class CreditIntegrationTest {
                     .header("Authorization", adminToken))
                     .andExpect(status().isNoContent());
 
+        }
+
+        @Test
+        void testCreditIsDeletedInDatabase() throws Exception {
+            // Arrange
+            assertTrue(creditRepository.existsById(existingCreditId));
+            // Act
+            mockMvc.perform(delete("/credits/" + existingCreditId)
+                            .header("Authorization", adminToken))
+                    .andExpect(status().isNoContent());
+            // Assert
+            assertFalse(creditRepository.existsById(existingCreditId));
         }
 
     }
