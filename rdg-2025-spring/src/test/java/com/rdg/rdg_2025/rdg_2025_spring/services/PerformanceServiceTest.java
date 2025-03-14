@@ -510,6 +510,19 @@ public class PerformanceServiceTest {
             verify(festivalService, times(1)).getFestivalById(anyInt());
         }
 
+        @Test
+        void testFestivalServiceDatabaseExceptionThrowsDatabaseException() {
+            // Arrange
+            when(performanceRepository.findById(1)).thenReturn(Optional.of(new Performance()));
+            when(venueService.getVenueById(1)).thenReturn(new Venue());
+            when(productionService.getProductionById(1)).thenReturn(new Production());
+            when(festivalService.getFestivalById(1)).thenThrow(new DatabaseException(""));
+            // Act & Assert
+            assertThrows(DatabaseException.class, () -> {
+                performanceService.updatePerformance(1, testPerformanceRequest);
+            });
+        }
+
 
     }
 }
