@@ -59,6 +59,8 @@ public class PerformanceService {
         Production production = retrieveProductionFromService(performanceRequest);
         Festival festival = retrieveFestivalFromService(performanceRequest);
 
+        updatePerformanceFromRequest(performanceRequest, venue, production, festival,performance);
+
         return new Performance();
     }
 
