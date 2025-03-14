@@ -427,5 +427,16 @@ public class PerformanceServiceTest {
             verify(venueService, times(1)).getVenueById(1);
         }
 
+        @Test
+        void testVenueServiceDatabaseExceptionThrowsDatabaseException() {
+            // Arrange
+            when(performanceRepository.findById(1)).thenReturn(Optional.of(new Performance()));
+            when(venueService.getVenueById(1)).thenThrow(new DatabaseException(""));
+            // Act & Assert
+            assertThrows(DatabaseException.class, () -> {
+                performanceService.updatePerformance(1, testPerformanceRequest);
+            });
+        }
+
     }
 }
