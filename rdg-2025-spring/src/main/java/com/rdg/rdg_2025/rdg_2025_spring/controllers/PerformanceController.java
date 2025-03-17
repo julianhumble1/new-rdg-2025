@@ -53,7 +53,12 @@ public class PerformanceController {
     @PatchMapping("/{performanceId}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> updatePerformance(@PathVariable int performanceId, @Valid @RequestBody PerformanceRequest performanceRequest) {
-        performanceService.updatePerformance(performanceId, performanceRequest);
+
+        try {
+            performanceService.updatePerformance(performanceId, performanceRequest);
+        } catch (EntityNotFoundException ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+        }
 
         return ResponseEntity.ok().build();
     }

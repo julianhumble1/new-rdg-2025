@@ -706,6 +706,18 @@ public class PerformanceControllerTest {
 
         }
 
+        @Test
+        void testEntityNotFoundExceptionResponds404() throws Exception {
+            // Arrange
+            when(performanceService.updatePerformance(anyInt(), any())).thenThrow(new EntityNotFoundException(""));
+            // Act & Assert
+            mockMvc.perform(patch("/performances/1")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(requestJson)))
+                    .andExpect(status().isNotFound());
+
+        }
+
 
 
     }
