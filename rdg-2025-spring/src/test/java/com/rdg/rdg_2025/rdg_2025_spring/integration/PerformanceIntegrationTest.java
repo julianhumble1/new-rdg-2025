@@ -1077,5 +1077,17 @@ public class PerformanceIntegrationTest {
                     .andExpect(status().isBadRequest());
         }
 
+        @Test
+        void testTimeEmptyResponds400() throws Exception {
+            // Arrange
+            requestJson.put("time", "");
+            // Act & Assert
+            mockMvc.perform(patch("/performances/" + testPerformanceId)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", adminToken)
+                            .content(objectMapper.writeValueAsString(requestJson)))
+                    .andExpect(status().isBadRequest());
+        }
+
     }
 }
