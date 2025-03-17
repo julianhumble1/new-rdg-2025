@@ -27,6 +27,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -890,6 +893,24 @@ public class PerformanceIntegrationTest {
                     .andExpect(status().isOk());
             // Assert
             assertTrue(performanceRepository.findById(testPerformanceId).get().getDescription().equals("Updated Test Description"));
+        }
+
+        @Test
+        void testOnlyMandatoryFieldsNotEmptyResponds200() throws Exception {
+            // Arrange
+            requestJson.put("festivalId", "");
+            requestJson.put("standardPrice", "");
+            requestJson.put("concessionPrice", "");
+            requestJson.put("boxOffice", "");
+            requestJson.put("description", "");
+            // Act & Assert
+            mockMvc.perform(patch("/performances/" + testPerformanceId)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", adminToken)
+                            .content(objectMapper.writeValueAsString(requestJson)))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("performance.festival").isEmpty());
+
         }
 
     }
