@@ -771,6 +771,23 @@ public class PerformanceControllerTest {
 
         }
 
+        @Test
+        void testOnlyMandatoryFieldsNotMissingResponds200() throws Exception {
+            // Arrange
+            requestJson.remove("festivalId");
+            requestJson.remove("standardPrice");
+            requestJson.remove("concessionPrice");
+            requestJson.remove("boxOffice");
+            requestJson.remove("description");
+            when(performanceService.updatePerformance(anyInt(), any())).thenReturn(testPerformance);
+            // Act & Assert
+            mockMvc.perform(patch("/performances/1")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(requestJson)))
+                    .andExpect(status().isOk());
+
+        }
+
 
     }
 
