@@ -931,5 +931,18 @@ public class PerformanceIntegrationTest {
 
         }
 
+        @Test
+        void testNonExistentFestivalIdResponds404() throws Exception {
+            // Arrange
+            assertFalse(festivalRepository.existsById(testFestival2Id + 1));
+            requestJson.put("festivalId", testFestival2Id + 1);
+            // Act & Assert
+            mockMvc.perform(patch("/performances/" + testPerformanceId)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", adminToken)
+                            .content(objectMapper.writeValueAsString(requestJson)))
+                    .andExpect(status().isNotFound());
+        }
+
     }
 }
