@@ -25,6 +25,7 @@ import FacebookFeed from "./components/FacebookFeed.jsx"
 import PersonPage from "./components/people/PersonPage.jsx"
 import NewCreditForm from "./components/credits/NewCreditForm.jsx"
 import EditCreditForm from "./components/credits/EditCreditForm.jsx"
+import EditPerformanceForm from "./components/performances/EditPerformanceForm.jsx"
 
 
 function App() {
@@ -72,6 +73,7 @@ function App() {
         <Route path="/festivals/:id" element={<FestivalPage />} />
 
         <Route path="/performances/new" element={<NewPerformanceForm />} />
+        <Route path="/performances/edit/:id" element={<EditPerformanceForm />} />
 
         <Route path="/people/:id" element={<PersonPage />} />
         <Route path="/people/new" element={<NewPersonForm />} />

@@ -27,13 +27,26 @@ const PerformanceRow = ({ performanceData, handleDelete }) => {
                     </Link> : ""
                 }
             </div>
+            <div>
+                {performanceData.boxOffice && 
+                    <a className="text-blue-500 hover:text-blue-700 hover:underline" target="_blank" href={`${performanceData.boxOffice}`}>
+                        {performanceData.boxOffice}
+                    </a>
+                }
+            </div>
             <div className="italic">
                 {performanceData.description}
             </div>
             <div className="flex justify-end">
-                <button className="font-bold hover:underline" onClick={() => handleDelete(performanceData)}>
-                    Delete
-                </button>
+                <div className="flex flex-row gap-1">
+                    <Link className="font-bold hover:underline" to={`/performances/edit/${performanceData.id}`}>
+                        Edit
+                    </Link>
+                    <button className="font-bold hover:underline" onClick={() => handleDelete(performanceData)}>
+                        Delete
+                    </button>
+
+                </div>
             </div>
         </div>
     )

@@ -43,7 +43,7 @@ const NewCreditForm = () => {
         event.preventDefault()
         try {
             const response = await CreditService.addNewCredit(
-                name, type.value, production.value, person ? person.value : 0, summary
+                name, type.value, production.value,  person.value, summary
             )
             setSuccessMessage(`Successfully added ${response.data.credit.name} for ${response.data.credit.production.name}!` )
         } catch (e) {
