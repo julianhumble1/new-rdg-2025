@@ -662,6 +662,17 @@ public class PerformanceControllerTest {
                     .andExpect(status().isBadRequest());
         }
 
+        @Test
+        void testFestivalIdNotIntResponds400() throws Exception {
+            // Arrange
+            requestJson.put("festivalId", "not an int");
+            // Act & Assert
+            mockMvc.perform(patch("/performances/1")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(requestJson)))
+                    .andExpect(status().isBadRequest());
+        }
+
 
 
     }
