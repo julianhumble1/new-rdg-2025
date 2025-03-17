@@ -754,6 +754,23 @@ public class PerformanceControllerTest {
 
         }
 
+        @Test
+        void testOnlyMandatoryFieldsNotEmptyResponds200() throws Exception {
+            // Arrange
+            requestJson.put("festivalId", "");
+            requestJson.put("standardPrice", "");
+            requestJson.put("concessionPrice", "");
+            requestJson.put("boxOffice", "");
+            requestJson.put("description", "");
+            when(performanceService.updatePerformance(anyInt(), any())).thenReturn(testPerformance);
+            // Act & Assert
+            mockMvc.perform(patch("/performances/1")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(requestJson)))
+                    .andExpect(status().isOk());
+
+        }
+
 
     }
 
