@@ -550,6 +550,7 @@ public class PerformanceControllerTest {
             requestJson.put("standardPrice", 10.00);
             requestJson.put("concessionPrice", 9.00);
             requestJson.put("boxOffice", "Test Box Office");
+            requestJson.put("description", "Updated Test Description");
         }
 
         @Test

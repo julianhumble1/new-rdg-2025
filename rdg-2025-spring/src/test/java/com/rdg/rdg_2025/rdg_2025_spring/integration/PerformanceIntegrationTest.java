@@ -1,5 +1,7 @@
 package com.rdg.rdg_2025.rdg_2025_spring.integration;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.rdg.rdg_2025.rdg_2025_spring.models.*;
 import com.rdg.rdg_2025.rdg_2025_spring.models.auth.User;
 import com.rdg.rdg_2025.rdg_2025_spring.repository.*;
@@ -18,14 +20,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -56,14 +58,14 @@ public class PerformanceIntegrationTest {
     private static User testUser;
     private static String userToken;
 
-    private Venue testVenue;
-    int testVenueId;
+    private Venue testVenue1;
+    private int testVenue1Id;
 
-    private Production testProduction;
-    int testProductionId;
+    private Production testProduction1;
+    private int testProduction1Id;
 
-    private Festival testFestival;
-    int testFestivalId;
+    private Festival testFestival1;
+    private int testFestival1Id;
 
     private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
 
@@ -92,11 +94,11 @@ public class PerformanceIntegrationTest {
     @BeforeEach
     public void populateDatabase() {
 
-        testVenue = new Venue("Test Venue", "Test Notes", "Test Postcode", "Test Address", "Test Town", "www.test.com");
+        testVenue1 = new Venue("Test Venue", "Test Notes", "Test Postcode", "Test Address", "Test Town", "www.test.com");
 
-        testProduction = new Production(
+        testProduction1 = new Production(
                 "Test Production",
-                testVenue,
+                testVenue1,
                 "Test Author",
                 "Test Description",
                 LocalDateTime.parse("2025-10-10T10:00:00", formatter),
@@ -105,14 +107,14 @@ public class PerformanceIntegrationTest {
                 "Test File String"
         );
 
-        testFestival = new Festival("Test Festival", testVenue, 2025, 1, "Test Description");
+        testFestival1 = new Festival("Test Festival", testVenue1, 2025, 1, "Test Description");
 
-        venueRepository.save(testVenue);
-        testVenueId = testVenue.getId();
-        productionRepository.save(testProduction);
-        testProductionId = testProduction.getId();
-        festivalRepository.save(testFestival);
-        testFestivalId = testFestival.getId();
+        venueRepository.save(testVenue1);
+        testVenue1Id = testVenue1.getId();
+        productionRepository.save(testProduction1);
+        testProduction1Id = testProduction1.getId();
+        festivalRepository.save(testFestival1);
+        testFestival1Id = testFestival1.getId();
 
     }
 
@@ -128,9 +130,9 @@ public class PerformanceIntegrationTest {
                             .header("Authorization", adminToken)
                             .content(
                                     "{" +
-                                            "\"productionId\": " + testProductionId +  ", " +
-                                            "\"venueId\": " + testVenueId + ", " +
-                                            "\"festivalId\": " + testFestivalId + ", " +
+                                            "\"productionId\": " + testProduction1Id +  ", " +
+                                            "\"venueId\": " + testVenue1Id + ", " +
+                                            "\"festivalId\": " + testFestival1Id + ", " +
                                             "\"time\": \"2025-10-10T10:00:00\", " +
                                             "\"description\": \"Test Performance Description\", " +
                                             "\"standardPrice\": \"10.00\", " +
@@ -149,8 +151,8 @@ public class PerformanceIntegrationTest {
                             .header("Authorization", adminToken)
                             .content(
                                     "{" +
-                                            "\"productionId\": " + testProductionId +  ", " +
-                                            "\"venueId\": " + testVenueId + ", " +
+                                            "\"productionId\": " + testProduction1Id +  ", " +
+                                            "\"venueId\": " + testVenue1Id + ", " +
                                             "\"time\": \"2025-10-10T10:00:00\" " +
                                             "}"
                             ))
@@ -169,9 +171,9 @@ public class PerformanceIntegrationTest {
                             .header("Authorization", adminToken)
                             .content(
                                     "{" +
-                                            "\"productionId\": " + testProductionId +  ", " +
-                                            "\"venueId\": " + testVenueId + ", " +
-                                            "\"festivalId\": " + testFestivalId + ", " +
+                                            "\"productionId\": " + testProduction1Id +  ", " +
+                                            "\"venueId\": " + testVenue1Id + ", " +
+                                            "\"festivalId\": " + testFestival1Id + ", " +
                                             "\"time\": \"2025-10-10T10:00:00\", " +
                                             "\"description\": \"Test Performance Description\", " +
                                             "\"standardPrice\": \"10.00\", " +
@@ -193,9 +195,9 @@ public class PerformanceIntegrationTest {
                     .header("Authorization", adminToken)
                     .content(
                             "{" +
-                                    "\"productionId\": " + testProductionId +  ", " +
-                                    "\"venueId\": " + testVenueId + ", " +
-                                    "\"festivalId\": " + testFestivalId + ", " +
+                                    "\"productionId\": " + testProduction1Id +  ", " +
+                                    "\"venueId\": " + testVenue1Id + ", " +
+                                    "\"festivalId\": " + testFestival1Id + ", " +
                                     "\"time\": \"2025-10-10T10:00:00\", " +
                                     "\"description\": \"Test Performance Description\", " +
                                     "\"standardPrice\": \"10.00\", " +
@@ -203,9 +205,9 @@ public class PerformanceIntegrationTest {
                                     "\"boxOffice\": \"Test Box Office\" " +
                                     "}"
                     ))
-                    .andExpect(jsonPath("$.performance.production.id").value(testProductionId))
-                    .andExpect(jsonPath("$.performance.venue.id").value(testVenueId))
-                    .andExpect(jsonPath("$.performance.festival.id").value(testFestivalId))
+                    .andExpect(jsonPath("$.performance.production.id").value(testProduction1Id))
+                    .andExpect(jsonPath("$.performance.venue.id").value(testVenue1Id))
+                    .andExpect(jsonPath("$.performance.festival.id").value(testFestival1Id))
                     .andExpect(jsonPath("$.performance.time").value("2025-10-10T10:00:00"))
                     .andExpect(jsonPath("$.performance.description").value("Test Performance Description"))
                     .andExpect(jsonPath("$.performance.standardPrice").value(10.00))
@@ -225,13 +227,13 @@ public class PerformanceIntegrationTest {
                             .header("Authorization", adminToken)
                             .content(
                                     "{" +
-                                            "\"productionId\": " + testProductionId +  ", " +
-                                            "\"venueId\": " + testVenueId + ", " +
+                                            "\"productionId\": " + testProduction1Id +  ", " +
+                                            "\"venueId\": " + testVenue1Id + ", " +
                                             "\"time\": \"2025-10-10T10:00:00\" " +
                                             "}"
                             ))
-                    .andExpect(jsonPath("$.performance.production.id").value(testProductionId))
-                    .andExpect(jsonPath("$.performance.venue.id").value(testVenueId))
+                    .andExpect(jsonPath("$.performance.production.id").value(testProduction1Id))
+                    .andExpect(jsonPath("$.performance.venue.id").value(testVenue1Id))
                     .andExpect(jsonPath("$.performance.festival").isEmpty())
                     .andExpect(jsonPath("$.performance.time").value("2025-10-10T10:00:00"))
                     .andExpect(jsonPath("$.performance.description").isEmpty())
@@ -250,9 +252,9 @@ public class PerformanceIntegrationTest {
                             .header("Authorization", adminToken)
                             .content(
                                     "{" +
-                                            "\"productionId\": " + testProductionId +  ", " +
-                                            "\"venueId\": " + testVenueId + ", " +
-                                            "\"festivalId\": " + (testFestivalId + 1) + ", " +
+                                            "\"productionId\": " + testProduction1Id +  ", " +
+                                            "\"venueId\": " + testVenue1Id + ", " +
+                                            "\"festivalId\": " + (testFestival1Id + 1) + ", " +
                                             "\"time\": \"2025-10-10T10:00:00\", " +
                                             "\"description\": \"Test Performance Description\", " +
                                             "\"standardPrice\": \"10.00\", " +
@@ -271,9 +273,9 @@ public class PerformanceIntegrationTest {
                             .header("Authorization", adminToken)
                             .content(
                                     "{" +
-                                            "\"productionId\": " +( testProductionId + 1) +  ", " +
-                                            "\"venueId\": " + testVenueId + ", " +
-                                            "\"festivalId\": " + testFestivalId + ", " +
+                                            "\"productionId\": " +( testProduction1Id + 1) +  ", " +
+                                            "\"venueId\": " + testVenue1Id + ", " +
+                                            "\"festivalId\": " + testFestival1Id + ", " +
                                             "\"time\": \"2025-10-10T10:00:00\", " +
                                             "\"description\": \"Test Performance Description\", " +
                                             "\"standardPrice\": \"10.00\", " +
@@ -292,9 +294,9 @@ public class PerformanceIntegrationTest {
                             .header("Authorization", adminToken)
                             .content(
                                     "{" +
-                                            "\"productionId\": " + testProductionId +  ", " +
-                                            "\"venueId\": " + (testVenueId + 1)+ ", " +
-                                            "\"festivalId\": " + testFestivalId + ", " +
+                                            "\"productionId\": " + testProduction1Id +  ", " +
+                                            "\"venueId\": " + (testVenue1Id + 1)+ ", " +
+                                            "\"festivalId\": " + testFestival1Id + ", " +
                                             "\"time\": \"2025-10-10T10:00:00\", " +
                                             "\"description\": \"Test Performance Description\", " +
                                             "\"standardPrice\": \"10.00\", " +
@@ -314,8 +316,8 @@ public class PerformanceIntegrationTest {
                             .content(
                                     "{" +
                                             "\"productionId\": \"not an int\", " +
-                                            "\"venueId\": " + testVenueId + ", " +
-                                            "\"festivalId\": " + testFestivalId + ", " +
+                                            "\"venueId\": " + testVenue1Id + ", " +
+                                            "\"festivalId\": " + testFestival1Id + ", " +
                                             "\"time\": \"2025-10-10T10:00:00\", " +
                                             "\"description\": \"Test Performance Description\", " +
                                             "\"standardPrice\": \"10.00\", " +
@@ -336,8 +338,8 @@ public class PerformanceIntegrationTest {
                             .content(
                                     "{" +
                                             "\"productionId\": \"\", " +
-                                            "\"venueId\": " + testVenueId + ", " +
-                                            "\"festivalId\": " + testFestivalId + ", " +
+                                            "\"venueId\": " + testVenue1Id + ", " +
+                                            "\"festivalId\": " + testFestival1Id + ", " +
                                             "\"time\": \"2025-10-10T10:00:00\", " +
                                             "\"description\": \"Test Performance Description\", " +
                                             "\"standardPrice\": \"10.00\", " +
@@ -357,8 +359,8 @@ public class PerformanceIntegrationTest {
                             .header("Authorization", adminToken)
                             .content(
                                     "{" +
-                                            "\"venueId\": " + testVenueId + ", " +
-                                            "\"festivalId\": " + testFestivalId + ", " +
+                                            "\"venueId\": " + testVenue1Id + ", " +
+                                            "\"festivalId\": " + testFestival1Id + ", " +
                                             "\"time\": \"2025-10-10T10:00:00\", " +
                                             "\"description\": \"Test Performance Description\", " +
                                             "\"standardPrice\": \"10.00\", " +
@@ -378,9 +380,9 @@ public class PerformanceIntegrationTest {
                             .header("Authorization", adminToken)
                             .content(
                                     "{" +
-                                            "\"productionId\": " + testProductionId +  ", " +
+                                            "\"productionId\": " + testProduction1Id +  ", " +
                                             "\"venueId\": \"not an int\", " +
-                                            "\"festivalId\": " + testFestivalId + ", " +
+                                            "\"festivalId\": " + testFestival1Id + ", " +
                                             "\"time\": \"2025-10-10T10:00:00\", " +
                                             "\"description\": \"Test Performance Description\", " +
                                             "\"standardPrice\": \"10.00\", " +
@@ -400,9 +402,9 @@ public class PerformanceIntegrationTest {
                             .header("Authorization", adminToken)
                             .content(
                                     "{" +
-                                            "\"productionId\": " + testProductionId +  ", " +
+                                            "\"productionId\": " + testProduction1Id +  ", " +
                                             "\"venueId\": \"\", " +
-                                            "\"festivalId\": " + testFestivalId + ", " +
+                                            "\"festivalId\": " + testFestival1Id + ", " +
                                             "\"time\": \"2025-10-10T10:00:00\", " +
                                             "\"description\": \"Test Performance Description\", " +
                                             "\"standardPrice\": \"10.00\", " +
@@ -422,8 +424,8 @@ public class PerformanceIntegrationTest {
                             .header("Authorization", adminToken)
                             .content(
                                     "{" +
-                                            "\"productionId\": " + testProductionId +  ", " +
-                                            "\"festivalId\": " + testFestivalId + ", " +
+                                            "\"productionId\": " + testProduction1Id +  ", " +
+                                            "\"festivalId\": " + testFestival1Id + ", " +
                                             "\"time\": \"2025-10-10T10:00:00\", " +
                                             "\"description\": \"Test Performance Description\", " +
                                             "\"standardPrice\": \"10.00\", " +
@@ -443,8 +445,8 @@ public class PerformanceIntegrationTest {
                             .header("Authorization", adminToken)
                             .content(
                                     "{" +
-                                            "\"productionId\": " + testProductionId +  ", " +
-                                            "\"venueId\": " + testVenueId + ", " +
+                                            "\"productionId\": " + testProduction1Id +  ", " +
+                                            "\"venueId\": " + testVenue1Id + ", " +
                                             "\"festivalId\": \"not an int\", " +
                                             "\"time\": \"2025-10-10T10:00:00\", " +
                                             "\"description\": \"Test Performance Description\", " +
@@ -465,9 +467,9 @@ public class PerformanceIntegrationTest {
                             .header("Authorization", adminToken)
                             .content(
                                     "{" +
-                                            "\"productionId\": " + testProductionId +  ", " +
-                                            "\"venueId\": " + testVenueId + ", " +
-                                            "\"festivalId\": " + testFestivalId + ", " +
+                                            "\"productionId\": " + testProduction1Id +  ", " +
+                                            "\"venueId\": " + testVenue1Id + ", " +
+                                            "\"festivalId\": " + testFestival1Id + ", " +
                                             "\"time\": \"not a date time\", " +
                                             "\"description\": \"Test Performance Description\", " +
                                             "\"standardPrice\": \"10.00\", " +
@@ -487,9 +489,9 @@ public class PerformanceIntegrationTest {
                             .header("Authorization", adminToken)
                             .content(
                                     "{" +
-                                            "\"productionId\": " + testProductionId +  ", " +
-                                            "\"venueId\": " + testVenueId + ", " +
-                                            "\"festivalId\": " + testFestivalId + ", " +
+                                            "\"productionId\": " + testProduction1Id +  ", " +
+                                            "\"venueId\": " + testVenue1Id + ", " +
+                                            "\"festivalId\": " + testFestival1Id + ", " +
                                             "\"time\": \"\", " +
                                             "\"description\": \"Test Performance Description\", " +
                                             "\"standardPrice\": \"10.00\", " +
@@ -509,9 +511,9 @@ public class PerformanceIntegrationTest {
                             .header("Authorization", adminToken)
                             .content(
                                     "{" +
-                                            "\"productionId\": " + testProductionId +  ", " +
-                                            "\"venueId\": " + testVenueId + ", " +
-                                            "\"festivalId\": " + testFestivalId + ", " +
+                                            "\"productionId\": " + testProduction1Id +  ", " +
+                                            "\"venueId\": " + testVenue1Id + ", " +
+                                            "\"festivalId\": " + testFestival1Id + ", " +
                                             "\"description\": \"Test Performance Description\", " +
                                             "\"standardPrice\": \"10.00\", " +
                                             "\"concessionPrice\": \"9.00\", " +
@@ -530,9 +532,9 @@ public class PerformanceIntegrationTest {
                             .header("Authorization", adminToken)
                             .content(
                                     "{" +
-                                            "\"productionId\": " + testProductionId +  ", " +
-                                            "\"venueId\": " + testVenueId + ", " +
-                                            "\"festivalId\": " + testFestivalId + ", " +
+                                            "\"productionId\": " + testProduction1Id +  ", " +
+                                            "\"venueId\": " + testVenue1Id + ", " +
+                                            "\"festivalId\": " + testFestival1Id + ", " +
                                             "\"time\": \"2025-10-10T10:00:00\", " +
                                             "\"description\": \"Test Performance Description\", " +
                                             "\"standardPrice\": \"not a number\", " +
@@ -552,9 +554,9 @@ public class PerformanceIntegrationTest {
                             .header("Authorization", adminToken)
                             .content(
                                     "{" +
-                                            "\"productionId\": " + testProductionId +  ", " +
-                                            "\"venueId\": " + testVenueId + ", " +
-                                            "\"festivalId\": " + testFestivalId + ", " +
+                                            "\"productionId\": " + testProduction1Id +  ", " +
+                                            "\"venueId\": " + testVenue1Id + ", " +
+                                            "\"festivalId\": " + testFestival1Id + ", " +
                                             "\"time\": \"2025-10-10T10:00:00\", " +
                                             "\"description\": \"Test Performance Description\", " +
                                             "\"standardPrice\": \"10.00\", " +
@@ -574,9 +576,9 @@ public class PerformanceIntegrationTest {
                             .header("Authorization", userToken)
                             .content(
                                     "{" +
-                                            "\"productionId\": " + testProductionId +  ", " +
-                                            "\"venueId\": " + testVenueId + ", " +
-                                            "\"festivalId\": " + testFestivalId + ", " +
+                                            "\"productionId\": " + testProduction1Id +  ", " +
+                                            "\"venueId\": " + testVenue1Id + ", " +
+                                            "\"festivalId\": " + testFestival1Id + ", " +
                                             "\"time\": \"2025-10-10T10:00:00\", " +
                                             "\"description\": \"Test Performance Description\", " +
                                             "\"standardPrice\": \"10.00\", " +
@@ -595,9 +597,9 @@ public class PerformanceIntegrationTest {
                             .header("Authorization", "bad token")
                             .content(
                                     "{" +
-                                            "\"productionId\": " + testProductionId +  ", " +
-                                            "\"venueId\": " + testVenueId + ", " +
-                                            "\"festivalId\": " + testFestivalId + ", " +
+                                            "\"productionId\": " + testProduction1Id +  ", " +
+                                            "\"venueId\": " + testVenue1Id + ", " +
+                                            "\"festivalId\": " + testFestival1Id + ", " +
                                             "\"time\": \"2025-10-10T10:00:00\", " +
                                             "\"description\": \"Test Performance Description\", " +
                                             "\"standardPrice\": \"10.00\", " +
@@ -615,9 +617,9 @@ public class PerformanceIntegrationTest {
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(
                                     "{" +
-                                            "\"productionId\": " + testProductionId +  ", " +
-                                            "\"venueId\": " + testVenueId + ", " +
-                                            "\"festivalId\": " + testFestivalId + ", " +
+                                            "\"productionId\": " + testProduction1Id +  ", " +
+                                            "\"venueId\": " + testVenue1Id + ", " +
+                                            "\"festivalId\": " + testFestival1Id + ", " +
                                             "\"time\": \"2025-10-10T10:00:00\", " +
                                             "\"description\": \"Test Performance Description\", " +
                                             "\"standardPrice\": \"10.00\", " +
@@ -643,23 +645,23 @@ public class PerformanceIntegrationTest {
             List<Performance> performanceList = new ArrayList<>();
             performanceList.add(testPerformance);
 
-            testPerformance.setVenue(testVenue);
-            testVenue.setPerformances(performanceList);
+            testPerformance.setVenue(testVenue1);
+            testVenue1.setPerformances(performanceList);
 
-            testPerformance.setProduction(testProduction);
-            testProduction.setPerformances(performanceList);
+            testPerformance.setProduction(testProduction1);
+            testProduction1.setPerformances(performanceList);
 
-            testPerformance.setFestival(testFestival);
-            testFestival.setPerformances(performanceList);
+            testPerformance.setFestival(testFestival1);
+            testFestival1.setPerformances(performanceList);
 
             testPerformance.setTime(LocalDateTime.now());
 
             performanceRepository.save(testPerformance);
             testPerformanceId = testPerformance.getId();
 
-            venueRepository.save(testVenue);
-            productionRepository.save(testProduction);
-            festivalRepository.save(testFestival);
+            venueRepository.save(testVenue1);
+            productionRepository.save(testProduction1);
+            festivalRepository.save(testFestival1);
 
         }
 
@@ -686,39 +688,39 @@ public class PerformanceIntegrationTest {
         @Test
         void testVenueNoLongerReferencesPerformanceFollowingDeletion() throws Exception {
             // Arrange
-            Venue preVenue = venueRepository.findById(testVenueId).orElseThrow(() -> new RuntimeException("No Venue with this id"));
+            Venue preVenue = venueRepository.findById(testVenue1Id).orElseThrow(() -> new RuntimeException("No Venue with this id"));
             assertTrue(preVenue.getPerformances().contains(testPerformance));
             // Act
             mockMvc.perform(delete("/performances/" + testPerformanceId)
                             .header("Authorization", adminToken));
             // Assert
-            Venue postVenue = venueRepository.findById(testVenueId).orElseThrow(() -> new RuntimeException("No Venue with this id"));
+            Venue postVenue = venueRepository.findById(testVenue1Id).orElseThrow(() -> new RuntimeException("No Venue with this id"));
             assertFalse(postVenue.getPerformances().contains(testPerformance));
         }
 
         @Test
         void testProductionNoLongerReferencesPerformanceFollowingDeletion() throws Exception {
             // Arrange
-            Production preProduction = productionRepository.findById(testProductionId).orElseThrow(() -> new RuntimeException("No Production with this id"));
+            Production preProduction = productionRepository.findById(testProduction1Id).orElseThrow(() -> new RuntimeException("No Production with this id"));
             assertTrue(preProduction.getPerformances().contains(testPerformance));
             // Act
             mockMvc.perform(delete("/performances/" + testPerformanceId)
                     .header("Authorization", adminToken));
             // Assert
-            Production postProduction = productionRepository.findById(testProductionId).orElseThrow(() -> new RuntimeException("No Production with this id"));
+            Production postProduction = productionRepository.findById(testProduction1Id).orElseThrow(() -> new RuntimeException("No Production with this id"));
             assertFalse(postProduction.getPerformances().contains(testPerformance));
         }
 
         @Test
         void testFestivalNoLongerReferencesPerformanceFollowingDeletion() throws Exception {
             // Arrange
-            Festival preFestival = festivalRepository.findById(testFestivalId).orElseThrow(() -> new RuntimeException("No Festival with this id"));
+            Festival preFestival = festivalRepository.findById(testFestival1Id).orElseThrow(() -> new RuntimeException("No Festival with this id"));
             assertTrue(preFestival.getPerformances().contains(testPerformance));
             // Act
             mockMvc.perform(delete("/performances/" + testPerformanceId)
                     .header("Authorization", adminToken));
             // Assert
-            Festival postFestival = festivalRepository.findById(testFestivalId).orElseThrow(() -> new RuntimeException("No Festival with this id"));
+            Festival postFestival = festivalRepository.findById(testFestival1Id).orElseThrow(() -> new RuntimeException("No Festival with this id"));
             assertFalse(postFestival.getPerformances().contains(testPerformance));
         }
 
@@ -764,6 +766,100 @@ public class PerformanceIntegrationTest {
             // Act & Assert
             mockMvc.perform(delete("/performances/" + testPerformanceId ))
                     .andExpect(status().isUnauthorized());
+        }
+
+    }
+
+    @Nested
+    @DisplayName("PATCH update performance integration tests")
+    class UpdatePerformanceIntegrationTests {
+
+        private Venue testVenue2;
+        private int testVenue2Id;
+
+        private Production testProduction2;
+        private int testProduction2Id;
+
+        private Festival testFestival2;
+        private int testFestival2Id;
+
+        private Performance testPerformance;
+        private int testPerformanceId;
+
+        @Autowired
+        private ObjectMapper objectMapper;
+
+        private ObjectNode requestJson;
+
+        @BeforeEach
+        public void populateDatabase() {
+
+            testVenue2 = new Venue("Another Test Venue", "Test Notes", "Test Postcode", "Test Address", "Test Town", "www.test.com");
+
+            testProduction2 = new Production(
+                    "Another Test Production",
+                    testVenue2,
+                    "Test Author",
+                    "Test Description",
+                    LocalDateTime.parse("2025-10-10T10:00:00", formatter),
+                    false,
+                    false,
+                    "Test File String"
+            );
+
+            testFestival2 = new Festival("Test Festival", testVenue2, 2025, 1, "Test Description");
+
+            venueRepository.save(testVenue2);
+            testVenue2Id = testVenue2.getId();
+            productionRepository.save(testProduction2);
+            testProduction2Id = testProduction2.getId();
+            festivalRepository.save(testFestival2);
+            testFestival2Id = testFestival2.getId();
+
+            testPerformance = new Performance(
+                testProduction1,
+                testVenue1,
+                testFestival1,
+                LocalDateTime.now(),
+                "Test Description",
+                BigDecimal.TEN,
+                BigDecimal.valueOf(9),
+                "Test Box Office"
+            );
+            List<Performance> performanceList = new ArrayList<>();
+            performanceList.add(testPerformance);
+
+            performanceRepository.save(testPerformance);
+            testPerformanceId = testPerformance.getId();
+
+            testProduction1.setPerformances(performanceList);
+            testVenue1.setPerformances(performanceList);
+            testFestival1.setPerformances(performanceList);
+
+            productionRepository.save(testProduction1);
+            venueRepository.save(testVenue1);
+            festivalRepository.save(testFestival1);
+
+            requestJson = objectMapper.createObjectNode();
+            requestJson.put("productionId", testProduction2Id);
+            requestJson.put("venueId", testVenue2Id);
+            requestJson.put("time", String.valueOf(LocalDateTime.now()));
+            requestJson.put("festivalId", testFestival2Id);
+            requestJson.put("standardPrice", 11.00);
+            requestJson.put("concessionPrice", 10.00);
+            requestJson.put("boxOffice", "Updated Test Box Office");
+            requestJson.put("description", "Updated Test Description");
+        }
+
+        @Test
+        void testSuccessfulUpdateResponds200() throws Exception {
+            // Arrange
+            // Act & Assert
+            mockMvc.perform(patch("/performances/" + testPerformanceId)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .header("Authorization", adminToken)
+                    .content(objectMapper.writeValueAsString(requestJson)))
+                    .andExpect(status().isOk());
         }
 
     }
