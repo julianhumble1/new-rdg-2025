@@ -913,5 +913,23 @@ public class PerformanceIntegrationTest {
 
         }
 
+        @Test
+        void testOnlyMandatoryFieldsNotMissingResponds200() throws Exception {
+            // Arrange
+            requestJson.remove("festivalId");
+            requestJson.remove("standardPrice");
+            requestJson.remove("concessionPrice");
+            requestJson.remove("boxOffice");
+            requestJson.remove("description");
+            // Act & Assert
+            mockMvc.perform(patch("/performances/" + testPerformanceId)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", adminToken)
+                            .content(objectMapper.writeValueAsString(requestJson)))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("performance.festival").isEmpty());
+
+        }
+
     }
 }
