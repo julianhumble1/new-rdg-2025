@@ -1017,5 +1017,17 @@ public class PerformanceIntegrationTest {
                     .andExpect(status().isBadRequest());
         }
 
+        @Test
+        void testProductionIdMissingResponds400() throws Exception {
+            // Arrange
+            requestJson.remove("productionId");
+            // Act & Assert
+            mockMvc.perform(patch("/performances/" + testPerformanceId)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", adminToken)
+                            .content(objectMapper.writeValueAsString(requestJson)))
+                    .andExpect(status().isBadRequest());
+        }
+
     }
 }
