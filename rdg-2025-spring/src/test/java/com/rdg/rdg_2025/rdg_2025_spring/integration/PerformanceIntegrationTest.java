@@ -1089,5 +1089,53 @@ public class PerformanceIntegrationTest {
                     .andExpect(status().isBadRequest());
         }
 
+        @Test
+        void testTimeMissingResponds400() throws Exception {
+            // Arrange
+            requestJson.remove("time");
+            // Act & Assert
+            mockMvc.perform(patch("/performances/" + testPerformanceId)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", adminToken)
+                            .content(objectMapper.writeValueAsString(requestJson)))
+                    .andExpect(status().isBadRequest());
+        }
+
+        @Test
+        void testFestivalIdNotIntResponds400() throws Exception {
+            // Arrange
+            requestJson.put("festivalId", "not an int");
+            // Act & Assert
+            mockMvc.perform(patch("/performances/" + testPerformanceId)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", adminToken)
+                            .content(objectMapper.writeValueAsString(requestJson)))
+                    .andExpect(status().isBadRequest());
+        }
+
+        @Test
+        void testStandardPriceNotNumberResponds400() throws Exception {
+            // Arrange
+            requestJson.put("standardPrice", "not a number");
+            // Act & Assert
+            mockMvc.perform(patch("/performances/" + testPerformanceId)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", adminToken)
+                            .content(objectMapper.writeValueAsString(requestJson)))
+                    .andExpect(status().isBadRequest());
+        }
+
+        @Test
+        void testConcessionPriceNotNumberResponds400() throws Exception {
+            // Arrange
+            requestJson.put("concessionPrice", "not a number");
+            // Act & Assert
+            mockMvc.perform(patch("/performances/" + testPerformanceId)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", adminToken)
+                            .content(objectMapper.writeValueAsString(requestJson)))
+                    .andExpect(status().isBadRequest());
+        }
+
     }
 }
