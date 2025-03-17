@@ -575,6 +575,17 @@ public class PerformanceControllerTest {
         }
 
         @Test
+        void testProductionIdEmptyResponds400() throws Exception {
+            // Arrange
+            requestJson.put("productionId", "");
+            // Act & Assert
+            mockMvc.perform(patch("/performances/1")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(requestJson)))
+                    .andExpect(status().isBadRequest());
+        }
+
+        @Test
         void testProductionIdMissingResponds400() throws Exception {
             // Arrange
             requestJson.remove("productionId");
