@@ -618,6 +618,17 @@ public class PerformanceControllerTest {
                     .andExpect(status().isBadRequest());
         }
 
+        @Test
+        void testVenueIdMissingResponds400() throws Exception {
+            // Arrange
+            requestJson.remove("venueId");
+            // Act & Assert
+            mockMvc.perform(patch("/performances/1")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(requestJson)))
+                    .andExpect(status().isBadRequest());
+        }
+
 
 
     }
