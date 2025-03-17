@@ -730,6 +730,18 @@ public class PerformanceControllerTest {
 
         }
 
+        @Test
+        void testSuccessfulUpdateResponds200() throws Exception {
+            // Arrange
+            when(performanceService.updatePerformance(anyInt(), any())).thenReturn(testPerformance);
+            // Act & Assert
+            mockMvc.perform(patch("/performances/1")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(requestJson)))
+                    .andExpect(status().isOk());
+
+        }
+
 
     }
 
