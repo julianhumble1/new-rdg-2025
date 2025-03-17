@@ -1,5 +1,7 @@
 package com.rdg.rdg_2025.rdg_2025_spring.controllers;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.rdg.rdg_2025.rdg_2025_spring.exception.DatabaseException;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Festival;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Performance;
@@ -28,8 +30,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(PerformanceController.class)
@@ -525,6 +526,41 @@ public class PerformanceControllerTest {
             // Act & Assert
             mockMvc.perform(delete("/performances/1"))
                     .andExpect(status().isNoContent());
+        }
+
+
+
+    }
+
+    @Nested
+    @DisplayName("updatePerformance controller tests")
+    class UpdatePerformanceControllerTests {
+
+        @Autowired
+        private ObjectMapper objectMapper;
+
+        private ObjectNode requestJson;
+
+        @BeforeEach
+        void setup() {
+            requestJson = objectMapper.createObjectNode();
+            requestJson.put("productionId", 1);
+            requestJson.put("venueId", 1);
+            requestJson.put("time", String.valueOf(LocalDateTime.now()));
+            requestJson.put("festivalId", 1);
+            requestJson.put("standardPrice", 10.00);
+            requestJson.put("concessionPrice", 9.00);
+            requestJson.put("boxOffice", "Test Box Office");
+        }
+
+        @Test
+        void testPerformanceIdNotIntResponds400() throws Exception {
+            // Arrange
+            // Act & Assert
+            mockMvc.perform(patch("/performances/notanint")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(requestJson)))
+                    .andExpect(status().isBadRequest());
         }
 
 

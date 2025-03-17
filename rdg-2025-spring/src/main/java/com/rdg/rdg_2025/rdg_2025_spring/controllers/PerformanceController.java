@@ -50,4 +50,10 @@ public class PerformanceController {
         }
     }
 
+    @PatchMapping("/{performanceId}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> updatePerformance(@PathVariable int performanceId) {
+        return ResponseEntity.ok().build();
+    }
+
 }
