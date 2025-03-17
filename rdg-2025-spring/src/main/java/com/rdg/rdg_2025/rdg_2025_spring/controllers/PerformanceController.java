@@ -56,14 +56,13 @@ public class PerformanceController {
             @PathVariable int performanceId, @Valid @RequestBody PerformanceRequest performanceRequest) {
 
         try {
-            performanceService.updatePerformance(performanceId, performanceRequest);
+            Performance performance = performanceService.updatePerformance(performanceId, performanceRequest);
+            return ResponseEntity.ok().body(new PerformanceResponse(performance));
         } catch (EntityNotFoundException ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
         } catch (DatabaseException ex) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
         }
-
-        return ResponseEntity.ok().build();
     }
 
 }
