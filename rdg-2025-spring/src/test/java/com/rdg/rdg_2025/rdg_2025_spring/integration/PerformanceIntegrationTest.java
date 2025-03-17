@@ -993,5 +993,17 @@ public class PerformanceIntegrationTest {
                     .andExpect(status().isBadRequest());
         }
 
+        @Test
+        void testProductionIdNotIntResponds400() throws Exception {
+            // Arrange
+            requestJson.put("productionId", "not an int");
+            // Act & Assert
+            mockMvc.perform(patch("/performances/1")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", adminToken)
+                            .content(objectMapper.writeValueAsString(requestJson)))
+                    .andExpect(status().isBadRequest());
+        }
+
     }
 }
