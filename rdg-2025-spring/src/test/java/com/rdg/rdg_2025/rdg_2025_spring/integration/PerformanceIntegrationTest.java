@@ -879,5 +879,18 @@ public class PerformanceIntegrationTest {
                     .andExpect(jsonPath("$.performance.boxOffice").value("Updated Test Box Office"));
         }
 
+        @Test
+        void testPerformanceIsUpdatedInDatabase() throws Exception {
+            // Arrange
+            // Act
+            mockMvc.perform(patch("/performances/" + testPerformanceId)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", adminToken)
+                            .content(objectMapper.writeValueAsString(requestJson)))
+                    .andExpect(status().isOk());
+            // Assert
+            assertTrue(performanceRepository.findById(testPerformanceId).get().getDescription().equals("Updated Test Description"));
+        }
+
     }
 }
