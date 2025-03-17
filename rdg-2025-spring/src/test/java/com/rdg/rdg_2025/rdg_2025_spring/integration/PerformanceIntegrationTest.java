@@ -982,5 +982,16 @@ public class PerformanceIntegrationTest {
                     .andExpect(status().isNotFound());
         }
 
+        @Test
+        void testPerformanceIdNotIntResponds400() throws Exception {
+            // Arrange
+            // Act & Assert
+            mockMvc.perform(patch("/performances/notanint")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", adminToken)
+                            .content(objectMapper.writeValueAsString(requestJson)))
+                    .andExpect(status().isBadRequest());
+        }
+
     }
 }
