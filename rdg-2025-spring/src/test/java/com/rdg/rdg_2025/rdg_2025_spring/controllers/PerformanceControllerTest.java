@@ -629,6 +629,17 @@ public class PerformanceControllerTest {
                     .andExpect(status().isBadRequest());
         }
 
+        @Test
+        void testTimeNotDateTimeResponds400() throws Exception {
+            // Arrange
+            requestJson.put("time", "not a date time");
+            // Act & Assert
+            mockMvc.perform(patch("/performances/1")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(requestJson)))
+                    .andExpect(status().isBadRequest());
+        }
+
 
 
     }
