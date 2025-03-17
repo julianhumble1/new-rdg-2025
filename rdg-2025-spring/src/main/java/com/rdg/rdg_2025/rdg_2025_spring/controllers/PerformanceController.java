@@ -53,6 +53,8 @@ public class PerformanceController {
     @PatchMapping("/{performanceId}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> updatePerformance(@PathVariable int performanceId, @Valid @RequestBody PerformanceRequest performanceRequest) {
+        performanceService.updatePerformance(performanceId, performanceRequest);
+
         return ResponseEntity.ok().build();
     }
 

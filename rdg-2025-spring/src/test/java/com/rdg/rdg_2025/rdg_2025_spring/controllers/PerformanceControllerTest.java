@@ -28,8 +28,7 @@ import java.time.LocalDateTime;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -693,6 +692,18 @@ public class PerformanceControllerTest {
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(requestJson)))
                     .andExpect(status().isBadRequest());
+        }
+
+        @Test
+        void testPerformanceServiceMethodIsCalled() throws Exception {
+            // Arrange
+            // Act
+            mockMvc.perform(patch("/performances/1")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(requestJson)));
+            // Assert
+            verify(performanceService, times(1)).updatePerformance(anyInt(), any());
+
         }
 
 
