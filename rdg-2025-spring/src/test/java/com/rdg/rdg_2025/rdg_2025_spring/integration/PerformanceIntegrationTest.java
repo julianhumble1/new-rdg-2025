@@ -970,5 +970,17 @@ public class PerformanceIntegrationTest {
                     .andExpect(status().isNotFound());
         }
 
+        @Test
+        void testNonExistentPerformanceIdResponds404() throws Exception {
+            // Arrange
+            assertFalse(performanceRepository.existsById(testPerformanceId + 1));
+            // Act & Assert
+            mockMvc.perform(patch("/performances/" + (testPerformanceId + 1))
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", adminToken)
+                            .content(objectMapper.writeValueAsString(requestJson)))
+                    .andExpect(status().isNotFound());
+        }
+
     }
 }
