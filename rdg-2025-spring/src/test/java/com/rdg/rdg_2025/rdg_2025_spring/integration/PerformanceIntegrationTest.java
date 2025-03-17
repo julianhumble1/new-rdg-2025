@@ -843,12 +843,12 @@ public class PerformanceIntegrationTest {
             requestJson = objectMapper.createObjectNode();
             requestJson.put("productionId", testProduction2Id);
             requestJson.put("venueId", testVenue2Id);
-            requestJson.put("time", String.valueOf(LocalDateTime.now()));
             requestJson.put("festivalId", testFestival2Id);
+            requestJson.put("description", "Updated Test Description");
+            requestJson.put("time", String.valueOf(LocalDateTime.now()));
             requestJson.put("standardPrice", 11.00);
             requestJson.put("concessionPrice", 10.00);
             requestJson.put("boxOffice", "Updated Test Box Office");
-            requestJson.put("description", "Updated Test Description");
         }
 
         @Test
@@ -860,6 +860,23 @@ public class PerformanceIntegrationTest {
                     .header("Authorization", adminToken)
                     .content(objectMapper.writeValueAsString(requestJson)))
                     .andExpect(status().isOk());
+        }
+
+        @Test
+        void testSuccessfulUpdateRespondsExpectedJson() throws Exception {
+            // Arrange
+            // Act & Assert
+            mockMvc.perform(patch("/performances/" + testPerformanceId)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", adminToken)
+                            .content(objectMapper.writeValueAsString(requestJson)))
+                    .andExpect(jsonPath("$.performance.production.id").value(testProduction2Id))
+                    .andExpect(jsonPath("$.performance.venue.id").value(testVenue2Id))
+                    .andExpect(jsonPath("$.performance.festival.id").value(testFestival2Id))
+                    .andExpect(jsonPath("$.performance.description").value("Updated Test Description"))
+                    .andExpect(jsonPath("$.performance.standardPrice").value(11.00))
+                    .andExpect(jsonPath("$.performance.concessionPrice").value(10.00))
+                    .andExpect(jsonPath("$.performance.boxOffice").value("Updated Test Box Office"));
         }
 
     }
