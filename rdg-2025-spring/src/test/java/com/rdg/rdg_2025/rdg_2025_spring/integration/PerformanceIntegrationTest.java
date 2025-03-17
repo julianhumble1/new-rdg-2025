@@ -947,8 +947,21 @@ public class PerformanceIntegrationTest {
         @Test
         void testNonExistentProductionIdResponds404() throws Exception {
             // Arrange
-            assertFalse(festivalRepository.existsById(testProduction2Id + 1));
+            assertFalse(productionRepository.existsById(testProduction2Id + 1));
             requestJson.put("productionId", testProduction2Id + 1);
+            // Act & Assert
+            mockMvc.perform(patch("/performances/" + testPerformanceId)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", adminToken)
+                            .content(objectMapper.writeValueAsString(requestJson)))
+                    .andExpect(status().isNotFound());
+        }
+
+        @Test
+        void testNonExistentVenueIdResponds404() throws Exception {
+            // Arrange
+            assertFalse(venueRepository.existsById(testVenue2Id + 1));
+            requestJson.put("venueId", testVenue2Id + 1);
             // Act & Assert
             mockMvc.perform(patch("/performances/" + testPerformanceId)
                             .contentType(MediaType.APPLICATION_JSON)
