@@ -28,7 +28,7 @@ public class Person {
     @Column(nullable = false)
     private String lastName;
 
-    @Column(length = 2000)
+    @Column(length = 6000)
     private String summary;
 
     private String homePhone;
@@ -36,6 +36,8 @@ public class Person {
     private String addressStreet;
     private String addressTown;
     private String addressPostcode;
+
+    private int imageId;
 
     @Column(nullable = false, unique = true)
     private String slug;

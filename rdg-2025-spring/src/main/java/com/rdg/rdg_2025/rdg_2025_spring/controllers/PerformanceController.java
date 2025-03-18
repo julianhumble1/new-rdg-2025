@@ -65,4 +65,18 @@ public class PerformanceController {
         }
     }
 
+    @GetMapping("/{performanceId}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> getPerformanceById(@PathVariable int performanceId) {
+
+        try {
+            Performance performance = performanceService.getPerformanceById(performanceId);
+            return ResponseEntity.ok(new PerformanceResponse(performance));
+        } catch (EntityNotFoundException ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+        } catch (DatabaseException ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
+        }
+    }
+
 }

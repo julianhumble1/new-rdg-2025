@@ -35,6 +35,7 @@ public class Credit {
     @JsonManagedReference
     private Production production;
 
+    @Column(length=2000)
     private String summary;
 
     @Column(nullable = false)

@@ -33,7 +33,7 @@ public class Production {
 
     private String author;
 
-    @Column(length = 2000)
+    @Column(length = 5000)
     private String description;
     private LocalDateTime auditionDate;
 
