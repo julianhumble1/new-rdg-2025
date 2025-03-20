@@ -45,6 +45,7 @@ const Home = () => {
                                     <img src="/hedda-photos/IMG-20241104-WA0001.jpg" alt="hedda-photo-1" className="h-fit"/>
                                     <img src="/hedda-photos/IMG-20241104-WA0002.jpg" alt="hedda-photo-2"  className="h-fit w-fit" />
                                     <img src="/hedda-photos/IMG-20241104-WA0004.jpg" alt="hedda-photo-3" />
+                                    <img src="https://www.facebook.com/photo/?fbid=4971782469545627&set=pcb.4971788016211739" alt="hedda-photo-3" />
                                 </Carousel>
                             </div>
 

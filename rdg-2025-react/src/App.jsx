@@ -21,11 +21,12 @@ import AllFestivals from "./components/festivals/AllFestivals.jsx"
 import NewPersonForm from "./components/people/NewPersonForm.jsx"
 import AllPeople from "./components/people/AllPeople.jsx"
 
-import FacebookFeed from "./components/FacebookFeed.jsx"
 import PersonPage from "./components/people/PersonPage.jsx"
 import NewCreditForm from "./components/credits/NewCreditForm.jsx"
 import EditCreditForm from "./components/credits/EditCreditForm.jsx"
 import EditPerformanceForm from "./components/performances/EditPerformanceForm.jsx"
+import CloudinaryTest from "./components/CloudinaryTest.jsx"
+import CloudinaryUploadTest from "./components/CloudinaryUploadTest.jsx"
 
 
 function App() {
@@ -82,7 +83,8 @@ function App() {
         <Route path="/credits/new" element={<NewCreditForm />} />
         <Route path="/credits/edit/:id" element={<EditCreditForm />} />
 
-        <Route path="/facebook" element={<FacebookFeed />} />
+        <Route path="/cloudinary" element={<CloudinaryTest />} />
+        <Route path="/cloudinary/upload" element={<CloudinaryUploadTest />} />
 
       </Routes>
     </Router>

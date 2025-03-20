@@ -7,13 +7,17 @@ import PublicPersonHighlight from "./PublicPersonHighlight.jsx"
 import DetailedPersonHighlight from "./DetailedPersonHighlight.jsx"
 import EditPersonForm from "./EditPersonForm.jsx"
 import ConfirmDeleteModal from "../modals/ConfirmDeleteModal.jsx"
-import { Tabs } from "flowbite-react"
-import { FilmIcon, MusicalNoteIcon, ScaleIcon } from "@heroicons/react/16/solid"
-import CreditsTable from "../credits/CreditsTable.jsx"
 import CreditsTabs from "../credits/CreditsTabs.jsx"
 import CreditService from "../../services/CreditService.js"
+import { Cloudinary } from "@cloudinary/url-gen/index"
+import { auto } from "@cloudinary/url-gen/actions/resize"
+import { autoGravity } from "@cloudinary/url-gen/qualifiers/gravity"
+import { AdvancedImage } from "@cloudinary/react"
+import AltDetailedPersonHighlight from "./AltDetailedPersonHighlight.jsx"
 
 const PersonPage = () => {
+
+    const[image, setImage] = useState(null)
 
     const personId = useParams().id
     const [searchParams] = useSearchParams();
@@ -41,6 +45,19 @@ const PersonPage = () => {
     }
 
     const fetchPersonData = useCallback(async () => {
+        const fetchPersonImage = async (imageId) => {
+            const cld = new Cloudinary({ cloud: { cloudName: "dbher59sh" } })
+            let img = cld.image("xrvbvweujcdqsjuuabys").format("auto").quality("auto")
+            if (imageId !== "0") {
+                try {
+                    img = cld.image(imageId).format("auto").quality("auto")
+                } catch (e) {
+                    setErrorMessage(e.message)
+                }
+            }
+            setImage(img)
+        }
+
         try {
             const response = await PersonService.getPersonById(personId)
             setViewType(response.data.responseType)
@@ -48,6 +65,7 @@ const PersonPage = () => {
             setActingCredits(response.data.actingCredits)
             setMusicianCredits(response.data.musicianCredits)
             setProducerCredits(response.data.producerCredits)
+            fetchPersonImage(response.data.person.imageId)
             console.log(response)
         } catch (e) {
             setErrorMessage(e.message)
@@ -58,10 +76,10 @@ const PersonPage = () => {
         fetchPersonData()
     }, [personId, fetchPersonData])
 
-    const handleEditPerson = async (event, personId, firstName, lastName, summary, homePhone, mobilePhone, addressStreet, addressTown, addressPostcode) => {
+    const handleEditPerson = async (event, personId, firstName, lastName, summary, homePhone, mobilePhone, addressStreet, addressTown, addressPostcode, imageId) => {
         event.preventDefault()
         try {
-            const response = await PersonService.updatePerson(personId, firstName, lastName, summary, homePhone, mobilePhone, addressStreet, addressTown, addressPostcode)
+            const response = await PersonService.updatePerson(personId, firstName, lastName, summary, homePhone, mobilePhone, addressStreet, addressTown, addressPostcode, imageId)
             setSuccessMessage("Successfully edited!")
             setErrorMessage("")
             setEditMode(false)
@@ -99,14 +117,15 @@ const PersonPage = () => {
                 <ConfirmDeleteModal setShowConfirmDelete={setShowConfirmDelete} itemToDelete={itemToDelete} handleConfirmDelete={ handleConfirmDelete } />
             }
             <div className="flex w-full justify-center">
-                {viewType === "PUBLIC" && 
-                    <PublicPersonHighlight personData={personData} />
+                {viewType === "PUBLIC" &&
+                    <PublicPersonHighlight personData={personData}  />
+
                 }
                 {viewType === "DETAILED" && 
                     (editMode ?
                     <EditPersonForm setEditMode={setEditMode} handleEditPerson={handleEditPerson} personData={personData}/>
                     :
-                    <DetailedPersonHighlight personData={personData} setEditMode={setEditMode} handleDelete={handleDelete} />)
+                    <AltDetailedPersonHighlight personData={personData} setEditMode={setEditMode} handleDelete={handleDelete} image={image} fetchPersonData={fetchPersonData} /> )
                 }
             </div>
             <CreditsTabs actingCredits={actingCredits} musicianCredits={musicianCredits} producerCredits={producerCredits} creditsParent={"person"} handleDelete={handleDelete}/>

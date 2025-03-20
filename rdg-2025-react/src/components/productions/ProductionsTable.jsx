@@ -13,7 +13,6 @@ const ProductionsTable = ({ productions, handleDelete, nameSearch, venueSearch, 
                     <Table.HeadCell>Description</Table.HeadCell>
                     <Table.HeadCell>Sundowners</Table.HeadCell>
                     <Table.HeadCell>Author</Table.HeadCell>
-                    <Table.HeadCell>Date Created</Table.HeadCell>
                     <Table.HeadCell>Actions</Table.HeadCell>
                 </Table.Head>
                 <Table.Body className="divide-y">

@@ -1,4 +1,4 @@
-import { Label, Textarea, TextInput } from "flowbite-react"
+import { FileInput, Label, Textarea, TextInput } from "flowbite-react"
 import { useState } from "react"
 
 const EditPersonForm = ({ setEditMode, handleEditPerson, personData }) => {
@@ -10,11 +10,11 @@ const EditPersonForm = ({ setEditMode, handleEditPerson, personData }) => {
 	const [mobilePhone, setMobilePhone] = useState(personData.mobilePhone)
 	const [addressStreet, setAddressStreet] = useState(personData.addressStreet)
 	const [addressTown, setAddressTown] = useState(personData.addressTown)
-	const [addressPostcode, setAddressPostcode] = useState(personData.addressPostcode)
+    const [addressPostcode, setAddressPostcode] = useState(personData.addressPostcode)
 
     return (
         <div className="bg-sky-900 bg-opacity-35 lg:w-1/2 md:w-2/3 w-full rounded p-4 mt-3 md:mx-0 m-3 flex flex-col gap-2 shadow-md">
-            <form className="flex flex-col gap-2 max-w-md"onSubmit={(event) => handleEditPerson(event, personData.id, firstName, lastName, summary, homePhone, mobilePhone, addressStreet, addressTown, addressPostcode)} >
+            <form className="flex flex-col gap-2 max-w-md"onSubmit={(event) => handleEditPerson(event, personData.id, firstName, lastName, summary, homePhone, mobilePhone, addressStreet, addressTown, addressPostcode, personData.imageId)} >
                 <div>
                     <div className="mb-2 block">
                         <Label value="Name (required)" />
@@ -27,7 +27,7 @@ const EditPersonForm = ({ setEditMode, handleEditPerson, personData }) => {
                 
                 <div>
                     <div className="mb-2 block italic">
-                        <Label value={`Summary (max 2000 characters, current: ${summary.length})`} />
+                        <Label value={`Summary (max 6000 characters, current: ${summary.length})`} />
                     </div>
                     <Textarea placeholder="A brilliant actor... " value={summary} onChange={(e) => setSummary(e.target.value)} rows={6} />
                 </div>
@@ -53,7 +53,8 @@ const EditPersonForm = ({ setEditMode, handleEditPerson, personData }) => {
 							<TextInput placeholder="Postcode" className="flex-auto" value={addressPostcode} onChange={(e) => setAddressPostcode(e.target.value)}/>
 						</div>
 					</div>
-				</div>
+                </div>
+ 
 
                 <div className="grid grid-cols-2 justify-end px-2">
                     <button className="text-sm hover:underline font-bold text-center col-span-1" onClick={() => setEditMode(false)}>

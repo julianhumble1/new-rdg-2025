@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import ProductionService from "../../services/ProductionService.js"
 import DateHelper from "../../utils/DateHelper.js"
+import { Link } from "react-router-dom"
 
 const HomeProductionSpotLight = ({ production }) => {
     
@@ -19,9 +20,9 @@ const HomeProductionSpotLight = ({ production }) => {
         <div className="flex w-full bg-white rounded">
             <img className=" h-full w-40" src="/kafka-flyer.jpg" alt="image 1" />
             <div className="flex flex-col gap-3 justify-center p-3 shadow-lg">
-                <h5 className="text-xl font-bold tracking-tight text-gray-900 dark:text-white">
+                <Link to={`/productions/${production.id}`} className="text-2xl hover:underline font-bold tracking-tight text-gray-900 dark:text-white">
                     {production.name}
-                </h5>
+                </Link>
                 <div className="text-sm italic"> 
                     {performanceStatement}
                 </div>

@@ -23,7 +23,7 @@ const ProductionRow = ({ production, handleDelete, nameSearch, venueSearch, sund
 
     return (
         <Table.Row className={`bg-white dark:border-gray-700 dark:bg-gray-800 ${hide && "hidden"}`} >
-            <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white ">
+            <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white max-w-sm truncate">
                 <Link to={`/productions/${production.id}`} className='hover:underline' >
                     {production.name}
                 </Link>
@@ -42,9 +42,6 @@ const ProductionRow = ({ production, handleDelete, nameSearch, venueSearch, sund
             </Table.Cell>
             <Table.Cell >
                 {production.author} 
-            </Table.Cell>
-            <Table.Cell >
-                {format(new Date(production.createdAt), "dd-MM-yyyy")}
             </Table.Cell>
             <Table.Cell>
                 <div className='flex gap-2'>
