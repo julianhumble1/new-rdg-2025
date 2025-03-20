@@ -81,6 +81,7 @@ public class PersonService {
         person.setAddressStreet(personRequest.getAddressStreet());
         person.setAddressTown(personRequest.getAddressTown());
         person.setAddressPostcode(personRequest.getAddressPostcode());
+        person.setImageId(personRequest.getImageId());
 
         person.setSlug(SlugUtils.generateSlug(person.getFirstName(), person.getLastName()));
 

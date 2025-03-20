@@ -37,7 +37,7 @@ public class Person {
     private String addressTown;
     private String addressPostcode;
 
-    private int imageId;
+    private String imageId;
 
     @Column(nullable = false, unique = true)
     private String slug;

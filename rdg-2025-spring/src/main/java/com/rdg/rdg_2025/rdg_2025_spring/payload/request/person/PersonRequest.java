@@ -21,6 +21,7 @@ public class PersonRequest {
     private String addressStreet;
     private String addressTown;
     private String addressPostcode;
+    private String imageId;
 
     public PersonRequest(String firstName, String lastName, String summary, String homePhone, String mobilePhone, String addressStreet, String addressTown, String addressPostcode) {
         this.firstName = firstName;
