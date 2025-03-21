@@ -4,16 +4,12 @@ import PersonService from "../../services/PersonService.js"
 import SuccessMessage from "../modals/SuccessMessage.jsx"
 import ErrorMessage from "../modals/ErrorMessage.jsx"
 import PublicPersonHighlight from "./PublicPersonHighlight.jsx"
-import DetailedPersonHighlight from "./DetailedPersonHighlight.jsx"
 import EditPersonForm from "./EditPersonForm.jsx"
 import ConfirmDeleteModal from "../modals/ConfirmDeleteModal.jsx"
 import CreditsTabs from "../credits/CreditsTabs.jsx"
 import CreditService from "../../services/CreditService.js"
 import { Cloudinary } from "@cloudinary/url-gen/index"
-import { auto } from "@cloudinary/url-gen/actions/resize"
-import { autoGravity } from "@cloudinary/url-gen/qualifiers/gravity"
-import { AdvancedImage } from "@cloudinary/react"
-import AltDetailedPersonHighlight from "./AltDetailedPersonHighlight.jsx"
+import DetailedPersonHighlight from "./DetailedPersonHighlight.jsx"
 
 const PersonPage = () => {
 
@@ -118,14 +114,14 @@ const PersonPage = () => {
             }
             <div className="flex w-full justify-center">
                 {viewType === "PUBLIC" &&
-                    <PublicPersonHighlight personData={personData}  />
+                    <PublicPersonHighlight personData={personData} image={image} />
 
                 }
                 {viewType === "DETAILED" && 
                     (editMode ?
                     <EditPersonForm setEditMode={setEditMode} handleEditPerson={handleEditPerson} personData={personData}/>
                     :
-                    <AltDetailedPersonHighlight personData={personData} setEditMode={setEditMode} handleDelete={handleDelete} image={image} fetchPersonData={fetchPersonData} /> )
+                    <DetailedPersonHighlight personData={personData} setEditMode={setEditMode} handleDelete={handleDelete} image={image} fetchPersonData={fetchPersonData} /> )
                 }
             </div>
             <CreditsTabs actingCredits={actingCredits} musicianCredits={musicianCredits} producerCredits={producerCredits} creditsParent={"person"} handleDelete={handleDelete}/>

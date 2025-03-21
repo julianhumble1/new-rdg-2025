@@ -83,9 +83,9 @@ export default class CreditService {
         const token = Cookies.get("token")
         try {
             const response = await axios.delete(`http://localhost:8080/credits/${creditId}`,{
-                    headers: {
-                        "Authorization": `Bearer ${token}`
-                    }
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                }
             })
             return response
         } catch (e) {

@@ -36,13 +36,28 @@ const ImageWithUploadBox = ({ image, personData, fetchPersonData }) => {
         const formData = new FormData()
         formData.append("file", file)
         formData.append("upload_preset", "people")
-        console.log(file)
+        formData.append("public_id", personData.id)
+        const signatureResponse = await getCloudinarySignature(personData.id)
+        const { timestamp, signature, apiKey } = signatureResponse.data;
+        formData.append("signature", signature)
+        formData.append("api_key", apiKey)
+        formData.append("timestamp", timestamp)
         const imageResponse = await submitImageToCloudinary(formData)
         if (imageResponse) {
             await updatePersonImageId(imageResponse.data.public_id)
         }
         setImageUpload(false)
         fetchPersonData()
+    }
+
+    const getCloudinarySignature = async () => {
+        try {
+            const response = await CloudinaryService.getSignature(personData.id)
+            console.log(response)
+            return response
+        } catch (e) {
+            setImageErrorMessage(e.message)
+        }
     }
 
     const submitImageToCloudinary = async (formData) => {

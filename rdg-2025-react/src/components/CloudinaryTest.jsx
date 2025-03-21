@@ -7,7 +7,7 @@ const CloudinaryTest = () => {
 
 	const cld = new Cloudinary({ cloud: { cloudName: "dbher59sh" } })
 	
-	const img = cld.image("5_hamxbl").format("auto").quality("auto").resize(auto().gravity(autoGravity()).width(500).height(500))
+	const img = cld.image("3").format("auto").quality("auto").resize(auto().gravity(autoGravity()).width(500).height(500))
 
 
 	return (

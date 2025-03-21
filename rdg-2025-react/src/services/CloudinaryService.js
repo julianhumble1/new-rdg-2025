@@ -1,4 +1,5 @@
 import axios from "axios";
+import Cookies from "js-cookie"
 
 export default class CloudinaryService {
 
@@ -15,6 +16,28 @@ export default class CloudinaryService {
         } catch (e) {
             throw new Error(e.message)
         }
+    }
+
+    static getSignature = async (imageId) => {
+
+        const token = Cookies.get("token")
+
+        try {
+            const response = await axios.get("http://localhost:8080/cloudinary/generate",
+                {
+                    headers: {
+                        "Authorization": `Bearer ${token}`
+                    },
+                    params: {
+                        publicId: imageId
+                    }
+                }
+            )
+            return response
+        } catch (e) {
+            throw new Error(e.message)
+        }
+
     }
 
 }
