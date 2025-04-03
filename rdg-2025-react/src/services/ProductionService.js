@@ -115,6 +115,43 @@ export default class ProductionService {
 
     }
 
+    static updateProductionWithImage = async (productionData, imageId) => {
+
+        const token = Cookies.get("token")
+
+        try {
+            const response = await axios.patch(`http://localhost:8080/productions/${productionData.id}`,
+                {
+                    name: productionData.name.trim(),
+                    venueId: productionData.venueId,
+                    author: productionData.author.trim(),
+                    description: productionData.description.trim(),
+                    auditionDate: productionData.auditionDate,
+                    sundowners: productionData.sundowners,
+                    notConfirmed: productionData.notConfirmed,
+                    flyerFile: imageId
+                } , {
+                    headers: {
+                        "Authorization" : `Bearer ${token}`
+                    }
+                }
+            )
+            
+            return response
+        } catch (e) {
+            if (e.response.status === 500) {
+                throw new Error("Internal Server Error.")
+            } else if (e.response.status === 404) {
+                throw new Error("No Production/Venue with this id.")
+            } else if (e.response.status === 409) {
+                throw new Error("Production with this name already exists.")
+            } else if (e.response.status === 401 || e.response.status === 403) {
+                throw new Error("Failed to authenticate as administrator.")
+            }
+        }
+
+    }
+
     static deleteProduction = async (productionId) => {
         const token = Cookies.get("token")
 

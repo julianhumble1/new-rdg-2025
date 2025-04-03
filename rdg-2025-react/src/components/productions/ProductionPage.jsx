@@ -11,12 +11,16 @@ import PerformancesTable from "../performances/PerformancesTable.jsx";
 import PerformanceService from "../../services/PerformanceService.js";
 import CreditsTabs from "../credits/CreditsTabs.jsx";
 import CreditService from "../../services/CreditService.js";
+import AltProductionHighlight from "./AltProductionHighlight.jsx";
+import { Cloudinary } from "@cloudinary/url-gen/index";
 
 const ProductionPage = () => {
 
     const productionId = useParams().id;
     const [searchParams] = useSearchParams();
     const navigate = useNavigate();
+
+    const[image, setImage] = useState(null)
 
     const [productionData, setProductionData] = useState(null);
     const [performances, setPerformances] = useState([])
@@ -35,6 +39,21 @@ const ProductionPage = () => {
     const [itemToDelete, setItemToDelete] = useState(null)
 
     const fetchProductionData = useCallback(async () => {
+        const fetchProductionImage = async (imageId) => {
+            const cld = new Cloudinary({ cloud: { cloudName: "dbher59sh" } })
+            let img = cld.image("xrvbvweujcdqsjuuabys").format("auto").quality("auto")
+            if (imageId !== "0") {
+                try {
+                    img = cld.image(imageId).format("auto").quality("auto")
+                } catch (e) {
+                    setErrorMessage(e.message)
+                }
+            }
+            setImage(img)
+        }
+
+
+
         try {
             const response = await ProductionService.getProductionById(productionId);
             setProductionData(response.data.production)
@@ -42,6 +61,7 @@ const ProductionPage = () => {
             setActingCredits(response.data.actingCredits)
             setMusicianCredits(response.data.musicianCredits)
             setProducerCredits(response.data.producerCredits)
+            await fetchProductionImage(response.data.production.flyerFile)
         } catch (e) {
             setErrorMessage(e.message)
         }
@@ -120,8 +140,8 @@ const ProductionPage = () => {
 
             <div className="flex justify-center w-full md:my-2 ">
                 {(productionData && !editMode && performances.length > 0) &&
-                    <div className="grid md:grid-cols-5 grid-cols-1 w-full lg:w-1/2 md:w-2/3 md:shadow-md min-h-[26rem]">
-                        <ProductionHighlight productionData={productionData} setEditMode={setEditMode} handleDelete={handleDelete} />
+                    <div className="grid md:grid-cols-5 grid-cols-1 w-full md:w-4/5 md:shadow-md min-h-[26rem]">
+                        <AltProductionHighlight productionData={productionData} setEditMode={setEditMode} handleDelete={handleDelete} image={image} fetchProductionData={fetchProductionData} />
                         <PerformancesTable performances={performances} handleDelete={handleDelete} />
                     </div>
                 }

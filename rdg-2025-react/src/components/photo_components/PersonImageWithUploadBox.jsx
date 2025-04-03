@@ -6,7 +6,7 @@ import CloudinaryService from "../../services/CloudinaryService.js"
 import PersonService from "../../services/PersonService.js"
 import {  Slide, ToastContainer, toast } from 'react-toastify';
 
-const ImageWithUploadBox = ({ image, personData, fetchPersonData }) => {
+const PersonImageWithUploadBox = ({ image, personData, fetchPersonData }) => {
 
     const [imageUpload, setImageUpload] = useState(false)
 
@@ -18,14 +18,12 @@ const ImageWithUploadBox = ({ image, personData, fetchPersonData }) => {
     const [personSuccessMessage, setPersonSuccessMessage] = useState("")
     const [personErrorMessage, setPersonErrorMessage] = useState("")
 
-    const notifyPromise = () => toast.promise(
-        handleSubmitImage,
-        {
-            pending: 'Uploading image...',
+    const notifyPromise = () =>
+        toast.promise(handleSubmitImage, {
+            pending: "Uploading image...",
             success: imageSuccessMessage,
-            error: imageErrorMessage
-        }
-    )
+            error: imageErrorMessage,
+        });
 
     const handleFileChange = (event) => {
         const selectedFile = event.target.files[0]
@@ -37,7 +35,7 @@ const ImageWithUploadBox = ({ image, personData, fetchPersonData }) => {
         formData.append("file", file)
         formData.append("upload_preset", "people")
         formData.append("public_id", personData.id)
-        const signatureResponse = await getCloudinarySignature(personData.id)
+        const signatureResponse = await getCloudinaryPersonSignature(personData.id)
         const { timestamp, signature, apiKey } = signatureResponse.data;
         formData.append("signature", signature)
         formData.append("api_key", apiKey)
@@ -50,9 +48,9 @@ const ImageWithUploadBox = ({ image, personData, fetchPersonData }) => {
         fetchPersonData()
     }
 
-    const getCloudinarySignature = async () => {
+    const getCloudinaryPersonSignature = async () => {
         try {
-            const response = await CloudinaryService.getSignature(personData.id)
+            const response = await CloudinaryService.getSignature(personData.id, "people")
             console.log(response)
             return response
         } catch (e) {
@@ -115,4 +113,4 @@ const ImageWithUploadBox = ({ image, personData, fetchPersonData }) => {
     )
 }
 
-export default ImageWithUploadBox
+export default PersonImageWithUploadBox

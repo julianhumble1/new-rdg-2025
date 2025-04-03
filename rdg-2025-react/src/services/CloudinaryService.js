@@ -18,7 +18,7 @@ export default class CloudinaryService {
         }
     }
 
-    static getSignature = async (imageId) => {
+    static getSignature = async (imageId, uploadPreset) => {
 
         const token = Cookies.get("token")
 
@@ -29,7 +29,8 @@ export default class CloudinaryService {
                         "Authorization": `Bearer ${token}`
                     },
                     params: {
-                        publicId: imageId
+                        publicId: imageId,
+                        uploadPreset: uploadPreset
                     }
                 }
             )

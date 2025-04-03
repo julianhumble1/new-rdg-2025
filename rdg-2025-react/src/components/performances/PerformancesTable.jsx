@@ -3,7 +3,7 @@ import PerformanceRow from "./PerformanceRow.jsx"
 const PerformanceTable = ({ performances, handleDelete }) => {
 
     if (performances.length > 0) return (
-        <div className="col-span-2 flex flex-col md:rounded-r hover:bg-opacity-50 bg-sky-900 bg-opacity-35 h-full md:h-[30rem] w-full p-4">
+        <div className="col-span-2 flex flex-col md:rounded-r hover:bg-slate-300 bg-slate-200 h-full md:h-[30rem] w-full p-4">
             <div className="font-bold text-lg" >
                 Performances
             </div>

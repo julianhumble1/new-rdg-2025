@@ -47,7 +47,7 @@ const EditCreditForm = () => {
             setProduction({value: response.data.credit.production.id, label: response.data.credit.production.name})
             response.data.credit.person &&
                 setPerson({ value: response.data.credit.person.id, label: `${response.data.credit.person.firstName} ${response.data.credit.person.lastName}` })
-            setSummary(response.data.credit.summary)
+            response.data.credit.summary && setSummary(response.data.credit.summary)       
         }
 
         try {
