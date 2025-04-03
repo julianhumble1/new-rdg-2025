@@ -23,17 +23,15 @@ public class CloudinaryService {
 
     private Long timestamp;
 
-    public String generateSecureSignature(String publicId) {
+    public String generateSecureSignature(String publicId, String uploadPreset) {
         Long timestamp = System.currentTimeMillis() / 1000L;
         this.timestamp = timestamp;
         Map<String, Object> paramsToSign = ObjectUtils.asMap(
                 "timestamp", timestamp,
-                "upload_preset", "people",
+                "upload_preset", uploadPreset,
                 "public_id", publicId
         );
         Cloudinary cloudinary = new Cloudinary();
-        System.out.println(apiKey);
-        System.out.println(apiSecret);
         return cloudinary.apiSignRequest(paramsToSign, apiSecret);
     }
 }
