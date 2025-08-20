@@ -29,7 +29,7 @@ const PeopleTable = ({ people, responseType, handleDelete }) => {
                         <Table.Row className="">
                             <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white ">
                                 <Link className='hover:underline flex flex-row gap-2' to="/people/new">
-                                    <PlusCircleIcon className="max-h-5 text-black text-opacity-75" />
+                                    <PlusCircleIcon className="h-5 text-black text-opacity-75" />
                                     <div className="my-auto">
                                         Add New Person
                                     </div>

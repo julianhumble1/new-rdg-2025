@@ -5,7 +5,7 @@ import { Link } from "react-router-dom"
 const ProductionHighlight = ({ productionData, setEditMode, handleDelete }) => {
 
     if (productionData) return (
-        <div className="bg-sky-900 bg-opacity-35 md:rounded-l p-4 m-0 flex flex-col gap-2 col-span-3 h-full">
+        <div className="bg-slate-200 md:rounded-l p-4 m-0 flex flex-col gap-2 col-span-3 h-full">
             <div className="text-black text-xl font-bold flex justify-between">
                 <div>
                     {productionData.name}
@@ -51,7 +51,7 @@ const ProductionHighlight = ({ productionData, setEditMode, handleDelete }) => {
                     </div>       
             
                     {productionData.description &&
-                        <div className="flex flex-col max-h-36 overflow-auto">
+                        <div className="flex flex-col h-40 overflow-auto">
                             <div className="font-bold italic">
                                 Description
                             </div>

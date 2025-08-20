@@ -141,7 +141,7 @@ const ProductionPage = () => {
             <div className="flex justify-center w-full md:my-2 ">
                 {(productionData && !editMode && performances.length > 0) &&
                     <div className="grid md:grid-cols-5 grid-cols-1 w-full md:w-4/5 md:shadow-md min-h-[26rem]">
-                        <AltProductionHighlight productionData={productionData} setEditMode={setEditMode} handleDelete={handleDelete} image={image} fetchProductionData={fetchProductionData} />
+                        <ProductionHighlight productionData={productionData} setEditMode={setEditMode} handleDelete={handleDelete} image={image} fetchProductionData={fetchProductionData} />
                         <PerformancesTable performances={performances} handleDelete={handleDelete} />
                     </div>
                 }
