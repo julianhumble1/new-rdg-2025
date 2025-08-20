@@ -20,7 +20,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.dao.DataAccessException;
-import org.springframework.security.core.parameters.P;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -63,8 +62,7 @@ public class CreditServiceTest {
                     CreditType.ACTOR,
                     1,
                     1,
-                    "Test Summary"
-            );
+                    "Test Summary");
         }
 
         @Test
@@ -152,8 +150,7 @@ public class CreditServiceTest {
                     CreditType.ACTOR,
                     new Person(),
                     new Production(),
-                    "Test Summary"
-            );
+                    "Test Summary");
             when(creditRepository.save(any())).thenReturn(testCredit);
             // Act
             Credit result = creditService.addNewCredit(testCreditRequest);
@@ -175,8 +172,7 @@ public class CreditServiceTest {
                     CreditType.ACTOR,
                     new Person(),
                     new Production(),
-                    "Test Summary"
-            );
+                    "Test Summary");
         }
 
         @Test
@@ -204,7 +200,8 @@ public class CreditServiceTest {
         @Test
         void testDataAccessExceptionThrowsDatabaseException() {
             // Arrange
-            when(creditRepository.findById(anyInt())).thenThrow(new DataAccessException("") {});
+            when(creditRepository.findById(anyInt())).thenThrow(new DataAccessException("") {
+            });
             // Act & Assert
             assertThrows(DatabaseException.class, () -> {
                 creditService.getCreditById(1);
@@ -222,7 +219,6 @@ public class CreditServiceTest {
             assertEquals(testCredit, result);
 
         }
-
 
     }
 
@@ -245,15 +241,13 @@ public class CreditServiceTest {
                     CreditType.ACTOR,
                     new Person(),
                     new Production(),
-                    "Test Summary"
-            );
+                    "Test Summary");
             testCreditRequest = new CreditRequest(
                     "Updated Test Credit",
                     CreditType.MUSICIAN,
                     2,
                     2,
-                    "Updated Test Summary"
-            );
+                    "Updated Test Summary");
             testPerson = new Person(
                     "Test First Name",
                     "Test Last Name",
@@ -262,8 +256,7 @@ public class CreditServiceTest {
                     "07111 111111",
                     "Test Street",
                     "Test Town",
-                    "Test Postcode"
-            );
+                    "Test Postcode");
             testProduction = new Production(
                     "Test Production",
                     new Venue(),
@@ -272,8 +265,7 @@ public class CreditServiceTest {
                     LocalDateTime.now(),
                     false,
                     false,
-                    "Test File String"
-            );
+                    "Test File String");
         }
 
         @Test
@@ -289,7 +281,8 @@ public class CreditServiceTest {
         @Test
         void testFindCreditDataAccessExceptionThrowsDatabaseException() {
             // Arrange
-            when(creditRepository.findById(1)).thenThrow(new DataAccessException("") {});
+            when(creditRepository.findById(1)).thenThrow(new DataAccessException("") {
+            });
             // Act & Assert
             assertThrows(DatabaseException.class, () -> {
                 creditService.updateCredit(1, testCreditRequest);
@@ -418,7 +411,8 @@ public class CreditServiceTest {
             when(creditRepository.findById(1)).thenReturn(Optional.of(testCredit));
             when(productionService.getProductionById(anyInt())).thenReturn(testProduction);
             when(personService.getPersonById(anyInt())).thenReturn(testPerson);
-            when(creditRepository.save(any())).thenThrow(new DataAccessException("") {});
+            when(creditRepository.save(any())).thenThrow(new DataAccessException("") {
+            });
             // Act & Assert
             assertThrows(DatabaseException.class, () -> {
                 creditService.updateCredit(1, testCreditRequest);
@@ -466,8 +460,7 @@ public class CreditServiceTest {
                     CreditType.ACTOR,
                     new Person(),
                     new Production(),
-                    "Test Summary"
-            );
+                    "Test Summary");
         }
 
         @Test
@@ -483,7 +476,8 @@ public class CreditServiceTest {
         @Test
         void testFindDataAccessExceptionThrowsDatabaseException() {
             // Arrange
-            when(creditRepository.findById(anyInt())).thenThrow(new DataAccessException("") {});
+            when(creditRepository.findById(anyInt())).thenThrow(new DataAccessException("") {
+            });
             // Act & Assert
             assertThrows(DatabaseException.class, () -> {
                 creditService.deleteCreditById(1);
@@ -514,7 +508,8 @@ public class CreditServiceTest {
         void testDeleteDataAccessExceptionThrowsDatabaseException() {
             // Arrange
             when(creditRepository.findById(anyInt())).thenReturn(Optional.of(testCredit));
-            doThrow(new DataAccessException("") {}).when(creditRepository).delete(any());
+            doThrow(new DataAccessException("") {
+            }).when(creditRepository).delete(any());
             // Act & Assert
             assertThrows(DatabaseException.class, () -> {
                 creditService.deleteCreditById(1);
@@ -531,8 +526,6 @@ public class CreditServiceTest {
                 creditService.deleteCreditById(1);
             });
         }
-
-
 
     }
 }

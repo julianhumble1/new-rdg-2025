@@ -3,13 +3,13 @@ package com.rdg.rdg_2025.rdg_2025_spring.services;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import lombok.Getter;
-import org.aspectj.weaver.SignatureUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
 
-@Service @Getter
+@Service
+@Getter
 public class CloudinaryService {
 
     @Value("${rdg.app.cloudinaryName}")
@@ -29,8 +29,7 @@ public class CloudinaryService {
         Map<String, Object> paramsToSign = ObjectUtils.asMap(
                 "timestamp", timestamp,
                 "upload_preset", uploadPreset,
-                "public_id", publicId
-        );
+                "public_id", publicId);
         Cloudinary cloudinary = new Cloudinary();
         return cloudinary.apiSignRequest(paramsToSign, apiSecret);
     }

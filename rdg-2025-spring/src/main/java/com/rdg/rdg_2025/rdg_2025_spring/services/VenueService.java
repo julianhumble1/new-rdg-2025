@@ -64,14 +64,11 @@ public class VenueService {
 
     public Venue updateVenue(int venueId, VenueRequest updateVenueRequest) {
         Venue venue = getVenueById(venueId);
-
         updateVenueFromRequest(updateVenueRequest, venue);
-
         return saveVenueToDatabase(venue);
     }
 
     public void deleteVenueById(int venueId) {
-
         Venue venue = getVenueById(venueId);
         setAssociatedProductionVenuesToNull(venue);
         setAssociatedFestivalVenuesToNull(venue);
