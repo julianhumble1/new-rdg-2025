@@ -1,6 +1,5 @@
 package com.rdg.rdg_2025.rdg_2025_spring.controllers;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.rdg.rdg_2025.rdg_2025_spring.exception.DatabaseException;
@@ -18,7 +17,6 @@ import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
-import org.springframework.security.core.parameters.P;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -48,7 +46,9 @@ public class CreditControllerTest {
     private ObjectMapper objectMapper;
 
     @BeforeEach
-    public void setupContext() {mockMvc = MockMvcBuilders.webAppContextSetup(context).build();}
+    public void setupContext() {
+        mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
+    }
 
     private Credit testCredit;
 
@@ -62,8 +62,7 @@ public class CreditControllerTest {
                 CreditType.ACTOR,
                 new Person(),
                 new Production(),
-                "Test Summary"
-        );
+                "Test Summary");
     }
 
     @Nested
@@ -78,7 +77,6 @@ public class CreditControllerTest {
             requestJson.put("productionId", 1);
             requestJson.put("personId", 1);
             requestJson.put("summary", "Test Summary");
-
 
         }
 
@@ -100,8 +98,8 @@ public class CreditControllerTest {
 
             // Act & Assert
             mockMvc.perform(post("/credits")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(objectMapper.writeValueAsString(requestJson)))
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(requestJson)))
                     .andExpect(status().isBadRequest());
         }
 
@@ -111,8 +109,8 @@ public class CreditControllerTest {
             requestJson.put("type", "");
             // Act & Assert
             mockMvc.perform(post("/credits")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(objectMapper.writeValueAsString(requestJson)))
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(requestJson)))
                     .andExpect(status().isBadRequest());
         }
 
@@ -122,8 +120,8 @@ public class CreditControllerTest {
             requestJson.remove("type");
             // Act & Assert
             mockMvc.perform(post("/credits")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(objectMapper.writeValueAsString(requestJson)))
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(requestJson)))
                     .andExpect(status().isBadRequest());
         }
 
@@ -133,8 +131,8 @@ public class CreditControllerTest {
             requestJson.put("type", "not actor musician or producer");
             // Act & Assert
             mockMvc.perform(post("/credits")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(objectMapper.writeValueAsString(requestJson)))
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(requestJson)))
                     .andExpect(status().isBadRequest());
         }
 
@@ -144,8 +142,8 @@ public class CreditControllerTest {
             requestJson.put("productionId", "");
             // Act & Assert
             mockMvc.perform(post("/credits")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(objectMapper.writeValueAsString(requestJson)))
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(requestJson)))
                     .andExpect(status().isBadRequest());
         }
 
@@ -155,8 +153,8 @@ public class CreditControllerTest {
             requestJson.remove("productionId");
             // Act & Assert
             mockMvc.perform(post("/credits")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(objectMapper.writeValueAsString(requestJson)))
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(requestJson)))
                     .andExpect(status().isBadRequest());
         }
 
@@ -166,8 +164,8 @@ public class CreditControllerTest {
             requestJson.put("productionId", "not an int");
             // Act & Assert
             mockMvc.perform(post("/credits")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(objectMapper.writeValueAsString(requestJson)))
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(requestJson)))
                     .andExpect(status().isBadRequest());
         }
 
@@ -177,8 +175,8 @@ public class CreditControllerTest {
             requestJson.put("productionId", 0);
             // Act & Assert
             mockMvc.perform(post("/credits")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(objectMapper.writeValueAsString(requestJson)))
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(requestJson)))
                     .andExpect(status().isBadRequest());
         }
 
@@ -188,8 +186,8 @@ public class CreditControllerTest {
             requestJson.put("personId", "not an int");
             // Act & Assert
             mockMvc.perform(post("/credits")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(objectMapper.writeValueAsString(requestJson)))
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(requestJson)))
                     .andExpect(status().isBadRequest());
         }
 
@@ -199,8 +197,8 @@ public class CreditControllerTest {
             when(creditService.addNewCredit(any())).thenReturn(testCredit);
             // Act
             mockMvc.perform(post("/credits")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(objectMapper.writeValueAsString(requestJson)));
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(requestJson)));
             // Assert
             verify(creditService, times(1)).addNewCredit(any());
         }
@@ -223,8 +221,8 @@ public class CreditControllerTest {
             when(creditService.addNewCredit(any())).thenThrow(new EntityNotFoundException(""));
             // Act & Assert
             mockMvc.perform(post("/credits")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(objectMapper.writeValueAsString(requestJson)))
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(requestJson)))
                     .andExpect(status().isNotFound());
         }
 
@@ -234,8 +232,8 @@ public class CreditControllerTest {
             when(creditService.addNewCredit(any())).thenReturn(testCredit);
             // Act & Assert
             mockMvc.perform(post("/credits")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(objectMapper.writeValueAsString(requestJson)))
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(requestJson)))
                     .andExpect(status().isCreated());
         }
 
@@ -245,8 +243,8 @@ public class CreditControllerTest {
             when(creditService.addNewCredit(any())).thenReturn(testCredit);
             // Act & Assert
             mockMvc.perform(post("/credits")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(objectMapper.writeValueAsString(requestJson)))
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(requestJson)))
                     .andExpect(header().string("Location", "/credits/" + testCredit.getId()));
         }
 
@@ -256,8 +254,8 @@ public class CreditControllerTest {
             when(creditService.addNewCredit(any())).thenReturn(testCredit);
             // Act & Assert
             mockMvc.perform(post("/credits")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(objectMapper.writeValueAsString(requestJson)))
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(requestJson)))
                     .andExpect(jsonPath("$.credit.name").value("Test Credit"))
                     .andExpect(jsonPath("$.credit.type").value("ACTOR"));
         }
@@ -269,8 +267,8 @@ public class CreditControllerTest {
             requestJson.put("type", "MUSICIAN");
             // Act & Assert
             mockMvc.perform(post("/credits")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(objectMapper.writeValueAsString(requestJson)))
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(requestJson)))
                     .andExpect(status().isCreated());
         }
 
@@ -281,8 +279,8 @@ public class CreditControllerTest {
             requestJson.put("type", "PRODUCER");
             // Act & Assert
             mockMvc.perform(post("/credits")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(objectMapper.writeValueAsString(requestJson)))
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(requestJson)))
                     .andExpect(status().isCreated());
         }
 
@@ -294,8 +292,8 @@ public class CreditControllerTest {
             requestJson.put("personId", "");
             // Act & Assert
             mockMvc.perform(post("/credits")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(objectMapper.writeValueAsString(requestJson)))
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(requestJson)))
                     .andExpect(status().isCreated());
         }
 
@@ -307,8 +305,8 @@ public class CreditControllerTest {
             requestJson.remove("personId");
             // Act & Assert
             mockMvc.perform(post("/credits")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(objectMapper.writeValueAsString(requestJson)))
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(requestJson)))
                     .andExpect(status().isCreated());
         }
 
@@ -319,11 +317,10 @@ public class CreditControllerTest {
             requestJson.put("personId", 0);
             // Act & Assert
             mockMvc.perform(post("/credits")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(objectMapper.writeValueAsString(requestJson)))
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(requestJson)))
                     .andExpect(status().isCreated());
         }
-
 
     }
 
@@ -401,7 +398,6 @@ public class CreditControllerTest {
             requestJson.put("summary", "Updated Test Summary");
         }
 
-
         @Test
         void testCreditIdNotIntResponds400() throws Exception {
             // Arrange
@@ -418,8 +414,8 @@ public class CreditControllerTest {
             requestJson.put("name", "");
             // Act & Assert
             mockMvc.perform(patch("/credits/1")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(objectMapper.writeValueAsString(requestJson)))
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(requestJson)))
                     .andExpect(status().isBadRequest());
         }
 
@@ -429,8 +425,8 @@ public class CreditControllerTest {
             requestJson.remove("name");
             // Act & Assert
             mockMvc.perform(patch("/credits/1")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(objectMapper.writeValueAsString(requestJson)))
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(requestJson)))
                     .andExpect(status().isBadRequest());
         }
 
@@ -440,8 +436,8 @@ public class CreditControllerTest {
             requestJson.put("type", "");
             // Act & Assert
             mockMvc.perform(patch("/credits/1")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(objectMapper.writeValueAsString(requestJson)))
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(requestJson)))
                     .andExpect(status().isBadRequest());
         }
 
@@ -451,8 +447,8 @@ public class CreditControllerTest {
             requestJson.remove("type");
             // Act & Assert
             mockMvc.perform(patch("/credits/1")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(objectMapper.writeValueAsString(requestJson)))
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(requestJson)))
                     .andExpect(status().isBadRequest());
         }
 
@@ -462,8 +458,8 @@ public class CreditControllerTest {
             requestJson.put("type", "not actor musician or producer");
             // Act & Assert
             mockMvc.perform(patch("/credits/1")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(objectMapper.writeValueAsString(requestJson)))
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(requestJson)))
                     .andExpect(status().isBadRequest());
         }
 
@@ -473,8 +469,8 @@ public class CreditControllerTest {
             requestJson.put("productionId", "");
             // Act & Assert
             mockMvc.perform(patch("/credits/1")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(objectMapper.writeValueAsString(requestJson)))
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(requestJson)))
                     .andExpect(status().isBadRequest());
         }
 
@@ -484,8 +480,8 @@ public class CreditControllerTest {
             requestJson.remove("productionId");
             // Act & Assert
             mockMvc.perform(patch("/credits/1")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(objectMapper.writeValueAsString(requestJson)))
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(requestJson)))
                     .andExpect(status().isBadRequest());
         }
 
@@ -495,8 +491,8 @@ public class CreditControllerTest {
             requestJson.put("productionId", "not an int");
             // Act & Assert
             mockMvc.perform(patch("/credits/1")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(objectMapper.writeValueAsString(requestJson)))
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(requestJson)))
                     .andExpect(status().isBadRequest());
         }
 
@@ -506,8 +502,8 @@ public class CreditControllerTest {
             requestJson.put("productionId", 0);
             // Act & Assert
             mockMvc.perform(patch("/credits/1")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(objectMapper.writeValueAsString(requestJson)))
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(requestJson)))
                     .andExpect(status().isBadRequest());
         }
 
@@ -517,8 +513,8 @@ public class CreditControllerTest {
             requestJson.put("personId", "not an int");
             // Act & Assert
             mockMvc.perform(patch("/credits/1")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(objectMapper.writeValueAsString(requestJson)))
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(requestJson)))
                     .andExpect(status().isBadRequest());
         }
 
@@ -552,8 +548,8 @@ public class CreditControllerTest {
             when(creditService.updateCredit(anyInt(), any())).thenThrow(new EntityNotFoundException(""));
             // Act & Assert
             mockMvc.perform(patch("/credits/1")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(objectMapper.writeValueAsString(requestJson)))
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(requestJson)))
                     .andExpect(status().isNotFound());
 
         }
@@ -564,8 +560,8 @@ public class CreditControllerTest {
             when(creditService.updateCredit(anyInt(), any())).thenReturn(testCredit);
             // Act & Assert
             mockMvc.perform(patch("/credits/1")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(objectMapper.writeValueAsString(requestJson)))
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(requestJson)))
                     .andExpect(status().isOk());
 
         }
@@ -576,8 +572,8 @@ public class CreditControllerTest {
             when(creditService.updateCredit(anyInt(), any())).thenReturn(testCredit);
             // Act & Assert
             mockMvc.perform(patch("/credits/1")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(objectMapper.writeValueAsString(requestJson)))
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(requestJson)))
                     .andExpect(jsonPath("$.credit.name").value("Test Credit"))
                     .andExpect(jsonPath("$.credit.type").value("ACTOR"));
         }
@@ -589,8 +585,8 @@ public class CreditControllerTest {
             requestJson.put("type", "MUSICIAN");
             // Act & Assert
             mockMvc.perform(patch("/credits/1")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(objectMapper.writeValueAsString(requestJson)))
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(requestJson)))
                     .andExpect(status().isOk());
         }
 
@@ -601,8 +597,8 @@ public class CreditControllerTest {
             requestJson.put("type", "PRODUCER");
             // Act & Assert
             mockMvc.perform(patch("/credits/1")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(objectMapper.writeValueAsString(requestJson)))
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(requestJson)))
                     .andExpect(status().isOk());
         }
 
@@ -614,8 +610,8 @@ public class CreditControllerTest {
             requestJson.put("personId", "");
             // Act & Assert
             mockMvc.perform(patch("/credits/1")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(objectMapper.writeValueAsString(requestJson)))
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(requestJson)))
                     .andExpect(status().isOk());
         }
 
@@ -627,8 +623,8 @@ public class CreditControllerTest {
             requestJson.remove("personId");
             // Act & Assert
             mockMvc.perform(patch("/credits/1")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(objectMapper.writeValueAsString(requestJson)))
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(requestJson)))
                     .andExpect(status().isOk());
         }
 
@@ -639,8 +635,8 @@ public class CreditControllerTest {
             requestJson.put("personId", 0);
             // Act & Assert
             mockMvc.perform(patch("/credits/1")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(objectMapper.writeValueAsString(requestJson)))
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(requestJson)))
                     .andExpect(status().isOk());
         }
 
@@ -651,7 +647,7 @@ public class CreditControllerTest {
     class DeleteCreditByIdControllerTests {
 
         @Test
-        void testCreditIdNotIntResponds400() throws Exception{
+        void testCreditIdNotIntResponds400() throws Exception {
             // Arrange
             // Act & Assert
             mockMvc.perform(delete("/credits/notanint"))
@@ -659,7 +655,7 @@ public class CreditControllerTest {
         }
 
         @Test
-        void testCreditServiceMethodIsCalled() throws Exception{
+        void testCreditServiceMethodIsCalled() throws Exception {
             // Arrange
             // Act
             mockMvc.perform(delete("/credits/1"));
@@ -668,7 +664,7 @@ public class CreditControllerTest {
         }
 
         @Test
-        void testDatabaseExceptionResponds500() throws Exception{
+        void testDatabaseExceptionResponds500() throws Exception {
             // Arrange
             doThrow(new DatabaseException("")).when(creditService).deleteCreditById(anyInt());
             // Act & Assert
@@ -677,7 +673,7 @@ public class CreditControllerTest {
         }
 
         @Test
-        void testEntityNotFoundExceptionResponds404() throws Exception{
+        void testEntityNotFoundExceptionResponds404() throws Exception {
             // Arrange
             doThrow(new EntityNotFoundException("")).when(creditService).deleteCreditById(anyInt());
             // Act & Assert
@@ -686,14 +682,13 @@ public class CreditControllerTest {
         }
 
         @Test
-        void testSuccessfulDeleteResponds204() throws Exception{
+        void testSuccessfulDeleteResponds204() throws Exception {
             // Arrange
             Production production = new Production();
             // Act & Assert
             mockMvc.perform(delete("/credits/1"))
                     .andExpect(status().isNoContent());
         }
-
 
     }
 

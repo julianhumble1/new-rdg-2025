@@ -1,10 +1,10 @@
 package com.rdg.rdg_2025.rdg_2025_spring.controllers;
 
 import com.rdg.rdg_2025.rdg_2025_spring.exception.DatabaseException;
-import com.rdg.rdg_2025.rdg_2025_spring.models.credit.Credit;
-import com.rdg.rdg_2025.rdg_2025_spring.payload.request.credit.CreditRequest;
-import com.rdg.rdg_2025.rdg_2025_spring.payload.response.credit.CreditResponse;
-import com.rdg.rdg_2025.rdg_2025_spring.services.CreditService;
+import com.rdg.rdg_2025.rdg_2025_spring.models.Award;
+import com.rdg.rdg_2025.rdg_2025_spring.payload.request.award.AwardRequest;
+import com.rdg.rdg_2025.rdg_2025_spring.payload.response.award.AwardResponse;
+import com.rdg.rdg_2025.rdg_2025_spring.services.AwardService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,33 +17,31 @@ import java.net.URI;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/credits")
-public class CreditController {
+@RequestMapping("/awards")
+public class AwardController {
 
     @Autowired
-    CreditService creditService;
+    AwardService awardService;
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> addNewCredit(@Valid @RequestBody CreditRequest creditRequest) {
-
+    public ResponseEntity<?> addNewAward(@Valid @RequestBody AwardRequest awardRequest) {
         try {
-            Credit credit = creditService.addNewCredit(creditRequest);
-            URI location = URI.create("/credits/" + credit.getId());
-            return ResponseEntity.created(location).body(new CreditResponse(credit));
+            Award award = awardService.addNewAward(awardRequest);
+            URI location = URI.create("/awards/" + award.getId());
+            return ResponseEntity.created(location).body(new AwardResponse(award));
         } catch (DatabaseException ex) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
         } catch (EntityNotFoundException ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
         }
-
     }
 
-    @GetMapping("/{creditId}")
-    public ResponseEntity<?> getCreditById(@PathVariable int creditId) {
+    @GetMapping("/{awardId}")
+    public ResponseEntity<?> getAwardById(@PathVariable int awardId) {
         try {
-            Credit credit = creditService.getCreditById(creditId);
-            return ResponseEntity.ok(new CreditResponse(credit));
+            Award award = awardService.getAwardById(awardId);
+            return ResponseEntity.ok(new AwardResponse(award));
         } catch (EntityNotFoundException ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
         } catch (DatabaseException ex) {
@@ -51,12 +49,12 @@ public class CreditController {
         }
     }
 
-    @PatchMapping("/{creditId}")
+    @PatchMapping("/{awardId}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> updateCredit(@PathVariable int creditId, @Valid @RequestBody CreditRequest creditRequest) {
+    public ResponseEntity<?> updateAward(@PathVariable int awardId, @Valid @RequestBody AwardRequest awardRequest) {
         try {
-            Credit credit = creditService.updateCredit(creditId, creditRequest);
-            return ResponseEntity.ok(new CreditResponse(credit));
+            Award award = awardService.updateAward(awardId, awardRequest);
+            return ResponseEntity.ok(new AwardResponse(award));
         } catch (DatabaseException ex) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
         } catch (EntityNotFoundException ex) {
@@ -64,11 +62,11 @@ public class CreditController {
         }
     }
 
-    @DeleteMapping("/{creditId}")
+    @DeleteMapping("/{awardId}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> deleteCreditById(@PathVariable int creditId) {
+    public ResponseEntity<?> deleteAwardById(@PathVariable int awardId) {
         try {
-            creditService.deleteCreditById(creditId);
+            awardService.deleteAwardById(awardId);
             return ResponseEntity.noContent().build();
         } catch (DatabaseException ex) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
@@ -76,4 +74,5 @@ public class CreditController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
         }
     }
+
 }
