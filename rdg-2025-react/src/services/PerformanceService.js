@@ -86,7 +86,7 @@ export default class PerformanceService {
     }
 
     static updatePerformance = async (performanceId, productionId, venueId, festivalId, performanceTime, description, standardPrice, concessionPrice, boxOffice) => {
-                const token = Cookies.get("token")
+        const token = Cookies.get("token")
 
         try {
             const response = await axios.patch(`http://localhost:8080/performances/${performanceId}`,

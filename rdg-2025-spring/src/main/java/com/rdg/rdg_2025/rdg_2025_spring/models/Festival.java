@@ -8,6 +8,7 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -46,6 +47,10 @@ public class Festival {
     @OneToMany(mappedBy = "festival", cascade = CascadeType.PERSIST)
     @JsonBackReference
     private List<Performance> performances = new ArrayList<>();
+
+    @OneToMany(mappedBy = "festival", cascade = CascadeType.PERSIST)
+    @JsonBackReference
+    private List<Award> awards = new ArrayList<>();
 
     public Festival(String name, Venue venue, int year, int month, String description) {
         this.name = name;

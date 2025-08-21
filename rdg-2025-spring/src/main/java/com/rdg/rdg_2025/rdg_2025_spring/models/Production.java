@@ -66,6 +66,10 @@ public class Production {
     @JsonBackReference
     private List<ProductionImage> productionImages = new ArrayList<>();
 
+    @OneToMany(mappedBy = "production", cascade = CascadeType.PERSIST)
+    @JsonBackReference
+    private List<Award> awards = new ArrayList<>();
+
     public Production(String name, Venue venue, String author, String description, LocalDateTime auditionDate, boolean sundowners, boolean notConfirmed, String flyerFile) {
         this.name = name;
         this.venue = venue;

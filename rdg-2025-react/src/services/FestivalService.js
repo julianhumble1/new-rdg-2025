@@ -10,7 +10,7 @@ export default class FestivalService {
         try {
             const response = await axios.post("http://localhost:8080/festivals",
                 {
-                    "name": name.trim(),
+                    name: name.trim(),
                     venueId: venueId,
                     year: year,
                     month: month,

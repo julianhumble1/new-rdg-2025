@@ -50,6 +50,10 @@ public class Person {
     @JsonBackReference
     private List<Credit> credits = new ArrayList<>();
 
+    @OneToMany(mappedBy = "person", cascade = CascadeType.PERSIST)
+    @JsonBackReference
+    private List<Award> awards = new ArrayList<>();
+
     public Person(String firstName, String lastName, String summary, String homePhone, String mobilePhone, String addressStreet, String addressTown, String addressPostcode) {
         this.firstName = firstName;
         this.lastName = lastName;

@@ -56,6 +56,7 @@ const PersonPage = () => {
 
         try {
             const response = await PersonService.getPersonById(personId)
+            console.log(response)
             setViewType(response.data.responseType)
             setPersonData(response.data.person)
             setActingCredits(response.data.actingCredits)

@@ -27,6 +27,7 @@ import EditCreditForm from "./components/credits/EditCreditForm.jsx"
 import EditPerformanceForm from "./components/performances/EditPerformanceForm.jsx"
 import CloudinaryTest from "./components/CloudinaryTest.jsx"
 import CloudinaryUploadTest from "./components/CloudinaryUploadTest.jsx"
+import NewAwardForm from "./components/awards/NewAwardForm.jsx"
 
 
 function App() {
@@ -85,6 +86,8 @@ function App() {
 
         <Route path="/cloudinary" element={<CloudinaryTest />} />
         <Route path="/cloudinary/upload" element={<CloudinaryUploadTest />} />
+
+        <Route path="/awards/new" element={<NewAwardForm /> } />
 
       </Routes>
     </Router>
