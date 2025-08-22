@@ -11,7 +11,6 @@ import PerformancesTable from "../performances/PerformancesTable.jsx";
 import PerformanceService from "../../services/PerformanceService.js";
 import CreditsTabs from "../credits/CreditsTabs.jsx";
 import CreditService from "../../services/CreditService.js";
-import AltProductionHighlight from "./AltProductionHighlight.jsx";
 import { Cloudinary } from "@cloudinary/url-gen/index";
 
 const ProductionPage = () => {

@@ -63,7 +63,6 @@ const PersonPage = () => {
             setMusicianCredits(response.data.musicianCredits)
             setProducerCredits(response.data.producerCredits)
             fetchPersonImage(response.data.person.imageId)
-            console.log(response)
         } catch (e) {
             setErrorMessage(e.message)
         }
