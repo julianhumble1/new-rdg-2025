@@ -36,7 +36,7 @@ const CreditRow = ({ credit, handleDelete }) => {
                         <Link className="text-medium text-black hover:underline font-bold text-end" to={`/credits/edit/${credit.id}`}>
                             Edit
                         </Link>
-                        <button className="text-medium text-black hover:underline font-bold text-end" onClick={() => handleDelete(credit)} >Delete</button>
+                        <button   className="text-medium text-black hover:underline font-bold text-end" onClick={() => handleDelete(credit)} >Delete</button>
                     </div>
                 </Table.Cell>
             }

@@ -8,6 +8,8 @@ import FestivalHighlight from "./FestivalHighlight.jsx";
 import PerformancesTable from "../performances/PerformancesTable.jsx";
 import EditFestivalForm from "./EditFestivalForm.jsx";
 import PerformanceService from "../../services/PerformanceService.js";
+import AwardService from "../../services/AwardService.js";
+import AwardsTabs from "../awards/AwardsTabs.jsx";
 
 const FestivalPage = () => {
 
@@ -18,6 +20,7 @@ const FestivalPage = () => {
     const [festivalData, setFestivalData] = useState(null)
 
     const [performances, setPerformances] = useState([])
+    const [awards, setAwards] = useState([])
 
     const [successMessage, setSuccessMessage] = useState("")
     const [errorMessage, setErrorMessage] = useState("")
@@ -27,12 +30,13 @@ const FestivalPage = () => {
 
     const [editMode, setEditMode] = useState(searchParams.get("edit"))
 
-    const getFestivalData = useCallback( async () => {
+    const getFestivalData = useCallback(async () => {
         try {
             const response = await FestivalService.getFestivalById(festivalId)
             console.log(response)
             setFestivalData(response.data.festival)
             setPerformances(response.data.performances)
+            setAwards(response.data.awards)
         } catch (e) {
             setErrorMessage(e.message)
         }
@@ -52,6 +56,13 @@ const FestivalPage = () => {
             if (item.year != null) {
                 await FestivalService.deleteFestivalById(item.id)
                 navigate("/festivals")
+            } else if (item.name && (item.production || item.person || item.festival)) {
+                // This is an award
+                await AwardService.deleteAward(item.id)
+                setShowConfirmDelete(false)
+                setErrorMessage("")
+                setSuccessMessage("Successfully deleted award")
+                getFestivalData()
             } else {
                 await PerformanceService.deletePerformance(item.id)
                 setShowConfirmDelete(false)
@@ -80,7 +91,7 @@ const FestivalPage = () => {
     return (
         <div>
             {showConfirmDelete &&
-                <ConfirmDeleteModal setShowConfirmDelete={setShowConfirmDelete} itemToDelete={itemToDelete} handleConfirmDelete={ handleConfirmDelete } />
+                <ConfirmDeleteModal setShowConfirmDelete={setShowConfirmDelete} itemToDelete={itemToDelete} handleConfirmDelete={handleConfirmDelete} />
             }
             <SuccessMessage message={successMessage} />
             <ErrorMessage message={errorMessage} />
@@ -89,7 +100,7 @@ const FestivalPage = () => {
                 {(festivalData && !editMode && performances.length > 0) &&
                     <div className="grid md:grid-cols-5 grid-cols-1 w-full lg:w-1/2 md:w-2/3 md:shadow-md min-h-[26rem]">
                         <FestivalHighlight festivalData={festivalData} setEditMode={setEditMode} handleDelete={handleDelete} />
-                        <PerformancesTable performances={performances} handleDelete={handleDelete}/>
+                        <PerformancesTable performances={performances} handleDelete={handleDelete} />
                     </div>
                 }
 
@@ -99,9 +110,18 @@ const FestivalPage = () => {
                     </div>
                 }
                 {(festivalData && editMode) &&
-                    <EditFestivalForm festivalData={festivalData} handleEdit={handleEdit} setEditMode={setEditMode}/>
+                    <EditFestivalForm festivalData={festivalData} handleEdit={handleEdit} setEditMode={setEditMode} />
                 }
             </div>
+
+            {/* Awards Section */}
+            {festivalData && !editMode && awards.length > 0 &&
+                <div className="flex w-full justify-center md:my-2">
+                    <div className="w-full lg:w-1/2 md:w-2/3 md:shadow-md">
+                        <AwardsTabs awards={awards} handleDelete={handleDelete} />
+                    </div>
+                </div>
+            }
         </div>
     )
 }

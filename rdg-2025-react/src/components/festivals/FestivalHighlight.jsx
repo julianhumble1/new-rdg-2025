@@ -1,11 +1,12 @@
 import { format } from "date-fns"
 import { Link } from "react-router-dom"
 import MonthDateUtils from "../../utils/MonthDateUtils.js"
+import Card from "../common/Card.jsx"
 
 const FestivalHighlight = ({ festivalData, setEditMode, handleDelete }) => {
     
     if (festivalData) return (
-        <div className="bg-sky-900 bg-opacity-35 md:rounded-l p-4 m-0 flex flex-col gap-2 col-span-3 h-full">
+        <Card className="flex flex-col gap-2 col-span-3 h-full">
             <div className="text-black text-xl font-bold flex justify-between">
                 <div>
                     {festivalData.name}
@@ -75,7 +76,7 @@ const FestivalHighlight = ({ festivalData, setEditMode, handleDelete }) => {
                 </Link>
 
             </div>
-        </div>
+        </Card>
 
     )
 

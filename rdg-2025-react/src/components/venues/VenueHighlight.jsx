@@ -1,13 +1,14 @@
 import { format } from "date-fns"
 import AddressHelper from "../../utils/AddressHelper.js"
 import { Link } from "react-router-dom"
+import Card from "../common/Card.jsx"
 
 const VenueHighlight = ({ venueData, setEditMode, handleDelete }) => {
     
     const fullAddress = AddressHelper.getFullAddress(venueData.address, venueData.town, venueData.postcode)
 
     if (venueData) return (
-        <div className="bg-sky-900 bg-opacity-35 lg:w-1/2 md:w-2/3 w-full rounded p-4 mt-3 md:mx-0 m-3 flex flex-col gap-2 shadow-md">
+        <Card className="flex flex-col gap-2">
             <div className="text-black text-xl font-bold flex justify-between">
                 <div>
                     {venueData.name}
@@ -72,7 +73,7 @@ const VenueHighlight = ({ venueData, setEditMode, handleDelete }) => {
             <Link to="/venues" className="text-sm hover:underline font-bold text-end">
                 See All Venues
             </Link>
-        </div>
+        </Card>
     )
 }
 

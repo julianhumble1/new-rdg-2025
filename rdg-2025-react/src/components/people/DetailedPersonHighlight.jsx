@@ -1,13 +1,14 @@
 import PersonImageWithUploadBox from "../photo_components/PersonImageWithUploadBox.jsx";
 import ContactDetailsBox from "./ContactDetailsBox.jsx";
+import Card from "../common/Card.jsx";
 
 const DetailedPersonHighlight = ({personData, setEditMode, handleDelete , image, fetchPersonData}) => {
 
 	const fullName = personData.firstName + " " + personData.lastName
   
-  	if (personData) return (
+ 	if (personData) return (
 		<div className="w-full flex justify-center">
-			<div className="bg-slate-200 md:w-4/5 w-full flex flex-col sm:flex-row p-2 sm:mt-2 rounded shadow-lg ">
+			<Card className="flex flex-col sm:flex-row">
 				<div className="flex flex-col">
 					<div className="flex justify-center">
 						<PersonImageWithUploadBox image={image} personData={personData} fetchPersonData={fetchPersonData} />
@@ -32,9 +33,9 @@ const DetailedPersonHighlight = ({personData, setEditMode, handleDelete , image,
 						{personData.summary}	
 					</div>	
 				</div>
-			</div>	
+			</Card>	
 		</div>
-    )
+	)
 }
 
 export default DetailedPersonHighlight

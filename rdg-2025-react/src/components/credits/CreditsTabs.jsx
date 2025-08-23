@@ -2,7 +2,7 @@ import { FilmIcon, MusicalNoteIcon, ScaleIcon, UserGroupIcon } from "@heroicons/
 import { Tabs } from "flowbite-react"
 import CreditsTable from "./CreditsTable.jsx"
 
-const CreditsTabs = ({actingCredits, musicianCredits, producerCredits, creditsParent, handleDelete}) => {
+const   CreditsTabs = ({actingCredits, musicianCredits, producerCredits, creditsParent, handleDelete}) => {
     return (
         creditsParent === "person" ?
             <Tabs variant="underline" className="m-3 mb-0">

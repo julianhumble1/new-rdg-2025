@@ -1,11 +1,12 @@
 import { format } from "date-fns"
 import { Badge } from "flowbite-react"
 import { Link } from "react-router-dom"
+import Card from "../common/Card.jsx"
 
 const ProductionHighlight = ({ productionData, setEditMode, handleDelete }) => {
 
     if (productionData) return (
-        <div className="bg-slate-200 md:rounded-l p-4 m-0 flex flex-col gap-2 col-span-3 h-full">
+        <Card className="flex flex-col gap-2 col-span-3 h-full">
             <div className="text-black text-xl font-bold flex justify-between">
                 <div>
                     {productionData.name}
@@ -99,7 +100,7 @@ const ProductionHighlight = ({ productionData, setEditMode, handleDelete }) => {
                     </Link>
                 </div>
             </div>
-        </div>
+        </Card>
     )
 
 }
