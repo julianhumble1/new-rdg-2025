@@ -30,7 +30,7 @@ const AwardRow = ({ award, handleDelete }) => {
             </Table.Cell>
             <Table.Cell>
                 <div className='flex gap-2'>
-                    <Link className="text-medium text-black hover:underline font-bold text-end" to={`/awards/${award.id}?edit=true`}>
+                    <Link className="text-medium text-black hover:underline font-bold text-end" to={`/awards/edit/${award.id}`}>
                         Edit
                     </Link>
                     <button className="text-medium text-black hover:underline font-bold text-end" onClick={() => handleDelete(award)}>

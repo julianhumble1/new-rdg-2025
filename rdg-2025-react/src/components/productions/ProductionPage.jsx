@@ -11,6 +11,7 @@ import PerformancesTable from "../performances/PerformancesTable.jsx";
 import PerformanceService from "../../services/PerformanceService.js";
 import CreditsTabs from "../credits/CreditsTabs.jsx";
 import CreditService from "../../services/CreditService.js";
+import AwardService from "../../services/AwardService.js";
 import { Cloudinary } from "@cloudinary/url-gen/index";
 
 const ProductionPage = () => {
@@ -19,7 +20,7 @@ const ProductionPage = () => {
     const [searchParams] = useSearchParams();
     const navigate = useNavigate();
 
-    const[image, setImage] = useState(null)
+    const [image, setImage] = useState(null)
 
     const [productionData, setProductionData] = useState(null);
     const [performances, setPerformances] = useState([])
@@ -27,6 +28,7 @@ const ProductionPage = () => {
     const [actingCredits, setActingCredits] = useState([])
     const [musicianCredits, setMusicianCredits] = useState([])
     const [producerCredits, setProducerCredits] = useState([])
+    const [awards, setAwards] = useState([])
 
     const [editMode, setEditMode] = useState(searchParams.get("edit"))
 
@@ -60,6 +62,7 @@ const ProductionPage = () => {
             setActingCredits(response.data.actingCredits)
             setMusicianCredits(response.data.musicianCredits)
             setProducerCredits(response.data.producerCredits)
+            setAwards(response.data.awards || [])
             await fetchProductionImage(response.data.production.flyerFile)
         } catch (e) {
             setErrorMessage(e.message)
@@ -89,15 +92,25 @@ const ProductionPage = () => {
                 setSuccessMessage("Successfully deleted performance")
                 fetchProductionData()
             } else if (itemToDelete.type != null) {
-            try {
-                const response = await CreditService.deleteCreditById(item.id)
-                fetchProductionData()
-                setSuccessMessage(`Successfully deleted credit.`)
-                setShowConfirmDelete(false)
-            } catch (e) {
-                setErrorMessage(e.message)
+                try {
+                    const response = await CreditService.deleteCreditById(item.id)
+                    fetchProductionData()
+                    setSuccessMessage(`Successfully deleted credit.`)
+                    setShowConfirmDelete(false)
+                } catch (e) {
+                    setErrorMessage(e.message)
+                }
+            } else if (item.name && (item.production || item.person || item.festival)) {
+                // This is an award
+                try {
+                    await AwardService.deleteAward(item.id)
+                    fetchProductionData()
+                    setSuccessMessage("Successfully deleted award")
+                    setShowConfirmDelete(false)
+                } catch (e) {
+                    setErrorMessage(e.message)
+                }
             }
-        }  
         } catch (e) {
             setSuccessMessage("")
             setErrorMessage(e.message)
@@ -132,7 +145,7 @@ const ProductionPage = () => {
     return (
         <div>
             {showConfirmDelete &&
-                <ConfirmDeleteModal setShowConfirmDelete={setShowConfirmDelete} itemToDelete={itemToDelete} handleConfirmDelete={ handleConfirmDelete } />
+                <ConfirmDeleteModal setShowConfirmDelete={setShowConfirmDelete} itemToDelete={itemToDelete} handleConfirmDelete={handleConfirmDelete} />
             }
             <SuccessMessage message={successMessage} />
             <ErrorMessage message={errorMessage} />
@@ -154,8 +167,8 @@ const ProductionPage = () => {
                 }
             </div>
 
-            <CreditsTabs actingCredits={actingCredits} musicianCredits={musicianCredits} producerCredits={producerCredits} creditsParent={"production"} handleDelete={handleDelete}/>
-        
+            <CreditsTabs actingCredits={actingCredits} musicianCredits={musicianCredits} producerCredits={producerCredits} awards={awards} creditsParent={"production"} handleDelete={handleDelete} />
+
         </div>
     )
 }

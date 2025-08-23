@@ -8,12 +8,13 @@ import EditPersonForm from "./EditPersonForm.jsx"
 import ConfirmDeleteModal from "../modals/ConfirmDeleteModal.jsx"
 import CreditsTabs from "../credits/CreditsTabs.jsx"
 import CreditService from "../../services/CreditService.js"
+import AwardService from "../../services/AwardService.js"
 import { Cloudinary } from "@cloudinary/url-gen/index"
 import DetailedPersonHighlight from "./DetailedPersonHighlight.jsx"
 
 const PersonPage = () => {
 
-    const[image, setImage] = useState(null)
+    const [image, setImage] = useState(null)
 
     const personId = useParams().id
     const [searchParams] = useSearchParams();
@@ -24,6 +25,7 @@ const PersonPage = () => {
     const [actingCredits, setActingCredits] = useState([])
     const [musicianCredits, setMusicianCredits] = useState([])
     const [producerCredits, setProducerCredits] = useState([])
+    const [awards, setAwards] = useState([])
 
     const [editMode, setEditMode] = useState(searchParams.get("edit"))
 
@@ -62,6 +64,7 @@ const PersonPage = () => {
             setActingCredits(response.data.actingCredits)
             setMusicianCredits(response.data.musicianCredits)
             setProducerCredits(response.data.producerCredits)
+            setAwards(response.data.awards || [])
             fetchPersonImage(response.data.person.imageId)
         } catch (e) {
             setErrorMessage(e.message)
@@ -102,7 +105,17 @@ const PersonPage = () => {
             } catch (e) {
                 setErrorMessage(e.message)
             }
-        }   
+        } else if (itemToDelete.name && (itemToDelete.production || itemToDelete.person || itemToDelete.festival)) {
+            // This is an award
+            try {
+                await AwardService.deleteAward(itemToDelete.id)
+                fetchPersonData()
+                setSuccessMessage("Successfully deleted award")
+                setShowConfirmDelete(false)
+            } catch (e) {
+                setErrorMessage(e.message)
+            }
+        }
     }
 
     return (
@@ -110,21 +123,21 @@ const PersonPage = () => {
             <SuccessMessage message={successMessage} />
             <ErrorMessage message={errorMessage} />
             {showConfirmDelete &&
-                <ConfirmDeleteModal setShowConfirmDelete={setShowConfirmDelete} itemToDelete={itemToDelete} handleConfirmDelete={ handleConfirmDelete } />
+                <ConfirmDeleteModal setShowConfirmDelete={setShowConfirmDelete} itemToDelete={itemToDelete} handleConfirmDelete={handleConfirmDelete} />
             }
             <div className="flex w-full justify-center">
                 {viewType === "PUBLIC" &&
                     <PublicPersonHighlight personData={personData} image={image} />
 
                 }
-                {viewType === "DETAILED" && 
+                {viewType === "DETAILED" &&
                     (editMode ?
-                    <EditPersonForm setEditMode={setEditMode} handleEditPerson={handleEditPerson} personData={personData}/>
-                    :
-                    <DetailedPersonHighlight personData={personData} setEditMode={setEditMode} handleDelete={handleDelete} image={image} fetchPersonData={fetchPersonData} /> )
+                        <EditPersonForm setEditMode={setEditMode} handleEditPerson={handleEditPerson} personData={personData} />
+                        :
+                        <DetailedPersonHighlight personData={personData} setEditMode={setEditMode} handleDelete={handleDelete} image={image} fetchPersonData={fetchPersonData} />)
                 }
             </div>
-            <CreditsTabs actingCredits={actingCredits} musicianCredits={musicianCredits} producerCredits={producerCredits} creditsParent={"person"} handleDelete={handleDelete}/>
+            <CreditsTabs actingCredits={actingCredits} musicianCredits={musicianCredits} producerCredits={producerCredits} awards={awards} creditsParent={"person"} handleDelete={handleDelete} />
         </div>
     )
 }

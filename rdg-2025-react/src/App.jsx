@@ -28,6 +28,7 @@ import EditPerformanceForm from "./components/performances/EditPerformanceForm.j
 import CloudinaryTest from "./components/CloudinaryTest.jsx"
 import CloudinaryUploadTest from "./components/CloudinaryUploadTest.jsx"
 import NewAwardForm from "./components/awards/NewAwardForm.jsx"
+import EditAwardForm from "./components/awards/EditAwardForm.jsx"
 
 
 function App() {
@@ -46,7 +47,7 @@ function App() {
         setLoggedIn={setLoggedIn}
       />
       <Routes>
-        <Route path="/" element={<Navigate to = "/home" replace/>}>
+        <Route path="/" element={<Navigate to="/home" replace />}>
         </Route>
         <Route path="/home" element={<Home />} >
         </Route>
@@ -58,8 +59,8 @@ function App() {
             />
           }>
         </Route>
-        <Route path="/dashboard" element={<Dashboard  />} />
-        <Route path="/user-dashboard" element={<UserDashboard  />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/user-dashboard" element={<UserDashboard />} />
         <Route path="/admin-dashboard" element={<AdminDashboard />} />
 
         <Route path="/venues/new" element={<NewVenueForm />} />
@@ -87,7 +88,8 @@ function App() {
         <Route path="/cloudinary" element={<CloudinaryTest />} />
         <Route path="/cloudinary/upload" element={<CloudinaryUploadTest />} />
 
-        <Route path="/awards/new" element={<NewAwardForm /> } />
+        <Route path="/awards/new" element={<NewAwardForm />} />
+        <Route path="/awards/edit/:id" element={<EditAwardForm />} />
 
       </Routes>
     </Router>

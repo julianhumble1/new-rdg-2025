@@ -1,7 +1,7 @@
 import { Table } from 'flowbite-react'
 import { Link } from 'react-router-dom'
 
-const FestivalAwardRow = ({ award, handleDelete }) => {
+const PersonAwardRow = ({ award, handleDelete }) => {
     return (
         <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
             <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
@@ -15,9 +15,9 @@ const FestivalAwardRow = ({ award, handleDelete }) => {
                 ) : ""}
             </Table.Cell>
             <Table.Cell>
-                {award.person ? (
-                    <Link to={`/people/${award.person.id}`} className="hover:underline">
-                        {award.person.firstName} {award.person.lastName}
+                {award.festival ? (
+                    <Link to={`/festivals/${award.festival.id}`} className="hover:underline">
+                        {award.festival.name}
                     </Link>
                 ) : ""}
             </Table.Cell>
@@ -35,4 +35,4 @@ const FestivalAwardRow = ({ award, handleDelete }) => {
     )
 }
 
-export default FestivalAwardRow
+export default PersonAwardRow
