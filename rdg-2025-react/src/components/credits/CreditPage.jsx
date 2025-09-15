@@ -1,7 +1,5 @@
 const CreditPage = () => {
-    return (
-        <div>CreditPage</div>
-    )
-}
+  return <div>CreditPage</div>;
+};
 
-export default CreditPage
+export default CreditPage;

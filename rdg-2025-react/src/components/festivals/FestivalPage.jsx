@@ -12,118 +12,154 @@ import AwardService from "../../services/AwardService.js";
 import AwardsTabs from "../awards/AwardsTabs.jsx";
 
 const FestivalPage = () => {
+  const festivalId = useParams().id;
+  const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
 
-    const festivalId = useParams().id;
-    const [searchParams] = useSearchParams();
-    const navigate = useNavigate()
+  const [festivalData, setFestivalData] = useState(null);
 
-    const [festivalData, setFestivalData] = useState(null)
+  const [performances, setPerformances] = useState([]);
+  const [awards, setAwards] = useState([]);
 
-    const [performances, setPerformances] = useState([])
-    const [awards, setAwards] = useState([])
+  const [successMessage, setSuccessMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
-    const [successMessage, setSuccessMessage] = useState("")
-    const [errorMessage, setErrorMessage] = useState("")
+  const [showConfirmDelete, setShowConfirmDelete] = useState(false);
+  const [itemToDelete, setItemToDelete] = useState(false);
 
-    const [showConfirmDelete, setShowConfirmDelete] = useState(false)
-    const [itemToDelete, setItemToDelete] = useState(false)
+  const [editMode, setEditMode] = useState(searchParams.get("edit"));
 
-    const [editMode, setEditMode] = useState(searchParams.get("edit"))
-
-    const getFestivalData = useCallback(async () => {
-        try {
-            const response = await FestivalService.getFestivalById(festivalId)
-            console.log(response)
-            setFestivalData(response.data.festival)
-            setPerformances(response.data.performances)
-            setAwards(response.data.awards)
-        } catch (e) {
-            setErrorMessage(e.message)
-        }
-    }, [festivalId])
-
-    useEffect(() => {
-        getFestivalData()
-    }, [getFestivalData])
-
-    const handleDelete = (item) => {
-        setShowConfirmDelete(true)
-        setItemToDelete(item)
+  const getFestivalData = useCallback(async () => {
+    try {
+      const response = await FestivalService.getFestivalById(festivalId);
+      console.log(response);
+      setFestivalData(response.data.festival);
+      setPerformances(response.data.performances);
+      setAwards(response.data.awards);
+    } catch (e) {
+      setErrorMessage(e.message);
     }
+  }, [festivalId]);
 
-    const handleConfirmDelete = async (item) => {
-        try {
-            if (item.year != null) {
-                await FestivalService.deleteFestivalById(item.id)
-                navigate("/festivals")
-            } else if (item.name && (item.production || item.person || item.festival)) {
-                // This is an award
-                await AwardService.deleteAward(item.id)
-                setShowConfirmDelete(false)
-                setErrorMessage("")
-                setSuccessMessage("Successfully deleted award")
-                getFestivalData()
-            } else {
-                await PerformanceService.deletePerformance(item.id)
-                setShowConfirmDelete(false)
-                setErrorMessage("")
-                setSuccessMessage("Successfully deleted performance")
-                getFestivalData()
-            }
-        } catch (e) {
-            setErrorMessage(e.message)
-        }
-        setShowConfirmDelete(false)
+  useEffect(() => {
+    getFestivalData();
+  }, [getFestivalData]);
+
+  const handleDelete = (item) => {
+    setShowConfirmDelete(true);
+    setItemToDelete(item);
+  };
+
+  const handleConfirmDelete = async (item) => {
+    try {
+      if (item.year != null) {
+        await FestivalService.deleteFestivalById(item.id);
+        navigate("/festivals");
+      } else if (
+        item.name &&
+        (item.production || item.person || item.festival)
+      ) {
+        // This is an award
+        await AwardService.deleteAward(item.id);
+        setShowConfirmDelete(false);
+        setErrorMessage("");
+        setSuccessMessage("Successfully deleted award");
+        getFestivalData();
+      } else {
+        await PerformanceService.deletePerformance(item.id);
+        setShowConfirmDelete(false);
+        setErrorMessage("");
+        setSuccessMessage("Successfully deleted performance");
+        getFestivalData();
+      }
+    } catch (e) {
+      setErrorMessage(e.message);
     }
+    setShowConfirmDelete(false);
+  };
 
-    const handleEdit = async (event, festivalId, name, venueId, year, month, description) => {
-        event.preventDefault()
-        try {
-            const response = await FestivalService.updateFestival(festivalId, name, venueId, year, month, description)
-            setEditMode(false)
-            setSuccessMessage("Successfully edited")
-            getFestivalData()
-        } catch (e) {
-            setErrorMessage(e.message)
-        }
+  const handleEdit = async (
+    event,
+    festivalId,
+    name,
+    venueId,
+    year,
+    month,
+    description,
+  ) => {
+    event.preventDefault();
+    try {
+      const response = await FestivalService.updateFestival(
+        festivalId,
+        name,
+        venueId,
+        year,
+        month,
+        description,
+      );
+      setEditMode(false);
+      setSuccessMessage("Successfully edited");
+      getFestivalData();
+    } catch (e) {
+      setErrorMessage(e.message);
     }
+  };
 
-    return (
-        <div>
-            {showConfirmDelete &&
-                <ConfirmDeleteModal setShowConfirmDelete={setShowConfirmDelete} itemToDelete={itemToDelete} handleConfirmDelete={handleConfirmDelete} />
-            }
-            <SuccessMessage message={successMessage} />
-            <ErrorMessage message={errorMessage} />
+  return (
+    <div>
+      {showConfirmDelete && (
+        <ConfirmDeleteModal
+          setShowConfirmDelete={setShowConfirmDelete}
+          itemToDelete={itemToDelete}
+          handleConfirmDelete={handleConfirmDelete}
+        />
+      )}
+      <SuccessMessage message={successMessage} />
+      <ErrorMessage message={errorMessage} />
 
-            <div className="flex w-full justify-center md:my-2">
-                {(festivalData && !editMode && performances.length > 0) &&
-                    <div className="grid md:grid-cols-5 grid-cols-1 w-full lg:w-1/2 md:w-2/3 md:shadow-md min-h-[26rem]">
-                        <FestivalHighlight festivalData={festivalData} setEditMode={setEditMode} handleDelete={handleDelete} />
-                        <PerformancesTable performances={performances} handleDelete={handleDelete} />
-                    </div>
-                }
+      <div className="flex w-full justify-center md:my-2">
+        {festivalData && !editMode && performances.length > 0 && (
+          <div className="grid md:grid-cols-5 grid-cols-1 w-full lg:w-1/2 md:w-2/3 md:shadow-md min-h-[26rem]">
+            <FestivalHighlight
+              festivalData={festivalData}
+              setEditMode={setEditMode}
+              handleDelete={handleDelete}
+            />
+            <PerformancesTable
+              performances={performances}
+              handleDelete={handleDelete}
+            />
+          </div>
+        )}
 
-                {(festivalData && !editMode && performances.length === 0) &&
-                    <div className="grid md:grid-cols-3 grid-cols-1 w-full lg:w-1/2 md:w-2/3 md:shadow-md h-[26rem]">
-                        <FestivalHighlight festivalData={festivalData} setEditMode={setEditMode} handleDelete={handleDelete} />
-                    </div>
-                }
-                {(festivalData && editMode) &&
-                    <EditFestivalForm festivalData={festivalData} handleEdit={handleEdit} setEditMode={setEditMode} />
-                }
-            </div>
+        {festivalData && !editMode && performances.length === 0 && (
+          <div className="grid md:grid-cols-3 grid-cols-1 w-full lg:w-1/2 md:w-2/3 md:shadow-md h-[26rem]">
+            <FestivalHighlight
+              festivalData={festivalData}
+              setEditMode={setEditMode}
+              handleDelete={handleDelete}
+            />
+          </div>
+        )}
+        {festivalData && editMode && (
+          <EditFestivalForm
+            festivalData={festivalData}
+            handleEdit={handleEdit}
+            setEditMode={setEditMode}
+          />
+        )}
+      </div>
 
-            {/* Awards Section */}
-            {festivalData && !editMode && awards.length > 0 &&
-                <div className="flex w-full justify-center md:my-2">
-                    <div className="w-full lg:w-1/2 md:w-2/3 md:shadow-md">
-                        <AwardsTabs awards={awards} handleDelete={handleDelete} />
-                    </div>
-                </div>
-            }
+      {/* Awards Section */}
+      {festivalData && !editMode && awards.length > 0 && (
+        <div className="flex w-full justify-center md:my-2">
+          <div className="w-full lg:w-1/2 md:w-2/3 md:shadow-md">
+            <AwardsTabs awards={awards} handleDelete={handleDelete} />
+          </div>
         </div>
-    )
-}
+      )}
+    </div>
+  );
+};
 
-export default FestivalPage
+export default FestivalPage;
