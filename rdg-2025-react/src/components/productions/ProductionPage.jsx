@@ -13,6 +13,7 @@ import CreditsTabs from "../credits/CreditsTabs.jsx";
 import CreditService from "../../services/CreditService.js";
 import AwardService from "../../services/AwardService.js";
 import { Cloudinary } from "@cloudinary/url-gen/index";
+import ContentCard from "../ui/ContentCard.jsx";
 
 const ProductionPage = () => {
   const productionId = useParams().id;
@@ -168,6 +169,18 @@ const ProductionPage = () => {
       <SuccessMessage message={successMessage} />
       <ErrorMessage message={errorMessage} />
 
+      <ContentCard>
+        {productionData && !editMode && (
+          <ProductionHighlight
+            productionData={productionData}
+            setEditMode={setEditMode}
+            handleDelete={handleDelete}
+            image={image}
+            fetchProductionData={fetchProductionData}
+          />
+        )}
+      </ContentCard>
+
       <div className="flex justify-center w-full md:my-2 ">
         {productionData && !editMode && performances.length > 0 && (
           <div className="grid md:grid-cols-5 grid-cols-1 w-full md:w-4/5 md:shadow-md min-h-[26rem]">
@@ -194,6 +207,7 @@ const ProductionPage = () => {
           </div>
         )}
       </div>
+
       {productionData && editMode && (
         <EditProductionForm
           productionData={productionData}

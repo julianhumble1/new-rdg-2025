@@ -6,7 +6,7 @@ import Card from "../common/Card.jsx";
 const ProductionHighlight = ({ productionData, setEditMode, handleDelete }) => {
   if (productionData)
     return (
-      <Card className="flex flex-col gap-2 col-span-3 h-full">
+      <div>
         <div className="text-black text-xl font-bold flex justify-between">
           <div>{productionData.name}</div>
           <div className="flex gap-2">
@@ -95,7 +95,7 @@ const ProductionHighlight = ({ productionData, setEditMode, handleDelete }) => {
             </Link>
           </div>
         </div>
-      </Card>
+      </div>
     );
 };
 

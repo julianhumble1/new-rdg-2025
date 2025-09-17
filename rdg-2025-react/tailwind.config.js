@@ -1,19 +1,14 @@
-import flowbite from "flowbite-react/tailwind"
+import flowbite from "flowbite-react/tailwind";
 
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: [
-    "./index.html",
-    "./src/**/*.{js,ts,jsx,tsx}",
-    flowbite.content(),
-  ],
+  content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}", flowbite.content()],
   theme: {
-    extend: { 
+    extend: {
       fontFamily: {
-        'merriweather': ['Merriweather', 'serif'],
+        merriweather: ["Merriweather", "serif"],
       },
     },
   },
   plugins: [flowbite.plugin()],
-}
-
+};
