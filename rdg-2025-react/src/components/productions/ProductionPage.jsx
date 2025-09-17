@@ -13,7 +13,7 @@ import CreditsTabs from "../credits/CreditsTabs.jsx";
 import CreditService from "../../services/CreditService.js";
 import AwardService from "../../services/AwardService.js";
 import { Cloudinary } from "@cloudinary/url-gen/index";
-import ContentCard from "../ui/ContentCard.jsx";
+import ContentCard from "../common/ContentCard.jsx";
 
 const ProductionPage = () => {
   const productionId = useParams().id;
@@ -171,7 +171,9 @@ const ProductionPage = () => {
 
       <ContentCard>
         <div>
-          {productionData && !editMode && (
+                  {productionData &&
+                      
+                      editMode ? <div>Edit mode</div> :  (
             <div className="flex gap-2 flex-col md:flex-row">
               <ProductionHighlight
                 productionData={productionData}

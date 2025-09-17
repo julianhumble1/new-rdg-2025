@@ -1,7 +1,7 @@
 import { format } from "date-fns";
 import { Badge } from "flowbite-react";
 import HighlightListItem from "../common/HighlightListItem.jsx";
-import HighlightTemplate from "./HighlightTemplate.jsx";
+import HighlightTemplate from "../common/HighlightTemplate.jsx";
 
 const ProductionHighlight = ({ productionData, setEditMode, handleDelete }) => {
   if (!productionData) return null;

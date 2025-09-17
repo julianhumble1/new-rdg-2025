@@ -9,7 +9,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import { Link, useNavigate } from "react-router-dom";
 import SuccessMessage from "../modals/SuccessMessage.jsx";
 import ErrorMessage from "../modals/ErrorMessage.jsx";
-import ContentCard from "../ui/ContentCard.jsx";
+import ContentCard from "../common/ContentCard.jsx";
 
 const NewProductionForm = () => {
   const navigate = useNavigate();

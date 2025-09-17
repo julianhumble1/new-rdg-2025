@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { Label, Textarea, TextInput } from "flowbite-react";
-import ContentCard from "../ui/ContentCard.jsx";
 
 const EditVenueForm = ({ venueData, handleEdit, setEditMode }) => {
   const [name, setName] = useState(venueData.name);

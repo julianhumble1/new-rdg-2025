@@ -4,7 +4,7 @@ import DatePicker from "react-datepicker";
 import Select from "react-select";
 import FetchValueOptionsHelper from "../../utils/FetchValueOptionsHelper.js";
 import ErrorMessage from "../modals/ErrorMessage.jsx";
-import ContentCard from "../ui/ContentCard.jsx";
+import ContentCard from "../common/ContentCard.jsx";
 
 const EditProductionForm = ({ productionData, handleEdit, setEditMode }) => {
   const [venueOptions, setVenueOptions] = useState([]);

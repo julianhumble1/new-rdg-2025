@@ -18,7 +18,7 @@ import { Tabs } from "flowbite-react";
 import { FilmIcon, ScaleIcon } from "@heroicons/react/16/solid";
 import FestivalService from "../../services/FestivalService.js";
 import AltFestivalsTable from "../festivals/FestivalsTable.jsx";
-import ContentCard from "../ui/ContentCard.jsx";
+import ContentCard from "../common/ContentCard.jsx";
 
 const VenuePage = () => {
   const venueId = useParams().id;

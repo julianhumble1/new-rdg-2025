@@ -6,7 +6,7 @@ import Select from "react-select";
 import { Label, Textarea, TextInput } from "flowbite-react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import ContentCard from "../ui/ContentCard.jsx";
+import ContentCard from "../common/ContentCard.jsx";
 
 const NewPerformanceForm = () => {
   const navigate = useNavigate();

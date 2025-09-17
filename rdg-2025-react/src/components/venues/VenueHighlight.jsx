@@ -1,5 +1,5 @@
 import AddressHelper from "../../utils/AddressHelper.js";
-import HighlightTemplate from "../productions/HighlightTemplate.jsx";
+import HighlightTemplate from "../common/HighlightTemplate.jsx";
 import HighlightListItem from "../common/HighlightListItem.jsx";
 
 const VenueHighlight = ({ venueData, setEditMode, handleDelete }) => {

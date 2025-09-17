@@ -9,7 +9,6 @@ import Select from "react-select";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { CurrencyPoundIcon } from "@heroicons/react/16/solid";
-import ContentCard from "../ui/ContentCard.jsx";
 
 const EditPerformanceForm = () => {
   const performanceId = useParams().id;

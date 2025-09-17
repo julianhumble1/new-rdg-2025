@@ -3,7 +3,7 @@ import VenueService from "../../services/VenueService.js";
 import { Link, useNavigate } from "react-router-dom";
 import { Label, TextInput, Textarea } from "flowbite-react";
 import ErrorMessage from "../modals/ErrorMessage.jsx";
-import ContentCard from "../ui/ContentCard.jsx";
+import ContentCard from "../common/ContentCard.jsx";
 
 const NewVenueForm = () => {
   const navigate = useNavigate();

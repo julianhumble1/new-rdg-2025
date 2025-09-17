@@ -1,5 +1,5 @@
-import HighlightFooter from "../common/HighlightFooter.jsx";
-import HighlightTitleBar from "../common/HighlightTitleBar.jsx";
+import HighlightFooter from "./HighlightFooter.jsx";
+import HighlightTitleBar from "./HighlightTitleBar.jsx";
 
 const HighlightTemplate = ({
   children,
