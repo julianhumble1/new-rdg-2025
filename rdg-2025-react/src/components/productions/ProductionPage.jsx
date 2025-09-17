@@ -170,18 +170,24 @@ const ProductionPage = () => {
       <ErrorMessage message={errorMessage} />
 
       <ContentCard>
-        {productionData && !editMode && (
-          <ProductionHighlight
-            productionData={productionData}
-            setEditMode={setEditMode}
-            handleDelete={handleDelete}
-            image={image}
-            fetchProductionData={fetchProductionData}
-          />
-        )}
+        <div>
+          {productionData && !editMode && (
+            <div className="flex gap-2 flex-col md:flex-row">
+              <ProductionHighlight
+                productionData={productionData}
+                setEditMode={setEditMode}
+                handleDelete={handleDelete}
+              />
+              <PerformancesTable
+                performances={performances}
+                handleDelete={handleDelete}
+              />
+            </div>
+          )}
+        </div>
       </ContentCard>
 
-      <div className="flex justify-center w-full md:my-2 ">
+      {/* <div className="flex justify-center w-full md:my-2 ">
         {productionData && !editMode && performances.length > 0 && (
           <div className="grid md:grid-cols-5 grid-cols-1 w-full md:w-4/5 md:shadow-md min-h-[26rem]">
             <ProductionHighlight
@@ -196,8 +202,8 @@ const ProductionPage = () => {
               handleDelete={handleDelete}
             />
           </div>
-        )}
-        {productionData && !editMode && performances.length === 0 && (
+        )} */}
+      {/* {productionData && !editMode && performances.length === 0 && (
           <div className="grid md:grid-cols-3 grid-cols-1 w-full lg:w-1/2 md:w-2/3 md:shadow-md h-[26rem]">
             <ProductionHighlight
               productionData={productionData}
@@ -206,7 +212,7 @@ const ProductionPage = () => {
             />
           </div>
         )}
-      </div>
+      </div> */}
 
       {productionData && editMode && (
         <EditProductionForm

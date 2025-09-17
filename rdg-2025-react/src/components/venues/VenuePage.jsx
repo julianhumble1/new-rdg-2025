@@ -122,20 +122,23 @@ const VenuePage = () => {
       )}
       <SuccessMessage message={successMessage} />
       <ErrorMessage message={errorMessage} />
-      {venueData && !editMode && (
-        <VenueHighlight
-          venueData={venueData}
-          setEditMode={setEditMode}
-          handleDelete={handleDelete}
-        />
-      )}
-      {venueData && editMode && (
-        <EditVenueForm
-          venueData={venueData}
-          handleEdit={handleEditVenue}
-          setEditMode={setEditMode}
-        />
-      )}
+
+      <ContentCard>
+        {venueData && !editMode && (
+          <VenueHighlight
+            venueData={venueData}
+            setEditMode={setEditMode}
+            handleDelete={handleDelete}
+          />
+        )}
+        {venueData && editMode && (
+          <EditVenueForm
+            venueData={venueData}
+            handleEdit={handleEditVenue}
+            setEditMode={setEditMode}
+          />
+        )}
+      </ContentCard>
       <Tabs variant="underline" className="m-3">
         <Tabs.Item active title="Productions" icon={ScaleIcon}>
           {productions.length > 0 ? (

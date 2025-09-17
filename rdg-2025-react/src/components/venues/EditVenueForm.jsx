@@ -15,97 +15,95 @@ const EditVenueForm = ({ venueData, handleEdit, setEditMode }) => {
   const [url, setUrl] = useState(venueData.url ? venueData.url : "");
 
   return (
-    <ContentCard>
-      <form
-        className="flex flex-col gap-2 max-w-md"
-        onSubmit={(event) =>
-          handleEdit(
-            event,
-            venueData.id,
-            name,
-            address,
-            town,
-            postcode,
-            notes,
-            url,
-          )
-        }
-      >
-        <div>
-          <div className="mb-2 block">
-            <Label value="Venue Name (required)" />
-          </div>
-          <TextInput
-            placeholder="The Globe"
-            required
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
+    <form
+      className="flex flex-col gap-2 max-w-md"
+      onSubmit={(event) =>
+        handleEdit(
+          event,
+          venueData.id,
+          name,
+          address,
+          town,
+          postcode,
+          notes,
+          url,
+        )
+      }
+    >
+      <div>
+        <div className="mb-2 block">
+          <Label value="Venue Name (required)" />
         </div>
-        <div>
-          <div className="mb-2 block">
-            <Label value="Address" />
-          </div>
-          <TextInput
-            placeholder="21 New Globe Walk"
-            value={address}
-            onChange={(e) => setAddress(e.target.value)}
-          />
+        <TextInput
+          placeholder="The Globe"
+          required
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
+      </div>
+      <div>
+        <div className="mb-2 block">
+          <Label value="Address" />
         </div>
-        <div>
-          <div className="mb-2 block">
-            <Label value="Town" />
-          </div>
-          <TextInput
-            placeholder="London"
-            value={town}
-            onChange={(e) => setTown(e.target.value)}
-          />
+        <TextInput
+          placeholder="21 New Globe Walk"
+          value={address}
+          onChange={(e) => setAddress(e.target.value)}
+        />
+      </div>
+      <div>
+        <div className="mb-2 block">
+          <Label value="Town" />
         </div>
-        <div>
-          <div className="mb-2 block">
-            <Label value="Postcode" />
-          </div>
-          <TextInput
-            placeholder="SE1 9DT"
-            value={postcode}
-            onChange={(e) => setPostcode(e.target.value)}
-          />
+        <TextInput
+          placeholder="London"
+          value={town}
+          onChange={(e) => setTown(e.target.value)}
+        />
+      </div>
+      <div>
+        <div className="mb-2 block">
+          <Label value="Postcode" />
         </div>
-        <div>
-          <div className="mb-2 block">
-            <Label value="Notes" />
-          </div>
-          <Textarea
-            placeholder="Parking is round the back"
-            value={notes}
-            onChange={(e) => setNotes(e.target.value)}
-            rows={4}
-          />
+        <TextInput
+          placeholder="SE1 9DT"
+          value={postcode}
+          onChange={(e) => setPostcode(e.target.value)}
+        />
+      </div>
+      <div>
+        <div className="mb-2 block">
+          <Label value="Notes" />
         </div>
-        <div>
-          <div className="mb-2 block">
-            <Label value="Website" />
-          </div>
-          <TextInput
-            placeholder="www.theglobe.com"
-            value={url}
-            onChange={(e) => setUrl(e.target.value)}
-          />
+        <Textarea
+          placeholder="Parking is round the back"
+          value={notes}
+          onChange={(e) => setNotes(e.target.value)}
+          rows={4}
+        />
+      </div>
+      <div>
+        <div className="mb-2 block">
+          <Label value="Website" />
         </div>
-        <div className="grid grid-cols-2 justify-end px-2">
-          <button
-            className="text-sm hover:underline font-bold text-center col-span-1"
-            onClick={() => setEditMode(false)}
-          >
-            Cancel Edit Mode
-          </button>
-          <button className="hover:underline bg-sky-900  p-2 py-1 rounded w-full text-white col-span-1 text-sm">
-            Confirm Edit
-          </button>
-        </div>
-      </form>
-    </ContentCard>
+        <TextInput
+          placeholder="www.theglobe.com"
+          value={url}
+          onChange={(e) => setUrl(e.target.value)}
+        />
+      </div>
+      <div className="grid grid-cols-2 justify-end px-2">
+        <button
+          className="text-sm hover:underline font-bold text-center col-span-1"
+          onClick={() => setEditMode(false)}
+        >
+          Cancel Edit Mode
+        </button>
+        <button className="hover:underline bg-sky-900  p-2 py-1 rounded w-full text-white col-span-1 text-sm">
+          Confirm Edit
+        </button>
+      </div>
+    </form>
   );
 };
 

@@ -1,18 +1,31 @@
 import { Link } from "react-router-dom";
 
-const HighlightListItem = (label, value, link) => {
-    if (!value) return null;
+const HighlightListItem = ({ label, value, link, linkType }) => {
+  if (!value) return null;
 
-    return (
-        <div className="flex flex-col">
-            <div className="font-bold italic">{label}</div>
-            {link ? 
-                <Link className="hover:underline font-bold" to={link}>{value}</Link>
-                :
-                <div>{value}</div>
-            }
-        </div>
-    )
-}
+  return (
+    <div className="flex flex-col">
+      <div className="font-bold italic">{label}</div>
 
-export default HighlightListItem
+      {link ? (
+        linkType === "external" ? (
+          <a
+            href={link}
+            className="text-blue-500 hover:text-blue-700 hover:underline"
+            target="_blank"
+          >
+            {value}
+          </a>
+        ) : (
+          <Link className="hover:underline font-bold w-fit" to={link}>
+            {value}
+          </Link>
+        )
+      ) : (
+        <div>{value}</div>
+      )}
+    </div>
+  );
+};
+
+export default HighlightListItem;

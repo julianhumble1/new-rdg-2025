@@ -1,10 +1,9 @@
 import PerformanceRow from "./PerformanceRow.jsx";
 
 const PerformanceTable = ({ performances, handleDelete }) => {
-  if (performances.length > 0)
+  if (performances && performances.length > 0) {
     return (
-      <div className="col-span-2 flex flex-col md:rounded-r hover:bg-slate-300 bg-slate-200 h-full md:h-[30rem] w-full p-4">
-        <div className="font-bold text-lg">Performances</div>
+      <div className="md:w-1/2 w-full">
         <div className="bg-white m-2 rounded overflow-auto ">
           {performances.map((performance, index) => (
             <PerformanceRow
@@ -16,8 +15,9 @@ const PerformanceTable = ({ performances, handleDelete }) => {
         </div>
       </div>
     );
-
-  return <div>No Performances</div>;
+  } else {
+    return null;
+  }
 };
 
 export default PerformanceTable;
