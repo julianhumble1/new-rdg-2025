@@ -18,7 +18,6 @@ import com.rdg.rdg_2025.rdg_2025_spring.utils.AuthTestUtils;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;

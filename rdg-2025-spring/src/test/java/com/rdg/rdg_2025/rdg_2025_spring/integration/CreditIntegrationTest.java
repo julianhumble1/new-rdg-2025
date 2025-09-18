@@ -993,7 +993,7 @@ public class CreditIntegrationTest {
         void testCreditIdNotIntResponds400() throws Exception {
             // Arrange
             // Act & Assert
-            mockMvc.perform(delete("/credits/notanint")
+            mockMvc.perform(delete( "/credits/notanint")
                             .header("Authorization", adminToken))
                     .andExpect(status().isBadRequest());
         }

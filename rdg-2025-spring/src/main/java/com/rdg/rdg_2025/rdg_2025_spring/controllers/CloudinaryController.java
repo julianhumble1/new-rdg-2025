@@ -18,9 +18,9 @@ public class CloudinaryController {
 
     @GetMapping("/generate")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity generateSignature(@RequestParam String publicId, @RequestParam String uploadPreset) {
+    public ResponseEntity<?> generateSignature(@RequestParam String publicId, @RequestParam String uploadPreset, @RequestParam String folder) {
         try {
-            String signature = cloudinaryService.generateSecureSignature(publicId, uploadPreset);
+            String signature = cloudinaryService.generateSecureSignature(publicId, uploadPreset, folder);
             String apiKey = cloudinaryService.getApiKey();
             Long timestamp = cloudinaryService.getTimestamp();
             return ResponseEntity.ok().body(new CloudinarySignatureResponse(signature, apiKey, timestamp));
