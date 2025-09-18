@@ -17,7 +17,32 @@ export default class CloudinaryService {
     }
   };
 
-  static getSignature = async (imageId, uploadPreset) => {
+  static uploadHomeImage = async (image, position) => {
+    try {
+      const signatureResponse = await this.getSignature(
+        position,
+        "home",
+        "dev/home",
+      );
+
+      const { signature, apiKey, timestamp } = signatureResponse.data;
+
+      const formData = new FormData();
+      formData.append("file", image);
+      formData.append("upload_preset", "home");
+      formData.append("asset_folder", "dev/home");
+      formData.append("public_id", position);
+      formData.append("signature", signature);
+      formData.append("api_key", apiKey);
+      formData.append("timestamp", timestamp);
+
+      await this.uploadImage(formData);
+    } catch (e) {
+      throw new Error(e.message);
+    }
+  };
+
+  static getSignature = async (imageId, uploadPreset, folder) => {
     const token = Cookies.get("token");
 
     try {
@@ -30,6 +55,7 @@ export default class CloudinaryService {
           params: {
             publicId: imageId,
             uploadPreset: uploadPreset,
+            folder: folder,
           },
         },
       );

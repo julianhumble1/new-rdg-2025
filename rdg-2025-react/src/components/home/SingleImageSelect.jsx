@@ -1,11 +1,16 @@
 import { XMarkIcon } from "@heroicons/react/16/solid";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import CloudinaryService from "../../services/CloudinaryService.js";
 
-const SingleImageSelect = () => {
+const SingleImageSelect = ({ position }) => {
   const [selectedImg, setSelectedImage] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);
 
-  const handleFileChange = (e) => {
+  const [feedback, setFeedback] = useState(null);
+
+  const firstRender = useRef(true);
+
+  const handleFileChange = async (e) => {
     const file = e.target.files?.[0];
     if (file) {
       setSelectedImage(file);
@@ -17,9 +22,32 @@ const SingleImageSelect = () => {
     }
   };
 
+  useEffect(() => {
+    const upload = async () => {
+      try {
+        const response = await CloudinaryService.uploadHomeImage(
+          selectedImg,
+          position,
+        );
+        setFeedback("Successfully updated image");
+      } catch (e) {
+        setFeedback(e.message);
+      }
+      
+    if (firstRender.current) {
+      firstRender.current = false;
+      return;
+    } else {
+      upload()
+    }
+
+    };
+  }, [selectedImg, position]);
+
   return (
     <div className="bg-slate-200 rounded p-2 m-2 shadow flex flex-col h-80">
-      <div className="text-center font-bold">Image 1</div>
+      <div className="text-center font-bold">Image {position}</div>
+      <div>{feedback}</div>
 
       {/* label acts as clickable/hoverable area that triggers the hidden file input */}
       <label className="border border-black border-dashed mx-auto text-center w-5/6 h-5/6 my-auto relative overflow-hidden rounded group cursor-pointer">

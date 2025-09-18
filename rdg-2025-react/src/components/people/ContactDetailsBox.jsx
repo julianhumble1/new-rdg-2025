@@ -1,4 +1,3 @@
-import { format } from "date-fns";
 import AddressHelper from "../../utils/AddressHelper.js";
 
 const ContactDetailsBox = ({ personData }) => {
@@ -28,16 +27,7 @@ const ContactDetailsBox = ({ personData }) => {
           <div>{personData.mobilePhone}</div>
         </div>
       )}
-      <div>
-        <div className="flex text-sm gap-1">
-          <div className="font-bold italic">Created:</div>
-          <div>{format(new Date(personData.createdAt), "dd-MM-yyyy")}</div>
-        </div>
-        <div className="flex text-sm gap-1">
-          <div className="font-bold italic">Last Updated:</div>
-          <div>{format(new Date(personData.updatedAt), "dd-MM-yyyy")}</div>
-        </div>
-      </div>
+      <div></div>
     </div>
   );
 };
