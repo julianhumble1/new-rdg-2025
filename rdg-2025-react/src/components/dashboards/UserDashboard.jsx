@@ -10,7 +10,6 @@ const UserDashboard = () => {
       try {
         await UserService.checkUser();
       } catch (error) {
-        console.log(error);
         navigate("/dashboard");
       }
     };

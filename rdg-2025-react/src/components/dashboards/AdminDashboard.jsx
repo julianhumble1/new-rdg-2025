@@ -1,6 +1,7 @@
 import {
   BuildingLibraryIcon,
   FilmIcon,
+  PhotoIcon,
   ScaleIcon,
   StarIcon,
   TicketIcon,
@@ -11,10 +12,10 @@ import {
 import ContentCard from "../common/ContentCard.jsx";
 import AdminDashboardCard from "./AdminDashboardCard.jsx";
 
-const AltAdminDashboard = () => {
+const AdminDashboard = () => {
   return (
     <ContentCard>
-      <div className="grid sm:grid-cols-3 grid-cols-1">
+      <div className="grid sm:grid-cols-2 grid-cols-1 lg:grid-cols-3">
         <AdminDashboardCard
           name="Venues"
           basePath="venues"
@@ -57,9 +58,13 @@ const AltAdminDashboard = () => {
           showSeeAll={false}
           icon={<TrophyIcon />}
         />
+        <AdminDashboardCard name="Images"
+          showSeeAll={false}
+          icon={<PhotoIcon />}
+        />
       </div>
     </ContentCard>
   );
 };
 
-export default AltAdminDashboard;
+export default AdminDashboard;
