@@ -1,7 +1,9 @@
 import {
+  ArrowRightIcon,
   BuildingLibraryIcon,
   FilmIcon,
   PhotoIcon,
+  PlusIcon,
   ScaleIcon,
   StarIcon,
   TicketIcon,
@@ -11,8 +13,12 @@ import {
 } from "@heroicons/react/16/solid";
 import ContentCard from "../common/ContentCard.jsx";
 import AdminDashboardCard from "./AdminDashboardCard.jsx";
+import Button from "../common/Button.jsx";
+import { useNavigate } from "react-router-dom";
 
 const AdminDashboard = () => {
+  const navigate = useNavigate();
+
   return (
     <ContentCard>
       <div className="grid sm:grid-cols-2 grid-cols-1 lg:grid-cols-3">
@@ -58,9 +64,18 @@ const AdminDashboard = () => {
           showSeeAll={false}
           icon={<TrophyIcon />}
         />
-        <AdminDashboardCard name="Images"
+        <AdminDashboardCard
+          name="Images"
           showSeeAll={false}
+          showAddNew={false}
+          basePath="home/images"
           icon={<PhotoIcon />}
+          customButton={
+            <Button onClick={() => navigate("/home/images")}>
+              Update Home Images
+              <ArrowRightIcon className="w-4 h-4 inline ml-2" />
+            </Button>
+          }
         />
       </div>
     </ContentCard>

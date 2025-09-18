@@ -34,6 +34,7 @@ import CloudinaryTest from "./components/CloudinaryTest.jsx";
 import CloudinaryUploadTest from "./components/CloudinaryUploadTest.jsx";
 import NewAwardForm from "./components/awards/NewAwardForm.jsx";
 import EditAwardForm from "./components/awards/EditAwardForm.jsx";
+import HomeImageSelect from "./components/home/HomeImageSelect.jsx";
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -49,6 +50,8 @@ function App() {
       <Routes>
         <Route path="/" element={<Navigate to="/home" replace />}></Route>
         <Route path="/home" element={<Home />}></Route>
+        <Route path="/home/images" element={<HomeImageSelect />} />
+
         <Route
           path="/login"
           element={<Login loggedIn={loggedIn} setLoggedIn={setLoggedIn} />}
