@@ -14,6 +14,7 @@ import CreditService from "../../services/CreditService.js";
 import AwardService from "../../services/AwardService.js";
 import { Cloudinary } from "@cloudinary/url-gen/index";
 import ContentCard from "../common/ContentCard.jsx";
+import FormTemplate from "../common/FormTemplate.jsx";
 
 const ProductionPage = () => {
   const productionId = useParams().id;
@@ -171,9 +172,13 @@ const ProductionPage = () => {
 
       <ContentCard>
         <div>
-                  {productionData &&
-                      
-                      editMode ? <div>Edit mode</div> :  (
+          {productionData && editMode ? (
+            <EditProductionForm
+              productionData={productionData}
+              handleEdit={handleEdit}
+              setEditMode={setEditMode}
+            />
+          ) : (
             <div className="flex gap-2 flex-col md:flex-row">
               <ProductionHighlight
                 productionData={productionData}
@@ -188,41 +193,6 @@ const ProductionPage = () => {
           )}
         </div>
       </ContentCard>
-
-      {/* <div className="flex justify-center w-full md:my-2 ">
-        {productionData && !editMode && performances.length > 0 && (
-          <div className="grid md:grid-cols-5 grid-cols-1 w-full md:w-4/5 md:shadow-md min-h-[26rem]">
-            <ProductionHighlight
-              productionData={productionData}
-              setEditMode={setEditMode}
-              handleDelete={handleDelete}
-              image={image}
-              fetchProductionData={fetchProductionData}
-            />
-            <PerformancesTable
-              performances={performances}
-              handleDelete={handleDelete}
-            />
-          </div>
-        )} */}
-      {/* {productionData && !editMode && performances.length === 0 && (
-          <div className="grid md:grid-cols-3 grid-cols-1 w-full lg:w-1/2 md:w-2/3 md:shadow-md h-[26rem]">
-            <ProductionHighlight
-              productionData={productionData}
-              setEditMode={setEditMode}
-              handleDelete={handleDelete}
-            />
-          </div>
-        )}
-      </div> */}
-
-      {productionData && editMode && (
-        <EditProductionForm
-          productionData={productionData}
-          handleEdit={handleEdit}
-          setEditMode={setEditMode}
-        />
-      )}
 
       <CreditsTabs
         actingCredits={actingCredits}

@@ -10,6 +10,7 @@ import EditFestivalForm from "./EditFestivalForm.jsx";
 import PerformanceService from "../../services/PerformanceService.js";
 import AwardService from "../../services/AwardService.js";
 import AwardsTabs from "../awards/AwardsTabs.jsx";
+import ContentCard from "../common/ContentCard.jsx";
 
 const FestivalPage = () => {
   const festivalId = useParams().id;
@@ -117,46 +118,32 @@ const FestivalPage = () => {
       <SuccessMessage message={successMessage} />
       <ErrorMessage message={errorMessage} />
 
-      <div className="flex w-full justify-center md:my-2">
-        {festivalData && !editMode && performances.length > 0 && (
-          <div className="grid md:grid-cols-5 grid-cols-1 w-full lg:w-1/2 md:w-2/3 md:shadow-md min-h-[26rem]">
-            <FestivalHighlight
+      <ContentCard>
+        {festivalData &&
+          (editMode ? (
+            <EditFestivalForm
               festivalData={festivalData}
+              handleEdit={handleEdit}
               setEditMode={setEditMode}
-              handleDelete={handleDelete}
             />
-            <PerformancesTable
-              performances={performances}
-              handleDelete={handleDelete}
-            />
-          </div>
-        )}
-
-        {festivalData && !editMode && performances.length === 0 && (
-          <div className="grid md:grid-cols-3 grid-cols-1 w-full lg:w-1/2 md:w-2/3 md:shadow-md h-[26rem]">
-            <FestivalHighlight
-              festivalData={festivalData}
-              setEditMode={setEditMode}
-              handleDelete={handleDelete}
-            />
-          </div>
-        )}
-        {festivalData && editMode && (
-          <EditFestivalForm
-            festivalData={festivalData}
-            handleEdit={handleEdit}
-            setEditMode={setEditMode}
-          />
-        )}
-      </div>
+          ) : (
+            <div className="flex gap-2 flex-col md:flex-row">
+              <FestivalHighlight
+                festivalData={festivalData}
+                setEditMode={setEditMode}
+                handleDelete={handleDelete}
+              />
+              <PerformancesTable
+                performances={performances}
+                handleDelete={handleDelete}
+              />
+            </div>
+          ))}
+      </ContentCard>
 
       {/* Awards Section */}
       {festivalData && !editMode && awards.length > 0 && (
-        <div className="flex w-full justify-center md:my-2">
-          <div className="w-full lg:w-1/2 md:w-2/3 md:shadow-md">
-            <AwardsTabs awards={awards} handleDelete={handleDelete} />
-          </div>
-        </div>
+        <AwardsTabs awards={awards} handleDelete={handleDelete} />
       )}
     </div>
   );

@@ -1,83 +1,37 @@
-import { format } from "date-fns";
-import { Link } from "react-router-dom";
 import MonthDateUtils from "../../utils/MonthDateUtils.js";
-import Card from "../common/Card.jsx";
+import HighlightTemplate from "../common/HighlightTemplate.jsx";
+import HighlightListItem from "../common/HighlightListItem.jsx";
 
 const FestivalHighlight = ({ festivalData, setEditMode, handleDelete }) => {
-  if (festivalData)
-    return (
-      <Card className="flex flex-col gap-2 col-span-3 h-full">
-        <div className="text-black text-xl font-bold flex justify-between">
-          <div>{festivalData.name}</div>
-          <div className="flex gap-2">
-            <button
-              className="text-sm hover:underline"
-              onClick={() => setEditMode(true)}
-            >
-              Edit
-            </button>
-            <button
-              className="text-sm hover:underline"
-              onClick={() => handleDelete(festivalData)}
-            >
-              Delete
-            </button>
-          </div>
-        </div>
-        <div className="flex flex-col justify-between h-full ">
-          <div className="flex flex-col gap-2">
-            {festivalData.venue && (
-              <div className="flex flex-col">
-                <div className="font-bold italic">Venue</div>
-                <Link
-                  className=" hover:underline font-bold"
-                  to={`/venues/${festivalData.venue.id}`}
-                >
-                  {festivalData.venue.name}
-                </Link>
-              </div>
-            )}
-            <div className="flex flex-col">
-              <div className="font-bold italic">Date</div>
-              <div>
-                {festivalData.month
-                  ? MonthDateUtils.monthMapping[festivalData.month]
-                  : ""}{" "}
-                {festivalData.year}
-              </div>
-            </div>
-            {festivalData.description && (
-              <div className="flex flex-col max-h-36 overflow-auto">
-                <div className="font-bold italic">Description</div>
-                <div>{festivalData.description}</div>
-              </div>
-            )}
-          </div>
-        </div>
-        <div className="flex justify-between mt-2">
-          <div>
-            <div className="flex text-sm gap-1">
-              <div className="font-bold italic">Created:</div>
-              <div>
-                {format(new Date(festivalData.createdAt), "dd-MM-yyyy")}
-              </div>
-            </div>
-            <div className="flex text-sm gap-1">
-              <div className="font-bold italic">Last Updated:</div>
-              <div>
-                {format(new Date(festivalData.updatedAt), "dd-MM-yyyy")}
-              </div>
-            </div>
-          </div>
-          <Link
-            to="/festivals"
-            className="text-sm hover:underline font-bold text-end my-auto"
-          >
-            See All Festivals
-          </Link>
-        </div>
-      </Card>
-    );
+  if (!festivalData) return null;
+
+  return (
+    <HighlightTemplate
+      title={festivalData.name}
+      type="Festivals"
+      handleEdit={() => setEditMode(false)}
+      handleDelete={handleDelete}
+      createdAt={festivalData.createdAt}
+      updatedAt={festivalData.updatedAt}
+    >
+      <HighlightListItem
+        label="Venue"
+        value={festivalData?.venue?.name}
+        link={`/venues/${festivalData?.venue?.id}`}
+      />
+
+      <HighlightListItem
+        label="Date"
+        value={`${
+          festivalData.month
+            ? MonthDateUtils.monthMapping[festivalData.month]
+            : ""
+        } ${festivalData.year}`}
+      />
+
+      <HighlightListItem label="Description" value={festivalData.description} />
+    </HighlightTemplate>
+  );
 };
 
 export default FestivalHighlight;

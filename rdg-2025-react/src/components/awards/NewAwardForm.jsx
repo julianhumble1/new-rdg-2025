@@ -6,6 +6,7 @@ import { Label, TextInput } from "flowbite-react";
 import FetchValueOptionsHelper from "../../utils/FetchValueOptionsHelper.js";
 import { Link } from "react-router-dom";
 import AwardService from "../../services/AwardService.js";
+import ContentCard from "../common/ContentCard.jsx";
 
 const NewAwardForm = () => {
   const [productionOptions, setProductionOptions] = useState([]);
@@ -60,7 +61,7 @@ const NewAwardForm = () => {
   };
 
   return (
-    <div className="bg-sky-900 bg-opacity-35 lg:w-1/2 md:w-2/3 rounded p-4 m-2 flex flex-col gap-2 shadow-md">
+    <ContentCard>
       <SuccessMessage message={successMessage} />
       <ErrorMessage message={errorMessage} />
       <form className="flex flex-col gap-2 max-w-md" onSubmit={handleSubmit}>
@@ -144,7 +145,7 @@ const NewAwardForm = () => {
           </button>
         </div>
       </form>
-    </div>
+    </ContentCard>
   );
 };
 

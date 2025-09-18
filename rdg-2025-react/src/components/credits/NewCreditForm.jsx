@@ -7,6 +7,7 @@ import { Label, Textarea, TextInput } from "flowbite-react";
 import FetchValueOptionsHelper from "../../utils/FetchValueOptionsHelper.js";
 import { Link } from "react-router-dom";
 import CreditService from "../../services/CreditService.js";
+import ContentCard from "../common/ContentCard.jsx";
 
 const NewCreditForm = () => {
   const typeOptions = [
@@ -59,7 +60,7 @@ const NewCreditForm = () => {
   };
 
   return (
-    <div className="bg-sky-900 bg-opacity-35 lg:w-1/2 md:w-2/3 rounded p-4 m-2 flex flex-col gap-2 shadow-md">
+    <ContentCard>
       <SuccessMessage message={successMessage} />
       <ErrorMessage message={errorMessage} />
       <form
@@ -164,7 +165,7 @@ const NewCreditForm = () => {
           </button>
         </div>
       </form>
-    </div>
+    </ContentCard>
   );
 };
 

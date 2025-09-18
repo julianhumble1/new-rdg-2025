@@ -124,20 +124,20 @@ const VenuePage = () => {
       <ErrorMessage message={errorMessage} />
 
       <ContentCard>
-        {venueData && !editMode && (
-          <VenueHighlight
-            venueData={venueData}
-            setEditMode={setEditMode}
-            handleDelete={handleDelete}
-          />
-        )}
-        {venueData && editMode && (
-          <EditVenueForm
-            venueData={venueData}
-            handleEdit={handleEditVenue}
-            setEditMode={setEditMode}
-          />
-        )}
+        {venueData &&
+          (editMode ? (
+            <EditVenueForm
+              venueData={venueData}
+              handleEdit={handleEditVenue}
+              setEditMode={setEditMode}
+            />
+          ) : (
+            <VenueHighlight
+              venueData={venueData}
+              setEditMode={setEditMode}
+              handleDelete={handleDelete}
+            />
+          ))}
       </ContentCard>
       <Tabs variant="underline" className="m-3">
         <Tabs.Item active title="Productions" icon={ScaleIcon}>

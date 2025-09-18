@@ -4,7 +4,7 @@ import DatePicker from "react-datepicker";
 import Select from "react-select";
 import FetchValueOptionsHelper from "../../utils/FetchValueOptionsHelper.js";
 import ErrorMessage from "../modals/ErrorMessage.jsx";
-import ContentCard from "../common/ContentCard.jsx";
+import ConfirmCancelButtons from "../common/ConfirmCancelButtons.jsx";
 
 const EditProductionForm = ({ productionData, handleEdit, setEditMode }) => {
   const [venueOptions, setVenueOptions] = useState([]);
@@ -54,7 +54,7 @@ const EditProductionForm = ({ productionData, handleEdit, setEditMode }) => {
   }, []);
 
   return (
-    <ContentCard>
+    <div>
       <ErrorMessage message={errorMessage} />
       <form
         className="flex flex-col gap-2 max-w-md"
@@ -172,19 +172,9 @@ const EditProductionForm = ({ productionData, handleEdit, setEditMode }) => {
             onChange={(e) => setFlyerFile(e.target.value)}
           />
         </div>
-        <div className="grid grid-cols-2 justify-end px-2">
-          <button
-            className="text-sm hover:underline font-bold text-center col-span-1"
-            onClick={() => setEditMode(false)}
-          >
-            Cancel Edit Mode
-          </button>
-          <button className="hover:underline bg-sky-900  p-2 py-1 rounded w-full text-white col-span-1 text-sm">
-            Confirm Edit
-          </button>
-        </div>
+        <ConfirmCancelButtons handleCancel={() => setEditMode(false)} />
       </form>
-    </ContentCard>
+    </div>
   );
 };
 

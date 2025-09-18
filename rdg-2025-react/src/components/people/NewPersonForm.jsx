@@ -4,6 +4,7 @@ import { Label, Textarea, TextInput } from "flowbite-react";
 import { Link, useNavigate } from "react-router-dom";
 import ErrorMessage from "../modals/ErrorMessage.jsx";
 import SuccessMessage from "../modals/SuccessMessage.jsx";
+import ContentCard from "../common/ContentCard.jsx";
 
 const NewPersonForm = () => {
   const navigate = useNavigate();
@@ -40,7 +41,7 @@ const NewPersonForm = () => {
   };
 
   return (
-    <div className="bg-sky-900 bg-opacity-35 lg:w-1/2 md:w-2/3 rounded p-4 m-2 flex flex-col gap-2 shadow-md">
+    <ContentCard>
       <form
         className="flex flex-col gap-2 max-w-md"
         onSubmit={(event) => handleSubmit(event)}
@@ -143,7 +144,7 @@ const NewPersonForm = () => {
           </button>
         </div>
       </form>
-    </div>
+    </ContentCard>
   );
 };
 

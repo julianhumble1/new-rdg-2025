@@ -5,8 +5,8 @@ const FormTemplate = ({
   children,
   customSubmit,
   newOrEdit = "new",
-    cancelEdit,
-  type
+  cancelEdit,
+  type,
 }) => {
   return (
     <ContentCard>

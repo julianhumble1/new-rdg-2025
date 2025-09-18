@@ -11,6 +11,7 @@ import CreditService from "../../services/CreditService.js";
 import AwardService from "../../services/AwardService.js";
 import { Cloudinary } from "@cloudinary/url-gen/index";
 import DetailedPersonHighlight from "./DetailedPersonHighlight.jsx";
+import ContentCard from "../common/ContentCard.jsx";
 
 const PersonPage = () => {
   const [image, setImage] = useState(null);
@@ -60,7 +61,6 @@ const PersonPage = () => {
 
     try {
       const response = await PersonService.getPersonById(personId);
-      console.log(response);
       setViewType(response.data.responseType);
       setPersonData(response.data.person);
       setActingCredits(response.data.actingCredits);
@@ -92,7 +92,7 @@ const PersonPage = () => {
   ) => {
     event.preventDefault();
     try {
-      const response = await PersonService.updatePerson(
+      await PersonService.updatePerson(
         personId,
         firstName,
         lastName,
@@ -157,7 +157,7 @@ const PersonPage = () => {
           handleConfirmDelete={handleConfirmDelete}
         />
       )}
-      <div className="flex w-full justify-center">
+      <ContentCard>
         {viewType === "PUBLIC" && (
           <PublicPersonHighlight personData={personData} image={image} />
         )}
@@ -177,7 +177,7 @@ const PersonPage = () => {
               fetchPersonData={fetchPersonData}
             />
           ))}
-      </div>
+      </ContentCard>
       <CreditsTabs
         actingCredits={actingCredits}
         musicianCredits={musicianCredits}
