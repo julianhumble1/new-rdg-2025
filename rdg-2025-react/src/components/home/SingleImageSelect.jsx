@@ -8,7 +8,7 @@ const SingleImageSelect = ({ position }) => {
 
   const [feedback, setFeedback] = useState(null);
 
-  const firstRender = useRef(true);
+  //   const firstRender = useRef(true);
 
   const handleFileChange = async (e) => {
     const file = e.target.files?.[0];
@@ -23,25 +23,18 @@ const SingleImageSelect = ({ position }) => {
   };
 
   useEffect(() => {
+    // don't run on mount when no image is selected
+    if (!selectedImg) return;
+      
     const upload = async () => {
       try {
-        const response = await CloudinaryService.uploadHomeImage(
-          selectedImg,
-          position,
-        );
-        setFeedback("Successfully updated image");
+        await CloudinaryService.uploadImage(selectedImg, position, "home")
       } catch (e) {
         setFeedback(e.message);
       }
-      
-    if (firstRender.current) {
-      firstRender.current = false;
-      return;
-    } else {
-      upload()
     }
 
-    };
+    upload();
   }, [selectedImg, position]);
 
   return (

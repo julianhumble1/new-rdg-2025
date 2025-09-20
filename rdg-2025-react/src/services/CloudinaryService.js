@@ -1,11 +1,12 @@
 import axios from "axios";
 import Cookies from "js-cookie";
 
+const baseFolder = import.meta.env.VITE_CLOUDINARY_BASE_FOLDER;
+const port = import.meta.env.VITE_BACKEND_PORT;
+const server = import.meta.env.VITE_BACKEND_SERVER;
+
 export default class CloudinaryService {
-  static uploadImage = async (formData) => {
-    for (let [key, value] of formData.entries()) {
-      console.log(`${key}: ${value}`);
-    }
+  static uploadImageToCloudinary = async (formData) => {
     try {
       const response = await axios.post(
         "https://api.cloudinary.com/v1_1/dbher59sh/image/upload",
@@ -17,26 +18,27 @@ export default class CloudinaryService {
     }
   };
 
-  static uploadHomeImage = async (image, position) => {
+  static uploadImage = async (image, publicId, preset) => {
     try {
       const signatureResponse = await this.getSignature(
-        position,
-        "home",
-        "dev/home",
+        publicId,
+        preset,
+        `${baseFolder}/${preset}`,
       );
 
       const { signature, apiKey, timestamp } = signatureResponse.data;
 
       const formData = new FormData();
       formData.append("file", image);
-      formData.append("upload_preset", "home");
-      formData.append("asset_folder", "dev/home");
-      formData.append("public_id", position);
+      formData.append("upload_preset", preset);
+      formData.append("asset_folder", `${baseFolder}/${preset}`);
+      formData.append("public_id", publicId);
+
       formData.append("signature", signature);
       formData.append("api_key", apiKey);
       formData.append("timestamp", timestamp);
 
-      await this.uploadImage(formData);
+      await this.uploadImageToCloudinary(formData);
     } catch (e) {
       throw new Error(e.message);
     }
@@ -47,7 +49,7 @@ export default class CloudinaryService {
 
     try {
       const response = await axios.get(
-        "http://localhost:8080/cloudinary/generate",
+        `http://${server}:${port}/cloudinary/generate`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
