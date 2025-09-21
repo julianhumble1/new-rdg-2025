@@ -23,6 +23,15 @@ public class CloudinaryService {
 
     private Long timestamp;
 
+    // helper to build configured Cloudinary instance
+    private Cloudinary cloudinary() {
+        return new Cloudinary(ObjectUtils.asMap(
+                "cloud_name", apiName,
+                "api_key", apiKey,
+                "api_secret", apiSecret
+        ));
+    }
+
     public String generateSecureSignature(String publicId, String uploadPreset, String folder) {
         Long timestamp = System.currentTimeMillis() / 1000L;
         this.timestamp = timestamp;
@@ -31,9 +40,19 @@ public class CloudinaryService {
                 "upload_preset", uploadPreset,
                 "public_id", publicId,
                 "asset_folder", folder
-
         );
-        Cloudinary cloudinary = new Cloudinary();
-        return cloudinary.apiSignRequest(paramsToSign, apiSecret);
+        // use cloudinary instance (but apiSignRequest only needs the secret)
+        return cloudinary().apiSignRequest(paramsToSign, apiSecret);
+    }
+
+    public String generateSecureUrl(String publicId) {
+        try {
+            Map<String, Object> resource = cloudinary().api().resource(publicId, ObjectUtils.emptyMap());
+            Object secureUrl = resource.get("secure_url");
+            return secureUrl != null ? secureUrl.toString() : null;
+        } catch (Exception e) {
+            // handle not found / other errors as you prefer
+            throw new RuntimeException("Failed to fetch Cloudinary resource: " + e.getMessage(), e);
+        }
     }
 }
