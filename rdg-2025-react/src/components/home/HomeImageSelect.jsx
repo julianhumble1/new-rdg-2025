@@ -8,9 +8,6 @@ const HomeImageSelect = () => {
       {imageSelects.map((number, index) => (
         <SingleImageSelect key={index} position={number} />
       ))}
-      {/* <SingleImageSelect />
-      <SingleImageSelect />
-      <SingleImageSelect /> */}
     </div>
   );
 };

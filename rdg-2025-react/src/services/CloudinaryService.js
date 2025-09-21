@@ -18,7 +18,9 @@ export default class CloudinaryService {
     }
   };
 
-  static uploadImage = async (image, publicId, preset) => {
+  static uploadImage = async (image, idNumber, preset) => {
+    const publicId = `${baseFolder}_${preset}_${idNumber}`;
+
     try {
       const signatureResponse = await this.getSignature(
         publicId,
@@ -38,7 +40,7 @@ export default class CloudinaryService {
       formData.append("api_key", apiKey);
       formData.append("timestamp", timestamp);
 
-      await this.uploadImageToCloudinary(formData);
+      return await this.uploadImageToCloudinary(formData);
     } catch (e) {
       throw new Error(e.message);
     }
@@ -58,6 +60,24 @@ export default class CloudinaryService {
             publicId: imageId,
             uploadPreset: uploadPreset,
             folder: folder,
+          },
+        },
+      );
+      return response;
+    } catch (e) {
+      throw new Error(e.message);
+    }
+  };
+
+  static getUrl = async (idNumber, preset) => {
+    const publicId = `${baseFolder}_${preset}_${idNumber}`;
+
+    try {
+      const response = await axios.get(
+        `http://${server}:${port}/cloudinary/url`,
+        {
+          params: {
+            publicId,
           },
         },
       );

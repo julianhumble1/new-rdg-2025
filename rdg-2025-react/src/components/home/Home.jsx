@@ -3,6 +3,7 @@ import Socials from "../modals/Socials.jsx";
 import HomeProductionSpotLight from "./HomeProductionSpotLight.jsx";
 import { useEffect, useState } from "react";
 import ProductionService from "../../services/ProductionService.js";
+import CloudinaryImage from "../common/CloudinaryImage.jsx";
 
 const Home = () => {
   const [futureProductions, setFutureProductions] = useState([]);
@@ -49,31 +50,15 @@ const Home = () => {
             </div>
             <div className="lg:w-1/2 flex flex-col justify-center">
               <div className="flex justify-center ">
-                <div className="w-96 xl:w-full h-96 lg:h-[500px]">
-                  <Carousel className="bg-black rounded" slideInterval={6000}>
-                    <img
-                      src="/hedda-photos/IMG-20241104-WA0001.jpg"
-                      alt="hedda-photo-1"
-                      className="h-fit"
-                    />
-                    <img
-                      src="/hedda-photos/IMG-20241104-WA0002.jpg"
-                      alt="hedda-photo-2"
-                      className="h-fit w-fit"
-                    />
-                    <img
-                      src="/hedda-photos/IMG-20241104-WA0004.jpg"
-                      alt="hedda-photo-3"
-                    />
-                    <img
-                      src="https://www.facebook.com/photo/?fbid=4971782469545627&set=pcb.4971788016211739"
-                      alt="hedda-photo-3"
-                    />
+                <div className="w-96 xl:w-full h-96 lg:min-h-[300px] border-4 bg-sky-900 bg-opacity-70 rounded-xl p-2">
+                  <Carousel className=" rounded-xl" slideInterval={6000}>
+                    <CloudinaryImage idNumber={1} folder="home" />
+
+                    <CloudinaryImage idNumber={2} folder="home" />
+
+                    <CloudinaryImage idNumber={3} folder="home" />
                   </Carousel>
                 </div>
-              </div>
-              <div className="text-center italic text-lg">
-                Some photos of the cast from a recent production
               </div>
             </div>
           </div>
