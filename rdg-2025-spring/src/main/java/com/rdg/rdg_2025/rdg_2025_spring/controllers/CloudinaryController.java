@@ -3,6 +3,7 @@ package com.rdg.rdg_2025.rdg_2025_spring.controllers;
 import com.rdg.rdg_2025.rdg_2025_spring.payload.response.cloudinary.CloudinarySignatureResponse;
 import com.rdg.rdg_2025.rdg_2025_spring.payload.response.cloudinary.CloudinaryUrlResponse;
 import com.rdg.rdg_2025.rdg_2025_spring.services.CloudinaryService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,6 +36,8 @@ public class CloudinaryController {
         try {
             String url = cloudinaryService.generateSecureUrl(publicId);
             return ResponseEntity.ok().body(new CloudinaryUrlResponse(url));
+        } catch (EntityNotFoundException ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
         } catch (Exception ex) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
         }

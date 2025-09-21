@@ -2,6 +2,8 @@ package com.rdg.rdg_2025.rdg_2025_spring.services;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
+import com.rdg.rdg_2025.rdg_2025_spring.exception.DatabaseException;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -50,9 +52,14 @@ public class CloudinaryService {
             Map<String, Object> resource = cloudinary().api().resource(publicId, ObjectUtils.emptyMap());
             Object secureUrl = resource.get("secure_url");
             return secureUrl != null ? secureUrl.toString() : null;
-        } catch (Exception e) {
+        } catch (Exception ex) {
+            String msg = ex.getMessage() != null ? ex.getMessage().toLowerCase() : "";
+            if (msg.contains("404") || msg.contains("not found")) {
+                // resource does not exist
+                throw new EntityNotFoundException("No image with id: " + publicId, ex);
+            }
             // handle not found / other errors as you prefer
-            throw new RuntimeException("Failed to fetch Cloudinary resource: " + e.getMessage(), e);
+            throw new DatabaseException("Failed to fetch Cloudinary resource: " + ex.getMessage(), ex);
         }
     }
 }
