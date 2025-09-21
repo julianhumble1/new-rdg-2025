@@ -71,19 +71,14 @@ export default class CloudinaryService {
 
   static getUrl = async (idNumber, preset) => {
     const publicId = `${baseFolder}_${preset}_${idNumber}`;
-
-    try {
-      const response = await axios.get(
-        `http://${server}:${port}/cloudinary/url`,
-        {
-          params: {
-            publicId,
-          },
+    const response = await axios.get(
+      `http://${server}:${port}/cloudinary/url`,
+      {
+        params: {
+          publicId,
         },
-      );
-      return response;
-    } catch (e) {
-      throw new Error(e.message);
-    }
+      },
+    );
+    return response;
   };
 }

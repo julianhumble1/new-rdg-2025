@@ -1,41 +1,32 @@
-// import { useEffect, useState } from "react";
-
-import { AdvancedImage } from "@cloudinary/react";
-import { Cloudinary } from "@cloudinary/url-gen/index";
 import { useEffect, useState } from "react";
 import NotFound from "./NotFound.jsx";
+import CloudinaryService from "../../services/CloudinaryService.js";
 
-// export default CloudinaryImage;
-const baseFolder = import.meta.env.VITE_CLOUDINARY_BASE_FOLDER;
-
-const CloudinaryImage = ({ idNumber, folder, version = "" }) => {
-  const [exists, setExists] = useState(true);
-
-  const cloudName = "dbher59sh";
-
-  const cld = new Cloudinary({
-    cloud: {
-      cloudName,
-    },
-  });
-
-  const myImage = cld.image(`${baseFolder}_${folder}_${idNumber}.jpg`);
-  if (version) myImage.setVersion(version);
+const CloudinaryImage = ({ idNumber, folder }) => {
+  const [url, setUrl] = useState("");
+  const [exists, setExists] = useState(false);
+  const [connection, setConnection] = useState(true);
 
   useEffect(() => {
-    const checkExists = async () => {
-      const exists = await fetch(myImage.toURL(), { method: "HEAD" })
-        .then((r) => r.ok)
-        .catch(() => false);
-
-      setExists(exists);
+    const getUrl = async () => {
+      try {
+        const response = await CloudinaryService.getUrl(idNumber, folder);
+        setUrl(response.data.url);
+        setExists(true);
+      } catch (e) {
+        if (e.status === 404) {
+          setExists(false);
+        } else {
+          setConnection(false);
+        }
+      }
     };
-    checkExists();
+    getUrl();
   });
 
   return (
     <div className="w-full h-full">
-      {exists ? <AdvancedImage cldImg={myImage} /> : <NotFound />}
+      {connection && (exists ? <img src={url} /> : <NotFound />)}
     </div>
   );
 };

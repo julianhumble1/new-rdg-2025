@@ -6,8 +6,6 @@ import CloudinaryImage from "../common/CloudinaryImage.jsx";
 const SingleImageSelect = ({ position }) => {
   const [selectedImg, setSelectedImage] = useState(null);
 
-  const [version, setVersion] = useState("");
-
   // store a preview URL (string) not the File object
   const [feedback, setFeedback] = useState(null);
 
@@ -29,8 +27,6 @@ const SingleImageSelect = ({ position }) => {
           position,
           "home",
         );
-        const version = resp.data.version;
-        setVersion(version);
         setFeedback("Successfully uploaded image");
       } catch (e) {
         setFeedback(e.message);
@@ -40,20 +36,14 @@ const SingleImageSelect = ({ position }) => {
     upload();
   }, [selectedImg, position]);
 
-  const makeRequest = async () => {
-    const response = await CloudinaryService.getUrl(position, "home");
-    console.log(response);
-  };
-
   return (
     <div className="bg-slate-200 rounded p-2 m-2 shadow flex flex-col h-80">
       <div className="text-center font-bold">Image {position}</div>
       <div>{feedback}</div>
-      <button onClick={() => makeRequest()}>Make request</button>
 
       {/* label acts as clickable/hoverable area that triggers the hidden file input */}
       <label className="border border-black border-dashed mx-auto text-center w-5/6 h-5/6 my-auto relative overflow-hidden rounded group cursor-pointer">
-        <CloudinaryImage folder="home" idNumber={position} version={version} />
+        <CloudinaryImage folder="home" idNumber={position} />
 
         {/* hover overlay shown when user hovers the image area */}
         <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-40 text-white opacity-0 group-hover:opacity-100 transition">
