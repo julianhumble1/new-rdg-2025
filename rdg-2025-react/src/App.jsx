@@ -35,6 +35,7 @@ import CloudinaryUploadTest from "./components/CloudinaryUploadTest.jsx";
 import NewAwardForm from "./components/awards/NewAwardForm.jsx";
 import EditAwardForm from "./components/awards/EditAwardForm.jsx";
 import HomeImageSelect from "./components/home/HomeImageSelect.jsx";
+import FeedbackToast from "./components/common/FeedbackToast.jsx";
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -91,6 +92,7 @@ function App() {
         <Route path="/awards/new" element={<NewAwardForm />} />
         <Route path="/awards/edit/:id" element={<EditAwardForm />} />
       </Routes>
+      <FeedbackToast />
     </Router>
   );
 }

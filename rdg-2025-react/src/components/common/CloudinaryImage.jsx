@@ -26,7 +26,12 @@ const CloudinaryImage = ({ idNumber, folder }) => {
 
   return (
     <div className="w-full h-full">
-      {connection && (exists ? <img src={url} /> : <NotFound />)}
+      {connection &&
+        (exists ? (
+          <img src={url} className="w-full h-full object-cover object-center" />
+        ) : (
+          <NotFound />
+        ))}
     </div>
   );
 };

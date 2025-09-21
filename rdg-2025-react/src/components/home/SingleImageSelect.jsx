@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import CloudinaryService from "../../services/CloudinaryService.js";
 import CloudinaryImage from "../common/CloudinaryImage.jsx";
+import FeedbackToast from "../common/FeedbackToast.jsx";
 
 const SingleImageSelect = ({ position }) => {
   const [selectedImg, setSelectedImage] = useState(null);
@@ -37,12 +38,12 @@ const SingleImageSelect = ({ position }) => {
   }, [selectedImg, position]);
 
   return (
-    <div className="bg-slate-200 rounded p-2 m-2 shadow flex flex-col h-80">
+    <div className="bg-slate-100 rounded p-2 m-2 flex flex-col hover:bg-slate-200">
       <div className="text-center font-bold">Image {position}</div>
       <div>{feedback}</div>
 
       {/* label acts as clickable/hoverable area that triggers the hidden file input */}
-      <label className="border border-black border-dashed mx-auto text-center w-5/6 h-5/6 my-auto relative overflow-hidden rounded group cursor-pointer">
+      <label className="border border-black border-dashed mx-auto text-center my-auto relative overflow-hidden rounded group cursor-pointer">
         <CloudinaryImage folder="home" idNumber={position} />
 
         {/* hover overlay shown when user hovers the image area */}

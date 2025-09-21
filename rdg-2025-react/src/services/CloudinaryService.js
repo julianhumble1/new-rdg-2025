@@ -35,6 +35,7 @@ export default class CloudinaryService {
       formData.append("upload_preset", preset);
       formData.append("asset_folder", `${baseFolder}/${preset}`);
       formData.append("public_id", publicId);
+      formData.append("eager", ["c_fill,w_1600,h_900,g_auto/f_auto/q_auto"]);
 
       formData.append("signature", signature);
       formData.append("api_key", apiKey);

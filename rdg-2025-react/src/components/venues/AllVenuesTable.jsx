@@ -27,6 +27,7 @@ const AllVenuesTable = ({ venues, handleDelete, nameSearch }) => {
               </Link>
             </Table.Cell>
           </Table.Row>
+
           {venues.map((venue, index) => (
             <AltVenueRow
               venue={venue}

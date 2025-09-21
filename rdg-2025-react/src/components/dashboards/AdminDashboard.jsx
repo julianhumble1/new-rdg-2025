@@ -3,21 +3,23 @@ import {
   BuildingLibraryIcon,
   FilmIcon,
   PhotoIcon,
-  PlusIcon,
   ScaleIcon,
   StarIcon,
   TicketIcon,
   TrophyIcon,
-  UserGroupIcon,
   UsersIcon,
 } from "@heroicons/react/16/solid";
 import ContentCard from "../common/ContentCard.jsx";
 import AdminDashboardCard from "./AdminDashboardCard.jsx";
 import Button from "../common/Button.jsx";
 import { useNavigate } from "react-router-dom";
+import useFeedbackStore from "../../stores/useFeedbackStore.js";
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
+
+  const show = useFeedbackStore((s) => s.showFeedback);
+  const message = useFeedbackStore((s) => s.message)
 
   return (
     <ContentCard>
@@ -78,6 +80,10 @@ const AdminDashboard = () => {
           }
         />
       </div>
+      <button onClick={show("Saved successfully", "success", 4000)}>
+        Set feedback
+      </button>
+      {message}
     </ContentCard>
   );
 };
