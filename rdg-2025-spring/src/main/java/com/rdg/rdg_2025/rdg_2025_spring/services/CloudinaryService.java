@@ -41,7 +41,8 @@ public class CloudinaryService {
                 "timestamp", timestamp,
                 "upload_preset", uploadPreset,
                 "public_id", publicId,
-                "asset_folder", folder
+                "asset_folder", folder,
+                "eager", new String[] { "c_fill,w_1600,h_900,g_auto/f_auto/q_auto" }
         );
         // use cloudinary instance (but apiSignRequest only needs the secret)
         return cloudinary().apiSignRequest(paramsToSign, apiSecret);
