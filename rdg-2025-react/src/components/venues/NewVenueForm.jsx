@@ -15,8 +15,6 @@ const NewVenueForm = () => {
   const [notes, setNotes] = useState("");
   const [url, setUrl] = useState("");
 
-  const [errorMessage, setErrorMessage] = useState("");
-
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
@@ -30,7 +28,7 @@ const NewVenueForm = () => {
       );
       navigate(`/venues/${response.data.venue.id}`);
     } catch (e) {
-      setErrorMessage(e.message);
+      return;
     }
   };
 
@@ -42,7 +40,6 @@ const NewVenueForm = () => {
           handleSubmit(event, name, address, town, postcode, notes, url)
         }
       >
-        <ErrorMessage message={errorMessage} />
         <div>
           <div className="mb-2 block">
             <Label value="Venue Name (required)" />

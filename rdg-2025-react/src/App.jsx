@@ -35,7 +35,8 @@ import CloudinaryUploadTest from "./components/CloudinaryUploadTest.jsx";
 import NewAwardForm from "./components/awards/NewAwardForm.jsx";
 import EditAwardForm from "./components/awards/EditAwardForm.jsx";
 import HomeImageSelect from "./components/home/HomeImageSelect.jsx";
-import FeedbackToast from "./components/common/FeedbackToast.jsx";
+import { Bounce, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -92,7 +93,20 @@ function App() {
         <Route path="/awards/new" element={<NewAwardForm />} />
         <Route path="/awards/edit/:id" element={<EditAwardForm />} />
       </Routes>
-      <FeedbackToast />
+
+      <ToastContainer
+        position="bottom-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick={false}
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+        transition={Bounce}
+      />
     </Router>
   );
 }

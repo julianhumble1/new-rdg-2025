@@ -5,11 +5,14 @@ import ErrorMessage from "../modals/ErrorMessage.jsx";
 import Select from "react-select";
 import { Label, Textarea, TextInput } from "flowbite-react";
 import FetchValueOptionsHelper from "../../utils/FetchValueOptionsHelper.js";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import CreditService from "../../services/CreditService.js";
 import ContentCard from "../common/ContentCard.jsx";
+import { toast } from "react-toastify";
 
 const NewCreditForm = () => {
+  const navigate = useNavigate();
+
   const typeOptions = [
     { value: "ACTOR", label: "Acting" },
     { value: "MUSICIAN", label: "Musician" },
@@ -17,9 +20,6 @@ const NewCreditForm = () => {
   ];
   const [productionOptions, setProductionOptions] = useState([]);
   const [personOptions, setPersonOptions] = useState([]);
-
-  const [successMessage, setSuccessMessage] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
 
   const [name, setName] = useState("");
   const [type, setType] = useState(typeOptions[0]);
@@ -29,16 +29,16 @@ const NewCreditForm = () => {
 
   useEffect(() => {
     const setOptions = async () => {
-      setProductionOptions(
-        await FetchValueOptionsHelper.fetchProductionOptions(),
-      );
-      setPersonOptions(await FetchValueOptionsHelper.fetchPersonOptions());
+      try {
+        setProductionOptions(
+          await FetchValueOptionsHelper.fetchProductionOptions(),
+        );
+        setPersonOptions(await FetchValueOptionsHelper.fetchPersonOptions());
+      } catch {
+        return;
+      }
     };
-    try {
-      setOptions();
-    } catch (e) {
-      setErrorMessage(e.message);
-    }
+    setOptions();
   }, []);
 
   const handleSubmit = async (event) => {
@@ -51,18 +51,14 @@ const NewCreditForm = () => {
         person.value,
         summary,
       );
-      setSuccessMessage(
-        `Successfully added ${response.data.credit.name} for ${response.data.credit.production.name}!`,
-      );
+      navigate(`/productions/${response.data.credit.production.id}`);
     } catch (e) {
-      setErrorMessage(e.message);
+      return;
     }
   };
 
   return (
     <ContentCard>
-      <SuccessMessage message={successMessage} />
-      <ErrorMessage message={errorMessage} />
       <form
         className="flex flex-col gap-2 max-w-md"
         onSubmit={(event) => handleSubmit(event)}

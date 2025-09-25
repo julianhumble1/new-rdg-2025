@@ -33,7 +33,6 @@ const FestivalPage = () => {
   const getFestivalData = useCallback(async () => {
     try {
       const response = await FestivalService.getFestivalById(festivalId);
-      console.log(response);
       setFestivalData(response.data.festival);
       setPerformances(response.data.performances);
       setAwards(response.data.awards);
@@ -74,7 +73,7 @@ const FestivalPage = () => {
         getFestivalData();
       }
     } catch (e) {
-      setErrorMessage(e.message);
+      return
     }
     setShowConfirmDelete(false);
   };

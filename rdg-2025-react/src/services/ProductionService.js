@@ -1,5 +1,6 @@
 import axios from "axios";
 import Cookies from "js-cookie";
+import { toast } from "react-toastify";
 
 export default class ProductionService {
   static createNewProduction = async (
@@ -33,17 +34,11 @@ export default class ProductionService {
           },
         },
       );
+      toast.success(`Successfully created ${response.data.production.name}.`);
       return response;
     } catch (e) {
-      if (e.response.status === 401 || e.response.status === 403) {
-        throw new Error("Failed to authenticate as administrator");
-      } else if (e.response.status === 500) {
-        throw new Error("Internal server error");
-      } else if (e.response.status === 409) {
-        throw new Error("Production with this name already exists");
-      } else if (e.response.status === 400) {
-        throw new Error("Bad request: details are not in expected format");
-      }
+      toast.error(e.message);
+      throw new Error(e.message, e);
     }
   };
 
@@ -52,11 +47,8 @@ export default class ProductionService {
       const response = await axios.get("http://localhost:8080/productions");
       return response;
     } catch (e) {
-      if (e.response.status === 500) {
-        throw new Error("Internal server error");
-      } else {
-        throw new Error(e.message);
-      }
+      toast.error(e.message);
+      throw new Error(e.message, e);
     }
   };
 
@@ -67,11 +59,8 @@ export default class ProductionService {
       );
       return response;
     } catch (e) {
-      if (e.response.status === 500) {
-        throw new Error("Internal server error");
-      } else {
-        throw new Error(e.message);
-      }
+      toast.error(e.message);
+      throw new Error(e.message, e);
     }
   };
 
@@ -82,13 +71,8 @@ export default class ProductionService {
       );
       return response;
     } catch (e) {
-      if (e.response.status === 500) {
-        throw new Error("Internal Server Error");
-      } else if (e.response.status === 404) {
-        throw new Error("No production with this id");
-      } else if (e.response.status === 400) {
-        throw new Error("Bad or missing production id");
-      }
+      toast.error(e.message);
+      throw new Error(e.message, e);
     }
   };
 
@@ -124,18 +108,11 @@ export default class ProductionService {
           },
         },
       );
-
+      toast.success(`Successfully updated ${response.data.production.name}.`);
       return response;
     } catch (e) {
-      if (e.response.status === 500) {
-        throw new Error("Internal Server Error.");
-      } else if (e.response.status === 404) {
-        throw new Error("No Production/Venue with this id.");
-      } else if (e.response.status === 409) {
-        throw new Error("Production with this name already exists.");
-      } else if (e.response.status === 401 || e.response.status === 403) {
-        throw new Error("Failed to authenticate as administrator.");
-      }
+      toast.error(e.message);
+      throw new Error(e.message, e);
     }
   };
 
@@ -188,15 +165,11 @@ export default class ProductionService {
           },
         },
       );
+      toast.success("Successfully deleted production.");
       return response;
     } catch (e) {
-      if (e.response.status === 500) {
-        throw new Error("Internal Server Error.");
-      } else if (e.response.status === 404) {
-        throw new Error("No Production/Venue with this id.");
-      } else if (e.response.status === 401 || e.response.status === 403) {
-        throw new Error("Failed to authenticate as administrator.");
-      }
+      toast.error(e.message);
+      throw new Error(e.message, e);
     }
   };
 }

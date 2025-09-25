@@ -2,13 +2,17 @@ import { useEffect, useState } from "react";
 import NotFound from "./NotFound.jsx";
 import CloudinaryService from "../../services/CloudinaryService.js";
 
-const CloudinaryImage = ({ idNumber, folder }) => {
+const CloudinaryImage = ({ idNumber, folder, newUploadedUrl }) => {
   const [url, setUrl] = useState("");
   const [exists, setExists] = useState(false);
   const [connection, setConnection] = useState(true);
 
   useEffect(() => {
     const getUrl = async () => {
+      if (newUploadedUrl) {
+        setUrl(newUploadedUrl);
+        return;
+      }
       try {
         const response = await CloudinaryService.getUrl(idNumber, folder);
         setUrl(response.data.url);

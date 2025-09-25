@@ -7,7 +7,6 @@ import ErrorMessage from "../modals/ErrorMessage.jsx";
 
 import AltVenueTable from "./AllVenuesTable.jsx";
 import { MagnifyingGlassIcon } from "@heroicons/react/16/solid";
-import FeedbackToast from "../common/FeedbackToast.jsx";
 
 const AllVenues = () => {
   const [venues, setVenues] = useState([]);

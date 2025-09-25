@@ -9,7 +9,7 @@ const FestivalHighlight = ({ festivalData, setEditMode, handleDelete }) => {
     <HighlightTemplate
       title={festivalData.name}
       type="Festivals"
-      handleEdit={() => setEditMode(false)}
+      handleEdit={() => setEditMode(true)}
       handleDelete={handleDelete}
       createdAt={festivalData.createdAt}
       updatedAt={festivalData.updatedAt}

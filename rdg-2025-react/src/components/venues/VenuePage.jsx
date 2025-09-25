@@ -19,7 +19,6 @@ import { FilmIcon, ScaleIcon } from "@heroicons/react/16/solid";
 import FestivalService from "../../services/FestivalService.js";
 import AltFestivalsTable from "../festivals/FestivalsTable.jsx";
 import ContentCard from "../common/ContentCard.jsx";
-import FeedbackToast from "../common/FeedbackToast.jsx";
 
 const VenuePage = () => {
   const venueId = useParams().id;

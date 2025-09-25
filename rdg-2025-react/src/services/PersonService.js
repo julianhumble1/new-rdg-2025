@@ -1,5 +1,6 @@
 import Cookies from "js-cookie";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 export default class PersonService {
   static addNewPerson = async (
@@ -33,17 +34,13 @@ export default class PersonService {
           },
         },
       );
+      toast.success(
+        `Successfully created ${response.data.person.firstName} ${response.data.person.lateName}`,
+      );
       return response;
     } catch (e) {
-      if (e.response.status === 500) {
-        throw new Error("Internal server error");
-      } else if (e.response.status === 409) {
-        throw new Error("Person with this name already exists.");
-      } else if (e.response.status === 401 || e.response.status === 403) {
-        throw new Error("Failed to authenticate as administrator.");
-      } else if (e.response.status === 400) {
-        throw new Error("Bad Request: Details not in expected format.");
-      }
+      toast.error(e.message);
+      throw new Error(e.message, e);
     }
   };
 
@@ -58,9 +55,8 @@ export default class PersonService {
       });
       return response;
     } catch (e) {
-      if (e.response.status === 500) {
-        throw new Error("Internal server error");
-      }
+      toast.error(e);
+      throw new Error(e.message, e);
     }
   };
 
@@ -76,15 +72,11 @@ export default class PersonService {
           },
         },
       );
+      toast.success("Successfully deleted person.");
       return response;
     } catch (e) {
-      if (e.response.status === 500) {
-        throw new Error("Internal server error");
-      } else if (e.response.status === 401 || e.response.status === 403) {
-        throw new Error("Failed to authenticate as administrator.");
-      } else if (e.response.status === 404) {
-        throw new Error("No Person with this id.");
-      }
+      toast.error(e.message);
+      throw new Error(e.message, e);
     }
   };
 
@@ -102,13 +94,8 @@ export default class PersonService {
       );
       return response;
     } catch (e) {
-      if (e.response.status === 500) {
-        throw new Error("Internal server error");
-      } else if (e.response.status === 404) {
-        throw new Error("No Person with this id.");
-      } else if (e.response.status === 400) {
-        throw new Error("Bad Request: Details not in expected format.");
-      }
+      toast.error(e.message);
+      throw new Error(e.message, e);
     }
   };
 
@@ -146,19 +133,13 @@ export default class PersonService {
           },
         },
       );
+      toast.success(
+        `Successfully updated ${response.data.person.firstName} ${response.data.person.lateName}`,
+      );
       return response;
     } catch (e) {
-      if (e.response.status === 500) {
-        throw new Error("Internal server error");
-      } else if (e.response.status === 409) {
-        throw new Error("Person with this name already exists.");
-      } else if (e.response.status === 404) {
-        throw new Error("No Person with this id.");
-      } else if (e.response.status === 400) {
-        throw new Error("Bad Request: Details not in expected format.");
-      } else if (e.response.status === 401 || e.response.status === 403) {
-        throw new Error("Failed to authenticate as administrator.");
-      }
+      toast.error(e.message);
+      throw new Error(e.message, e);
     }
   };
 

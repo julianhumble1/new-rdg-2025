@@ -46,14 +46,9 @@ const NewProductionForm = () => {
         notConfirmed,
         flyerFile,
       );
-      setSuccessMessage(
-        `Successfully created '${response.data.production.name}'!`,
-      );
-      setErrorMessage("");
       navigate(`/productions/${response.data.production.id}`);
     } catch (e) {
-      setSuccessMessage("");
-      setErrorMessage(e.message);
+      return;
     }
   };
 

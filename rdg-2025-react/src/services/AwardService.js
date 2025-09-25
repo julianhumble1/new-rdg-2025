@@ -1,5 +1,6 @@
 import axios from "axios";
 import Cookies from "js-cookie";
+import { toast } from "react-toastify";
 
 export default class AwardService {
   static createNewAward = async (name, productionId, personId, festivalId) => {
@@ -20,17 +21,11 @@ export default class AwardService {
           },
         },
       );
+      toast.success(`Successfully created ${response.data.award.name}`);
       return response;
     } catch (e) {
-      if (e.response.status === 401 || e.response.status === 403) {
-        throw new Error("Failed to authenticate as administrator");
-      } else if (e.response.status === 404) {
-        throw new Error("This production, person or festival does not exist");
-      } else if (e.response.status === 500) {
-        throw new Error("Internal server error");
-      } else {
-        throw new Error(e.message);
-      }
+      toast.error(e.message);
+      throw new Error(e.message, e);
     }
   };
 
@@ -41,13 +36,8 @@ export default class AwardService {
       );
       return response;
     } catch (e) {
-      if (e.response.status === 404) {
-        throw new Error("This award does not exist");
-      } else if (e.response.status === 500) {
-        throw new Error("Internal server error");
-      } else {
-        throw new Error(e.message);
-      }
+      toast.error(e.message);
+      throw new Error(e.message, e);
     }
   };
 
@@ -75,17 +65,12 @@ export default class AwardService {
           },
         },
       );
+      console.log(`Successfully updated ${response.data.award.name}`);
+      toast.success(`Successfully updated ${response.data.award.name}`);
       return response;
     } catch (e) {
-      if (e.response.status === 401 || e.response.status === 403) {
-        throw new Error("Failed to authenticate as administrator");
-      } else if (e.response.status === 404) {
-        throw new Error("Does not exist");
-      } else if (e.response.status === 500) {
-        throw new Error("Internal server error");
-      } else {
-        throw new Error(e.message);
-      }
+      toast.error(e.message);
+      throw new Error(e.message, e);
     }
   };
 
@@ -101,17 +86,11 @@ export default class AwardService {
           },
         },
       );
+      toast.success("Successfully deleted award.");
       return response;
     } catch (e) {
-      if (e.response.status === 401 || e.response.status === 403) {
-        throw new Error("Failed to authenticate as administrator");
-      } else if (e.response.status === 404) {
-        throw new Error("Does not exist");
-      } else if (e.response.status === 500) {
-        throw new Error("Internal server error");
-      } else {
-        throw new Error(e.message);
-      }
+      toast.error(e.message);
+      throw new Error(e.message, e);
     }
   };
 }

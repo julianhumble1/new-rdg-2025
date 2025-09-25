@@ -4,17 +4,16 @@ import ErrorMessage from "../modals/ErrorMessage.jsx";
 import Select from "react-select";
 import { Label, TextInput } from "flowbite-react";
 import FetchValueOptionsHelper from "../../utils/FetchValueOptionsHelper.js";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import AwardService from "../../services/AwardService.js";
 import ContentCard from "../common/ContentCard.jsx";
 
 const NewAwardForm = () => {
+  const navigate = useNavigate();
+
   const [productionOptions, setProductionOptions] = useState([]);
   const [personOptions, setPersonOptions] = useState([]);
   const [festivalOptions, setFestivalOptions] = useState([]);
-
-  const [successMessage, setSuccessMessage] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
 
   const [name, setName] = useState("");
   const [production, setProduction] = useState(null);
@@ -32,18 +31,12 @@ const NewAwardForm = () => {
     try {
       setOptions();
     } catch (e) {
-      setErrorMessage(e.message);
+      return;
     }
-  }, []);
+  });
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
-    // Validate that production is selected
-    if (!production) {
-      setErrorMessage("Production is required");
-      return;
-    }
 
     try {
       const response = await AwardService.createNewAward(
@@ -52,18 +45,23 @@ const NewAwardForm = () => {
         person ? person.value : null,
         festival ? festival.value : null,
       );
-      setSuccessMessage(
-        `Successfully added award "${response.data.award.name}"!`,
-      );
+      // Navigate back to the appropriate page based on the award's associations
+      if (response.data.award.production) {
+        navigate(`/productions/${response.data.award.production.id}`);
+      } else if (response.data.award.person) {
+        navigate(`/people/${response.data.award.person.id}`);
+      } else if (response.data.award.festival) {
+        navigate(`/festivals/${response.data.award.festival.id}`);
+      } else {
+        navigate("/dashboard");
+      }
     } catch (e) {
-      setErrorMessage(e.message);
+      return;
     }
   };
 
   return (
     <ContentCard>
-      <SuccessMessage message={successMessage} />
-      <ErrorMessage message={errorMessage} />
       <form className="flex flex-col gap-2 max-w-md" onSubmit={handleSubmit}>
         <div>
           <div className="mb-2 block italic">

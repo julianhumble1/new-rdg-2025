@@ -2,13 +2,11 @@
 import { useEffect, useState } from "react";
 import CloudinaryService from "../../services/CloudinaryService.js";
 import CloudinaryImage from "../common/CloudinaryImage.jsx";
-import FeedbackToast from "../common/FeedbackToast.jsx";
+import { toast } from "react-toastify";
 
 const SingleImageSelect = ({ position }) => {
   const [selectedImg, setSelectedImage] = useState(null);
-
-  // store a preview URL (string) not the File object
-  const [feedback, setFeedback] = useState(null);
+  const [uploadedUrl, setUploadedUrl] = useState(null);
 
   const handleFileChange = async (e) => {
     const file = e.target.files?.[0];
@@ -22,15 +20,25 @@ const SingleImageSelect = ({ position }) => {
     if (!selectedImg) return;
 
     const upload = async () => {
+      const imageUploadTest = toast.loading("Uploading image...");
       try {
-        const resp = await CloudinaryService.uploadImage(
+        const response = await CloudinaryService.uploadImage(
           selectedImg,
           position,
           "home",
         );
-        setFeedback("Successfully uploaded image");
+        toast.update(imageUploadTest, {
+          render: "Successfully uploaded image.",
+          type: "success",
+          isLoading: false,
+        });
+        setUploadedUrl(response.data.secureUrl);
       } catch (e) {
-        setFeedback(e.message);
+        toast.update(imageUploadTest, {
+          render: e.message,
+          type: "error",
+          isLoading: false,
+        });
       }
     };
 
@@ -40,11 +48,14 @@ const SingleImageSelect = ({ position }) => {
   return (
     <div className="bg-slate-100 rounded p-2 m-2 flex flex-col hover:bg-slate-200">
       <div className="text-center font-bold">Image {position}</div>
-      <div>{feedback}</div>
 
       {/* label acts as clickable/hoverable area that triggers the hidden file input */}
       <label className="border border-black border-dashed mx-auto text-center my-auto relative overflow-hidden rounded group cursor-pointer">
-        <CloudinaryImage folder="home" idNumber={position} />
+        <CloudinaryImage
+          folder="home"
+          idNumber={position}
+          newUploadedUrl={uploadedUrl}
+        />
 
         {/* hover overlay shown when user hovers the image area */}
         <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-40 text-white opacity-0 group-hover:opacity-100 transition">

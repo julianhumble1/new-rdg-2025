@@ -1,5 +1,6 @@
 import axios from "axios";
 import Cookies from "js-cookie";
+import { toast } from "react-toastify";
 
 const baseFolder = import.meta.env.VITE_CLOUDINARY_BASE_FOLDER;
 const port = import.meta.env.VITE_BACKEND_PORT;
@@ -14,7 +15,7 @@ export default class CloudinaryService {
       );
       return response;
     } catch (e) {
-      throw new Error(e.message);
+      throw new Error(e.message, e);
     }
   };
 
@@ -41,9 +42,12 @@ export default class CloudinaryService {
       formData.append("api_key", apiKey);
       formData.append("timestamp", timestamp);
 
-      return await this.uploadImageToCloudinary(formData);
+      const response = await this.uploadImageToCloudinary(formData);
+      toast.success("Successfully uploaded image");
+      return response;
     } catch (e) {
-      throw new Error(e.message);
+      toast.error(e.message);
+      throw new Error(e.message, e);
     }
   };
 

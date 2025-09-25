@@ -1,5 +1,6 @@
 import axios from "axios";
 import Cookies from "js-cookie";
+import { toast } from "react-toastify";
 
 export default class FestivalService {
   static createNewFestival = async (
@@ -27,17 +28,11 @@ export default class FestivalService {
           },
         },
       );
+      toast.success(`Successfully created ${response.data.festival.name}`);
       return response;
     } catch (e) {
-      if (e.response.status === 401 || e.response.status === 403) {
-        throw new Error("Failed to authenticate as administrator");
-      } else if (e.response.status === 500) {
-        throw new Error("Internal server error");
-      } else if (e.response.status === 400) {
-        throw new Error("Bad request: details are not in expected format");
-      } else if (e.response.status === 404) {
-        throw new Error("No Venue with this id.");
-      }
+      toast.error(e.message);
+      throw new Error(e.message, e);
     }
   };
 
@@ -52,13 +47,8 @@ export default class FestivalService {
       });
       return response;
     } catch (e) {
-      if (e.response.status === 401 || e.response.status === 403) {
-        throw new Error("Failed to authenticate as administrator");
-      } else if (e.response.status === 500) {
-        throw new Error("Internal server error");
-      } else {
-        throw new Error(e.message);
-      }
+      toast.error(e.message);
+      throw new Error(e.message, e);
     }
   };
 
@@ -69,13 +59,8 @@ export default class FestivalService {
       );
       return response;
     } catch (e) {
-      if (e.response.status === 401 || e.response.status === 403) {
-        throw new Error("Failed to authenticate as administrator");
-      } else if (e.response.status === 500) {
-        throw new Error("Internal server error");
-      } else if (e.response.status === 404) {
-        throw new Error("No Festival with this id.");
-      }
+      toast.error(e.message);
+      throw new Error(e.message, e);
     }
   };
 
@@ -91,15 +76,11 @@ export default class FestivalService {
           },
         },
       );
+      toast.success("Successfully deleted festival.");
       return response;
     } catch (e) {
-      if (e.response.status === 401 || e.response.status === 403) {
-        throw new Error("Failed to authenticate as administrator");
-      } else if (e.response.status === 500) {
-        throw new Error("Internal server error");
-      } else if (e.response.status === 404) {
-        throw new Error("No Festival with this id.");
-      }
+      toast.error(e.message);
+      throw new Error(e.message, e);
     }
   };
 
@@ -129,15 +110,11 @@ export default class FestivalService {
           },
         },
       );
+      toast.success(`Successfully updated ${response.data.festival.name}`);
       return response;
     } catch (e) {
-      if (e.response.status === 401 || e.response.status === 403) {
-        throw new Error("Failed to authenticate as administrator");
-      } else if (e.response.status === 500) {
-        throw new Error("Internal server error");
-      } else if (e.response.status === 404) {
-        throw new Error("No Festival/Venue with this id.");
-      }
+      toast.error(e.message);
+      throw new Error(e.message, e);
     }
   };
 }

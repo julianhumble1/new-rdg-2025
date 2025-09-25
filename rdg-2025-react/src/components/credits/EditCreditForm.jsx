@@ -22,9 +22,6 @@ const EditCreditForm = () => {
   const [productionOptions, setProductionOptions] = useState([]);
   const [personOptions, setPersonOptions] = useState([]);
 
-  const [successMessage, setSuccessMessage] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
-
   const [name, setName] = useState("");
   const [type, setType] = useState(null);
   const [production, setProduction] = useState(null);
@@ -32,46 +29,49 @@ const EditCreditForm = () => {
   const [summary, setSummary] = useState("");
 
   const setOptions = async () => {
-    setProductionOptions(
-      await FetchValueOptionsHelper.fetchProductionOptions(),
-    );
-    setPersonOptions(await FetchValueOptionsHelper.fetchPersonOptions());
+    try {
+      setProductionOptions(
+        await FetchValueOptionsHelper.fetchProductionOptions(),
+      );
+      setPersonOptions(await FetchValueOptionsHelper.fetchPersonOptions());
+    } catch {
+      return;
+    }
   };
 
   useEffect(() => {
     const fetchCreditData = async (creditId) => {
-      const response = await CreditService.getCreditById(creditId);
-      console.log(response);
-      setName(response.data.credit.name);
-      for (let i = 0; i < 3; i++) {
-        if (response.data.credit.type === typeOptions[i].value) {
-          setType(typeOptions[i]);
+      try {
+        const response = await CreditService.getCreditById(creditId);
+        setName(response.data.credit.name);
+        for (let i = 0; i < 3; i++) {
+          if (response.data.credit.type === typeOptions[i].value) {
+            setType(typeOptions[i]);
+          }
         }
-      }
-      setProduction({
-        value: response.data.credit.production.id,
-        label: response.data.credit.production.name,
-      });
-      response.data.credit.person &&
-        setPerson({
-          value: response.data.credit.person.id,
-          label: `${response.data.credit.person.firstName} ${response.data.credit.person.lastName}`,
+        setProduction({
+          value: response.data.credit.production.id,
+          label: response.data.credit.production.name,
         });
-      response.data.credit.summary && setSummary(response.data.credit.summary);
+        response.data.credit.person &&
+          setPerson({
+            value: response.data.credit.person.id,
+            label: `${response.data.credit.person.firstName} ${response.data.credit.person.lastName}`,
+          });
+        response.data.credit.summary &&
+          setSummary(response.data.credit.summary);
+      } catch {
+        return;
+      }
     };
 
-    try {
-      setOptions();
-      fetchCreditData(creditId);
-    } catch (e) {
-      setErrorMessage(e.message);
-    }
+    setOptions();
+    fetchCreditData(creditId);
   }, [creditId, typeOptions]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      console.log(creditId);
       const response = await CreditService.updateCredit(
         creditId,
         name,
@@ -82,14 +82,12 @@ const EditCreditForm = () => {
       );
       navigate(`/productions/${response.data.credit.production.id}`);
     } catch (e) {
-      setErrorMessage(e.message);
+      return;
     }
   };
 
   return (
     <div className="bg-sky-900 bg-opacity-35 lg:w-1/2 md:w-2/3 rounded p-4 m-2 flex flex-col gap-2 shadow-md">
-      <SuccessMessage message={successMessage} />
-      <ErrorMessage message={errorMessage} />
       <form
         className="flex flex-col gap-2 max-w-md"
         onSubmit={(event) => handleSubmit(event)}

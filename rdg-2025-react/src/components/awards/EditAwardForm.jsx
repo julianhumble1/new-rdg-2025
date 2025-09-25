@@ -20,9 +20,6 @@ const EditAwardForm = () => {
   const [personOptions, setPersonOptions] = useState([]);
   const [festivalOptions, setFestivalOptions] = useState([]);
 
-  const [successMessage, setSuccessMessage] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
-
   useEffect(() => {
     const setOptions = async () => {
       try {
@@ -34,7 +31,7 @@ const EditAwardForm = () => {
           await FetchValueOptionsHelper.fetchFestivalOptions(),
         );
       } catch (e) {
-        setErrorMessage(e.message);
+        return;
       }
     };
     setOptions();
@@ -44,7 +41,6 @@ const EditAwardForm = () => {
     const getAwardById = async () => {
       try {
         const response = await AwardService.getAwardById(awardId);
-        console.log(response);
         setName(response.data.award.name);
         setProduction(
           response.data.award.production
@@ -71,7 +67,7 @@ const EditAwardForm = () => {
             : null,
         );
       } catch (e) {
-        setErrorMessage(e.message);
+        return;
       }
     };
     getAwardById();
@@ -79,12 +75,6 @@ const EditAwardForm = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
-    // Validate that production is selected
-    if (!production) {
-      setErrorMessage("Production is required");
-      return;
-    }
 
     try {
       const response = await AwardService.updateAward(
@@ -94,7 +84,6 @@ const EditAwardForm = () => {
         person ? person.value : null,
         festival ? festival.value : null,
       );
-      setSuccessMessage("Successfully updated award!");
       // Navigate back to the appropriate page based on the award's associations
       if (response.data.award.production) {
         navigate(`/productions/${response.data.award.production.id}`);
@@ -106,14 +95,12 @@ const EditAwardForm = () => {
         navigate("/dashboard");
       }
     } catch (e) {
-      setErrorMessage(e.message);
+      return;
     }
   };
 
   return (
     <div>
-      <SuccessMessage message={successMessage} />
-      <ErrorMessage message={errorMessage} />
       <div className="bg-sky-900 bg-opacity-35 lg:w-1/2 md:w-2/3 rounded p-4 m-2 flex flex-col gap-2 shadow-md">
         <form className="flex flex-col gap-2 max-w-md" onSubmit={handleSubmit}>
           <div>

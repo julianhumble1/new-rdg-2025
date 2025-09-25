@@ -1,5 +1,6 @@
 import axios from "axios";
 import Cookies from "js-cookie";
+import { toast } from "react-toastify";
 
 export default class VenueService {
   static createNewVenue = async (name, address, town, postcode, notes, url) => {
@@ -22,18 +23,11 @@ export default class VenueService {
           },
         },
       );
-
+      toast.success(`Successfully created ${response.data.venue.name}.`);
       return response;
     } catch (e) {
-      if (e.response.status === 401 || e.response.status === 403) {
-        throw new Error("Failed to authenticate as administrator");
-      } else if (e.response.status === 500) {
-        throw new Error("Internal server error");
-      } else if (e.response.status === 409) {
-        throw new Error("Venue with this name already exists");
-      } else if (e.response.status === 400) {
-        throw new Error("Bad request: details are not in expected format");
-      }
+      toast.error(e.message);
+      throw new Error(e.message);
     }
   };
 
@@ -48,13 +42,8 @@ export default class VenueService {
       });
       return response;
     } catch (e) {
-      if (e.response.status === 401 || e.response.status === 403) {
-        throw new Error("Failed to authenticate as administrator");
-      } else if (e.response.status === 500) {
-        throw new Error("Internal server error");
-      } else {
-        throw new Error(e.message);
-      }
+      toast.error(e.message);
+      throw new Error(e.message);
     }
   };
 
@@ -70,17 +59,11 @@ export default class VenueService {
           },
         },
       );
+      toast.success("Successfully deleted venue.");
       return response;
     } catch (e) {
-      if (e.response.status === 401 || e.response.status === 403) {
-        throw new Error("Failed to authenticate as administrator");
-      } else if (e.response.status === 500) {
-        throw new Error("Internal server error");
-      } else if (e.response.status === 404) {
-        throw new Error("Venue does not exist to be deleted");
-      } else if (e.response.status === 400) {
-        throw new Error("Provided venue id must be integer");
-      }
+      toast.error(e.message);
+      throw new Error(e.message);
     }
   };
 
@@ -91,13 +74,8 @@ export default class VenueService {
       );
       return response;
     } catch (e) {
-      if (e.response.status === 500) {
-        throw new Error("Internal server error");
-      } else if (e.response.status === 404) {
-        throw new Error("Venue does not exist");
-      } else if (e.response.status === 400) {
-        throw new Error("Provided venue id must be integer");
-      }
+      toast.error(e.message);
+      throw new Error(e.message);
     }
   };
 
@@ -130,19 +108,11 @@ export default class VenueService {
         },
       );
 
+      toast.success(`Successfully updated ${response.data.venue.name}`);
       return response;
     } catch (e) {
-      if (e.response.status === 401 || e.response.status === 403) {
-        throw new Error("Failed to authenticate as administrator");
-      } else if (e.response.status === 500) {
-        throw new Error("Internal server error");
-      } else if (e.response.status === 409) {
-        throw new Error("Venue with this name already exists");
-      } else if (e.response.status === 400) {
-        throw new Error("Bad request: details are not in expected format");
-      } else if (e.response.status === 404) {
-        throw new Error("Can not find venue with this id");
-      }
+      toast.error(e.message);
+      throw new Error(e.message);
     }
   };
 }
