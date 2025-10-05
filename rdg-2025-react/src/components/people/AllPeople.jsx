@@ -1,10 +1,13 @@
+// ...existing code...
 import { useEffect, useState } from "react";
 import PersonService from "../../services/PersonService.js";
 import ErrorMessage from "../modals/ErrorMessage.jsx";
-import { Label } from "flowbite-react";
+import { Label, TextInput } from "flowbite-react";
 import PeopleTable from "./PeopleTable.jsx";
 import ConfirmDeleteModal from "../modals/ConfirmDeleteModal.jsx";
 import SuccessMessage from "../modals/SuccessMessage.jsx";
+import { MagnifyingGlassIcon } from "@heroicons/react/16/solid";
+import CustomSpinner from "../common/CustomSpinner.jsx";
 
 const AllPeople = () => {
   const [people, setPeople] = useState([]);
@@ -16,13 +19,21 @@ const AllPeople = () => {
   const [personToDelete, setPersonToDelete] = useState("");
   const [showConfirmDelete, setShowConfirmDelete] = useState("");
 
+  const [nameSearch, setNameSearch] = useState("");
+
+  // loading state
+  const [loading, setLoading] = useState(true);
+
   const fetchAllPeople = async () => {
+    setLoading(true);
     try {
       const response = await PersonService.getAllPeople();
       setPeople(response.data.people);
       setResponseType(response.data.responseType);
     } catch (e) {
       setErrorMessage(e.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -66,15 +77,29 @@ const AllPeople = () => {
             <div className="m-2">
               <Label value="Search" />
             </div>
+            <TextInput
+              icon={MagnifyingGlassIcon}
+              placeholder="Name"
+              className="m-2 mt-0"
+              value={nameSearch}
+              onChange={(e) => setNameSearch(e.target.value)}
+            />
           </div>
         </div>
 
         <span className="col-span-5 p-2 pl-0 overflow-x-auto">
-          <PeopleTable
-            people={people}
-            responseType={responseType}
-            handleDelete={handleDelete}
-          />
+          {loading ? (
+            <div className="flex items-center justify-center h-64">
+              <CustomSpinner />
+            </div>
+          ) : (
+            <PeopleTable
+              people={people}
+              responseType={responseType}
+              handleDelete={handleDelete}
+              nameSearch={nameSearch}
+            />
+          )}
         </span>
       </div>
     </div>
@@ -82,3 +107,4 @@ const AllPeople = () => {
 };
 
 export default AllPeople;
+// ...existing code...

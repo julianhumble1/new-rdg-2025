@@ -1,4 +1,4 @@
-import { FileInput, Label, Textarea, TextInput } from "flowbite-react";
+import { Label, Textarea, TextInput } from "flowbite-react";
 import { useState } from "react";
 
 const EditPersonForm = ({ setEditMode, handleEditPerson, personData }) => {

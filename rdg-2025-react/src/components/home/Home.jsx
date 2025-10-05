@@ -4,6 +4,7 @@ import HomeProductionSpotLight from "./HomeProductionSpotLight.jsx";
 import { useEffect, useState } from "react";
 import ProductionService from "../../services/ProductionService.js";
 import CloudinaryImage from "../common/CloudinaryImage.jsx";
+import { toast } from "react-toastify";
 
 const Home = () => {
   const [futureProductions, setFutureProductions] = useState([]);

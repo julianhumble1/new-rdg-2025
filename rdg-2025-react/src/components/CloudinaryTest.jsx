@@ -2,6 +2,7 @@ import { AdvancedImage } from "@cloudinary/react";
 import { auto } from "@cloudinary/url-gen/actions/resize";
 import { Cloudinary } from "@cloudinary/url-gen/index";
 import { autoGravity } from "@cloudinary/url-gen/qualifiers/gravity";
+import { toast } from "react-toastify";
 
 const CloudinaryTest = () => {
   const cld = new Cloudinary({ cloud: { cloudName: "dbher59sh" } });

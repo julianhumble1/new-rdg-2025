@@ -3,6 +3,7 @@ import ContactDetailsBox from "./ContactDetailsBox.jsx";
 import Card from "../common/Card.jsx";
 import HighlightTemplate from "../common/HighlightTemplate.jsx";
 import HighlightListItem from "../common/HighlightListItem.jsx";
+import { toast } from "react-toastify";
 
 const DetailedPersonHighlight = ({
   personData,

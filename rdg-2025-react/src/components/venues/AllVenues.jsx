@@ -1,12 +1,13 @@
+// ...existing code...
 import { Label, TextInput } from "flowbite-react";
 import { useState, useEffect } from "react";
 import VenueService from "../../services/VenueService.js";
 import ConfirmDeleteModal from "../modals/ConfirmDeleteModal.jsx";
 import SuccessMessage from "../modals/SuccessMessage.jsx";
 import ErrorMessage from "../modals/ErrorMessage.jsx";
-
-import AltVenueTable from "./AllVenuesTable.jsx";
 import { MagnifyingGlassIcon } from "@heroicons/react/16/solid";
+import AllVenuesTable from "./AllVenuesTable.jsx";
+import CustomSpinner from "../common/CustomSpinner.jsx"
 
 const AllVenues = () => {
   const [venues, setVenues] = useState([]);
@@ -18,6 +19,9 @@ const AllVenues = () => {
   const [errorMessage, setErrorMessage] = useState("");
 
   const [nameSearch, setNameSearch] = useState("");
+
+  // added loading state
+  const [loading, setLoading] = useState(true);
 
   const handleDelete = (venue) => {
     setShowConfirmDelete(true);
@@ -37,11 +41,14 @@ const AllVenues = () => {
   };
 
   const fetchAllVenues = async () => {
+    setLoading(true);
     try {
       const response = await VenueService.getAllVenues();
       setVenues(response.data.venues);
     } catch (e) {
       setErrorMessage(e.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -78,11 +85,17 @@ const AllVenues = () => {
             </div>
           </div>
           <span className="col-span-5 p-2 pl-0 overflow-x-auto">
-            <AltVenueTable
-              venues={venues}
-              handleDelete={handleDelete}
-              nameSearch={nameSearch}
-            />
+            {loading ? (
+              <div className="flex items-center justify-center h-64">
+                <CustomSpinner />
+              </div>
+            ) : (
+              <AllVenuesTable
+                venues={venues}
+                handleDelete={handleDelete}
+                nameSearch={nameSearch}
+              />
+            )}
           </span>
         </div>
       </div>
@@ -91,3 +104,4 @@ const AllVenues = () => {
 };
 
 export default AllVenues;
+// ...existing code...

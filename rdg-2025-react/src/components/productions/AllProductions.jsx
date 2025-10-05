@@ -1,3 +1,4 @@
+// ...existing code...
 import { useState, useEffect } from "react";
 import ProductionService from "../../services/ProductionService.js";
 import ConfirmDeleteModal from "../modals/ConfirmDeleteModal.jsx";
@@ -6,6 +7,7 @@ import { Label, TextInput, ToggleSwitch } from "flowbite-react";
 import { MagnifyingGlassIcon } from "@heroicons/react/16/solid";
 import SuccessMessage from "../modals/SuccessMessage.jsx";
 import ErrorMessage from "../modals/ErrorMessage.jsx";
+import CustomSpinner from "../common/CustomSpinner.jsx";
 
 const AllProductions = () => {
   const [productions, setProductions] = useState([]);
@@ -20,12 +22,18 @@ const AllProductions = () => {
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
+  // loading state
+  const [loading, setLoading] = useState(true);
+
   const fetchAllProductions = async () => {
+    setLoading(true);
     try {
       const response = await ProductionService.getAllProductions();
       setProductions(response.data.productions);
     } catch (e) {
       setErrorMessage(e.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -91,13 +99,19 @@ const AllProductions = () => {
           </div>
         </div>
         <span className="col-span-5 p-2 pl-0 overflow-x-auto">
-          <ProductionsTable
-            productions={productions}
-            handleDelete={handleDelete}
-            nameSearch={nameSearch}
-            venueSearch={venueSearch}
-            sundownersSearch={sundownersSearch}
-          />
+          {loading ? (
+            <div className="flex items-center justify-center h-64">
+              <CustomSpinner />
+            </div>
+          ) : (
+            <ProductionsTable
+              productions={productions}
+              handleDelete={handleDelete}
+              nameSearch={nameSearch}
+              venueSearch={venueSearch}
+              sundownersSearch={sundownersSearch}
+            />
+          )}
         </span>
       </div>
     </div>
@@ -105,3 +119,4 @@ const AllProductions = () => {
 };
 
 export default AllProductions;
+// ...existing code...

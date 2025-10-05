@@ -73,7 +73,7 @@ const FestivalPage = () => {
         getFestivalData();
       }
     } catch (e) {
-      return
+      return;
     }
     setShowConfirmDelete(false);
   };

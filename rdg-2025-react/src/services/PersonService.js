@@ -35,7 +35,7 @@ export default class PersonService {
         },
       );
       toast.success(
-        `Successfully created ${response.data.person.firstName} ${response.data.person.lateName}`,
+        `Successfully created ${response.data.person.firstName} ${response.data.person.lastName}`,
       );
       return response;
     } catch (e) {
@@ -134,7 +134,7 @@ export default class PersonService {
         },
       );
       toast.success(
-        `Successfully updated ${response.data.person.firstName} ${response.data.person.lateName}`,
+        `Successfully updated ${response.data.person.firstName} ${response.data.person.lastName}`,
       );
       return response;
     } catch (e) {

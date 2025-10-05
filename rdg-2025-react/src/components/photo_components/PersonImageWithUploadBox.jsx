@@ -17,13 +17,6 @@ const PersonImageWithUploadBox = ({ image, personData, fetchPersonData }) => {
   const [personSuccessMessage, setPersonSuccessMessage] = useState("");
   const [personErrorMessage, setPersonErrorMessage] = useState("");
 
-  const notifyPromise = () =>
-    toast.promise(handleSubmitImage, {
-      pending: "Uploading image...",
-      success: imageSuccessMessage,
-      error: imageErrorMessage,
-    });
-
   const handleFileChange = (event) => {
     const selectedFile = event.target.files[0];
     setFile(selectedFile);
@@ -103,7 +96,6 @@ const PersonImageWithUploadBox = ({ image, personData, fetchPersonData }) => {
           <FileInput onChange={handleFileChange} sizing="sm" />
           <button
             className={`font-bold text-sm hover:underline ${!file && "cursor-not-allowed"}`}
-            onClick={notifyPromise}
           >
             Upload
           </button>

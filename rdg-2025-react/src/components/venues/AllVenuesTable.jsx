@@ -1,5 +1,5 @@
 import { Table } from "flowbite-react";
-import AltVenueRow from "./VenueRow.jsx";
+import VenueRow from "./VenueRow.jsx";
 import { Link } from "react-router-dom";
 import { PlusCircleIcon } from "@heroicons/react/16/solid";
 
@@ -29,7 +29,7 @@ const AllVenuesTable = ({ venues, handleDelete, nameSearch }) => {
           </Table.Row>
 
           {venues.map((venue, index) => (
-            <AltVenueRow
+            <VenueRow
               venue={venue}
               handleDelete={handleDelete}
               key={index}

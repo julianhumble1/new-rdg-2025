@@ -12,6 +12,7 @@ import AwardService from "../../services/AwardService.js";
 import { Cloudinary } from "@cloudinary/url-gen/index";
 import DetailedPersonHighlight from "./DetailedPersonHighlight.jsx";
 import ContentCard from "../common/ContentCard.jsx";
+import { toast } from "react-toastify";
 
 const PersonPage = () => {
   const [image, setImage] = useState(null);
@@ -157,6 +158,8 @@ const PersonPage = () => {
           handleConfirmDelete={handleConfirmDelete}
         />
       )}
+      <button onClick={() => toast.success("toast")}>Toast</button>
+
       <ContentCard>
         {viewType === "PUBLIC" && (
           <PublicPersonHighlight personData={personData} image={image} />

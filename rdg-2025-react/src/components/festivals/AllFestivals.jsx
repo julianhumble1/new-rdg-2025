@@ -6,6 +6,7 @@ import ErrorMessage from "../modals/ErrorMessage.jsx";
 import { Label, TextInput } from "flowbite-react";
 import { MagnifyingGlassIcon } from "@heroicons/react/16/solid";
 import FestivalsTable from "./FestivalsTable.jsx";
+import CustomSpinner from "../common/CustomSpinner.jsx";
 
 const AllFestivals = () => {
   const [festivals, setFestivals] = useState([]);
@@ -19,13 +20,19 @@ const AllFestivals = () => {
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
+  // loading state
+  const [loading, setLoading] = useState(true);
+
   const fetchAllFestivals = async () => {
+    setLoading(true);
     try {
       const response = await FestivalService.getAllFestivals();
       setFestivals(response.data.festivals);
       setErrorMessage("");
     } catch (e) {
       setErrorMessage(e.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -80,12 +87,18 @@ const AllFestivals = () => {
           </div>
         </div>
         <span className="col-span-5 p-2 pl-0 overflow-x-auto">
-          <FestivalsTable
-            festivals={festivals}
-            handleDelete={handleDelete}
-            nameSearch={nameSearch}
-            venueSearch={venueSearch}
-          />
+          {loading ? (
+            <div className="flex items-center justify-center h-64">
+              <CustomSpinner />
+            </div>
+          ) : (
+            <FestivalsTable
+              festivals={festivals}
+              handleDelete={handleDelete}
+              nameSearch={nameSearch}
+              venueSearch={venueSearch}
+            />
+          )}
         </span>
       </div>
     </div>
@@ -93,3 +106,4 @@ const AllFestivals = () => {
 };
 
 export default AllFestivals;
+// ...existing code...

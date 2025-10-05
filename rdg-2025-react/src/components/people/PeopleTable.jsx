@@ -3,7 +3,7 @@ import { Table } from "flowbite-react";
 import { Link } from "react-router-dom";
 import PersonRow from "./PersonRow.jsx";
 
-const PeopleTable = ({ people, responseType, handleDelete }) => {
+const PeopleTable = ({ people, responseType, handleDelete, nameSearch }) => {
   if (people.length > 0) {
     return (
       <Table hoverable className="border overflow-auto max-w-screen">
@@ -43,6 +43,7 @@ const PeopleTable = ({ people, responseType, handleDelete }) => {
               responseType={responseType}
               person={person}
               handleDelete={handleDelete}
+              nameSearch={nameSearch}
             />
           ))}
         </Table.Body>

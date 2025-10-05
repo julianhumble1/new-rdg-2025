@@ -20,25 +20,15 @@ const SingleImageSelect = ({ position }) => {
     if (!selectedImg) return;
 
     const upload = async () => {
-      const imageUploadTest = toast.loading("Uploading image...");
       try {
         const response = await CloudinaryService.uploadImage(
           selectedImg,
           position,
           "home",
         );
-        toast.update(imageUploadTest, {
-          render: "Successfully uploaded image.",
-          type: "success",
-          isLoading: false,
-        });
         setUploadedUrl(response.data.secureUrl);
       } catch (e) {
-        toast.update(imageUploadTest, {
-          render: e.message,
-          type: "error",
-          isLoading: false,
-        });
+        return;
       }
     };
 

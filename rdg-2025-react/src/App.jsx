@@ -47,53 +47,54 @@ function App() {
   }, []);
 
   return (
-    <Router>
-      <Header loggedIn={loggedIn} setLoggedIn={setLoggedIn} />
-      <Routes>
-        <Route path="/" element={<Navigate to="/home" replace />}></Route>
-        <Route path="/home" element={<Home />}></Route>
-        <Route path="/home/images" element={<HomeImageSelect />} />
+    <>
+      <Router>
+        <Header loggedIn={loggedIn} setLoggedIn={setLoggedIn} />
+        <Routes>
+          <Route path="/" element={<Navigate to="/home" replace />}></Route>
+          <Route path="/home" element={<Home />}></Route>
+          <Route path="/home/images" element={<HomeImageSelect />} />
 
-        <Route
-          path="/login"
-          element={<Login loggedIn={loggedIn} setLoggedIn={setLoggedIn} />}
-        ></Route>
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/user-dashboard" element={<UserDashboard />} />
-        <Route path="/admin-dashboard" element={<AdminDashboard />} />
+          <Route
+            path="/login"
+            element={<Login loggedIn={loggedIn} setLoggedIn={setLoggedIn} />}
+          ></Route>
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/user-dashboard" element={<UserDashboard />} />
+          <Route path="/admin-dashboard" element={<AdminDashboard />} />
 
-        <Route path="/venues/new" element={<NewVenueForm />} />
-        <Route path="/venues" element={<AllVenues />} />
-        <Route path="/venues/:id" element={<VenuePage />} />
+          <Route path="/venues/new" element={<NewVenueForm />} />
+          <Route path="/venues" element={<AllVenues />} />
+          <Route path="/venues/:id" element={<VenuePage />} />
 
-        <Route path="/productions/new" element={<NewProductionForm />} />
-        <Route path="/productions" element={<AllProductions />} />
-        <Route path="/productions/:id" element={<ProductionPage />} />
+          <Route path="/productions/new" element={<NewProductionForm />} />
+          <Route path="/productions" element={<AllProductions />} />
+          <Route path="/productions/:id" element={<ProductionPage />} />
 
-        <Route path="/festivals/new" element={<NewFestivalForm />} />
-        <Route path="/festivals" element={<AllFestivals />} />
-        <Route path="/festivals/:id" element={<FestivalPage />} />
+          <Route path="/festivals/new" element={<NewFestivalForm />} />
+          <Route path="/festivals" element={<AllFestivals />} />
+          <Route path="/festivals/:id" element={<FestivalPage />} />
 
-        <Route path="/performances/new" element={<NewPerformanceForm />} />
-        <Route
-          path="/performances/edit/:id"
-          element={<EditPerformanceForm />}
-        />
+          <Route path="/performances/new" element={<NewPerformanceForm />} />
+          <Route
+            path="/performances/edit/:id"
+            element={<EditPerformanceForm />}
+          />
 
-        <Route path="/people/:id" element={<PersonPage />} />
-        <Route path="/people/new" element={<NewPersonForm />} />
-        <Route path="/people" element={<AllPeople />} />
+          <Route path="/people/:id" element={<PersonPage />} />
+          <Route path="/people/new" element={<NewPersonForm />} />
+          <Route path="/people" element={<AllPeople />} />
 
-        <Route path="/credits/new" element={<NewCreditForm />} />
-        <Route path="/credits/edit/:id" element={<EditCreditForm />} />
+          <Route path="/credits/new" element={<NewCreditForm />} />
+          <Route path="/credits/edit/:id" element={<EditCreditForm />} />
 
-        <Route path="/cloudinary" element={<CloudinaryTest />} />
-        <Route path="/cloudinary/upload" element={<CloudinaryUploadTest />} />
+          <Route path="/cloudinary" element={<CloudinaryTest />} />
+          <Route path="/cloudinary/upload" element={<CloudinaryUploadTest />} />
 
-        <Route path="/awards/new" element={<NewAwardForm />} />
-        <Route path="/awards/edit/:id" element={<EditAwardForm />} />
-      </Routes>
-
+          <Route path="/awards/new" element={<NewAwardForm />} />
+          <Route path="/awards/edit/:id" element={<EditAwardForm />} />
+        </Routes>
+      </Router>
       <ToastContainer
         position="bottom-right"
         autoClose={5000}
@@ -106,8 +107,9 @@ function App() {
         pauseOnHover
         theme="light"
         transition={Bounce}
+        style={{ zIndex: 9999 }}
       />
-    </Router>
+    </>
   );
 }
 
