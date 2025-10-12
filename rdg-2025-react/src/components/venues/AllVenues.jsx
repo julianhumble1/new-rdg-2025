@@ -7,7 +7,7 @@ import SuccessMessage from "../modals/SuccessMessage.jsx";
 import ErrorMessage from "../modals/ErrorMessage.jsx";
 import { MagnifyingGlassIcon } from "@heroicons/react/16/solid";
 import AllVenuesTable from "./AllVenuesTable.jsx";
-import CustomSpinner from "../common/CustomSpinner.jsx"
+import CustomSpinner from "../common/CustomSpinner.jsx";
 
 const AllVenues = () => {
   const [venues, setVenues] = useState([]);

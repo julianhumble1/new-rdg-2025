@@ -1,6 +1,7 @@
 import {
   ArrowRightIcon,
   BuildingLibraryIcon,
+  CalendarDaysIcon,
   FilmIcon,
   PhotoIcon,
   ScaleIcon,
@@ -13,6 +14,7 @@ import ContentCard from "../common/ContentCard.jsx";
 import AdminDashboardCard from "./AdminDashboardCard.jsx";
 import Button from "../common/Button.jsx";
 import { useNavigate } from "react-router-dom";
+import EventService from "../../services/EventService.js";
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
@@ -74,6 +76,12 @@ const AdminDashboard = () => {
               <ArrowRightIcon className="w-4 h-4 inline ml-2" />
             </Button>
           }
+        />
+        <AdminDashboardCard
+          name="Events"
+          showSeeAll={false}
+          basePath="events"
+          icon={<CalendarDaysIcon />}
         />
       </div>
     </ContentCard>

@@ -2,8 +2,7 @@ import { Table } from "flowbite-react";
 import { Link } from "react-router-dom";
 
 const PersonRow = ({ person, responseType, handleDelete, nameSearch }) => {
-
-  const fullName = `${person.firstName} ${person.lastName}`
+  const fullName = `${person.firstName} ${person.lastName}`;
 
   if (fullName.toLowerCase().includes(nameSearch.toLowerCase())) {
     if (responseType === "DETAILED") {
@@ -55,7 +54,9 @@ const PersonRow = ({ person, responseType, handleDelete, nameSearch }) => {
         </Table.Row>
       );
     }
-  } else {return null}
+  } else {
+    return null;
+  }
 };
 
 export default PersonRow;
