@@ -15,14 +15,16 @@ public class EventRequest {
     @NotBlank
     private String name;
 
-    @NotNull
     LocalDateTime dateTime;
 
     private String description;
 
-    public EventRequest(String name, LocalDateTime dateTime, String description) {
+    private int venueId;
+
+    public EventRequest(String name, LocalDateTime dateTime, String description, int venueId) {
         this.name = name;
         this.dateTime = dateTime;
         this.description = description;
+        this.venueId =venueId;
     }
 }

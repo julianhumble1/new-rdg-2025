@@ -1,5 +1,6 @@
 package com.rdg.rdg_2025.rdg_2025_spring.models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,6 +23,10 @@ public class Event {
 
     @Column(length = 6000)
     private String description;
+
+    @ManyToOne
+    @JsonManagedReference
+    private Venue venue;
 
     public Event(LocalDateTime dateTime, String name, String description) {
         this.dateTime = dateTime;
