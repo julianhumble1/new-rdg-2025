@@ -1,16 +1,21 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import EventService from "../../services/EventService.js";
 import ContentCard from "../common/ContentCard.jsx";
 import { Label, Textarea, TextInput } from "flowbite-react";
 import DatePicker from "react-datepicker";
+import FetchValueOptionsHelper from "../../utils/FetchValueOptionsHelper.js";
+import Select from "react-select";
+import { toast } from "react-toastify";
 
 const NewEventForm = () => {
   const navigate = useNavigate();
+  const [venueOptions, setVenueOptions] = useState([]);
 
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-  const [dateTime, setDateTime] = useState(new Date());
+  const [dateTime, setDateTime] = useState(null);
+  const [venue, setVenue] = useState({ value: null });
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -20,17 +25,28 @@ const NewEventForm = () => {
         name,
         description,
         dateTime,
+        venue.value,
       );
-      console.log(response)
       navigate(`/events/${response.data.event.id}`);
-    } catch {
-      return;
+    } catch (e) {
+      console.log(e);
+      toast.error("Failed");
     }
   };
 
+  useEffect(() => {
+    const populateVenues = async () => {
+      setVenueOptions(await FetchValueOptionsHelper.fetchVenueOptions());
+    };
+    populateVenues();
+  }, []);
+
   return (
     <ContentCard>
-      <form className="flex flex-col gap-2 max-w-md" onSubmit={(event) => handleSubmit(event)}>
+      <form
+        className="flex flex-col gap-2 max-w-md"
+        onSubmit={(event) => handleSubmit(event)}
+      >
         <div>
           <div className="mb-2 block">
             <Label value="Event Name (required)" />
@@ -42,7 +58,7 @@ const NewEventForm = () => {
             onChange={(e) => setName(e.target.value)}
           />
         </div>
-          <div>
+        <div>
           <div className="mb-2 block">
             <Label value="Description" />
           </div>
@@ -56,7 +72,26 @@ const NewEventForm = () => {
 
         <div>
           <div className="mb-2 block">
-            <Label value="Date & Time (required)" />
+            <Label value="Venue" />
+          </div>
+          <Select
+            options={venueOptions}
+            onChange={setVenue}
+            value={venue}
+            className="w-full text-sm"
+            styles={{
+              control: (baseStyles) => ({
+                ...baseStyles,
+                borderRadius: 8,
+                padding: 1,
+              }),
+            }}
+          />
+        </div>
+
+        <div>
+          <div className="mb-2 block">
+            <Label value="Date & Time" />
           </div>
           <DatePicker
             selected={dateTime}
@@ -67,6 +102,7 @@ const NewEventForm = () => {
             popperPlacement="right"
             showIcon
             className="p-1 rounded border border-gray-300 text-sm"
+            isClearable
           />
         </div>
 
@@ -81,7 +117,6 @@ const NewEventForm = () => {
             Submit
           </button>
         </div>
-        
       </form>
     </ContentCard>
   );

@@ -38,6 +38,8 @@ import HomeImageSelect from "./components/home/HomeImageSelect.jsx";
 import { Bounce, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import NewEventForm from "./components/events/NewEventForm.jsx";
+import EventPage from "./components/events/EventPage.jsx";
+import AllEvents from "./components/events/AllEvents.jsx";
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -96,6 +98,8 @@ function App() {
           <Route path="/awards/edit/:id" element={<EditAwardForm />} />
 
           <Route path="/events/new" element={<NewEventForm />} />
+          <Route path="/events/:id" element={<EventPage />} />
+          <Route path="/events" element={<AllEvents />} />
         </Routes>
       </Router>
       <ToastContainer
