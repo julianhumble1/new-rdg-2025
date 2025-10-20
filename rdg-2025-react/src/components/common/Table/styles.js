@@ -14,21 +14,26 @@ export const customStyles = {
   // header titles
   headCells: {
     style: {
-      fontSize: "1rem",
+      fontSize: "1.1rem",
       fontWeight: "700",
       paddingLeft: "1rem",
       paddingRight: "1rem",
+      textTransform: "uppercase",
     },
   },
   rows: {
     style: {
-      minHeight: "56px",
+      minHeight: "70px",
       "&:not(:last-of-type)": {
         borderBottomStyle: "solid",
         borderBottomWidth: "1px",
         borderBottomColor: "#e2e8f0",
       },
       fontSize: "1rem",
+      // transition: "background-color 150ms ease",
+      // "&:hover": {
+      //   backgroundColor: "#008000"
+      // }
     },
   },
   cells: {

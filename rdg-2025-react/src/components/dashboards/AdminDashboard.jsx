@@ -79,7 +79,7 @@ const AdminDashboard = () => {
         />
         <AdminDashboardCard
           name="Events"
-          showSeeAll={false}
+          showSeeAll
           basePath="events"
           icon={<CalendarDaysIcon />}
         />

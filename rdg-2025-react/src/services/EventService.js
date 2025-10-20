@@ -50,4 +50,50 @@ export default class EventService {
       throw new Error(e.message, e);
     }
   };
+
+  static updateEvent = async (eventId, name, description, dateTime, venue) => {
+    const token = Cookies.get("token");
+
+    try {
+      const response = await axios.patch(
+        `http://localhost:8080/events/${eventId}`,
+        {
+          name: name.trim(),
+          description: description.trim(),
+          dateTime,
+          venueId: venue,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+      toast.success(`Successfully updated ${response.data.event.name}`);
+      return response;
+    } catch (e) {
+      toast.error(e.message);
+      throw new Error(e.message, e);
+    }
+  };
+
+  static deleteEvent = async (eventId) => {
+    const token = Cookies.get("token");
+
+    try {
+      const response = await axios.delete(
+        `http://localhost:8080/events/${eventId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+      toast.success("Successfully deleted event.");
+      return response;
+    } catch (e) {
+      toast.error(e.message);
+      throw new Error(e.message, e);
+    }
+  };
 }

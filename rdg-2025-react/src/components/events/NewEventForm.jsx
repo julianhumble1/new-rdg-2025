@@ -29,8 +29,7 @@ const NewEventForm = () => {
       );
       navigate(`/events/${response.data.event.id}`);
     } catch (e) {
-      console.log(e);
-      toast.error("Failed");
+      toast.error(e.message);
     }
   };
 

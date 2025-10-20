@@ -38,6 +38,10 @@ const SpecificDeleteMessage = ({ itemToDelete }) => {
       setMessage(
         <>When deleting a credit, no other objects will be deleted.</>,
       );
+    } else if (itemToDelete.dateTime != null && itemToDelete.venue != null) {
+      setMessage(
+        <>When deleting an event, no other objects will be deleted.</>,
+      );
     }
   }, [itemToDelete]);
 
