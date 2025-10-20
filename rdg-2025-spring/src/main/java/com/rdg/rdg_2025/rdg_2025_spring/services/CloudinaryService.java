@@ -8,6 +8,8 @@ import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -37,12 +39,19 @@ public class CloudinaryService {
     public String generateSecureSignature(String publicId, String uploadPreset, String folder) {
         Long timestamp = System.currentTimeMillis() / 1000L;
         this.timestamp = timestamp;
+        List<String> eager = new ArrayList<>();
+        if (uploadPreset.equals("home")) {
+            eager.add("c_fill,w_1600,h_900,g_auto/f_auto/q_auto");
+        }
+        if (uploadPreset.equals("production")) {
+            eager.add("c_fill,w_600,h_800,g_auto/f_auto/q_auto");
+        }
         Map<String, Object> paramsToSign = ObjectUtils.asMap(
                 "timestamp", timestamp,
                 "upload_preset", uploadPreset,
                 "public_id", publicId,
                 "asset_folder", folder,
-                "eager", new String[] { "c_fill,w_1600,h_900,g_auto/f_auto/q_auto" }
+                "eager", eager
         );
         // use cloudinary instance (but apiSignRequest only needs the secret)
         return cloudinary().apiSignRequest(paramsToSign, apiSecret);
