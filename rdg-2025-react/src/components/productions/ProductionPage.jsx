@@ -179,7 +179,7 @@ const ProductionPage = () => {
               setEditMode={setEditMode}
             />
           ) : (
-            <div className="flex gap-2 flex-col md:flex-row">
+            <div className="flex gap-2 flex-col">
               <ProductionHighlight
                 productionData={productionData}
                 setEditMode={setEditMode}

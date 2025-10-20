@@ -36,7 +36,11 @@ export default class CloudinaryService {
       formData.append("upload_preset", preset);
       formData.append("asset_folder", `${baseFolder}/${preset}`);
       formData.append("public_id", publicId);
-      formData.append("eager", ["c_fill,w_1600,h_900,g_auto/f_auto/q_auto"]);
+      // Use different aspect ratios based on preset
+      const eagerTransform = preset === "production" 
+        ? ["c_fill,w_600,h_800,g_auto/f_auto/q_auto"] // Portrait for productions
+        : ["c_fill,w_1600,h_900,g_auto/f_auto/q_auto"]; // Landscape for home
+      formData.append("eager", eagerTransform);
 
       formData.append("signature", signature);
       formData.append("api_key", apiKey);

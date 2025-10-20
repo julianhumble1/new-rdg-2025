@@ -2,7 +2,6 @@
 import { useEffect, useState } from "react";
 import CloudinaryService from "../../services/CloudinaryService.js";
 import CloudinaryImage from "../common/CloudinaryImage.jsx";
-import { toast } from "react-toastify";
 
 const SingleImageSelect = ({ position }) => {
   const [selectedImg, setSelectedImage] = useState(null);
