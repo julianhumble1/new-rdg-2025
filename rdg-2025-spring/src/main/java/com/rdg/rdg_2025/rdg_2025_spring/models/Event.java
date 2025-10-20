@@ -24,7 +24,7 @@ public class Event {
     @Column(length = 6000)
     private String description;
 
-    @ManyToOne
+    @ManyToOne(optional = true)
     @JsonManagedReference
     private Venue venue;
 

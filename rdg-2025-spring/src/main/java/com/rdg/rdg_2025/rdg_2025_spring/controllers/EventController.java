@@ -63,4 +63,30 @@ public class EventController {
         }
     }
 
+    @PatchMapping("/{eventId}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> updateEvent(@PathVariable int eventId, @Valid @RequestBody EventRequest updateEventRequest) {
+        try {
+            Event event = eventService.updateEvent(eventId, updateEventRequest);
+            return ResponseEntity.ok().body(new EventResponse(event));
+        } catch (EntityNotFoundException ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+        } catch (DatabaseException ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
+        }
+    }
+
+    @DeleteMapping("/{eventId}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> deleteEvent(@PathVariable int eventId) {
+        try {
+            eventService.deleteEvent(eventId);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        } catch (EntityNotFoundException ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+        } catch (DatabaseException ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
+        }
+    }
+
 }

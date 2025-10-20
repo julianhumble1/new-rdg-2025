@@ -51,7 +51,18 @@ public class EventService {
         }
     }
 
+    public Event updateEvent(int eventId, EventRequest updateEventRequest) {
+        Event event = getEventById(eventId);
+        Venue venue = getVenueFromService(updateEventRequest);
 
+        updateEventFromRequest(updateEventRequest, event, venue);
+        return saveEventToDatabase(event);
+    }
+
+    public void deleteEvent(int eventId) {
+        Event event = getEventById(eventId);
+        deleteEventInDatabase(event);
+    }
 
     // PRIVATE HELPER METHODS
 
@@ -85,6 +96,14 @@ public class EventService {
             }
         }
         return venue;
+    }
+
+    private void deleteEventInDatabase(Event event) {
+        try {
+            eventRepository.delete(event);
+        }catch (DataAccessException | PersistenceException ex) {
+            throw new DatabaseException(ex.getMessage(), ex);
+        }
     }
 
 }
