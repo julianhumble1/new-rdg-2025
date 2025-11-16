@@ -40,6 +40,8 @@ import "react-toastify/dist/ReactToastify.css";
 import NewEventForm from "./components/events/NewEventForm.jsx";
 import EventPage from "./components/events/EventPage.jsx";
 import AllEvents from "./components/events/AllEvents.jsx";
+import AltHeader from "./components/header/AltHeader.jsx";
+import AltHome from "./components/home/AltHome.jsx";
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -52,55 +54,64 @@ function App() {
   return (
     <>
       <Router>
-        <Header loggedIn={loggedIn} setLoggedIn={setLoggedIn} />
-        <Routes>
-          <Route path="/" element={<Navigate to="/home" replace />}></Route>
-          <Route path="/home" element={<Home />}></Route>
-          <Route path="/home/images" element={<HomeImageSelect />} />
+        <div className="flex flex-col min-h-screen h-full tracking-wider">
+          <AltHeader />
+          {/* <Header loggedIn={loggedIn} setLoggedIn={setLoggedIn} />
+           */}
+          <Routes>
+            <Route path="/" element={<Navigate to="/home" replace />}></Route>
+            {/* <Route path="/home" element={<Home />}></Route> */}
+            <Route path="/home" element={<AltHome />} />
 
-          <Route
-            path="/login"
-            element={<Login loggedIn={loggedIn} setLoggedIn={setLoggedIn} />}
-          ></Route>
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/user-dashboard" element={<UserDashboard />} />
-          <Route path="/admin-dashboard" element={<AdminDashboard />} />
+            <Route path="/home/images" element={<HomeImageSelect />} />
 
-          <Route path="/venues/new" element={<NewVenueForm />} />
-          <Route path="/venues" element={<AllVenues />} />
-          <Route path="/venues/:id" element={<VenuePage />} />
+            <Route
+              path="/login"
+              element={<Login loggedIn={loggedIn} setLoggedIn={setLoggedIn} />}
+            ></Route>
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/user-dashboard" element={<UserDashboard />} />
+            <Route path="/admin-dashboard" element={<AdminDashboard />} />
 
-          <Route path="/productions/new" element={<NewProductionForm />} />
-          <Route path="/productions" element={<AllProductions />} />
-          <Route path="/productions/:id" element={<ProductionPage />} />
+            <Route path="/venues/new" element={<NewVenueForm />} />
+            <Route path="/venues" element={<AllVenues />} />
+            <Route path="/venues/:id" element={<VenuePage />} />
 
-          <Route path="/festivals/new" element={<NewFestivalForm />} />
-          <Route path="/festivals" element={<AllFestivals />} />
-          <Route path="/festivals/:id" element={<FestivalPage />} />
+            <Route path="/productions/new" element={<NewProductionForm />} />
+            <Route path="/productions" element={<AllProductions />} />
+            <Route path="/productions/:id" element={<ProductionPage />} />
 
-          <Route path="/performances/new" element={<NewPerformanceForm />} />
-          <Route
-            path="/performances/edit/:id"
-            element={<EditPerformanceForm />}
-          />
+            <Route path="/festivals/new" element={<NewFestivalForm />} />
+            <Route path="/festivals" element={<AllFestivals />} />
+            <Route path="/festivals/:id" element={<FestivalPage />} />
 
-          <Route path="/people/:id" element={<PersonPage />} />
-          <Route path="/people/new" element={<NewPersonForm />} />
-          <Route path="/people" element={<AllPeople />} />
+            <Route path="/performances/new" element={<NewPerformanceForm />} />
+            <Route
+              path="/performances/edit/:id"
+              element={<EditPerformanceForm />}
+            />
 
-          <Route path="/credits/new" element={<NewCreditForm />} />
-          <Route path="/credits/edit/:id" element={<EditCreditForm />} />
+            <Route path="/people/:id" element={<PersonPage />} />
+            <Route path="/people/new" element={<NewPersonForm />} />
+            <Route path="/people" element={<AllPeople />} />
 
-          <Route path="/cloudinary" element={<CloudinaryTest />} />
-          <Route path="/cloudinary/upload" element={<CloudinaryUploadTest />} />
+            <Route path="/credits/new" element={<NewCreditForm />} />
+            <Route path="/credits/edit/:id" element={<EditCreditForm />} />
 
-          <Route path="/awards/new" element={<NewAwardForm />} />
-          <Route path="/awards/edit/:id" element={<EditAwardForm />} />
+            <Route path="/cloudinary" element={<CloudinaryTest />} />
+            <Route
+              path="/cloudinary/upload"
+              element={<CloudinaryUploadTest />}
+            />
 
-          <Route path="/events/new" element={<NewEventForm />} />
-          <Route path="/events/:id" element={<EventPage />} />
-          <Route path="/events" element={<AllEvents />} />
-        </Routes>
+            <Route path="/awards/new" element={<NewAwardForm />} />
+            <Route path="/awards/edit/:id" element={<EditAwardForm />} />
+
+            <Route path="/events/new" element={<NewEventForm />} />
+            <Route path="/events/:id" element={<EventPage />} />
+            <Route path="/events" element={<AllEvents />} />
+          </Routes>
+        </div>
       </Router>
       <ToastContainer
         position="bottom-right"

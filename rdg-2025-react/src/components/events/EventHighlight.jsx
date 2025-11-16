@@ -28,7 +28,6 @@ const EventHighlight = ({ eventData }) => {
     }
   };
 
-
   return (
     <>
       {eventData && (
@@ -42,7 +41,10 @@ const EventHighlight = ({ eventData }) => {
               handleEdit={() => setEditMode(true)}
               handleDelete={() => handleDelete(eventData)}
             >
-              <HighlightListItem label="Description" value={eventData?.description} />
+              <HighlightListItem
+                label="Description"
+                value={eventData?.description}
+              />
               <HighlightListItem
                 label="Venue"
                 value={eventData.venue?.name}

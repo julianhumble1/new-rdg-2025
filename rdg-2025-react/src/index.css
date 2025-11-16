@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 body {
-  font-family: "Roboto", sans-serif; /* Change 'Roboto' to your desired font */
+  font-family: "DM Sans"; /* Change 'Roboto' to your desired font */
 }
 
 /* You can also apply different fonts to specific elements */

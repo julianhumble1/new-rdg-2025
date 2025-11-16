@@ -7,6 +7,11 @@ export default {
     extend: {
       fontFamily: {
         merriweather: ["Merriweather", "serif"],
+          },
+              colors: {
+                  'rdg-red': '#e9462f',
+                  "rdg-blue": "#0347f7",
+                  "rdg-yellow": "#f7c938"
       },
     },
   },

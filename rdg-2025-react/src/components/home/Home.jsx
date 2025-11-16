@@ -51,7 +51,7 @@ const Home = () => {
             </div>
             <div className="lg:w-1/2 flex flex-col justify-center">
               <div className="flex justify-center ">
-                <div className="w-96 xl:w-full h-96 lg:min-h-[300px] border-4 bg-sky-900 bg-opacity-70 rounded-xl p-2">
+                <div className="w-96 xl:w-full h-96 lg:min-h-[300px] border-4 bg-rdg-blue bg-opacity-70 rounded-xl p-2">
                   <Carousel className=" rounded-xl" slideInterval={6000}>
                     <CloudinaryImage idNumber={1} folder="home" />
 

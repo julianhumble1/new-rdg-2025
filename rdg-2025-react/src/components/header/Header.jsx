@@ -37,49 +37,52 @@ const Header = ({ loggedIn, setLoggedIn }) => {
       <NavbarBrand href="/home">
         <img
           src="/src/assets/new_logo_transparent.png"
-          className="mr-3 h-9 sm:h-9"
+          className="mr-3 h-9"
           alt="Flowbite React Logo"
         />
-        <span className="self-center whitespace-nowrap text-xl font-semibold text-white">
+        {/* <span className="self-center whitespace-nowrap text-xl font-semibold text-white">
           Runnymede Drama Group
-        </span>
+        </span> */}
       </NavbarBrand>
-      <NavbarToggle className="text-white" />
-      <NavbarCollapse>
-        <NavbarLink
-          href="/home"
-          className="text-white"
-          active={url.includes("home")}
-        >
-          {" "}
-          Home{" "}
-        </NavbarLink>
-        {loggedIn && (
-          <NavbarLink
-            href="/dashboard"
-            className="text-white active:text-red-500"
-            active={url.includes("dashboard")}
-          >
-            {role} Dashboard
-          </NavbarLink>
-        )}
-        {!loggedIn ? (
-          <NavbarLink
-            href="/login"
-            className="text-white"
-            active={url.includes("login")}
-          >
-            Login
-          </NavbarLink>
-        ) : (
-          <NavbarLink
-            className="text-white hover:cursor-pointer"
-            onClick={handleLogout}
-          >
-            Logout
-          </NavbarLink>
-        )}
-      </NavbarCollapse>
+      <div className="sm:w-1/2 bg-green-500">
+        <NavbarToggle className="text-white" />
+        <div className="flex justify-between w-full">
+          <NavbarCollapse>
+            <NavbarLink
+              href="/home"
+              className="text-white"
+              active={url.includes("home")}
+            >
+              Home
+            </NavbarLink>
+            {loggedIn && (
+              <NavbarLink
+                href="/dashboard"
+                className="text-white data-[state=active]:text-red-500"
+                active={url.includes("dashboard")}
+              >
+                {role} Dashboard
+              </NavbarLink>
+            )}
+            {!loggedIn ? (
+              <NavbarLink
+                href="/login"
+                className="text-white"
+                active={url.includes("login")}
+              >
+                Login
+              </NavbarLink>
+            ) : (
+              <NavbarLink
+                className="text-white hover:cursor-pointer"
+                onClick={handleLogout}
+              >
+                Logout
+              </NavbarLink>
+            )}
+          </NavbarCollapse>
+        </div>
+      </div>
     </Navbar>
   );
 };
