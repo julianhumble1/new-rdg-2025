@@ -1,10 +1,11 @@
 import axios from "axios";
 import Cookies from "js-cookie";
 import { toast } from "react-toastify";
+import { getBaseUrl } from "./baseUrl.js";
 
 const baseFolder = import.meta.env.VITE_CLOUDINARY_BASE_FOLDER;
-const port = import.meta.env.VITE_BACKEND_PORT;
-const server = import.meta.env.VITE_BACKEND_SERVER;
+
+const baseUrl = getBaseUrl()
 
 export default class CloudinaryService {
   static uploadImageToCloudinary = async (formData) => {
@@ -56,7 +57,7 @@ export default class CloudinaryService {
 
     try {
       const response = await axios.get(
-        `http://${server}:${port}/cloudinary/generate`,
+        `${baseUrl}/cloudinary/generate`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -77,7 +78,7 @@ export default class CloudinaryService {
   static getUrl = async (idNumber, preset) => {
     const publicId = `${baseFolder}_${preset}_${idNumber}`;
     const response = await axios.get(
-      `http://${server}:${port}/cloudinary/url`,
+      `${baseUrl}/cloudinary/url`,
       {
         params: {
           publicId,

@@ -13,7 +13,7 @@ const AltHeader = () => {
       <div className="flex w-full justify-between max-w-[1440px] mx-auto">
         <div>
           <img
-            src="/src/assets/new_logo_transparent.png"
+            src="/new_logo_transparent.png"
             className="sm:h-16 sm:m-6 h-12 m-3"
             alt="RDG Logo"
           />

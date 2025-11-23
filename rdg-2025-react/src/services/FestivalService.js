@@ -1,6 +1,9 @@
 import axios from "axios";
 import Cookies from "js-cookie";
 import { toast } from "react-toastify";
+import { getBaseUrl } from "./baseUrl";
+
+const baseUrl = getBaseUrl();
 
 export default class FestivalService {
   static createNewFestival = async (
@@ -14,7 +17,7 @@ export default class FestivalService {
 
     try {
       const response = await axios.post(
-        "http://localhost:8080/festivals",
+        `${baseUrl}/festivals`,
         {
           name: name.trim(),
           venueId: venueId,
@@ -40,7 +43,7 @@ export default class FestivalService {
     const token = Cookies.get("token");
 
     try {
-      const response = await axios.get("http://localhost:8080/festivals", {
+      const response = await axios.get(`${baseUrl}/festivals`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -54,9 +57,7 @@ export default class FestivalService {
 
   static getFestivalById = async (festivalId) => {
     try {
-      const response = await axios.get(
-        `http://localhost:8080/festivals/${festivalId}`,
-      );
+      const response = await axios.get(`${baseUrl}/festivals/${festivalId}`);
       return response;
     } catch (e) {
       toast.error(e.message);
@@ -68,14 +69,11 @@ export default class FestivalService {
     const token = Cookies.get("token");
 
     try {
-      const response = await axios.delete(
-        `http://localhost:8080/festivals/${festivalId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+      const response = await axios.delete(`${baseUrl}/festivals/${festivalId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
-      );
+      });
       toast.success("Successfully deleted festival.");
       return response;
     } catch (e) {
@@ -96,7 +94,7 @@ export default class FestivalService {
 
     try {
       const response = await axios.patch(
-        `http://localhost:8080/festivals/${festivalId}`,
+        `${baseUrl}/festivals/${festivalId}`,
         {
           name: name.trim(),
           venueId: venueId,

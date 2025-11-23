@@ -1,6 +1,9 @@
 import axios from "axios";
 import Cookies from "js-cookie";
 import { toast } from "react-toastify";
+import { getBaseUrl } from "./baseUrl.js";
+
+const baseUrl = getBaseUrl()
 
 export default class AwardService {
   static createNewAward = async (name, productionId, personId, festivalId) => {
@@ -8,7 +11,7 @@ export default class AwardService {
 
     try {
       const response = await axios.post(
-        "http://localhost:8080/awards",
+        `${baseUrl}/awards`,
         {
           name: name.trim(),
           productionId,
@@ -31,9 +34,7 @@ export default class AwardService {
 
   static getAwardById = async (awardId) => {
     try {
-      const response = await axios.get(
-        `http://localhost:8080/awards/${awardId}`,
-      );
+      const response = await axios.get(`${baseUrl}/awards/${awardId}`);
       return response;
     } catch (e) {
       toast.error(e.message);
@@ -52,7 +53,7 @@ export default class AwardService {
 
     try {
       const response = await axios.patch(
-        `http://localhost:8080/awards/${awardId}`,
+        `${baseUrl}/awards/${awardId}`,
         {
           name: name.trim(),
           productionId,
@@ -78,14 +79,11 @@ export default class AwardService {
     const token = Cookies.get("token");
 
     try {
-      const response = await axios.delete(
-        `http://localhost:8080/awards/${awardId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+      const response = await axios.delete(`${baseUrl}/awards/${awardId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
-      );
+      });
       toast.success("Successfully deleted award.");
       return response;
     } catch (e) {

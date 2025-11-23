@@ -1,6 +1,9 @@
 import Cookies from "js-cookie";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { getBaseUrl } from "./baseUrl";
+
+const baseUrl = getBaseUrl();
 
 export default class PersonService {
   static addNewPerson = async (
@@ -17,7 +20,7 @@ export default class PersonService {
 
     try {
       const response = await axios.post(
-        "http://localhost:8080/people",
+        `${baseUrl}/people`,
         {
           firstName: firstName.trim(),
           lastName: lastName.trim(),
@@ -48,7 +51,7 @@ export default class PersonService {
     const token = Cookies.get("token");
 
     try {
-      const response = await axios.get("http://localhost:8080/people", {
+      const response = await axios.get(`${baseUrl}/people`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -65,7 +68,7 @@ export default class PersonService {
 
     try {
       const response = await axios.delete(
-        `http://localhost:8080/people/${personId}`,
+        `${baseUrl}/people/${personId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -85,7 +88,7 @@ export default class PersonService {
 
     try {
       const response = await axios.get(
-        `http://localhost:8080/people/${personId}`,
+        `${baseUrl}/people/${personId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -115,7 +118,7 @@ export default class PersonService {
 
     try {
       const response = await axios.patch(
-        `http://localhost:8080/people/${personId}`,
+        `${baseUrl}/people/${personId}`,
         {
           firstName: firstName.trim(),
           lastName: lastName.trim(),
@@ -148,7 +151,7 @@ export default class PersonService {
 
     try {
       const response = await axios.patch(
-        `http://localhost:8080/people/${personData.id}`,
+        `${baseUrl}/people/${personData.id}`,
         {
           firstName: personData.firstName.trim(),
           lastName: personData.lastName.trim(),

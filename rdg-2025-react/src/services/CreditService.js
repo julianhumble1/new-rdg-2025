@@ -1,6 +1,9 @@
 import axios from "axios";
 import Cookies from "js-cookie";
 import { toast } from "react-toastify";
+import { getBaseUrl } from "./baseUrl";
+
+const baseUrl = getBaseUrl();
 
 export default class CreditService {
   static addNewCredit = async (name, type, productionId, personId, summary) => {
@@ -8,7 +11,7 @@ export default class CreditService {
 
     try {
       const response = await axios.post(
-        "http://localhost:8080/credits",
+        `${baseUrl}/credits`,
         {
           name: name.trim(),
           type: type,
@@ -34,9 +37,7 @@ export default class CreditService {
 
   static getCreditById = async (creditId) => {
     try {
-      const response = await axios.get(
-        `http://localhost:8080/credits/${creditId}`,
-      );
+      const response = await axios.get(`${baseUrl}/credits/${creditId}`);
       return response;
     } catch (e) {
       toast.error(e.message);
@@ -56,7 +57,7 @@ export default class CreditService {
 
     try {
       const response = await axios.patch(
-        `http://localhost:8080/credits/${creditId}`,
+        `${baseUrl}/credits/${creditId}`,
         {
           name: name.trim(),
           type: type,
@@ -83,14 +84,11 @@ export default class CreditService {
   static deleteCreditById = async (creditId) => {
     const token = Cookies.get("token");
     try {
-      const response = await axios.delete(
-        `http://localhost:8080/credits/${creditId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+      const response = await axios.delete(`${baseUrl}/credits/${creditId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
-      );
+      });
       toast.success("Successfully deleted credit.");
       return response;
     } catch (e) {

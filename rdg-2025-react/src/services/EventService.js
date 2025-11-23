@@ -1,6 +1,9 @@
 import axios from "axios";
 import Cookies from "js-cookie";
 import { toast } from "react-toastify";
+import { getBaseUrl } from "./baseUrl";
+
+const baseUrl = getBaseUrl();
 
 export default class EventService {
   static addNewEvent = async (name, description, dateTime, venue) => {
@@ -8,7 +11,7 @@ export default class EventService {
 
     try {
       const response = await axios.post(
-        "http://localhost:8080/events",
+        `${baseUrl}/events`,
         {
           name: name.trim(),
           description: description.trim(),
@@ -31,9 +34,7 @@ export default class EventService {
 
   static getEventById = async (eventId) => {
     try {
-      const response = await axios.get(
-        `http://localhost:8080/events/${eventId}`,
-      );
+      const response = await axios.get(`${baseUrl}/events/${eventId}`);
       return response;
     } catch (e) {
       toast.error(e.message);
@@ -43,7 +44,7 @@ export default class EventService {
 
   static getAllEvents = async () => {
     try {
-      const response = await axios.get(`http://localhost:8080/events`);
+      const response = await axios.get(`${baseUrl}/events`);
       return response;
     } catch (e) {
       toast.error(e.message);
@@ -56,7 +57,7 @@ export default class EventService {
 
     try {
       const response = await axios.patch(
-        `http://localhost:8080/events/${eventId}`,
+        `${baseUrl}/events/${eventId}`,
         {
           name: name.trim(),
           description: description.trim(),
@@ -81,14 +82,11 @@ export default class EventService {
     const token = Cookies.get("token");
 
     try {
-      const response = await axios.delete(
-        `http://localhost:8080/events/${eventId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+      const response = await axios.delete(`${baseUrl}/events/${eventId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
-      );
+      });
       toast.success("Successfully deleted event.");
       return response;
     } catch (e) {

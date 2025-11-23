@@ -1,6 +1,9 @@
 import axios from "axios";
 import Cookies from "js-cookie";
 import { toast } from "react-toastify";
+import { getBaseUrl } from "./baseUrl";
+
+const baseUrl = getBaseUrl();
 
 export default class ProductionService {
   static createNewProduction = async (
@@ -17,7 +20,7 @@ export default class ProductionService {
 
     try {
       const response = await axios.post(
-        "http://localhost:8080/productions",
+        `${baseUrl}/productions`,
         {
           name: name.trim(),
           venueId: venueId,
@@ -44,7 +47,7 @@ export default class ProductionService {
 
   static getAllProductions = async () => {
     try {
-      const response = await axios.get("http://localhost:8080/productions");
+      const response = await axios.get(`${baseUrl}/productions`);
       return response;
     } catch (e) {
       toast.error(e.message);
@@ -55,7 +58,7 @@ export default class ProductionService {
   static getFutureProductions = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:8080/productions/future",
+        `${baseUrl}/productions/future`,
       );
       return response;
     } catch (e) {
@@ -67,7 +70,7 @@ export default class ProductionService {
   static getProductionById = async (productionId) => {
     try {
       const response = await axios.get(
-        `http://localhost:8080/productions/${productionId}`,
+        `${baseUrl}/productions/${productionId}`,
       );
       return response;
     } catch (e) {
@@ -91,7 +94,7 @@ export default class ProductionService {
 
     try {
       const response = await axios.patch(
-        `http://localhost:8080/productions/${productionId}`,
+        `${baseUrl}/productions/${productionId}`,
         {
           name: name.trim(),
           venueId: venueId,
@@ -121,7 +124,7 @@ export default class ProductionService {
 
     try {
       const response = await axios.patch(
-        `http://localhost:8080/productions/${productionData.id}`,
+        `${baseUrl}/productions/${productionData.id}`,
         {
           name: productionData.name.trim(),
           venueId: productionData.venueId,
@@ -158,7 +161,7 @@ export default class ProductionService {
 
     try {
       const response = await axios.delete(
-        `http://localhost:8080/productions/${productionId}`,
+        `${baseUrl}/productions/${productionId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

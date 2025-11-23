@@ -1,6 +1,9 @@
 import axios from "axios";
 import Cookies from "js-cookie";
 import { toast } from "react-toastify";
+import { getBaseUrl } from "./baseUrl";
+
+const baseUrl = getBaseUrl();
 
 export default class VenueService {
   static createNewVenue = async (name, address, town, postcode, notes, url) => {
@@ -8,7 +11,7 @@ export default class VenueService {
 
     try {
       const response = await axios.post(
-        "http://localhost:8080/venues",
+        `${baseUrl}/venues`,
         {
           name: name.trim(),
           address: address.trim(),
@@ -35,7 +38,7 @@ export default class VenueService {
     const token = Cookies.get("token");
 
     try {
-      const response = await axios.get("http://localhost:8080/venues", {
+      const response = await axios.get(`${baseUrl}/venues`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -52,7 +55,7 @@ export default class VenueService {
 
     try {
       const response = await axios.delete(
-        `http://localhost:8080/venues/${venueId}`,
+        `${baseUrl}/venues/${venueId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -70,7 +73,7 @@ export default class VenueService {
   static getVenueById = async (venueId) => {
     try {
       const response = await axios.get(
-        `http://localhost:8080/venues/${venueId}`,
+        `${baseUrl}/venues/${venueId}`,
       );
       return response;
     } catch (e) {
@@ -92,7 +95,7 @@ export default class VenueService {
 
     try {
       const response = await axios.patch(
-        `http://localhost:8080/venues/${venueId}`,
+        `${baseUrl}/venues/${venueId}`,
         {
           name: name.trim(),
           address: address.trim(),

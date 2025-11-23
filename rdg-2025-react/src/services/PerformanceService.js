@@ -1,6 +1,9 @@
 import axios from "axios";
 import Cookies from "js-cookie";
 import { toast } from "react-toastify";
+import { getBaseUrl } from "./baseUrl";
+
+const baseUrl = getBaseUrl();
 
 export default class PerformanceService {
   static addNewPerformance = async (
@@ -17,7 +20,7 @@ export default class PerformanceService {
 
     try {
       const response = await axios.post(
-        "http://localhost:8080/performances",
+        `${baseUrl}/performances`,
         {
           productionId: productionId,
           venueId: venueId,
@@ -47,7 +50,7 @@ export default class PerformanceService {
 
     try {
       const response = await axios.delete(
-        `http://localhost:8080/performances/${performanceId}`,
+        `${baseUrl}/performances/${performanceId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -67,7 +70,7 @@ export default class PerformanceService {
 
     try {
       const response = await axios.get(
-        `http://localhost:8080/performances/${performanceId}`,
+        `${baseUrl}/performances/${performanceId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -96,7 +99,7 @@ export default class PerformanceService {
 
     try {
       const response = await axios.patch(
-        `http://localhost:8080/performances/${performanceId}`,
+        `${baseUrl}/performances/${performanceId}`,
         {
           productionId: productionId,
           venueId: venueId,

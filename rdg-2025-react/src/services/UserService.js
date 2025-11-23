@@ -1,10 +1,13 @@
 import axios from "axios";
 import Cookies from "js-cookie";
+import { getBaseUrl } from "./baseUrl";
+
+const baseUrl = getBaseUrl();
 
 export default class UserService {
   static login = async (username, password) => {
     try {
-      const response = await axios.post("http://localhost:8080/auth/signin", {
+      const response = await axios.post(`${baseUrl}/auth/signin`, {
         username: username,
         password: password,
       });
@@ -17,7 +20,7 @@ export default class UserService {
   static checkUser = async () => {
     try {
       const token = Cookies.get("token");
-      const response = await axios.get("http://localhost:8080/checkAuth/user", {
+      const response = await axios.get(`${baseUrl}/checkAuth/user`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -32,7 +35,7 @@ export default class UserService {
     try {
       const token = Cookies.get("token");
       const response = await axios.get(
-        "http://localhost:8080/checkAuth/admin",
+        `${baseUrl}/checkAuth/admin`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

@@ -12,7 +12,7 @@ const NavLink = ({ title, link }) => {
   return (
     <a className="hover:cursor-pointer flex flex-col group" href={link}>
       <div
-        className={`h-2 bg-rdg-blue ${isActive ? "opacity-100" : "opacity-0 "}group-hover:opacity-50`}
+        className={`h-2 bg-rdg-blue ${isActive ? "opacity-100" : "opacity-0 "} group-hover:opacity-50`}
       />
       <div className="h-full flex flex-col justify-center flex-1 md:px-4 px-2">
         {title}
