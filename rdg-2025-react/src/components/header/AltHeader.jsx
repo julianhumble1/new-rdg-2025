@@ -14,14 +14,19 @@ const AltHeader = () => {
         <div>
           <img
             src="/images/new_logo_transparent.png"
-            className="sm:h-16 sm:m-6 h-12 m-3"
+            className="sm:h-24 sm:m-3 h-12 m-3"
             alt="RDG Logo"
           />
         </div>
         {/* Desktop navigation */}
         <div className=" md:w-1/2 justify-between sm:pr-5 hidden sm:flex">
           {navLinks.map((link, index) => (
-            <NavLink title={link.title} link={link.link} key={index} />
+            <NavLink
+              title={link.title}
+              link={link.link}
+              key={index}
+              sublinks={link.sublinks}
+            />
           ))}
         </div>
         {/* Mobile navigation */}

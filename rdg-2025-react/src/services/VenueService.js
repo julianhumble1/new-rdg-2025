@@ -54,14 +54,11 @@ export default class VenueService {
     const token = Cookies.get("token");
 
     try {
-      const response = await axios.delete(
-        `${baseUrl}/venues/${venueId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+      const response = await axios.delete(`${baseUrl}/venues/${venueId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
-      );
+      });
       toast.success("Successfully deleted venue.");
       return response;
     } catch (e) {
@@ -72,9 +69,7 @@ export default class VenueService {
 
   static getVenueById = async (venueId) => {
     try {
-      const response = await axios.get(
-        `${baseUrl}/venues/${venueId}`,
-      );
+      const response = await axios.get(`${baseUrl}/venues/${venueId}`);
       return response;
     } catch (e) {
       toast.error(e.message);

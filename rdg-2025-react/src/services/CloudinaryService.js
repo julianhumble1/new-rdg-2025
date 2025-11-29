@@ -5,7 +5,7 @@ import { getBaseUrl } from "./baseUrl.js";
 
 const baseFolder = import.meta.env.VITE_CLOUDINARY_BASE_FOLDER;
 
-const baseUrl = getBaseUrl()
+const baseUrl = getBaseUrl();
 
 export default class CloudinaryService {
   static uploadImageToCloudinary = async (formData) => {
@@ -56,19 +56,16 @@ export default class CloudinaryService {
     const token = Cookies.get("token");
 
     try {
-      const response = await axios.get(
-        `${baseUrl}/cloudinary/generate`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          params: {
-            publicId: imageId,
-            uploadPreset: uploadPreset,
-            folder: folder,
-          },
+      const response = await axios.get(`${baseUrl}/cloudinary/generate`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
-      );
+        params: {
+          publicId: imageId,
+          uploadPreset: uploadPreset,
+          folder: folder,
+        },
+      });
       return response;
     } catch (e) {
       throw new Error(e.message);
@@ -77,14 +74,11 @@ export default class CloudinaryService {
 
   static getUrl = async (idNumber, preset) => {
     const publicId = `${baseFolder}_${preset}_${idNumber}`;
-    const response = await axios.get(
-      `${baseUrl}/cloudinary/url`,
-      {
-        params: {
-          publicId,
-        },
+    const response = await axios.get(`${baseUrl}/cloudinary/url`, {
+      params: {
+        publicId,
       },
-    );
+    });
     return response;
   };
 }

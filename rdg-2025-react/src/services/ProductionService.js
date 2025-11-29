@@ -57,9 +57,7 @@ export default class ProductionService {
 
   static getFutureProductions = async () => {
     try {
-      const response = await axios.get(
-        `${baseUrl}/productions/future`,
-      );
+      const response = await axios.get(`${baseUrl}/productions/future`);
       return response;
     } catch (e) {
       toast.error(e.message);

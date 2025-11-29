@@ -7,8 +7,6 @@ import {
 import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import Login from "./components/Login.jsx";
-import Home from "./components/home/Home.jsx";
-import Header from "./components/header/Header.jsx";
 import Dashboard from "./components/dashboards/Dashboard.jsx";
 import UserDashboard from "./components/dashboards/UserDashboard.jsx";
 import AdminDashboard from "./components/dashboards/AdminDashboard.jsx";

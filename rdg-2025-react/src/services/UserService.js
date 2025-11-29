@@ -34,14 +34,11 @@ export default class UserService {
   static checkAdmin = async () => {
     try {
       const token = Cookies.get("token");
-      const response = await axios.get(
-        `${baseUrl}/checkAuth/admin`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+      const response = await axios.get(`${baseUrl}/checkAuth/admin`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
-      );
+      });
       return response;
     } catch (error) {
       throw new Error(error);

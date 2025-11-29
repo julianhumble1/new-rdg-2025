@@ -69,11 +69,14 @@ export default class FestivalService {
     const token = Cookies.get("token");
 
     try {
-      const response = await axios.delete(`${baseUrl}/festivals/${festivalId}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
+      const response = await axios.delete(
+        `${baseUrl}/festivals/${festivalId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         },
-      });
+      );
       toast.success("Successfully deleted festival.");
       return response;
     } catch (e) {

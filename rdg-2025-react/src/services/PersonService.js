@@ -67,14 +67,11 @@ export default class PersonService {
     const token = Cookies.get("token");
 
     try {
-      const response = await axios.delete(
-        `${baseUrl}/people/${personId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+      const response = await axios.delete(`${baseUrl}/people/${personId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
-      );
+      });
       toast.success("Successfully deleted person.");
       return response;
     } catch (e) {
@@ -87,14 +84,11 @@ export default class PersonService {
     const token = Cookies.get("token");
 
     try {
-      const response = await axios.get(
-        `${baseUrl}/people/${personId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+      const response = await axios.get(`${baseUrl}/people/${personId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
-      );
+      });
       return response;
     } catch (e) {
       toast.error(e.message);

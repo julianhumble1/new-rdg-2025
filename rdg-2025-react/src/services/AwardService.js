@@ -3,7 +3,7 @@ import Cookies from "js-cookie";
 import { toast } from "react-toastify";
 import { getBaseUrl } from "./baseUrl.js";
 
-const baseUrl = getBaseUrl()
+const baseUrl = getBaseUrl();
 
 export default class AwardService {
   static createNewAward = async (name, productionId, personId, festivalId) => {
