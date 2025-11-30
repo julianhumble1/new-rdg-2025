@@ -5,6 +5,10 @@ export const navLinks = [
     link: "/about",
     sublinks: [
       {
+        title: "Who We Are",
+        link: "/about",
+      },
+      {
         title: "Our Venues",
         link: "/about/ourvenues",
       },
@@ -14,8 +18,8 @@ export const navLinks = [
       },
       {
         title: "Legal & Governance",
-        link: "/about/legal"
-      }
+        link: "/about/legal",
+      },
     ],
   },
   { title: "What's On", link: "/upcoming" },

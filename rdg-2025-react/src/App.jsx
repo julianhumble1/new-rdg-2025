@@ -40,6 +40,10 @@ import EventPage from "./components/events/EventPage.jsx";
 import AllEvents from "./components/events/AllEvents.jsx";
 import AltHeader from "./components/header/AltHeader.jsx";
 import AltHome from "./components/home/AltHome.jsx";
+import About from "./pages/about/About.jsx";
+import OurVenues from "./pages/about/OurVenues/OurVenues.jsx";
+import Committee from "./pages/about/Committee/Committee.jsx";
+import Legal from "./pages/about/Legal/Legal.jsx";
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -108,6 +112,11 @@ function App() {
             <Route path="/events/new" element={<NewEventForm />} />
             <Route path="/events/:id" element={<EventPage />} />
             <Route path="/events" element={<AllEvents />} />
+
+            <Route path="/about" element={<About />} />
+            <Route path="/about/ourvenues" element={<OurVenues />} />
+            <Route path="/about/committee" element={<Committee />} />
+            <Route path="/about/legal" element={<Legal />} />
           </Routes>
         </div>
       </Router>

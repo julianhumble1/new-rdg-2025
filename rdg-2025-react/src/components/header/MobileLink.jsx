@@ -8,7 +8,6 @@ const MobileLink = ({ title, link }) => {
     pathname === link ||
     pathname.startsWith(link + "/") ||
     (link === "/" && pathname === "/");
-
   return (
     <a className="w-full group flex h-8 gap-3 sm:hidden " href={link}>
       <div
