@@ -4,10 +4,7 @@ const MobileLink = ({ title, link }) => {
   const location = useLocation();
   const pathname = location.pathname || "/";
 
-  const isActive =
-    pathname === link ||
-    pathname.startsWith(link + "/") ||
-    (link === "/" && pathname === "/");
+  const isActive = pathname === link;
   return (
     <a className="w-full group flex h-8 gap-3 sm:hidden " href={link}>
       <div
