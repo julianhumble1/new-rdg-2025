@@ -38,7 +38,7 @@ const AltHeader = () => {
           <Bars4Icon className="w-8 m-2 text-rdg-blue" />
         </button>
       </div>
-      <div className={`mobile-menu sm:hidden ${navbarOpen ? "open" : ""}`}>
+      <div className={`mobile-menu sm:hidden ${navbarOpen ? "open" : "closed"}`}>
         <div className="mobile-links flex flex-col pb-2">
           {navLinks.map((link, index) =>
             link.sublinks ? (

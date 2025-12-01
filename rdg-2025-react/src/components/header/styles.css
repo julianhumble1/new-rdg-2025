@@ -8,12 +8,27 @@
     opacity 300ms ease-out;
   will-change: transform, opacity;
   height: 0;
+    overflow: hidden;
+  box-sizing: border-box;
+  transform: translateX(100%);
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    transform 300ms ease-out,
+    opacity 300ms ease-out,
+    width 300ms ease-out;
+  will-change: transform, opacity, width;
+  height: 0;
 }
 .mobile-menu.open {
   transform: translateX(0);
   opacity: 1;
   pointer-events: auto;
   height: auto;
+}
+
+.mobile-menu.closed {
+    width: 0
 }
 
 /* links slide in with a small stagger (nth-child) */
