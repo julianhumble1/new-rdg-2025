@@ -1,13 +1,15 @@
-import AllEventsTable from "./AllEventsTable.jsx";
+import EventsTable from "./EventsTable.jsx";
+import FiltersTable from "../common/FiltersTable.jsx";
+import { useEventsFilter } from "./useEventsFilter.js";
 
 const AllEvents = () => {
+  const { filteredEvents, filtersForUI } = useEventsFilter();
+
   return (
     <div className="flex flex-col sm:flex-row">
-      {/* <div className="md:w-1/5 w-full">
-        <FiltersTable  filters={["Name"]}/>
-      </div> */}
+      <FiltersTable filters={filtersForUI} />
       <div className="flex-1">
-        <AllEventsTable />
+        <EventsTable events={filteredEvents} />
       </div>
     </div>
   );
