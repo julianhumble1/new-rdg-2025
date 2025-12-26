@@ -44,6 +44,7 @@ import About from "./pages/about/About.jsx";
 import OurVenues from "./pages/about/OurVenues/OurVenues.jsx";
 import Committee from "./pages/about/Committee/Committee.jsx";
 import Legal from "./pages/about/Legal/Legal.jsx";
+import Join from "./pages/join/Join.jsx";
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -117,6 +118,8 @@ function App() {
             <Route path="/about/ourvenues" element={<OurVenues />} />
             <Route path="/about/committee" element={<Committee />} />
             <Route path="/about/legal" element={<Legal />} />
+
+            <Route path="/join" element={<Join />} />
           </Routes>
         </div>
       </Router>

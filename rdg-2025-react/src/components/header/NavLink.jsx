@@ -26,7 +26,7 @@ const NavLink = ({ title, link, sublinks }) => {
             )}
           </div>
           {sublinks && (
-            <div className="absolute min-w-48 bg-gray-100 rounded-xl shadow-md p-2 opacity-0 group-hover:opacity-100 flex flex-col gap-1">
+            <div className="absolute min-w-48 bg-gray-100 rounded-xl shadow-md p-2 hidden group-hover:flex flex-col gap-1">
               {sublinks.map((sublink, index) => (
                 <a
                   key={index}

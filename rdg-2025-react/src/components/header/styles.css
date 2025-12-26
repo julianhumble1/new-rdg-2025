@@ -8,7 +8,7 @@
     opacity 300ms ease-out;
   will-change: transform, opacity;
   height: 0;
-    overflow: hidden;
+  overflow: hidden;
   box-sizing: border-box;
   transform: translateX(100%);
   opacity: 0;
@@ -28,7 +28,7 @@
 }
 
 .mobile-menu.closed {
-    width: 0
+  width: 0;
 }
 
 /* links slide in with a small stagger (nth-child) */

@@ -7,7 +7,7 @@ const MobileSubNavMenu = ({ link, title, sublinks }) => {
   const location = useLocation();
   const pathname = location.pathname || "/";
 
-  const isActive = sublinks.some((sublink) => pathname === sublink.link)
+  const isActive = sublinks.some((sublink) => pathname === sublink.link);
 
   const [open, setOpen] = useState(isActive);
 

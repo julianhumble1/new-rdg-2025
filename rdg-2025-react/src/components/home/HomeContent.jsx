@@ -3,8 +3,7 @@ import RedButton from "../common/RedButton.jsx";
 import Socials from "../modals/Socials.jsx";
 
 const HomeContent = () => {
-
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   return (
     <>
@@ -25,11 +24,27 @@ const HomeContent = () => {
         Woking.
       </div>
       <div className="flex justify-between">
-
-        <div className="text-rdg-red font-bold text-lg my-auto" >Our Current Production</div>
-        <RedButton onClick={() => window.open("https://www.riverhousebarn.co.uk/events/133315?showDates=1&showItems=1", "_blank", "noopener")}>Book Now</RedButton>
+        <div className="text-rdg-red font-bold text-lg my-auto">
+          Our Current Production
+        </div>
+        <RedButton
+          onClick={() =>
+            window.open(
+              "https://www.riverhousebarn.co.uk/events/133315?showDates=1&showItems=1",
+              "_blank",
+              "noopener",
+            )
+          }
+        >
+          Book Now
+        </RedButton>
       </div>
-      <img src="/images/rdg_xmas25_lndscape._1882692229.jpg" alt="xmas at barn" className="mx-8 hover:cursor-pointer" onClick={() => navigate("/upcoming")}/>
+      <img
+        src="/images/rdg_xmas25_lndscape._1882692229.jpg"
+        alt="xmas at barn"
+        className="mx-8 hover:cursor-pointer"
+        onClick={() => navigate("/upcoming")}
+      />
       <div className="hidden md:inline">
         <div className="text-center">Find us on socials:</div>
         <Socials />
