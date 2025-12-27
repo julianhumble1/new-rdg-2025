@@ -23,7 +23,7 @@ export const navLinks = [
     ],
   },
   { title: "What's On", link: "/upcoming" },
-  { title: "Our History", link: "/login" },
+  { title: "Our History", link: "/archive" },
   { title: "Join Us", link: "/join" },
   { title: "Contact", link: "/contact" },
 ];
