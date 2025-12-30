@@ -13,7 +13,7 @@ export const productionsColumns = [
     name: "Venue",
     selector: (row) => row?.venue?.name.toLowerCase(),
     cell: (row) => (
-      <TableLink link={`/venues/${row.id}`} text={row?.venue?.name ?? ""} />
+      <TableLink link={`/venues/${row?.venue?.id}`} text={row?.venue?.name ?? ""} />
     ),
     sortable: true,
   },

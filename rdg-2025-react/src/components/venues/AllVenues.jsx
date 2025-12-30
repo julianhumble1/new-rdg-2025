@@ -12,21 +12,20 @@ import { useVenuesFilter } from "./useVenuesFilter.js";
 import FiltersTable from "../common/FiltersTable.jsx";
 
 const AllVenues = () => {
-  const { filteredVenues, filtersForUI, loading } = useVenuesFilter()
- 
+  const { filteredVenues, filtersForUI, loading } = useVenuesFilter();
 
   return (
-       <div className="flex flex-col sm:flex-row">
+    <div className="flex flex-col sm:flex-row">
       <FiltersTable filters={filtersForUI} />
       <div className="flex-1">
         {loading ? (
           <CustomSpinner />
         ) : (
-            <AllVenuesTable venues={filteredVenues }  />
+          <AllVenuesTable venues={filteredVenues} />
         )}
       </div>
     </div>
-  )
+  );
 };
 
 export default AllVenues;
