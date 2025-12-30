@@ -4,7 +4,8 @@ import { usePeopleFilter } from "./usePeopleFilter.js";
 import FiltersTable from "../common/FiltersTable.jsx";
 
 const AllPeople = () => {
-  const { filteredPeople, filtersForUI, loading, responseType } = usePeopleFilter();
+  const { filteredPeople, filtersForUI, loading, responseType } =
+    usePeopleFilter();
 
   return (
     <div className="flex flex-col sm:flex-row">

@@ -5,8 +5,11 @@ import { useCallback } from "react";
 
 // thin wrapper that wires the generic hook to the events service + defs
 export const useEventsFilter = () => {
-  const fetcher = useCallback( async () =>
-    EventService.getAllEvents().then((res) => res.data.events ?? []), []);
+  const fetcher = useCallback(
+    async () =>
+      EventService.getAllEvents().then((res) => res.data.events ?? []),
+    [],
+  );
 
   const { filteredItems, filtersForUI, loading } = useTableFilters({
     fetcher,

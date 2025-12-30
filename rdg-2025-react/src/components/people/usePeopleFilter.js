@@ -4,14 +4,16 @@ import { peopleFilters } from "../common/Table/filters/people.filters.js";
 import { useTableFilters } from "../common/Table/useTableFilters.js";
 
 export const usePeopleFilter = () => {
+  const [responseType, setResponseType] = useState("PUBLIC");
 
-  const [responseType, setResponseType] = useState("PUBLIC")
-
-  const fetcher = useCallback( async () =>
-    PersonService.getAllPeople().then((res) => {
-      setResponseType(res.data.responseType)
-      return res.data.people ?? []
-    }), []);
+  const fetcher = useCallback(
+    async () =>
+      PersonService.getAllPeople().then((res) => {
+        setResponseType(res.data.responseType);
+        return res.data.people ?? [];
+      }),
+    [],
+  );
 
   const { filteredItems, filtersForUI, loading } = useTableFilters({
     fetcher,
@@ -22,6 +24,6 @@ export const usePeopleFilter = () => {
     filteredPeople: filteredItems,
     filtersForUI,
     loading,
-    responseType
+    responseType,
   };
 };
