@@ -1,12 +1,11 @@
 import { Outlet } from "react-router-dom";
+import ArchiveHeader from "./ArchiveHeader.jsx";
 
-const ArchiveLayout = () => {
+const ArchiveLayout = ({ loggedIn, setLoggedIn }) => {
   return (
-    <div>
-          <div className="flex justify-end">
-              <button className="text-sm font-blue hover-underline">Admin Login</button>
-      </div>
-        <Outlet />
+    <div className="bg-slate-100 h-full flex-1">
+      <ArchiveHeader loggedIn={loggedIn} setLoggedIn={setLoggedIn} />
+      <Outlet />
     </div>
   );
 };

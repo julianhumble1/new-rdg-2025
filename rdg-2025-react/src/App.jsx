@@ -57,25 +57,27 @@ function App() {
       <Router>
         <div className="flex flex-col min-h-screen h-full tracking-wider max-w-[1440px] mx-auto">
           <AltHeader />
-          {/* <Header loggedIn={loggedIn} setLoggedIn={setLoggedIn} />
-           */}
           <Routes>
             <Route path="/" element={<Navigate to="/home" replace />}></Route>
-            {/* <Route path="/home" element={<Home />}></Route> */}
             <Route path="/home" element={<AltHome />} />
 
             <Route path="/home/images" element={<HomeImageSelect />} />
 
             <Route
-              path="/login"
-              element={<Login loggedIn={loggedIn} setLoggedIn={setLoggedIn} />}
-            ></Route>
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/user-dashboard" element={<UserDashboard />} />
-            <Route path="/admin-dashboard" element={<AdminDashboard />} />
-
-            <Route path="/archive" element={<ArchiveLayout />}>
+              path="/archive"
+              element={
+                <ArchiveLayout loggedIn={loggedIn} setLoggedIn={setLoggedIn} />
+              }
+            >
               <Route index element={<Archive />} />
+
+              <Route
+                path="login"
+                element={<Login setLoggedIn={setLoggedIn} />}
+              />
+              <Route path="dashboard" element={<Dashboard />} />
+              <Route path="user-dashboard" element={<UserDashboard />} />
+              <Route path="admin-dashboard" element={<AdminDashboard />} />
 
               <Route path="venues">
                 <Route index element={<AllVenues />} />

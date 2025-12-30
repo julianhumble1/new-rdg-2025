@@ -24,6 +24,7 @@ export const useTableFilters = ({ fetcher, filterDefs }) => {
     const load = async () => {
       try {
         const fetchedItems = await fetcher();
+        console.log(fetchedItems);
         if (mounted) setItems(fetchedItems);
       } catch (err) {
         if (mounted) setItems([]);
