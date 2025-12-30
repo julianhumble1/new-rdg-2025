@@ -20,7 +20,7 @@ const HighlightFooter = ({ name, createdAt, updatedAt }) => {
           )}
         </div>
         <Link
-          to={`/${name.toLowerCase()}`}
+          to={`/archive/${name.toLowerCase()}`}
           className="text-sm hover:underline font-bold text-end my-auto"
         >
           See All {name}

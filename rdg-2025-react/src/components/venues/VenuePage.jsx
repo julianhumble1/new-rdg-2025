@@ -143,13 +143,7 @@ const VenuePage = () => {
         <Tabs.Item active title="Productions" icon={ScaleIcon}>
           {productions.length > 0 ? (
             <div className="m-2 overflow-auto">
-              <ProductionsTable
-                productions={productions}
-                handleDelete={handleDelete}
-                nameSearch={""}
-                venueSearch={""}
-                sundownersSearch={false}
-              />
+              <ProductionsTable productions={productions} />
             </div>
           ) : (
             <div className="text-md font-bold ml-3">
