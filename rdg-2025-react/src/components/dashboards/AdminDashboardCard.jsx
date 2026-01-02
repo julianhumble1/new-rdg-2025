@@ -18,9 +18,9 @@ const AdminDashboardCard = ({
         <div className="text-sky-900 w-16 h-16 mx-auto group-hover:scale-110">
           {icon}
         </div>
-        <div className="mx-auto font-bold">{name}</div>
+        <div className="mx-auto font-bold text-sm">{name}</div>
       </div>
-      <div className="w-full mx-4 flex flex-col gap-2 justify-center">
+      <div className="w-full flex flex-col gap-2 justify-center">
         {showAddNew && (
           <Button onClick={() => navigate(`/archive/${basePath}/new`)}>
             Add New {name !== "People" ? name.slice(0, -1) : "Person"}

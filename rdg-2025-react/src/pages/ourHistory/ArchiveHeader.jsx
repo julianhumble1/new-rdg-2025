@@ -1,4 +1,4 @@
-import { Cog8ToothIcon, UserCircleIcon } from "@heroicons/react/16/solid";
+import { HomeIcon, UserCircleIcon } from "@heroicons/react/16/solid";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 
@@ -28,7 +28,7 @@ const ArchiveHeader = ({ loggedIn, setLoggedIn }) => {
             className="hover:underline flex gap-1"
             onClick={() => navigate("/archive/dashboard")}
           >
-            <Cog8ToothIcon className="w-4" />
+            <HomeIcon className="w-4" />
             <div>Dashboard</div>
           </button>
           <button className="flex gap-1 hover:underline" onClick={handleLogout}>

@@ -1,9 +1,18 @@
-import TableLink from "../TableLink.jsx";
+import TableLink from "../../TableLink.jsx";
 import Cookies from "js-cookie";
+import { CreditsActionCell } from "./CreditsActionCell.jsx";
 
 // TODO: make this a method that if they are admin adds the action buttons
 
-const role = Cookies.get("role");
+export const getCreditsColumns = () => {
+  const role = Cookies.get("role");
+
+  if (role === "ROLE_ADMIN") {
+    return creditsColumns.concat(creditsActionButtons)
+  } else {
+    return creditsColumns
+  }
+};
 
 export const creditsColumns = [
   {
@@ -35,8 +44,11 @@ export const creditsColumns = [
       />
     ),
   },
-  {
-    name: "Actions",
-    cell: (row) => <div>{role}</div>,
-  },
 ];
+
+const creditsActionButtons = [{
+  name: "Actions",
+  cell: (row) => <CreditsActionCell row={row} />
+}];
+
+

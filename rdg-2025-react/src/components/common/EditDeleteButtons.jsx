@@ -1,6 +1,6 @@
 const EditDeleteButtons = ({ handleEdit, handleDelete }) => {
   return (
-    <div className="flex gap-2">
+    <div className="flex gap-2 font-bold">
       <button className="text-sm hover:underline" onClick={handleEdit}>
         Edit
       </button>

@@ -158,8 +158,6 @@ const PersonPage = () => {
           handleConfirmDelete={handleConfirmDelete}
         />
       )}
-      <button onClick={() => toast.success("toast")}>Toast</button>
-
       <ContentCard>
         {viewType === "PUBLIC" && (
           <PublicPersonHighlight personData={personData} image={image} />

@@ -15,7 +15,7 @@ const SpecificDeleteMessage = ({ itemToDelete }) => {
       setMessage(
         <>
           When deleting a production, any <strong>performances</strong> and{" "}
-          <strong>credits</strong> associated with the venue will also be
+          <strong>credits</strong> associated with the production will also be
           deleted.
         </>,
       );

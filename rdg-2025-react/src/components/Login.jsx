@@ -19,8 +19,8 @@ const AltLogin = ({ setLoggedIn }) => {
     try {
       const responseData = await UserService.login(username, password);
       const mainRole = RoleHelper.determineMainRole(responseData.roles);
-      Cookies.set("token", responseData.token, { expires: 7 });
-      Cookies.set("role", mainRole, { expires: 7 });
+      Cookies.set("token", responseData.token, { expires: 3 });
+      Cookies.set("role", mainRole, { expires: 3 });
       setLoggedIn(true);
       navigate("/archive/dashboard");
     } catch (error) {
