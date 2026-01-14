@@ -43,6 +43,9 @@ import Legal from "./pages/about/Legal/Legal.jsx";
 import Join from "./pages/join/Join.jsx";
 import Archive from "./pages/ourHistory/Archive.jsx";
 import ArchiveLayout from "./pages/ourHistory/ArchiveLayout.jsx";
+import Upcoming from "./pages/upcoming/Upcoming.jsx";
+import Contact from "./pages/contact/Contact.jsx";
+import AllAwards from "./components/awards/AllAwards.jsx";
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -114,6 +117,7 @@ function App() {
               </Route>
 
               <Route path="awards">
+                <Route index element={<AllAwards />} />
                 <Route path="new" element={<NewAwardForm />} />
                 <Route path="edit/:id" element={<EditAwardForm />} />
               </Route>
@@ -133,6 +137,10 @@ function App() {
             </Route>
 
             <Route path="/join" element={<Join />} />
+
+            <Route path="/upcoming" element={<Upcoming />} />
+
+            <Route path="/contact" element={<Contact />} />
           </Routes>
         </div>
       </Router>

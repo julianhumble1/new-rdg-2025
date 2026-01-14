@@ -1,4 +1,7 @@
-import { creditsColumns, getCreditsColumns } from "../common/Table/columns/credits/credits.columns.jsx";
+import {
+  creditsColumns,
+  getCreditsColumns,
+} from "../common/Table/columns/credits/credits.columns.jsx";
 import Table from "../common/Table/Table.jsx";
 
 const CreditsTable = ({ credits, handleDelete }) => {

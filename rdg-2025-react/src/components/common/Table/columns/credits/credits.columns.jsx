@@ -8,9 +8,9 @@ export const getCreditsColumns = () => {
   const role = Cookies.get("role");
 
   if (role === "ROLE_ADMIN") {
-    return creditsColumns.concat(creditsActionButtons)
+    return creditsColumns.concat(creditsActionButtons);
   } else {
-    return creditsColumns
+    return creditsColumns;
   }
 };
 
@@ -46,9 +46,9 @@ export const creditsColumns = [
   },
 ];
 
-const creditsActionButtons = [{
-  name: "Actions",
-  cell: (row) => <CreditsActionCell row={row} />
-}];
-
-
+const creditsActionButtons = [
+  {
+    name: "Actions",
+    cell: (row) => <CreditsActionCell row={row} />,
+  },
+];

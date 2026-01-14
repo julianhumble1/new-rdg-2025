@@ -12,8 +12,8 @@ const ArchiveButtons = () => {
       <RedButton onClick={() => navigate("people")} altColor="blue">
         See Our People
       </RedButton>
-      <RedButton onClick={() => navigate("festivals")} altColor="yellow">
-        See Past Festivals
+      <RedButton onClick={() => navigate("awards")} altColor="yellow">
+        See Our Awards
       </RedButton>
     </div>
   );
