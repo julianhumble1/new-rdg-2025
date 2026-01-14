@@ -1,8 +1,16 @@
+import { useNavigate } from "react-router-dom";
+
 const TableLink = ({ text, link }) => {
+  const fullLink = "/archive" + link;
+
+  const navigate = useNavigate();
   return (
-    <a href={link} className="font-bold hover:underline">
+    <button
+      onClick={() => navigate(fullLink)}
+      className="font-bold hover:underline text-start"
+    >
       {text}
-    </a>
+    </button>
   );
 };
 

@@ -6,7 +6,7 @@ import UserService from "../services/UserService.js";
 import RoleHelper from "../utils/RoleHelper.js";
 import ErrorMessage from "./modals/ErrorMessage.jsx";
 
-const AltLogin = ({ loggedIn, setLoggedIn }) => {
+const AltLogin = ({ setLoggedIn }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
@@ -19,10 +19,10 @@ const AltLogin = ({ loggedIn, setLoggedIn }) => {
     try {
       const responseData = await UserService.login(username, password);
       const mainRole = RoleHelper.determineMainRole(responseData.roles);
-      Cookies.set("token", responseData.token, { expires: 7 });
-      Cookies.set("role", mainRole, { expires: 7 });
+      Cookies.set("token", responseData.token, { expires: 3 });
+      Cookies.set("role", mainRole, { expires: 3 });
       setLoggedIn(true);
-      navigate("/dashboard");
+      navigate("/archive/dashboard");
     } catch (error) {
       setErrorMessage("Username or password incorrect. Please try again.");
     }
@@ -32,7 +32,7 @@ const AltLogin = ({ loggedIn, setLoggedIn }) => {
     <div className="flex justify-center">
       <form
         onSubmit={(event) => handleLogin(event)}
-        className="flex lg:w-1/2 w-full flex-col gap-4 min-w-1/2 border-4 p-4 m-4 rounded-xl border-sky-900 border-opacity-60"
+        className="flex lg:w-1/2 w-full flex-col gap-4 min-w-1/2 border-4 p-4 m-4 rounded-xl border-sky-900 border-opacity-60 bg-slate-200"
       >
         <div className="text-2xl font-bold">Login</div>
         <div>

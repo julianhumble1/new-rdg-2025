@@ -14,7 +14,6 @@ import CreditService from "../../services/CreditService.js";
 import AwardService from "../../services/AwardService.js";
 import { Cloudinary } from "@cloudinary/url-gen/index";
 import ContentCard from "../common/ContentCard.jsx";
-import FormTemplate from "../common/FormTemplate.jsx";
 
 const ProductionPage = () => {
   const productionId = useParams().id;

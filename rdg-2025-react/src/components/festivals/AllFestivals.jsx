@@ -7,103 +7,24 @@ import { Label, TextInput } from "flowbite-react";
 import { MagnifyingGlassIcon } from "@heroicons/react/16/solid";
 import FestivalsTable from "./FestivalsTable.jsx";
 import CustomSpinner from "../common/CustomSpinner.jsx";
+import { useFestivalsFilter } from "./useFestivalsFilter.js";
+import FiltersTable from "../common/FiltersTable.jsx";
 
 const AllFestivals = () => {
-  const [festivals, setFestivals] = useState([]);
-
-  const [nameSearch, setNameSearch] = useState("");
-  const [venueSearch, setVenueSearch] = useState("");
-
-  const [showConfirmDelete, setShowConfirmDelete] = useState("");
-  const [festivalToDelete, setFestivalToDelete] = useState(null);
-
-  const [successMessage, setSuccessMessage] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
-
-  // loading state
-  const [loading, setLoading] = useState(true);
-
-  const fetchAllFestivals = async () => {
-    setLoading(true);
-    try {
-      const response = await FestivalService.getAllFestivals();
-      setFestivals(response.data.festivals);
-      setErrorMessage("");
-    } catch (e) {
-      setErrorMessage(e.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchAllFestivals();
-  }, []);
-
-  const handleDelete = (festival) => {
-    setShowConfirmDelete(true);
-    setFestivalToDelete(festival);
-  };
-
-  const handleConfirmDelete = async (festival) => {
-    await FestivalService.deleteFestivalById(festival.id);
-    setShowConfirmDelete(false);
-    setSuccessMessage(`Successfully deleted ${festival.name}`);
-    fetchAllFestivals();
-  };
+  const { filteredFestivals, loading, filtersForUI } = useFestivalsFilter();
 
   return (
-    <div>
-      {showConfirmDelete && (
-        <ConfirmDeleteModal
-          setShowConfirmDelete={setShowConfirmDelete}
-          itemToDelete={festivalToDelete}
-          handleConfirmDelete={handleConfirmDelete}
-        />
-      )}
-      <SuccessMessage message={successMessage} />
-      <ErrorMessage message={errorMessage} />
-      <div className="grid lg:grid-cols-6 grid-cols-1">
-        <div className="col-span-1 rounded m-2 border bg-slate-200 max-h-fit drop-shadow-md lg:pb-6">
-          <div className="flex flex-col">
-            <div className="font-bold lg:text-center m-2">Filters</div>
-            <div className="m-2">
-              <Label value="Search" />
-            </div>
-            <TextInput
-              icon={MagnifyingGlassIcon}
-              placeholder="Festival Name"
-              className="m-2 mt-0"
-              value={nameSearch}
-              onChange={(e) => setNameSearch(e.target.value)}
-            />
-            <TextInput
-              icon={MagnifyingGlassIcon}
-              placeholder="Venue Name"
-              className="m-2 mt-0"
-              value={venueSearch}
-              onChange={(e) => setVenueSearch(e.target.value)}
-            />
-          </div>
-        </div>
-        <span className="col-span-5 p-2 pl-0 overflow-x-auto">
-          {loading ? (
-            <div className="flex items-center justify-center h-64">
-              <CustomSpinner />
-            </div>
-          ) : (
-            <FestivalsTable
-              festivals={festivals}
-              handleDelete={handleDelete}
-              nameSearch={nameSearch}
-              venueSearch={venueSearch}
-            />
-          )}
-        </span>
+    <div className="flex flex-col sm:flex-row">
+      <FiltersTable filters={filtersForUI} />
+      <div className="flex-1">
+        {loading ? (
+          <CustomSpinner />
+        ) : (
+          <FestivalsTable festivals={filteredFestivals} />
+        )}
       </div>
     </div>
   );
 };
 
 export default AllFestivals;
-// ...existing code...

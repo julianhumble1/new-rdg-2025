@@ -12,7 +12,7 @@ const PerformanceRow = ({ performanceData, handleDelete }) => {
       <div className="font-bold">{formattedDate}</div>
       <div>
         <Link
-          to={`/productions/${performanceData.production.id}`}
+          to={`/archive/productions/${performanceData.production.id}`}
           className="hover:underline"
         >
           {performanceData.production.name}
@@ -20,7 +20,7 @@ const PerformanceRow = ({ performanceData, handleDelete }) => {
       </div>
       <div>
         <Link
-          to={`/venues/${performanceData.venue.id}`}
+          to={`/archive/venues/${performanceData.venue.id}`}
           className="hover:underline"
         >
           {performanceData.venue.name}
@@ -29,7 +29,7 @@ const PerformanceRow = ({ performanceData, handleDelete }) => {
       <div>
         {performanceData.festival ? (
           <Link
-            to={`/festivals/${performanceData.festival.id}`}
+            to={`/archive/festivals/${performanceData.festival.id}`}
             className="hover:underline"
           >
             {performanceData.festival.name} ({performanceData.festival.year})
@@ -54,7 +54,7 @@ const PerformanceRow = ({ performanceData, handleDelete }) => {
         <div className="flex flex-row gap-1">
           <Link
             className="font-bold hover:underline"
-            to={`/performances/edit/${performanceData.id}`}
+            to={`/archive/performances/edit/${performanceData.id}`}
           >
             Edit
           </Link>

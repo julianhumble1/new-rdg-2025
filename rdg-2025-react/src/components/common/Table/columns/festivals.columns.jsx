@@ -1,12 +1,14 @@
 import TableLink from "../TableLink.jsx";
 
-export const productionsColumns = [
+export const festivalColumns = [
   {
-    name: "Production",
+    name: "Festival",
     selector: (row) => row.name.toLowerCase(),
-    cell: (row) => (
-      <TableLink link={`/productions/${row.id}`} text={row.name} />
-    ),
+    cell: (row) => <TableLink link={`/festivals/${row.id}`} text={row.name} />,
+  },
+  {
+    name: "Year",
+    selector: (row) => row.year,
     sortable: true,
   },
   {
@@ -21,8 +23,10 @@ export const productionsColumns = [
     sortable: true,
   },
   {
-    name: "Author",
-    selector: (row) => row?.author,
-    sortable: true,
+    name: "Description",
+    selector: (row) => row?.description,
+    cell: (row) => (
+      <div className="text-gray-600 line-clamp-3">{row.description}</div>
+    ),
   },
 ];

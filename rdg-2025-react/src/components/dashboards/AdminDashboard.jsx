@@ -14,7 +14,6 @@ import ContentCard from "../common/ContentCard.jsx";
 import AdminDashboardCard from "./AdminDashboardCard.jsx";
 import Button from "../common/Button.jsx";
 import { useNavigate } from "react-router-dom";
-import EventService from "../../services/EventService.js";
 
 const AdminDashboard = () => {
   const navigate = useNavigate();

@@ -20,16 +20,12 @@ import NewPerformanceForm from "./components/performances/NewPerformanceForm.jsx
 import FestivalPage from "./components/festivals/FestivalPage.jsx";
 import AllProductions from "./components/productions/AllProductions.jsx";
 import AllFestivals from "./components/festivals/AllFestivals.jsx";
-
 import NewPersonForm from "./components/people/NewPersonForm.jsx";
 import AllPeople from "./components/people/AllPeople.jsx";
-
 import PersonPage from "./components/people/PersonPage.jsx";
 import NewCreditForm from "./components/credits/NewCreditForm.jsx";
 import EditCreditForm from "./components/credits/EditCreditForm.jsx";
 import EditPerformanceForm from "./components/performances/EditPerformanceForm.jsx";
-import CloudinaryTest from "./components/CloudinaryTest.jsx";
-import CloudinaryUploadTest from "./components/CloudinaryUploadTest.jsx";
 import NewAwardForm from "./components/awards/NewAwardForm.jsx";
 import EditAwardForm from "./components/awards/EditAwardForm.jsx";
 import HomeImageSelect from "./components/home/HomeImageSelect.jsx";
@@ -45,6 +41,11 @@ import OurVenues from "./pages/about/OurVenues/OurVenues.jsx";
 import Committee from "./pages/about/Committee/Committee.jsx";
 import Legal from "./pages/about/Legal/Legal.jsx";
 import Join from "./pages/join/Join.jsx";
+import Archive from "./pages/ourHistory/Archive.jsx";
+import ArchiveLayout from "./pages/ourHistory/ArchiveLayout.jsx";
+import Upcoming from "./pages/upcoming/Upcoming.jsx";
+import Contact from "./pages/contact/Contact.jsx";
+import AllAwards from "./components/awards/AllAwards.jsx";
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -57,69 +58,89 @@ function App() {
   return (
     <>
       <Router>
-        <div className="flex flex-col min-h-screen h-full tracking-wider">
+        <div className="flex flex-col min-h-screen h-full tracking-wider max-w-[1440px] mx-auto">
           <AltHeader />
-          {/* <Header loggedIn={loggedIn} setLoggedIn={setLoggedIn} />
-           */}
           <Routes>
             <Route path="/" element={<Navigate to="/home" replace />}></Route>
-            {/* <Route path="/home" element={<Home />}></Route> */}
             <Route path="/home" element={<AltHome />} />
 
             <Route path="/home/images" element={<HomeImageSelect />} />
 
             <Route
-              path="/login"
-              element={<Login loggedIn={loggedIn} setLoggedIn={setLoggedIn} />}
-            ></Route>
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/user-dashboard" element={<UserDashboard />} />
-            <Route path="/admin-dashboard" element={<AdminDashboard />} />
+              path="/archive"
+              element={
+                <ArchiveLayout loggedIn={loggedIn} setLoggedIn={setLoggedIn} />
+              }
+            >
+              <Route index element={<Archive />} />
 
-            <Route path="/venues/new" element={<NewVenueForm />} />
-            <Route path="/venues" element={<AllVenues />} />
-            <Route path="/venues/:id" element={<VenuePage />} />
+              <Route
+                path="login"
+                element={<Login setLoggedIn={setLoggedIn} />}
+              />
+              <Route path="dashboard" element={<Dashboard />} />
+              <Route path="user-dashboard" element={<UserDashboard />} />
+              <Route path="admin-dashboard" element={<AdminDashboard />} />
 
-            <Route path="/productions/new" element={<NewProductionForm />} />
-            <Route path="/productions" element={<AllProductions />} />
-            <Route path="/productions/:id" element={<ProductionPage />} />
+              <Route path="venues">
+                <Route index element={<AllVenues />} />
+                <Route path="new" element={<NewVenueForm />} />
+                <Route path=":id" element={<VenuePage />} />
+              </Route>
 
-            <Route path="/festivals/new" element={<NewFestivalForm />} />
-            <Route path="/festivals" element={<AllFestivals />} />
-            <Route path="/festivals/:id" element={<FestivalPage />} />
+              <Route path="productions">
+                <Route index element={<AllProductions />} />
+                <Route path="new" element={<NewProductionForm />} />
+                <Route path=":id" element={<ProductionPage />} />
+              </Route>
 
-            <Route path="/performances/new" element={<NewPerformanceForm />} />
-            <Route
-              path="/performances/edit/:id"
-              element={<EditPerformanceForm />}
-            />
+              <Route path="festivals">
+                <Route index element={<AllFestivals />} />
+                <Route path="new" element={<NewFestivalForm />} />
+                <Route path=":id" element={<FestivalPage />} />
+              </Route>
 
-            <Route path="/people/:id" element={<PersonPage />} />
-            <Route path="/people/new" element={<NewPersonForm />} />
-            <Route path="/people" element={<AllPeople />} />
+              <Route path="performances">
+                <Route path="new" element={<NewPerformanceForm />} />
+                <Route path="edit/:id" element={<EditPerformanceForm />} />
+              </Route>
 
-            <Route path="/credits/new" element={<NewCreditForm />} />
-            <Route path="/credits/edit/:id" element={<EditCreditForm />} />
+              <Route path="people">
+                <Route index element={<AllPeople />} />
+                <Route path=":id" element={<PersonPage />} />
+                <Route path="new" element={<NewPersonForm />} />
+              </Route>
 
-            <Route path="/cloudinary" element={<CloudinaryTest />} />
-            <Route
-              path="/cloudinary/upload"
-              element={<CloudinaryUploadTest />}
-            />
+              <Route path="credits">
+                <Route path="new" element={<NewCreditForm />} />
+                <Route path="edit/:id" element={<EditCreditForm />} />
+              </Route>
 
-            <Route path="/awards/new" element={<NewAwardForm />} />
-            <Route path="/awards/edit/:id" element={<EditAwardForm />} />
+              <Route path="awards">
+                <Route index element={<AllAwards />} />
+                <Route path="new" element={<NewAwardForm />} />
+                <Route path="edit/:id" element={<EditAwardForm />} />
+              </Route>
 
-            <Route path="/events/new" element={<NewEventForm />} />
-            <Route path="/events/:id" element={<EventPage />} />
-            <Route path="/events" element={<AllEvents />} />
+              <Route path="events">
+                <Route index element={<AllEvents />} />
+                <Route path="new" element={<NewEventForm />} />
+                <Route path=":id" element={<EventPage />} />
+              </Route>
+            </Route>
 
-            <Route path="/about" element={<About />} />
-            <Route path="/about/ourvenues" element={<OurVenues />} />
-            <Route path="/about/committee" element={<Committee />} />
-            <Route path="/about/legal" element={<Legal />} />
+            <Route path="/about">
+              <Route index element={<About />} />
+              <Route path="ourvenues" element={<OurVenues />} />
+              <Route path="committee" element={<Committee />} />
+              <Route path="legal" element={<Legal />} />
+            </Route>
 
             <Route path="/join" element={<Join />} />
+
+            <Route path="/upcoming" element={<Upcoming />} />
+
+            <Route path="/contact" element={<Contact />} />
           </Routes>
         </div>
       </Router>

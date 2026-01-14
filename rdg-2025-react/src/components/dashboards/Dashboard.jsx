@@ -9,9 +9,9 @@ const Dashboard = () => {
     const roleFromCookies = Cookies.get("role");
 
     if (roleFromCookies === "ROLE_USER") {
-      navigate("/user-dashboard");
+      navigate("/archive/user-dashboard");
     } else if (roleFromCookies === "ROLE_ADMIN") {
-      navigate("/admin-dashboard");
+      navigate("/archive/admin-dashboard");
     } else {
       navigate("/login"); // Redirect to login if no valid role is found
     }

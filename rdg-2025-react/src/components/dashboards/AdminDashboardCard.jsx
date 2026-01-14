@@ -1,10 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import Button from "../common/Button.jsx";
-import {
-  ArrowRightIcon,
-  PlusCircleIcon,
-  PlusIcon,
-} from "@heroicons/react/16/solid";
+import { ArrowRightIcon, PlusIcon } from "@heroicons/react/16/solid";
 
 const AdminDashboardCard = ({
   name,
@@ -22,17 +18,17 @@ const AdminDashboardCard = ({
         <div className="text-sky-900 w-16 h-16 mx-auto group-hover:scale-110">
           {icon}
         </div>
-        <div className="mx-auto font-bold">{name}</div>
+        <div className="mx-auto font-bold text-sm">{name}</div>
       </div>
-      <div className="w-full mx-4 flex flex-col gap-2 justify-center">
+      <div className="w-full flex flex-col gap-2 justify-center">
         {showAddNew && (
-          <Button onClick={() => navigate(`/${basePath}/new`)}>
+          <Button onClick={() => navigate(`/archive/${basePath}/new`)}>
             Add New {name !== "People" ? name.slice(0, -1) : "Person"}
             <PlusIcon className="w-4 h-4 inline ml-2" />
           </Button>
         )}
         {showSeeAll && (
-          <Button onClick={() => navigate(`/${basePath}`)}>
+          <Button onClick={() => navigate(`/archive/${basePath}`)}>
             See All {name}
             <ArrowRightIcon className="w-4 h-4 inline ml-2" />
           </Button>
