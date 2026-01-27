@@ -3,10 +3,12 @@ import ArchiveHeader from "./ArchiveHeader.jsx";
 
 const ArchiveLayout = ({ loggedIn, setLoggedIn }) => {
   return (
-    <div className="bg-slate-100 h-full flex-1">
+    <>
+      <div className="flex-1">
+        <Outlet />
+      </div>
       <ArchiveHeader loggedIn={loggedIn} setLoggedIn={setLoggedIn} />
-      <Outlet />
-    </div>
+    </>
   );
 };
 

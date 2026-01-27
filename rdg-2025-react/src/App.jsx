@@ -46,6 +46,8 @@ import ArchiveLayout from "./pages/ourHistory/ArchiveLayout.jsx";
 import Upcoming from "./pages/upcoming/Upcoming.jsx";
 import Contact from "./pages/contact/Contact.jsx";
 import AllAwards from "./components/awards/AllAwards.jsx";
+import Membership from "./pages/join/Membership/Membership.jsx";
+import Rehearsals from "./pages/join/Rehearsals/Rehearsals.jsx";
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -136,7 +138,11 @@ function App() {
               <Route path="legal" element={<Legal />} />
             </Route>
 
-            <Route path="/join" element={<Join />} />
+            <Route path="/join">
+              <Route index element={<Join />} />
+              <Route path="membership" element={<Membership />} />
+              <Route path="rehearsals" element={<Rehearsals />} />
+            </Route>
 
             <Route path="/upcoming" element={<Upcoming />} />
 

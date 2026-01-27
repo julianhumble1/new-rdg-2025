@@ -22,8 +22,25 @@ export const navLinks = [
       },
     ],
   },
-  { title: "What's On", link: "/upcoming" },
+  // { title: "What's On", link: "/upcoming" },
+  {
+    title: "Join Us",
+    link: "/join",
+    sublinks: [
+      {
+        title: "Get Involved",
+        link: "/join",
+      },
+      {
+        title: "Membership",
+        link: "/join/membership",
+      },
+      {
+        title: "Rehearsals & Auditions",
+        link: "/join/rehearsals",
+      },
+    ],
+  },
   { title: "Our History", link: "/archive" },
-  { title: "Join Us", link: "/join" },
   { title: "Contact", link: "/contact" },
 ];

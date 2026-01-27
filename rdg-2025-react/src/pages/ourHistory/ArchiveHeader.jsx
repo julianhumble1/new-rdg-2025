@@ -13,7 +13,7 @@ const ArchiveHeader = ({ loggedIn, setLoggedIn }) => {
   };
 
   return (
-    <div className="flex justify-end text-sm text-rdg-blue my-1 mr-3">
+    <div className="flex justify-end text-sm text-rdg-blue mt-3 mb-1 mr-3">
       {!loggedIn ? (
         <button
           className="flex gap-1 hover:underline"

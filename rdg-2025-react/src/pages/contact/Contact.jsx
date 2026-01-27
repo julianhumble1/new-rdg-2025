@@ -4,7 +4,7 @@ import ContactContent from "./ContactContent.jsx";
 const Contact = () => {
   return (
     <StandardPageLayout
-      imgSrc="/images/scribble/1.png"
+      imgSrc="/images/scribble/10.svg"
       title="Contact Us"
       content={ContactContent}
     />

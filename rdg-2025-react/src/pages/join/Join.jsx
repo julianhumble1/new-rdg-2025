@@ -5,8 +5,8 @@ const Join = () => {
   return (
     <StandardPageLayout
       photoPosition="left"
-      imgSrc="/images/scribble/6.png"
-      title="Join Us"
+      imgSrc="/images/scribble/9.svg"
+      title="Get Involved"
       content={JoinContent}
     />
   );
