@@ -1,7 +1,5 @@
 const AllAwards = () => {
-  return (
-    <div>All awards placeholder</div>
-  )
-}
+  return <div>All awards placeholder</div>;
+};
 
-export default AllAwards
+export default AllAwards;

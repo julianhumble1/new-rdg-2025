@@ -5,7 +5,7 @@ const Legal = () => {
   return (
     <StandardPageLayout
       photoPosition="left"
-      imgSrc="/images/scribble/5.png"
+      imgSrc="/images/scribble/5.svg"
       title="Legal & Governance"
       content={LegalContent}
     />

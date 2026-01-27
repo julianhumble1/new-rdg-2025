@@ -5,7 +5,7 @@ const Archive = () => {
   return (
     <StandardPageLayout
       title="Our History"
-      imgSrc="/images/scribble/3.png"
+      imgSrc="/images/scribble/7.svg"
       content={ArchiveContent}
       photoPosition="right"
     />
