@@ -1,5 +1,3 @@
-import "./Policies.css";
-
 const Policies = () => {
   const policyFiles = [
     "Child Protection & Safeguarding Policy January 2026.pdf",
