@@ -23,7 +23,7 @@ const Policies = () => {
             >
               {label}
             </a>
-            <img src="/public/icons/pdf-svgrepo-com.svg" alt="pdf-download" className="h-5 inline ml-2"/>
+            <img src="/icons/pdf-svgrepo-com.svg" alt="pdf-download" className="h-5 inline ml-2"/>
           </div>
         );
       })}
