@@ -6,6 +6,7 @@ const Membership = () => {
     <StandardPageLayout
       imgSrc="/images/scribble/8.svg"
       title="Membership"
+      photoPosition="right"
       content={MembershipContent}
     />
   );

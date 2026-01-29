@@ -26,13 +26,13 @@ const HomeContent = () => {
         supportive space for people of all ages to build confidence and develop
         new skills.
       </div>
-      <UpcomingProduction />
       <div>
         Rehearsing at our dedicated studio in Chertsey in Surrey, we stage at
         least five productions each year at venues including The Riverhouse Barn
         and Cecil Hepworth Playhouse in Walton, and the Rhoda McGaw Theatre in
         Woking.
       </div>
+      <UpcomingProduction />
       <div className="hidden md:inline">
         <div className="text-center">Find us on socials:</div>
         <Socials />
