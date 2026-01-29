@@ -1,3 +1,5 @@
+import Policies from "./Policies.jsx";
+
 const LegalContent = () => {
   return (
     <>
@@ -15,8 +17,9 @@ const LegalContent = () => {
       <div className="text-rdg-red font-bold">Policies</div>
       <div>
         We take our responsibilities to Equality, Safeguarding and Data Privacy
-        seriously. Our policies can be found here. [INSERT LINKS TO PDFs]
+        seriously. Our policies can be found here:
       </div>
+      <Policies />
     </>
   );
 };
