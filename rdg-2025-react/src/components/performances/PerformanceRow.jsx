@@ -1,11 +1,17 @@
 import { format } from "date-fns";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import EditDeleteButtons from "../common/EditDeleteButtons.jsx";
 
 const PerformanceRow = ({ performanceData, handleDelete }) => {
+
+  const navigate = useNavigate();
+
   const formattedDate = format(
     new Date(performanceData.time),
     "MMMM d, yyyy, h:mm a",
   );
+
+  const handleEdit = () => navigate(`/archive/performances/edit/${performanceData.id}`);
 
   return (
     <div className="flex flex-col text-sm p-2 hover:bg-gray-200 bg-gray-100 border gap-1 md:gap-0">
@@ -52,18 +58,11 @@ const PerformanceRow = ({ performanceData, handleDelete }) => {
       <div className="italic">{performanceData.description}</div>
       <div className="flex justify-end">
         <div className="flex flex-row gap-1">
-          <Link
-            className="font-bold hover:underline"
-            to={`/archive/performances/edit/${performanceData.id}`}
-          >
-            Edit
-          </Link>
-          <button
-            className="font-bold hover:underline"
-            onClick={() => handleDelete(performanceData)}
-          >
-            Delete
-          </button>
+          <EditDeleteButtons
+            handleEdit={handleEdit}
+            handleDelete={() => handleDelete(performanceData)}
+            itemToDelete={performanceData}
+          />
         </div>
       </div>
     </div>
