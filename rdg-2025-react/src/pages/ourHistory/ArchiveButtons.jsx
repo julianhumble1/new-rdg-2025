@@ -12,9 +12,9 @@ const ArchiveButtons = () => {
       <RedButton onClick={() => navigate("people")} altColor="blue">
         See Our People
       </RedButton>
-      <RedButton onClick={() => navigate("awards")} altColor="yellow">
+      {/* <RedButton onClick={() => navigate("awards")} altColor="yellow">
         See Our Awards
-      </RedButton>
+      </RedButton> */}
     </div>
   );
 };
