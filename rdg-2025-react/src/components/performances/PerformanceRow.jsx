@@ -3,7 +3,6 @@ import { Link, useNavigate } from "react-router-dom";
 import EditDeleteButtons from "../common/EditDeleteButtons.jsx";
 
 const PerformanceRow = ({ performanceData, handleDelete }) => {
-
   const navigate = useNavigate();
 
   const formattedDate = format(
@@ -11,7 +10,8 @@ const PerformanceRow = ({ performanceData, handleDelete }) => {
     "MMMM d, yyyy, h:mm a",
   );
 
-  const handleEdit = () => navigate(`/archive/performances/edit/${performanceData.id}`);
+  const handleEdit = () =>
+    navigate(`/archive/performances/edit/${performanceData.id}`);
 
   return (
     <div className="flex flex-col text-sm p-2 hover:bg-gray-200 bg-gray-100 border gap-1 md:gap-0">

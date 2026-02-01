@@ -1,15 +1,13 @@
 import Socials from "../../modals/Socials.jsx";
-import{ useState} from "react"
-import CustomSpinner from "../CustomSpinner.jsx"
+import { useState } from "react";
+import CustomSpinner from "../CustomSpinner.jsx";
 
 const PhotoColumn = ({ imgSrc }) => {
-   const [loaded, setLoaded] = useState(false);
+  const [loaded, setLoaded] = useState(false);
 
   return (
     <div className="flex-1 flex flex-col justify-start">
-      {!loaded && (
-        <CustomSpinner />
-      )}
+      {!loaded && <CustomSpinner />}
 
       <img
         src={imgSrc}
@@ -22,7 +20,6 @@ const PhotoColumn = ({ imgSrc }) => {
           loaded ? "opacity-100" : "opacity-0"
         }`}
       />
-
 
       <div className="md:hidden">
         <div className="flex justify-center">Find us on socials:</div>

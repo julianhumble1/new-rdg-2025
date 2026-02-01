@@ -14,7 +14,9 @@ const CommitteeContent = () => {
         <div>
           <b>Secretary:</b> Jean Warner
         </div>
-        <div className="text-rdg-blue">📧 info@rdg.org</div>
+        <a className="text-rdg-blue hover:underline" href="mailto:info@rdg.org">
+          📧 info@rdg.org
+        </a>
       </div>
       <div className="text-rdg-red font-bold">How We Choose Productions</div>
       <div>
