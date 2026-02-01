@@ -4,7 +4,7 @@ import MembershipContent from "./MembershipContent.jsx";
 const Membership = () => {
   return (
     <StandardPageLayout
-      imgSrc="/images/scribble/8.svg"
+      imgSrc="/images/scribble/8.webp"
       title="Membership"
       photoPosition="right"
       content={MembershipContent}

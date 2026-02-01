@@ -5,7 +5,7 @@ const Committee = () => {
   return (
     <StandardPageLayout
       photoPosition="right"
-      imgSrc="/images/scribble/4.svg"
+      imgSrc="/images/scribble/4.webp"
       title="Committee"
       content={CommitteeContent}
     />

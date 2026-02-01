@@ -5,7 +5,7 @@ const OurVenues = () => {
   return (
     <StandardPageLayout
       photoPosition="left"
-      imgSrc="/images/scribble/3.svg"
+      imgSrc="/images/scribble/3.webp"
       title="Our Venues"
       content={OurVenuesContent}
     />

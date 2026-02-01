@@ -4,7 +4,7 @@ import RehearsalsContent from "./RehearsalsContent.jsx";
 const Rehearsals = () => {
   return (
     <StandardPageLayout
-      imgSrc="/images/scribble/11.svg"
+      imgSrc="/images/scribble/11.webp"
       title="Rehearsals & Auditions"
       content={RehearsalsContent}
     />

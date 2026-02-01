@@ -5,7 +5,7 @@ const About = () => {
   return (
     <StandardPageLayout
       photoPosition="right"
-      imgSrc="/images/scribble/2.svg"
+      imgSrc="/images/scribble/2.webp"
       title="Who We Are"
       content={AboutContent}
     />
