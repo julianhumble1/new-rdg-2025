@@ -4,7 +4,7 @@ import HomeContent from "./HomeContent.jsx";
 const AltHome = () => {
   return (
     <StandardPageLayout
-      imgSrc="/images/scribble/1.svg"
+      imgSrc="/images/scribble/1.webp"
       title="We are RDG"
       content={HomeContent}
     />
