@@ -51,7 +51,7 @@ const NewCreditForm = () => {
         person.value,
         summary,
       );
-      navigate(`/productions/${response.data.credit.production.id}`);
+      navigate(`/archive/productions/${response.data.credit.production.id}`);
     } catch (e) {
       return;
     }
