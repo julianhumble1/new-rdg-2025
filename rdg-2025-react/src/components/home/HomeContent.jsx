@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import RedButton from "../common/RedButton.jsx";
 import Socials from "../modals/Socials.jsx";
 import UpcomingProduction from "./UpcomingProduction.jsx";
+import UpcomingProductions from "./UpcomingProductions.jsx";
 
 const HomeContent = () => {
   const navigate = useNavigate();
@@ -32,7 +33,8 @@ const HomeContent = () => {
         and Cecil Hepworth Playhouse in Walton, and the Rhoda McGaw Theatre in
         Woking.
       </div>
-      <UpcomingProduction />
+      {/* <UpcomingProduction /> */}
+      <UpcomingProductions />
       <div className="hidden md:inline">
         <div className="text-center">Find us on socials:</div>
         <Socials />

@@ -3,12 +3,15 @@ import ProductionService from "../../services/ProductionService.js";
 import DateHelper from "../../utils/DateHelper.js";
 import { Link } from "react-router-dom";
 
-const HomeProductionSpotLight = ({ production }) => {
+const HomeProductionSpotLight = ({ production, image }) => {
   const [performanceStatement, setPerformanceStatement] = useState("");
+
+  const [performances, setPerformances] = useState([]);
 
   useEffect(() => {
     const getPerformanceStatement = async () => {
       const response = await ProductionService.getProductionById(production.id);
+      setPerformances(response.data.performances);
       setPerformanceStatement(
         DateHelper.createPerformanceStatement(response.data.performances),
       );
@@ -17,18 +20,32 @@ const HomeProductionSpotLight = ({ production }) => {
     getPerformanceStatement();
   }, [production.id]);
 
+  if (performances.length === 0 ) return null
+
   return (
-    <div className="flex w-full bg-white rounded">
-      <img className=" h-full w-40" src="/kafka-flyer.jpg" alt="image 1" />
-      <div className="flex flex-col gap-3 justify-center p-3 shadow-lg">
-        <Link
-          to={`/productions/${production.id}`}
-          className="text-2xl hover:underline font-bold tracking-tight text-gray-900 dark:text-white"
-        >
-          {production.name}
-        </Link>
-        <div className="text-sm italic">{performanceStatement}</div>
-        <div className=" text-gray-700 text-sm overflow-hidden max-h-24">
+    <div className="flex w-full bg-gray-100  rounded-xl shadow-md hover:shadow-xl transition h-44 max-h-44">
+      <img className="w-1/2 md:w-1/3 rounded-l-xl " src={image} alt="image 1" />
+      <div className="flex flex-col gap-1 justify-center p-2 ">
+        <div className="flex">
+          <Link
+            to={`/archive/productions/${production.id}`}
+            className={`lg:text-2xl text-md hover:underline font-bold tracking-tight text-gray-900 dark:text-white line-clamp-1 ${performances[0].boxOffice ? "w-4/5": "" }`}
+          >
+            {production.name}
+          </Link>
+          {performances[0].boxOffice && (
+            <button
+              className="text-xs bg-rdg-red rounded-full px-2 font-bold text-white hover:scale-105"
+              onClick={() => {
+                window.open(performances[0].boxOffice, "_blank", "noopener");
+              }}
+            >
+              Book Now
+            </button>
+          )}
+        </div>
+        <div className="text-xs italic">{performanceStatement}</div>
+        <div className=" text-gray-700 text-xs line-clamp-5">
           {production.description}
         </div>
       </div>
