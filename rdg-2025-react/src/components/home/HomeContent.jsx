@@ -36,7 +36,7 @@ const HomeContent = () => {
       {/* <UpcomingProduction /> */}
       <UpcomingProductions />
       <div className="hidden md:inline">
-        <div className="text-center">Find us on socials:</div>
+        {/* <div className="text-center">Find us on socials:</div> */}
         <Socials />
       </div>
     </>

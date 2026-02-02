@@ -27,8 +27,8 @@ export default class PerformanceService {
           festivalId: festivalId,
           time: performanceTime,
           description: description.trim(),
-          standardPrice: standardPrice.trim(),
-          concessionPrice: concessionPrice.trim(),
+          standardPrice: standardPrice,
+          concessionPrice: concessionPrice,
           boxOffice: boxOffice.trim(),
         },
         {
@@ -106,8 +106,8 @@ export default class PerformanceService {
           festivalId: festivalId,
           time: performanceTime,
           description: description.trim(),
-          standardPrice: standardPrice.trim(),
-          concessionPrice: concessionPrice.trim(),
+          standardPrice: standardPrice,
+          concessionPrice: concessionPrice,
           boxOffice: boxOffice.trim(),
         },
         {
