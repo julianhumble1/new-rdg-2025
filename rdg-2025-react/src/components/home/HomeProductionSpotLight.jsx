@@ -37,7 +37,12 @@ const HomeProductionSpotLight = ({ production, image }) => {
             <button
               className="text-xs bg-rdg-red rounded-full px-2 font-bold text-white hover:scale-105"
               onClick={() => {
-                window.open(performances[0].boxOffice, "_blank", "noopener");
+                let url = performances[0].boxOffice || "";
+                // ensure we open an absolute URL (prepend https:// when protocol missing)
+                if (!/^https?:\/\//i.test(url)) {
+                  url = `https://${url.replace(/^\/+/, "")}`;
+                }
+                window.open(url, "_blank", "noopener,noreferrer");
               }}
             >
               Book Now
