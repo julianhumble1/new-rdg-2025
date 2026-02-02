@@ -20,7 +20,7 @@ const HomeProductionSpotLight = ({ production, image }) => {
     getPerformanceStatement();
   }, [production.id]);
 
-  if (performances.length === 0 ) return null
+  if (performances.length === 0) return null;
 
   return (
     <div className="flex w-full bg-gray-100  rounded-xl shadow-md hover:shadow-xl transition h-44 max-h-44">
@@ -29,7 +29,7 @@ const HomeProductionSpotLight = ({ production, image }) => {
         <div className="flex">
           <Link
             to={`/archive/productions/${production.id}`}
-            className={`lg:text-2xl text-md hover:underline font-bold tracking-tight text-gray-900 dark:text-white line-clamp-1 ${performances[0].boxOffice ? "w-4/5": "" }`}
+            className={`lg:text-2xl text-md hover:underline font-bold tracking-tight text-gray-900 dark:text-white line-clamp-1 ${performances[0].boxOffice ? "w-4/5" : ""}`}
           >
             {production.name}
           </Link>

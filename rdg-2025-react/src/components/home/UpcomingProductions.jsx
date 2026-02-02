@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import ProductionService from "../../services/ProductionService.js";
 import HomeProductionSpotLight from "./HomeProductionSpotLight.jsx";
+import  CustomSpinner from "../common/CustomSpinner.jsx"
 
 const UpcomingProductions = () => {
   const [productions, setProductions] = useState([]);
@@ -16,18 +17,28 @@ const UpcomingProductions = () => {
   }, []);
 
   const pictureLinks = [
-    "/images/productions/rock-paper-scissors.jpg",
     "/images/productions/beauty social adv2_.jpg",
+    "/images/productions/rock-paper-scissors.jpg",
     "/images/productions/pinter.jpg",
   ];
 
-  return productions.map((production, idx) => (
-    <HomeProductionSpotLight
-      production={production}
-      key={production.id}
-      image={pictureLinks[idx]}
-    />
-  ));
+  return (
+    <>
+      <div className="text-rdg-red font-bold text-lg my-auto">
+        Our Current Production
+      </div>
+      {productions.length > 0 ?
+      productions.slice(0,3).map((production, idx) => (
+        <HomeProductionSpotLight
+        production={production}
+        key={production.id}
+        image={pictureLinks[idx]}
+        />
+      )) : 
+        <CustomSpinner />
+    }
+    </>
+  );
 };
 
 export default UpcomingProductions;
