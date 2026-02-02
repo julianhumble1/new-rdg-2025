@@ -25,7 +25,7 @@ const UpcomingProductions = () => {
   return (
     <>
       <div className="text-rdg-red font-bold text-lg my-auto">
-        Our Current Production
+        Upcoming Productions:
       </div>
       {productions.length > 0 ?
       productions.slice(0,3).map((production, idx) => (
