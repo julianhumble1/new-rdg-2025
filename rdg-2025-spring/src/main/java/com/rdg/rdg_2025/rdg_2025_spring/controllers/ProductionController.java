@@ -9,6 +9,8 @@ import com.rdg.rdg_2025.rdg_2025_spring.services.ProductionService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -46,12 +48,27 @@ public class ProductionController {
 
     @GetMapping()
     public ResponseEntity<?> getAllProductions() {
+        long start = System.currentTimeMillis();
+        Logger log = LoggerFactory.getLogger(getClass());
+
+        log.info("getAllProductions - request received");
+
         try {
             List<Production> productions = productionService.getAllProductions();
+            long duration = System.currentTimeMillis() - start;
+            log.info("getAllProductions - returning {} productions in {} ms",
+                    productions.size(), duration);
+
             return ResponseEntity.ok(new ProductionsResponse(productions));
 
         } catch (DatabaseException ex) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
+            long duration = System.currentTimeMillis() - start;
+            log.error("getAllProductions - database error after {} ms: {}",
+                    duration, ex.getMessage(), ex);
+
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(ex.getMessage());
         }
     }
 
