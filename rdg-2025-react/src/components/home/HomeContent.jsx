@@ -1,20 +1,7 @@
-import { useNavigate } from "react-router-dom";
-import RedButton from "../common/RedButton.jsx";
 import Socials from "../modals/Socials.jsx";
-import UpcomingProduction from "./UpcomingProduction.jsx";
 import UpcomingProductions from "./UpcomingProductions.jsx";
 
 const HomeContent = () => {
-  const navigate = useNavigate();
-
-  const openTicketLink = () => {
-    window.open(
-      "https://www.ticketsource.co.uk/the-sundowners",
-      "_blank",
-      "noopener",
-    );
-  };
-
   return (
     <>
       <div>
