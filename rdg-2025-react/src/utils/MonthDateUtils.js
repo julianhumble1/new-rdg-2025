@@ -31,9 +31,10 @@ export default class MonthDateUtils {
 
   static getYearsArray = () => {
     const currentYear = new Date().getFullYear();
+    const firstYear = currentYear - 5
     const yearsArray = [];
     for (let i = 0; i < 10; i++) {
-      yearsArray.push({ value: currentYear + i, label: currentYear + i });
+      yearsArray.push({ value: firstYear + i, label: firstYear + i });
     }
     return yearsArray;
   };
