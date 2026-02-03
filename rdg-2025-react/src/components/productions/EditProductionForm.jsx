@@ -151,7 +151,7 @@ const EditProductionForm = ({ productionData, handleEdit, setEditMode }) => {
                 onChange={(e) => setSundowners(e.target.checked)}
               />
             </div>
-            <div className="col-span-1 flex justify-center gap-2">
+            {/* <div className="col-span-1 flex justify-center gap-2">
               <Label htmlFor="sundowners" className="flex italic">
                 Not Confirmed?
               </Label>
@@ -159,18 +159,18 @@ const EditProductionForm = ({ productionData, handleEdit, setEditMode }) => {
                 checked={notConfirmed}
                 onChange={(e) => setNotConfirmed(e.target.checked)}
               />
-            </div>
+            </div> */}
           </div>
         </div>
         <div>
-          <div className="mb-2 block italic">
+          {/* <div className="mb-2 block italic">
             <Label value="Flyer File" />
           </div>
           <TextInput
             placeholder="oliver-flyer.pdf"
             value={flyerFile}
             onChange={(e) => setFlyerFile(e.target.value)}
-          />
+          /> */}
         </div>
         <ConfirmCancelButtons handleCancel={() => setEditMode(false)} />
       </form>

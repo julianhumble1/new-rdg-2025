@@ -145,24 +145,24 @@ const NewProductionForm = () => {
                 onChange={(e) => setSundowners(e.target.checked)}
               />
             </div>
-            <div className="col-span-1 flex justify-center gap-2">
+            {/* <div className="col-span-1 flex justify-center gap-2">
               <Label className="flex italic">Not Confirmed?</Label>
               <Checkbox
                 checked={notConfirmed}
                 onChange={(e) => setNotConfirmed(e.target.checked)}
               />
-            </div>
+            </div> */}
           </div>
         </div>
         <div>
-          <div className="mb-2 block italic">
+          {/* <div className="mb-2 block italic">
             <Label value="Flyer File" />
           </div>
           <TextInput
             placeholder="oliver-flyer.pdf"
             value={flyerFile}
             onChange={(e) => setFlyerFile(e.target.value)}
-          />
+          /> */}
         </div>
         <div className="grid grid-cols-2 justify-end px-2">
           <Link
