@@ -47,7 +47,7 @@ export const creditsColumns = [
   },
 ];
 
-const creditsActionButtons = [
+export const creditsActionButtons = [
   {
     name: "Actions",
     cell: (row) => <CreditsActionCell row={row} />,

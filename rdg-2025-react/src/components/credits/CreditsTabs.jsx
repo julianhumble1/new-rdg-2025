@@ -7,8 +7,7 @@ import {
 } from "@heroicons/react/16/solid";
 import { Tabs } from "flowbite-react";
 import CreditsTable from "./CreditsTable.jsx";
-import PersonAwardsTable from "../awards/PersonAwardsTable.jsx";
-import ProductionAwardsTable from "../awards/ProductionAwardsTable.jsx";
+import AwardsTable from "../awards/AwardsTable.jsx";
 
 const CreditsTabs = ({
   actingCredits,
@@ -50,7 +49,7 @@ const CreditsTabs = ({
       {awards && awards.length > 0 && (
         <Tabs.Item active title="Awards" icon={TrophyIcon}>
           <div className="m-2 overflow-auto">
-            <PersonAwardsTable awards={awards} handleDelete={handleDelete} />
+            <AwardsTable awards={awards} handleDelete={handleDelete} />
           </div>
         </Tabs.Item>
       )}
@@ -87,7 +86,7 @@ const CreditsTabs = ({
       {awards && awards.length > 0 && (
         <Tabs.Item active title="Awards" icon={TrophyIcon}>
           <div className="m-2 overflow-auto">
-            <ProductionAwardsTable
+            <AwardsTable
               awards={awards}
               handleDelete={handleDelete}
             />

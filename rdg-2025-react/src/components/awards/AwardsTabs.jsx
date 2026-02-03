@@ -1,6 +1,6 @@
 import { TrophyIcon } from "@heroicons/react/16/solid";
 import { Tabs } from "flowbite-react";
-import FestivalAwardsTable from "./FestivalAwardsTable.jsx";
+import AwardsTable from "./AwardsTable.jsx";
 
 const AwardsTabs = ({ awards, handleDelete }) => {
   return (
@@ -8,7 +8,7 @@ const AwardsTabs = ({ awards, handleDelete }) => {
       {awards.length > 0 && (
         <Tabs.Item active title="Awards" icon={TrophyIcon}>
           <div className="m-2 overflow-auto">
-            <FestivalAwardsTable awards={awards} handleDelete={handleDelete} />
+            <AwardsTable awards={awards} handleDelete={handleDelete} />
           </div>
         </Tabs.Item>
       )}
