@@ -17,10 +17,11 @@ export const getCreditsColumns = () => {
 export const creditsColumns = [
   {
     name: "Credit",
-    selector: (row) => (
+    selector: (row) => row.name,
+    cell: (row) => (
       <ul>
-        <li>{row?.name}</li>
-        <li className="text-gray-600">{row?.summary}</li>
+        <li className="line-clamp-3">{row?.name}</li>
+        <li className="text-gray-600 line-clamp-3">{row?.summary}</li>
       </ul>
     ),
   },

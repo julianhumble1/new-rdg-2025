@@ -30,10 +30,10 @@ export const customStyles = {
         borderBottomColor: "#e2e8f0",
       },
       fontSize: "1rem",
-      // transition: "background-color 150ms ease",
-      // "&:hover": {
-      //   backgroundColor: "#008000"
-      // }
+      transition: "background-color 150ms ease",
+      "&:hover": {
+        backgroundColor: "#008000"
+      }
     },
   },
   cells: {
