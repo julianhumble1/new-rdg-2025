@@ -103,12 +103,15 @@ public class AuthController {
         } else {
             strRoles.forEach(role -> {
                 switch (role) {
+                    case "superadmin":
+                        Role superAdminRole = roleRepository.findByName(ERole.ROLE_SUPERADMIN)
+                                .orElseThrow(() -> new RuntimeException("Error: Role is not found"));
+                        roles.add(superAdminRole);
+
                     case "admin":
                         Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
                                 .orElseThrow(() -> new RuntimeException("Error: Role is not found"));
                         roles.add(adminRole);
-
-                        break;
 
                     default:
                         Role userRole = roleRepository.findByName(ERole.ROLE_USER)
@@ -127,4 +130,5 @@ public class AuthController {
         return ResponseEntity.ok(new MessageResponse("User registered successfully"));
 
     }
+
 }
