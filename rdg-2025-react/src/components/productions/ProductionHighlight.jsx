@@ -43,9 +43,11 @@ const ProductionHighlight = ({ productionData, setEditMode, handleDelete }) => {
           Not Yet Confirmed
         </Badge>
       )}
-      {productionData?.sundowners &&
-        <div className="px-2 rounded-full italic md:hidden bg-gradient-to-r from-rdg-red to-black font-bold text-white text-center w-fit">SUNDOWNERS</div>
-      }
+      {productionData?.sundowners && (
+        <div className="px-2 rounded-full italic md:hidden bg-gradient-to-r from-rdg-red to-black font-bold text-white text-center w-fit">
+          SUNDOWNERS
+        </div>
+      )}
     </HighlightTemplate>
   );
 };

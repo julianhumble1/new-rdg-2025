@@ -1,21 +1,21 @@
-import Cookies from "js-cookie"
+import Cookies from "js-cookie";
 import { CreditsActionCell } from "../credits/CreditsActionCell.jsx";
 import TableLink from "../../TableLink.jsx";
 
 export const getAwardsColumns = () => {
-    const role = Cookies.get("role");
+  const role = Cookies.get("role");
 
   if (role === "ROLE_ADMIN") {
     return awardsColumns.concat(awardsActionButtons);
   } else {
     return awardsColumns;
   }
-}
+};
 
 export const awardsColumns = [
   {
     name: "Award",
-    selector: (row) => row.name
+    selector: (row) => row.name,
   },
   {
     name: "Production",
@@ -23,8 +23,9 @@ export const awardsColumns = [
     cell: (row) => (
       <TableLink
         link={`/productions/${row?.production?.id}`}
-        text={row.production.name}/>
-    )
+        text={row.production.name}
+      />
+    ),
   },
   {
     name: "Festival",
@@ -34,7 +35,7 @@ export const awardsColumns = [
         link={`/festivals/${row?.festival?.id}`}
         text={row.festival.name}
       />
-    )
+    ),
   },
   {
     name: "Person",
@@ -44,9 +45,9 @@ export const awardsColumns = [
         link={`/people/${row?.person?.id}`}
         text={`${row.person?.firstName} ${row.person?.lastName}`}
       />
-    )
-  }
-]
+    ),
+  },
+];
 
 export const awardsActionButtons = [
   {

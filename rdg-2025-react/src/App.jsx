@@ -48,6 +48,9 @@ import Contact from "./pages/contact/Contact.jsx";
 import AllAwards from "./components/awards/AllAwards.jsx";
 import Membership from "./pages/join/Membership/Membership.jsx";
 import Rehearsals from "./pages/join/Rehearsals/Rehearsals.jsx";
+import NewUserForm from "./components/users/NewUserForm.jsx";
+import AllUsers from "./components/users/AllUsers.jsx";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -57,98 +60,110 @@ function App() {
     if (token) setLoggedIn(true);
   }, []);
 
+  const queryClient = new QueryClient();
+
   return (
     <>
       <Router>
-        <div className="flex flex-col min-h-screen h-full tracking-wider max-w-[1440px] mx-auto">
-          <AltHeader />
-          <Routes>
-            <Route path="/" element={<Navigate to="/home" replace />}></Route>
-            <Route path="/home" element={<AltHome />} />
+        <QueryClientProvider client={queryClient}>
+          <div className="flex flex-col min-h-screen h-full tracking-wider max-w-[1440px] mx-auto">
+            <AltHeader />
+            <Routes>
+              <Route path="/" element={<Navigate to="/home" replace />}></Route>
+              <Route path="/home" element={<AltHome />} />
 
-            <Route path="/home/images" element={<HomeImageSelect />} />
-
-            <Route
-              path="/archive"
-              element={
-                <ArchiveLayout loggedIn={loggedIn} setLoggedIn={setLoggedIn} />
-              }
-            >
-              <Route index element={<Archive />} />
+              <Route path="/home/images" element={<HomeImageSelect />} />
 
               <Route
-                path="login"
-                element={<Login setLoggedIn={setLoggedIn} />}
-              />
-              <Route path="dashboard" element={<Dashboard />} />
-              <Route path="user-dashboard" element={<UserDashboard />} />
-              <Route path="admin-dashboard" element={<AdminDashboard />} />
+                path="/archive"
+                element={
+                  <ArchiveLayout
+                    loggedIn={loggedIn}
+                    setLoggedIn={setLoggedIn}
+                  />
+                }
+              >
+                <Route index element={<Archive />} />
 
-              <Route path="venues">
-                <Route index element={<AllVenues />} />
-                <Route path="new" element={<NewVenueForm />} />
-                <Route path=":id" element={<VenuePage />} />
+                <Route
+                  path="login"
+                  element={<Login setLoggedIn={setLoggedIn} />}
+                />
+                <Route path="dashboard" element={<Dashboard />} />
+                <Route path="user-dashboard" element={<UserDashboard />} />
+                <Route path="admin-dashboard" element={<AdminDashboard />} />
+
+                <Route path="venues">
+                  <Route index element={<AllVenues />} />
+                  <Route path="new" element={<NewVenueForm />} />
+                  <Route path=":id" element={<VenuePage />} />
+                </Route>
+
+                <Route path="productions">
+                  <Route index element={<AllProductions />} />
+                  <Route path="new" element={<NewProductionForm />} />
+                  <Route path=":id" element={<ProductionPage />} />
+                </Route>
+
+                <Route path="festivals">
+                  <Route index element={<AllFestivals />} />
+                  <Route path="new" element={<NewFestivalForm />} />
+                  <Route path=":id" element={<FestivalPage />} />
+                </Route>
+
+                <Route path="performances">
+                  <Route path="new" element={<NewPerformanceForm />} />
+                  <Route path="edit/:id" element={<EditPerformanceForm />} />
+                </Route>
+
+                <Route path="people">
+                  <Route index element={<AllPeople />} />
+                  <Route path=":id" element={<PersonPage />} />
+                  <Route path="new" element={<NewPersonForm />} />
+                </Route>
+
+                <Route path="credits">
+                  <Route path="new" element={<NewCreditForm />} />
+                  <Route path="edit/:id" element={<EditCreditForm />} />
+                </Route>
+
+                <Route path="awards">
+                  <Route index element={<AllAwards />} />
+                  <Route path="new" element={<NewAwardForm />} />
+                  <Route path="edit/:id" element={<EditAwardForm />} />
+                </Route>
+
+                <Route path="events">
+                  <Route index element={<AllEvents />} />
+                  <Route path="new" element={<NewEventForm />} />
+                  <Route path=":id" element={<EventPage />} />
+                </Route>
+
+                <Route path="users">
+                  <Route path="new" element={<NewUserForm />} />
+                  <Route index element={<AllUsers />} />
+                </Route>
               </Route>
 
-              <Route path="productions">
-                <Route index element={<AllProductions />} />
-                <Route path="new" element={<NewProductionForm />} />
-                <Route path=":id" element={<ProductionPage />} />
+              <Route path="/about">
+                <Route index element={<About />} />
+                <Route path="ourvenues" element={<OurVenues />} />
+                <Route path="committee" element={<Committee />} />
+                <Route path="legal" element={<Legal />} />
               </Route>
 
-              <Route path="festivals">
-                <Route index element={<AllFestivals />} />
-                <Route path="new" element={<NewFestivalForm />} />
-                <Route path=":id" element={<FestivalPage />} />
+              <Route path="/join">
+                <Route index element={<Join />} />
+                <Route path="membership" element={<Membership />} />
+                <Route path="rehearsals" element={<Rehearsals />} />
               </Route>
 
-              <Route path="performances">
-                <Route path="new" element={<NewPerformanceForm />} />
-                <Route path="edit/:id" element={<EditPerformanceForm />} />
-              </Route>
+              <Route path="/upcoming" element={<Upcoming />} />
 
-              <Route path="people">
-                <Route index element={<AllPeople />} />
-                <Route path=":id" element={<PersonPage />} />
-                <Route path="new" element={<NewPersonForm />} />
-              </Route>
-
-              <Route path="credits">
-                <Route path="new" element={<NewCreditForm />} />
-                <Route path="edit/:id" element={<EditCreditForm />} />
-              </Route>
-
-              <Route path="awards">
-                <Route index element={<AllAwards />} />
-                <Route path="new" element={<NewAwardForm />} />
-                <Route path="edit/:id" element={<EditAwardForm />} />
-              </Route>
-
-              <Route path="events">
-                <Route index element={<AllEvents />} />
-                <Route path="new" element={<NewEventForm />} />
-                <Route path=":id" element={<EventPage />} />
-              </Route>
-            </Route>
-
-            <Route path="/about">
-              <Route index element={<About />} />
-              <Route path="ourvenues" element={<OurVenues />} />
-              <Route path="committee" element={<Committee />} />
-              <Route path="legal" element={<Legal />} />
-            </Route>
-
-            <Route path="/join">
-              <Route index element={<Join />} />
-              <Route path="membership" element={<Membership />} />
-              <Route path="rehearsals" element={<Rehearsals />} />
-            </Route>
-
-            <Route path="/upcoming" element={<Upcoming />} />
-
-            <Route path="/contact" element={<Contact />} />
-          </Routes>
-        </div>
+              <Route path="/contact" element={<Contact />} />
+            </Routes>
+          </div>
+        </QueryClientProvider>
       </Router>
       <ToastContainer
         position="bottom-right"

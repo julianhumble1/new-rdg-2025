@@ -1,6 +1,7 @@
 import axios from "axios";
 import Cookies from "js-cookie";
 import { getBaseUrl } from "./baseUrl";
+import { toast } from "react-toastify";
 
 const baseUrl = getBaseUrl();
 
@@ -41,6 +42,21 @@ export default class UserService {
       });
       return response;
     } catch (error) {
+      throw new Error(error);
+    }
+  };
+
+  static getAllUsers = async () => {
+    try {
+      const token = Cookies.get("token");
+      const response = await axios.get(`${baseUrl}/users`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response;
+    } catch (error) {
+      toast.error(error.message);
       throw new Error(error);
     }
   };
