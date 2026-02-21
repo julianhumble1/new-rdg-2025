@@ -1,10 +1,8 @@
 import {
-  ArrowRightIcon,
   BuildingLibraryIcon,
   CalendarDaysIcon,
   FilmIcon,
   IdentificationIcon,
-  PhotoIcon,
   ScaleIcon,
   StarIcon,
   TicketIcon,
@@ -13,9 +11,8 @@ import {
 } from "@heroicons/react/16/solid";
 import ContentCard from "../common/ContentCard.jsx";
 import AdminDashboardCard from "./AdminDashboardCard.jsx";
-import Button from "../common/Button.jsx";
-import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
+import AlertDialog from "../library/AlertDialog.jsx";
 
 const AdminDashboard = () => {
   const role = Cookies.get("role");
@@ -89,10 +86,10 @@ const AdminDashboard = () => {
             name="Admins"
             basePath="users"
             icon={<IdentificationIcon />}
-            showSeeAll={false}
           />
         )}
       </div>
+      <AlertDialog />
     </ContentCard>
   );
 };

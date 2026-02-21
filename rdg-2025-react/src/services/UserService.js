@@ -60,4 +60,25 @@ export default class UserService {
       throw new Error(error);
     }
   };
+
+  static updatePassword = async (newPassword, userId) => {
+    try {
+      const token = Cookies.get("token");
+      const response = await axios.patch(
+        `${baseUrl}/auth/${userId}/reset-password`,
+        {
+          newPassword,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+      return response;
+    } catch (error) {
+      toast.error(error.message);
+      throw new Error(error);
+    }
+  };
 }

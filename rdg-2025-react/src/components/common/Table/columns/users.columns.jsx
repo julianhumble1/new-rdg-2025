@@ -1,5 +1,4 @@
-import { Bars3Icon } from "@heroicons/react/16/solid";
-import { Dropdown, DropdownItem } from "flowbite-react";
+import ResetPasswordDialog from "../../../users/ResetPasswordDialog.jsx";
 
 export const usersColumns = [
   {
@@ -12,12 +11,6 @@ export const usersColumns = [
   },
   {
     name: "Actions",
-    cell: (row) => (
-      <Dropdown className="w-34" renderTrigger={() => (
-    <button className="bg-rdg-blue/80 text-white rounded-full p-2"><Bars3Icon className="w-4 h-4 " /></button>
-  )}>
-        <DropdownItem >Reset Password</DropdownItem>
-      </Dropdown>
-    ),
+    cell: (row) => <ResetPasswordDialog username={row.username} id={row.id} />,
   },
 ];
