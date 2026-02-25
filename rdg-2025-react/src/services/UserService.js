@@ -81,4 +81,29 @@ export default class UserService {
       throw new Error(error);
     }
   };
+
+  static createUser = async (name, email, role, password) => {
+    const token = Cookies.get("token");
+    try {
+      const response = await axios.post(
+        `${baseUrl}/auth/signup`,
+        {
+          name,
+          username: email,
+          email,
+          role: [role],
+          password
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          }
+        }
+      )
+      return response
+    } catch (e) {
+      toast.error(e.message)
+      throw new Error(e)
+    }
+  }
 }

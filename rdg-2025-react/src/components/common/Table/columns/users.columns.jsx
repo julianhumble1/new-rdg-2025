@@ -2,8 +2,8 @@ import ResetPasswordDialog from "../../../users/ResetPasswordDialog.jsx";
 
 export const usersColumns = [
   {
-    name: "Username",
-    selector: (row) => row.username,
+    name: "Name",
+    selector: (row) => row.name,
   },
   {
     name: "Email",
