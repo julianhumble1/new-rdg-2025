@@ -15,14 +15,15 @@ import com.rdg.rdg_2025.rdg_2025_spring.security.services.UserDetailsImpl;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -66,11 +67,17 @@ public class AuthController {
                 .map(item -> item.getAuthority())
                 .collect(Collectors.toList());
 
+        User user = userRepository.findByUsername(userDetails.getUsername()).orElseThrow(
+                () -> new EntityNotFoundException("No user found"));
+
+        boolean passwordResetRequired = user.isPasswordResetRequired();
+
         return ResponseEntity.ok(new JwtResponse(
                 jwt,
                 userDetails.getId(),
                 userDetails.getUsername(),
                 userDetails.getEmail(),
+                passwordResetRequired,
                 roles
         ));
     }
@@ -130,6 +137,8 @@ public class AuthController {
 
         user.setRoles(roles);
 
+        user.setPasswordResetRequired(true);
+
         userRepository.save(user);
 
         return ResponseEntity.ok(new MessageResponse("User registered successfully"));
@@ -146,8 +155,27 @@ public class AuthController {
             ));
             String encodedPassword = encoder.encode(updatePasswordRequest.getNewPassword());
             user.setPassword(encodedPassword);
+            user.setPasswordResetRequired(true);
             userRepository.save(user);
-            return ResponseEntity.ok("Updated");
+            return ResponseEntity.ok("Updated password successfully.");
+        } catch (EntityNotFoundException ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+        } catch (Exception ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
+        }
+    }
+
+    @PatchMapping("/me/reset-password")
+    public ResponseEntity<?> updateOwnPassword(@AuthenticationPrincipal UserDetails userDetails, @Valid @RequestBody UpdatePasswordRequest newPasswordRequest) {
+        String username = userDetails.getUsername();
+        System.out.println(newPasswordRequest.getNewPassword());
+        try {
+            User user = userRepository.findByUsername(username).orElseThrow(() -> new EntityNotFoundException("No user with this id"));
+            String encodedPassword = encoder.encode(newPasswordRequest.getNewPassword());
+            user.setPassword(encodedPassword);
+            user.setPasswordResetRequired(false);
+            userRepository.save(user);
+            return ResponseEntity.ok("Updated password successfully.");
         } catch (EntityNotFoundException ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
         } catch (Exception ex) {
