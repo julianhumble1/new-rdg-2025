@@ -92,18 +92,39 @@ export default class UserService {
           username: email,
           email,
           role: [role],
-          password
+          password,
         },
         {
           headers: {
             Authorization: `Bearer ${token}`,
-          }
-        }
-      )
-      return response
+          },
+        },
+      );
+      return response;
     } catch (e) {
-      toast.error(e.message)
-      throw new Error(e)
+      toast.error(e.message);
+      throw new Error(e);
+    }
+  };
+
+  static updateOwnPassword = async (newPassword) => {
+    try {
+      const token = Cookies.get("token");
+      const response = await axios.patch(
+        `${baseUrl}/auth/me/reset-password`,
+        {
+          newPassword,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+      return response;
+    } catch (error) {
+      toast.error(error.message);
+      throw new Error(error);
     }
   }
 }

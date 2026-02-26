@@ -51,6 +51,7 @@ import Rehearsals from "./pages/join/Rehearsals/Rehearsals.jsx";
 import NewUserForm from "./components/users/NewUserForm.jsx";
 import AllUsers from "./components/users/AllUsers.jsx";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import ResetPassword from "./components/ResetPassword.jsx";
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -89,6 +90,7 @@ function App() {
                   path="login"
                   element={<Login setLoggedIn={setLoggedIn} />}
                 />
+                <Route path="password-reset" element={<ResetPassword /> } />
                 <Route path="dashboard" element={<Dashboard />} />
                 <Route path="user-dashboard" element={<UserDashboard />} />
                 <Route path="admin-dashboard" element={<AdminDashboard />} />

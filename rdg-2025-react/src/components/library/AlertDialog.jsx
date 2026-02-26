@@ -28,6 +28,7 @@ const AlertDialog = ({
   onAction,
   onCancel,
   actionColor = "bg-red-600 hover:bg-red-700 focus:ring-red-400",
+  preventActionClose = false,
   children,
 }) => (
   <AlertDialogRoot {...(open !== undefined ? { open, onOpenChange } : {})}>
@@ -59,7 +60,7 @@ const AlertDialog = ({
             </AlertDialogCancel>
           ) : null}
           {actionText !== null ? (
-            <AlertDialogAction asChild>
+            preventActionClose ? (
               <button
                 className={`inline-flex h-[35px] items-center justify-center rounded px-4 font-medium text-white focus:outline-none focus:ring-2 select-none ${actionColor}`}
                 onClick={onAction}
@@ -67,7 +68,17 @@ const AlertDialog = ({
               >
                 {actionText}
               </button>
-            </AlertDialogAction>
+            ) : (
+              <AlertDialogAction asChild>
+                <button
+                  className={`inline-flex h-[35px] items-center justify-center rounded px-4 font-medium text-white focus:outline-none focus:ring-2 select-none ${actionColor}`}
+                  onClick={onAction}
+                  type="button"
+                >
+                  {actionText}
+                </button>
+              </AlertDialogAction>
+            )
           ) : null}
         </div>
       </AlertDialogContent>

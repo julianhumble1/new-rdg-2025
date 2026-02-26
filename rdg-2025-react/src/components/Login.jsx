@@ -22,7 +22,11 @@ const AltLogin = ({ setLoggedIn }) => {
       Cookies.set("token", responseData.token, { expires: 3 });
       Cookies.set("role", mainRole, { expires: 3 });
       setLoggedIn(true);
-      navigate("/archive/dashboard");
+      if (responseData.passwordResetRequired === true) {
+        navigate("/archive/password-reset")
+      } else {
+        navigate("/archive/dashboard");
+      }
     } catch (error) {
       setErrorMessage("Username or password incorrect. Please try again.");
     }

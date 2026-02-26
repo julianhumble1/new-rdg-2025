@@ -12,7 +12,6 @@ import {
 import ContentCard from "../common/ContentCard.jsx";
 import AdminDashboardCard from "./AdminDashboardCard.jsx";
 import Cookies from "js-cookie";
-import AlertDialog from "../library/AlertDialog.jsx";
 
 const AdminDashboard = () => {
   const role = Cookies.get("role");
@@ -89,7 +88,6 @@ const AdminDashboard = () => {
           />
         )}
       </div>
-      <AlertDialog />
     </ContentCard>
   );
 };
