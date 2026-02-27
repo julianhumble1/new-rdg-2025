@@ -18,13 +18,13 @@ const UpcomingProductions = () => {
 
   const pictureLinks = [
     // "/images/productions/batb.jpeg",
-    "/images/productions/rock-paper-scissors.jpeg",
-    // "/images/productions/pinter.jpeg",
+    // "/images/productions/rock-paper-scissors.jpeg",
+    "/images/productions/pinter.jpeg",
   ];
 
   return (
     <>
-      <div className="text-rdg-red font-bold text-lg my-auto">
+      <div className="text-rdg-red font-bold text-lg ">
         Upcoming Productions:
       </div>
       {productions.length > 0 ? (
