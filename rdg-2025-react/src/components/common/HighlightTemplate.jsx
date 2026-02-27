@@ -1,6 +1,6 @@
 import HighlightFooter from "./HighlightFooter.jsx";
 import HighlightTitleBar from "./HighlightTitleBar.jsx";
-import "./styles.css"
+import "./styles.css";
 
 const HighlightTemplate = ({
   children,
@@ -10,13 +10,11 @@ const HighlightTemplate = ({
   handleDelete,
   createdAt,
   updatedAt,
-  sundowners=false
+  sundowners = false,
 }) => {
   return (
     <div className="w-full flex flex-col relative overflow-visible">
-      {sundowners &&
-        <div className="ribbon">Sundowners</div>
-      }
+      {sundowners && <div className="ribbon">Sundowners</div>}
       <HighlightTitleBar
         title={title}
         handleDelete={handleDelete}

@@ -86,10 +86,7 @@ const CreditsTabs = ({
       {awards && awards.length > 0 && (
         <Tabs.Item active title="Awards" icon={TrophyIcon}>
           <div className="m-2 overflow-auto">
-            <AwardsTable
-              awards={awards}
-              handleDelete={handleDelete}
-            />
+            <AwardsTable awards={awards} handleDelete={handleDelete} />
           </div>
         </Tabs.Item>
       )}

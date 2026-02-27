@@ -1,9 +1,8 @@
 import {
-  ArrowRightIcon,
   BuildingLibraryIcon,
   CalendarDaysIcon,
   FilmIcon,
-  PhotoIcon,
+  IdentificationIcon,
   ScaleIcon,
   StarIcon,
   TicketIcon,
@@ -12,11 +11,10 @@ import {
 } from "@heroicons/react/16/solid";
 import ContentCard from "../common/ContentCard.jsx";
 import AdminDashboardCard from "./AdminDashboardCard.jsx";
-import Button from "../common/Button.jsx";
-import { useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
 
 const AdminDashboard = () => {
-  const navigate = useNavigate();
+  const role = Cookies.get("role");
 
   return (
     <ContentCard>
@@ -63,7 +61,7 @@ const AdminDashboard = () => {
           showSeeAll={false}
           icon={<TrophyIcon />}
         />
-        <AdminDashboardCard
+        {/* <AdminDashboardCard
           name="Images"
           showSeeAll={false}
           showAddNew={false}
@@ -75,13 +73,20 @@ const AdminDashboard = () => {
               <ArrowRightIcon className="w-4 h-4 inline ml-2" />
             </Button>
           }
-        />
+        /> */}
         <AdminDashboardCard
           name="Events"
           showSeeAll
           basePath="events"
           icon={<CalendarDaysIcon />}
         />
+        {role === "ROLE_SUPERADMIN" && (
+          <AdminDashboardCard
+            name="Admins"
+            basePath="users"
+            icon={<IdentificationIcon />}
+          />
+        )}
       </div>
     </ContentCard>
   );

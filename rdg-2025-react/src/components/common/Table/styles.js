@@ -32,8 +32,8 @@ export const customStyles = {
       fontSize: "1rem",
       transition: "background-color 150ms ease",
       "&:hover": {
-        backgroundColor: "#008000"
-      }
+        backgroundColor: "#008000",
+      },
     },
   },
   cells: {

@@ -10,10 +10,13 @@ const Dashboard = () => {
 
     if (roleFromCookies === "ROLE_USER") {
       navigate("/archive/user-dashboard");
-    } else if (roleFromCookies === "ROLE_ADMIN") {
+    } else if (
+      roleFromCookies === "ROLE_ADMIN" ||
+      roleFromCookies === "ROLE_SUPERADMIN"
+    ) {
       navigate("/archive/admin-dashboard");
     } else {
-      navigate("/login"); // Redirect to login if no valid role is found
+      navigate("/archive/login"); // Redirect to login if no valid role is found
     }
   });
 
