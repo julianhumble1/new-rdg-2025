@@ -7,7 +7,7 @@ const EditDeleteButtons = ({ handleEdit, handleDelete, itemToDelete }) => {
 
   const role = Cookies.get("role");
 
-  if (role === "ROLE_ADMIN") {
+  if (role === "ROLE_ADMIN" || role === "ROLE_SUPERADMIN") {
     return (
       <>
         <div className="flex gap-2 font-bold">
