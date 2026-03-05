@@ -33,7 +33,7 @@ const NewAwardForm = () => {
     } catch (e) {
       return;
     }
-  });
+  }, []);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
