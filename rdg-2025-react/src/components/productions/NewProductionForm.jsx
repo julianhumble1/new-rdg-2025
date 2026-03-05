@@ -46,7 +46,7 @@ const NewProductionForm = () => {
         notConfirmed,
         flyerFile,
       );
-      navigate(`/productions/${response.data.production.id}`);
+      navigate(`/archive/productions/${response.data.production.id}`);
     } catch (e) {
       return;
     }
@@ -166,7 +166,7 @@ const NewProductionForm = () => {
         </div>
         <div className="grid grid-cols-2 justify-end px-2">
           <Link
-            to="/productions"
+            to="/archive/productions"
             className="text-sm hover:underline font-bold text-center col-span-1 my-auto"
           >
             Cancel

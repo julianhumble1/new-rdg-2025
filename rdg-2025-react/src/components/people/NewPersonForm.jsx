@@ -35,7 +35,7 @@ const NewPersonForm = () => {
         addressTown,
         addressPostcode,
       );
-      navigate(`/people/${response.data.person.id}`);
+      navigate(`/archive/people/${response.data.person.id}`);
     } catch (e) {
       setErrorMessage(e.message);
     }
@@ -135,7 +135,7 @@ const NewPersonForm = () => {
 
         <div className="grid grid-cols-2 justify-end px-2 mt-2">
           <Link
-            to="/dashboard"
+            to="/archive/dashboard"
             className="text-sm hover:underline font-bold text-center col-span-1 my-auto"
           >
             Cancel

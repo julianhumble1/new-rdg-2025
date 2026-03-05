@@ -98,7 +98,7 @@ const EditPerformanceForm = () => {
         concessionPrice,
         boxOffice,
       );
-      navigate(`/productions/${response.data.performance.production.id}`);
+      navigate(`/archive/productions/${response.data.performance.production.id}`);
     } catch (e) {
       setErrorMessage(e.message);
     }
@@ -247,7 +247,7 @@ const EditPerformanceForm = () => {
           </div>
           <div className="grid grid-cols-2 justify-end px-2">
             <Link
-              to="/dashboard"
+              to="/archive/dashboard"
               className="text-sm hover:underline font-bold text-center col-span-1 my-auto"
             >
               Cancel

@@ -86,13 +86,13 @@ const EditAwardForm = () => {
       );
       // Navigate back to the appropriate page based on the award's associations
       if (response.data.award.production) {
-        navigate(`/productions/${response.data.award.production.id}`);
+        navigate(`/archive/productions/${response.data.award.production.id}`);
       } else if (response.data.award.person) {
-        navigate(`/people/${response.data.award.person.id}`);
+        navigate(`/archive/people/${response.data.award.person.id}`);
       } else if (response.data.award.festival) {
-        navigate(`/festivals/${response.data.award.festival.id}`);
+        navigate(`/archive/festivals/${response.data.award.festival.id}`);
       } else {
-        navigate("/dashboard");
+        navigate("/archive/dashboard");
       }
     } catch (e) {
       return;
@@ -173,7 +173,7 @@ const EditAwardForm = () => {
           </div>
           <div className="grid grid-cols-2 justify-end px-2">
             <Link
-              to="/dashboard"
+              to="/archive/dashboard"
               className="text-sm hover:underline font-bold text-center col-span-1 my-auto"
             >
               Cancel

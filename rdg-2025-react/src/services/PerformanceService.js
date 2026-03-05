@@ -5,6 +5,11 @@ import { getBaseUrl } from "./baseUrl";
 
 const baseUrl = getBaseUrl();
 
+const formatLocalDateTime = (date) => {
+  const pad = (n) => String(n).padStart(2, "0");
+  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
+};
+
 export default class PerformanceService {
   static addNewPerformance = async (
     productionId,
@@ -25,7 +30,7 @@ export default class PerformanceService {
           productionId: productionId,
           venueId: venueId,
           festivalId: festivalId,
-          time: performanceTime,
+          time: formatLocalDateTime(performanceTime),
           description: description.trim(),
           standardPrice: standardPrice,
           concessionPrice: concessionPrice,
@@ -104,7 +109,7 @@ export default class PerformanceService {
           productionId: productionId,
           venueId: venueId,
           festivalId: festivalId,
-          time: performanceTime,
+          time: formatLocalDateTime(performanceTime),
           description: description.trim(),
           standardPrice: standardPrice,
           concessionPrice: concessionPrice,

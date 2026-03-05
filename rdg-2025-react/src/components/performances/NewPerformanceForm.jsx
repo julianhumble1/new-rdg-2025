@@ -59,11 +59,17 @@ const NewPerformanceForm = () => {
         concessionPrice,
         boxOffice,
       );
-      navigate(`/productions/${production.value}`);
+      navigate(`/archive/productions/${production.value}`);
     } catch (e) {
       setFailMessage(e.message);
     }
   };
+
+  useEffect(() => {
+    if (performanceTime) {
+      console.log(performanceTime)
+    }
+  }, [performanceTime])
 
   return (
     <ContentCard>
@@ -201,7 +207,7 @@ const NewPerformanceForm = () => {
         </div>
         <div className="grid grid-cols-2 justify-end px-2">
           <Link
-            to="/dashboard"
+            to="/archive/dashboard"
             className="text-sm hover:underline font-bold text-center col-span-1 my-auto"
           >
             Cancel

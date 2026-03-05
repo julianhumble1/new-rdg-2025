@@ -27,7 +27,7 @@ const NewEventForm = () => {
         dateTime,
         venue.value,
       );
-      navigate(`/events/${response.data.event.id}`);
+      navigate(`/archive/events/${response.data.event.id}`);
     } catch (e) {
       toast.error(e.message);
     }
@@ -107,7 +107,7 @@ const NewEventForm = () => {
 
         <div className="grid grid-cols-2 justify-end px-2">
           <Link
-            to="/dashboard"
+            to="/archive/dashboard"
             className="text-sm hover:underline font-bold text-center col-span-1 my-auto"
           >
             Cancel

@@ -80,7 +80,7 @@ const EditCreditForm = () => {
         person.value,
         summary,
       );
-      navigate(`/productions/${response.data.credit.production.id}`);
+      navigate(`/archive/productions/${response.data.credit.production.id}`);
     } catch (e) {
       return;
     }
@@ -180,7 +180,7 @@ const EditCreditForm = () => {
 
         <div className="grid grid-cols-2 justify-end px-2">
           <Link
-            to="/dashboard"
+            to="/archive/dashboard"
             className="text-sm hover:underline font-bold text-center col-span-1 my-auto"
           >
             Cancel

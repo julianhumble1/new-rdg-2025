@@ -38,7 +38,7 @@ const NewFestivalForm = () => {
         month.value,
         description,
       );
-      navigate(`/festivals/${response.data.festival.id}`);
+      navigate(`/archive/festivals/${response.data.festival.id}`);
     } catch (e) {
       setSuccessMessage("");
       setErrorMessage(e.message);
@@ -146,7 +146,7 @@ const NewFestivalForm = () => {
         </div>
         <div className="grid grid-cols-2 justify-end px-2">
           <Link
-            to="/festivals"
+            to="/archive/festivals"
             className="text-sm hover:underline font-bold text-center col-span-1 my-auto"
           >
             Cancel

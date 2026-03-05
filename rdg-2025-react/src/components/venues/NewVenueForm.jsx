@@ -25,7 +25,7 @@ const NewVenueForm = () => {
         notes,
         url,
       );
-      navigate(`/venues/${response.data.venue.id}`);
+      navigate(`/archive/venues/${response.data.venue.id}`);
     } catch (e) {
       return;
     }
@@ -103,7 +103,7 @@ const NewVenueForm = () => {
         </div>
         <div className="grid grid-cols-2 justify-end px-2">
           <Link
-            to="/venues"
+            to="/archive/venues"
             className="text-sm hover:underline font-bold text-center col-span-1 my-auto"
           >
             Cancel
