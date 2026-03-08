@@ -98,7 +98,9 @@ const EditPerformanceForm = () => {
         concessionPrice,
         boxOffice,
       );
-      navigate(`/archive/productions/${response.data.performance.production.id}`);
+      navigate(
+        `/archive/productions/${response.data.performance.production.id}`,
+      );
     } catch (e) {
       setErrorMessage(e.message);
     }

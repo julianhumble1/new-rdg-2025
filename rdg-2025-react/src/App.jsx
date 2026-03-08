@@ -90,7 +90,7 @@ function App() {
                   path="login"
                   element={<Login setLoggedIn={setLoggedIn} />}
                 />
-                <Route path="password-reset" element={<ResetPassword /> } />
+                <Route path="password-reset" element={<ResetPassword />} />
                 <Route path="dashboard" element={<Dashboard />} />
                 <Route path="user-dashboard" element={<UserDashboard />} />
                 <Route path="admin-dashboard" element={<AdminDashboard />} />

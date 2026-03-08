@@ -26,9 +26,9 @@ const NewUserForm = () => {
   };
 
   const handleSubmit = (e) => {
-    e.preventDefault()
-    setShowPasswordDialog((prev) => !prev)
-  }
+    e.preventDefault();
+    setShowPasswordDialog((prev) => !prev);
+  };
 
   const handleCreate = async (e) => {
     e.preventDefault();

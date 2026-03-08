@@ -4,24 +4,24 @@ export const usersColumns = [
   {
     name: "Name",
     selector: (row) => row.name,
-    sortable: true
+    sortable: true,
   },
   {
     name: "Email",
     selector: (row) => row.email,
-    sortable: true
+    sortable: true,
   },
   {
     name: "Permissions",
     selector: (row) => {
-      const roles = row.roles.map((roleObj) => roleObj.name)
+      const roles = row.roles.map((roleObj) => roleObj.name);
       if (roles.includes("ROLE_SUPERADMIN")) {
-        return "Superadmin"
+        return "Superadmin";
       } else {
-        return "Admin"
+        return "Admin";
       }
     },
-    sortable: true
+    sortable: true,
   },
   {
     name: "Actions",

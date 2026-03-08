@@ -67,9 +67,9 @@ const NewPerformanceForm = () => {
 
   useEffect(() => {
     if (performanceTime) {
-      console.log(performanceTime)
+      console.log(performanceTime);
     }
-  }, [performanceTime])
+  }, [performanceTime]);
 
   return (
     <ContentCard>

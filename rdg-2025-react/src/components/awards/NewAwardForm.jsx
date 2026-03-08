@@ -1,15 +1,17 @@
 import { useEffect, useState } from "react";
-import SuccessMessage from "../modals/SuccessMessage.jsx";
-import ErrorMessage from "../modals/ErrorMessage.jsx";
 import Select from "react-select";
 import { Label, TextInput } from "flowbite-react";
 import FetchValueOptionsHelper from "../../utils/FetchValueOptionsHelper.js";
 import { Link, useNavigate } from "react-router-dom";
 import AwardService from "../../services/AwardService.js";
 import ContentCard from "../common/ContentCard.jsx";
+import { usePeople } from "../../hooks/usePeople.js";
 
 const NewAwardForm = () => {
   const navigate = useNavigate();
+
+  const { people } = usePeople()
+  const peopleOptions = people.isLoading ? [] : FetchValueOptionsHelper.formatPersonOptions(people.data)
 
   const [productionOptions, setProductionOptions] = useState([]);
   const [personOptions, setPersonOptions] = useState([]);
@@ -62,6 +64,11 @@ const NewAwardForm = () => {
 
   return (
     <ContentCard>
+      {people.isLoading ? (
+        <div>Loading</div>
+      ) : (
+        <div>{people.data[0]?.firstName}</div>
+      )}
       <form className="flex flex-col gap-2 max-w-md" onSubmit={handleSubmit}>
         <div>
           <div className="mb-2 block italic">
@@ -79,7 +86,7 @@ const NewAwardForm = () => {
             <Label value="Person" />
           </div>
           <Select
-            options={personOptions}
+            options={peopleOptions}
             value={person}
             onChange={setPerson}
             isClearable

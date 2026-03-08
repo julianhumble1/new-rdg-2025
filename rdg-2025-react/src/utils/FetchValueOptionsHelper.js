@@ -53,4 +53,10 @@ export default class FetchValueOptionsHelper {
       throw new Error(e.message);
     }
   };
+
+  static formatPersonOptions = (people) =>
+    people.map((person) => ({
+      value: person.id,
+      label: `${person.firstName} ${person.lastName}`,
+    }));
 }
