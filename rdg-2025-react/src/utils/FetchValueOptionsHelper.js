@@ -59,4 +59,20 @@ export default class FetchValueOptionsHelper {
       value: person.id,
       label: `${person.firstName} ${person.lastName}`,
     }));
+
+  static formatProductionOptions = (productions) =>
+    productions.map((production) => ({
+      value: production.id,
+      label: production.name,
+      venue: production.venue ? production.venue : "",
+    }));
+
+  static formatFestivalOptions = (festivals) =>
+    festivals.map((festival) => ({
+      value: festival.id,
+      label: `${festival.name} (${festival.year})`,
+    }));
+
+  static formatVenueOptions = (venues) =>
+    venues.map((venue) => ({ value: venue.id, label: venue.name }));
 }

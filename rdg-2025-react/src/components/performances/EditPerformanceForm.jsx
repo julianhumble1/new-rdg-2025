@@ -9,10 +9,29 @@ import Select from "react-select";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { CurrencyPoundIcon } from "@heroicons/react/16/solid";
+import { useProductions } from "../../hooks/useProductions.js";
+import { useVenues } from "../../hooks/useVenues.js";
+import { useFestivals } from "../../hooks/useFestivals.js";
 
 const EditPerformanceForm = () => {
   const performanceId = useParams().id;
   const navigate = useNavigate();
+
+  const { productions } = useProductions();
+  const { venues } = useVenues();
+  const { festivals } = useFestivals();
+
+  const productionOptions = productions.data
+    ? FetchValueOptionsHelper.formatProductionOptions(productions.data)
+    : [];
+
+  const venueOptions = venues.data
+    ? FetchValueOptionsHelper.formatVenueOptions(venues.data)
+    : [];
+
+  const festivalOptions = festivals.data
+    ? FetchValueOptionsHelper.formatFestivalOptions(festivals.data)
+    : [];
 
   const [production, setProduction] = useState(null);
   const [venue, setVenue] = useState(null);
@@ -23,29 +42,8 @@ const EditPerformanceForm = () => {
   const [concessionPrice, setConcessionPrice] = useState("");
   const [boxOffice, setBoxOffice] = useState("");
 
-  const [productionOptions, setProductionOptions] = useState([]);
-  const [venueOptions, setVenueOptions] = useState([]);
-  const [festivalOptions, setFestivalOptions] = useState([]);
-
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-
-  useEffect(() => {
-    const setOptions = async () => {
-      try {
-        setProductionOptions(
-          await FetchValueOptionsHelper.fetchProductionOptions(),
-        );
-        setVenueOptions(await FetchValueOptionsHelper.fetchVenueOptions());
-        setFestivalOptions(
-          await FetchValueOptionsHelper.fetchFestivalOptions(),
-        );
-      } catch (e) {
-        setErrorMessage(e.message);
-      }
-    };
-    setOptions();
-  }, []);
 
   useEffect(() => {
     const getPerformanceId = async () => {
@@ -119,6 +117,7 @@ const EditPerformanceForm = () => {
             <Select
               options={productionOptions}
               value={production}
+              isLoading={productions.isLoading}
               required
               onChange={(selectedOption) => {
                 setProduction(selectedOption);
@@ -149,6 +148,7 @@ const EditPerformanceForm = () => {
             </div>
             <Select
               options={venueOptions}
+              isLoading={venues.isLoading}
               required
               onChange={setVenue}
               value={venue}
@@ -168,6 +168,7 @@ const EditPerformanceForm = () => {
             </div>
             <Select
               options={festivalOptions}
+              isLoading={festivals.isLoading}
               onChange={setFestival}
               isClearable
               value={festival}

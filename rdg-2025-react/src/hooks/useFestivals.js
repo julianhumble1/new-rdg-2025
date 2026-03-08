@@ -15,7 +15,13 @@ export const useFestivals = () => {
 
   const createFestival = useMutation({
     mutationFn: ({ name, venueId, year, month, description }) =>
-      FestivalService.createNewFestival(name, venueId, year, month, description),
+      FestivalService.createNewFestival(
+        name,
+        venueId,
+        year,
+        month,
+        description,
+      ),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["festivals"] });
     },
@@ -23,14 +29,22 @@ export const useFestivals = () => {
 
   const updateFestival = useMutation({
     mutationFn: ({ festivalId, name, venueId, year, month, description }) =>
-      FestivalService.updateFestival(festivalId, name, venueId, year, month, description),
+      FestivalService.updateFestival(
+        festivalId,
+        name,
+        venueId,
+        year,
+        month,
+        description,
+      ),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["festivals"] });
     },
   });
 
   const deleteFestival = useMutation({
-    mutationFn: ({ festivalId }) => FestivalService.deleteFestivalById(festivalId),
+    mutationFn: ({ festivalId }) =>
+      FestivalService.deleteFestivalById(festivalId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["festivals"] });
     },

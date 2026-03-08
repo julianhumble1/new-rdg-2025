@@ -1,15 +1,26 @@
 import { useEffect, useMemo, useState } from "react";
-import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import CreditService from "../../services/CreditService.js";
-import SuccessMessage from "../modals/SuccessMessage.jsx";
-import ErrorMessage from "../modals/ErrorMessage.jsx";
 import { Label, Textarea, TextInput } from "flowbite-react";
 import Select from "react-select";
 import FetchValueOptionsHelper from "../../utils/FetchValueOptionsHelper.js";
+import { usePeople } from "../../hooks/usePeople.js";
+import { useProductions } from "../../hooks/useProductions.js";
 
 const EditCreditForm = () => {
   const creditId = useParams().id;
   const navigate = useNavigate();
+
+  const { people } = usePeople();
+  const { productions } = useProductions();
+
+  const peopleOptions = people.data
+    ? FetchValueOptionsHelper.formatPersonOptions(people.data)
+    : [];
+
+  const productionOptions = productions.data
+    ? FetchValueOptionsHelper.formatProductionOptions(productions.data)
+    : [];
 
   const typeOptions = useMemo(
     () => [
@@ -19,25 +30,12 @@ const EditCreditForm = () => {
     ],
     [],
   );
-  const [productionOptions, setProductionOptions] = useState([]);
-  const [personOptions, setPersonOptions] = useState([]);
 
   const [name, setName] = useState("");
   const [type, setType] = useState(null);
   const [production, setProduction] = useState(null);
   const [person, setPerson] = useState(null);
   const [summary, setSummary] = useState("");
-
-  const setOptions = async () => {
-    try {
-      setProductionOptions(
-        await FetchValueOptionsHelper.fetchProductionOptions(),
-      );
-      setPersonOptions(await FetchValueOptionsHelper.fetchPersonOptions());
-    } catch {
-      return;
-    }
-  };
 
   useEffect(() => {
     const fetchCreditData = async (creditId) => {
@@ -65,7 +63,6 @@ const EditCreditForm = () => {
       }
     };
 
-    setOptions();
     fetchCreditData(creditId);
   }, [creditId, typeOptions]);
 
@@ -129,6 +126,7 @@ const EditCreditForm = () => {
           <Select
             options={productionOptions}
             value={production}
+            isLoading={productions.isLoading}
             required
             onChange={(selectedOption) => {
               setProduction(selectedOption);
@@ -148,8 +146,9 @@ const EditCreditForm = () => {
             <Label value="Person" />
           </div>
           <Select
-            options={personOptions}
+            options={peopleOptions}
             value={person}
+            isLoading={people.isLoading}
             isClearable
             onChange={(selectedOption) => {
               setPerson(selectedOption);

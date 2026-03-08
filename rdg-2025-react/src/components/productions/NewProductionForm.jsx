@@ -1,5 +1,5 @@
 import { format } from "date-fns";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import ProductionService from "../../services/ProductionService.js";
 import FetchValueOptionsHelper from "../../utils/FetchValueOptionsHelper.js";
 import { Label, Textarea, TextInput, Checkbox } from "flowbite-react";
@@ -10,9 +10,15 @@ import { Link, useNavigate } from "react-router-dom";
 import SuccessMessage from "../modals/SuccessMessage.jsx";
 import ErrorMessage from "../modals/ErrorMessage.jsx";
 import ContentCard from "../common/ContentCard.jsx";
+import { useVenues } from "../../hooks/useVenues.js";
 
 const NewProductionForm = () => {
   const navigate = useNavigate();
+
+  const { venues } = useVenues();
+  const venueOptions = venues.data
+    ? FetchValueOptionsHelper.formatVenueOptions(venues.data)
+    : [];
 
   const [name, setName] = useState("");
   const [venue, setVenue] = useState({ label: "None", value: 0 });
@@ -25,8 +31,6 @@ const NewProductionForm = () => {
 
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-
-  const [venueOptions, setVenueOptions] = useState([]);
 
   const [descriptionLength, setDescriptionLength] = useState(0);
 
@@ -52,17 +56,6 @@ const NewProductionForm = () => {
     }
   };
 
-  useEffect(() => {
-    const getVenueOptions = async () => {
-      try {
-        setVenueOptions(await FetchValueOptionsHelper.fetchVenueOptions());
-      } catch (e) {
-        setErrorMessage(e.message);
-      }
-    };
-    getVenueOptions();
-  }, []);
-
   return (
     <ContentCard>
       <SuccessMessage message={successMessage} />
@@ -85,6 +78,7 @@ const NewProductionForm = () => {
           </div>
           <Select
             options={venueOptions}
+            isLoading={venues.isLoading}
             onChange={setVenue}
             className="w-full text-sm"
             isClearable

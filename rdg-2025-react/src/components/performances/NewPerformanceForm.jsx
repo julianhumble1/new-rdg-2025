@@ -7,9 +7,28 @@ import { Label, Textarea, TextInput } from "flowbite-react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import ContentCard from "../common/ContentCard.jsx";
+import { useProductions } from "../../hooks/useProductions.js";
+import { useVenues } from "../../hooks/useVenues.js";
+import { useFestivals } from "../../hooks/useFestivals.js";
 
 const NewPerformanceForm = () => {
   const navigate = useNavigate();
+
+  const { productions } = useProductions();
+  const { venues } = useVenues();
+  const { festivals } = useFestivals();
+
+  const productionOptions = productions.data
+    ? FetchValueOptionsHelper.formatProductionOptions(productions.data)
+    : [];
+
+  const venueOptions = venues.data
+    ? FetchValueOptionsHelper.formatVenueOptions(venues.data)
+    : [];
+
+  const festivalOptions = festivals.data
+    ? FetchValueOptionsHelper.formatFestivalOptions(festivals.data)
+    : [];
 
   const [production, setProduction] = useState(null);
   const [venue, setVenue] = useState(null);
@@ -20,30 +39,9 @@ const NewPerformanceForm = () => {
   const [concessionPrice, setConcessionPrice] = useState("");
   const [boxOffice, setBoxOffice] = useState("");
 
-  const [productionOptions, setProductionOptions] = useState([]);
-  const [venueOptions, setVenueOptions] = useState([]);
-  const [festivalOptions, setFestivalOptions] = useState([]);
-
   const [descriptionLength, setDescriptionLength] = useState(0);
 
   const [failMessage, setFailMessage] = useState("");
-
-  useEffect(() => {
-    const setOptions = async () => {
-      try {
-        setProductionOptions(
-          await FetchValueOptionsHelper.fetchProductionOptions(),
-        );
-        setVenueOptions(await FetchValueOptionsHelper.fetchVenueOptions());
-        setFestivalOptions(
-          await FetchValueOptionsHelper.fetchFestivalOptions(),
-        );
-      } catch (e) {
-        setFailMessage(e.message);
-      }
-    };
-    setOptions();
-  }, []);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -65,12 +63,6 @@ const NewPerformanceForm = () => {
     }
   };
 
-  useEffect(() => {
-    if (performanceTime) {
-      console.log(performanceTime);
-    }
-  }, [performanceTime]);
-
   return (
     <ContentCard>
       <form className="flex flex-col gap-2 max-w-md" onSubmit={handleSubmit}>
@@ -81,6 +73,7 @@ const NewPerformanceForm = () => {
           <Select
             options={productionOptions}
             value={production}
+            isLoading={productions.isLoading}
             required
             onChange={(selectedOption) => {
               setProduction(selectedOption);
@@ -111,6 +104,7 @@ const NewPerformanceForm = () => {
           </div>
           <Select
             options={venueOptions}
+            isLoading={venues.isLoading}
             onChange={setVenue}
             value={venue}
             className="w-full text-sm"
@@ -129,6 +123,7 @@ const NewPerformanceForm = () => {
           </div>
           <Select
             options={festivalOptions}
+            isLoading={festivals.isLoading}
             onChange={setFestival}
             isClearable
             value={festival}

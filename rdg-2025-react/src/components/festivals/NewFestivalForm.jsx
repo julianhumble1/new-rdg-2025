@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import FestivalService from "../../services/FestivalService.js";
 import FetchValueOptionsHelper from "../../utils/FetchValueOptionsHelper.js";
 import MonthDateUtils from "../../utils/MonthDateUtils.js";
@@ -8,20 +8,25 @@ import { Label, Textarea, TextInput } from "flowbite-react";
 import Select from "react-select";
 import { Link, useNavigate } from "react-router-dom";
 import ContentCard from "../common/ContentCard.jsx";
+import { useVenues } from "../../hooks/useVenues.js";
 
 const NewFestivalForm = () => {
   const navigate = useNavigate();
 
   const currentYear = new Date().getFullYear();
 
+  const { venues } = useVenues();
+  const venueOptions = venues.data
+    ? FetchValueOptionsHelper.formatVenueOptions(venues.data)
+    : [];
+
+  const yearOptions = MonthDateUtils.getYearsArray;
+
   const [name, setName] = useState("");
   const [venue, setVenue] = useState({ label: "None", value: 0 });
   const [year, setYear] = useState({ value: currentYear, label: currentYear });
   const [month, setMonth] = useState({ value: 1, label: "January" });
   const [description, setDescription] = useState("");
-
-  const [venueOptions, setVenueOptions] = useState([]);
-  const [yearOptions, setYearOptions] = useState([]);
 
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
@@ -45,18 +50,6 @@ const NewFestivalForm = () => {
     }
   };
 
-  useEffect(() => {
-    const getVenueOptions = async () => {
-      try {
-        setVenueOptions(await FetchValueOptionsHelper.fetchVenueOptions());
-      } catch (e) {
-        setErrorMessage(e.message);
-      }
-    };
-    getVenueOptions();
-    setYearOptions(MonthDateUtils.getYearsArray);
-  }, []);
-
   return (
     <ContentCard>
       <SuccessMessage message={successMessage} />
@@ -79,6 +72,7 @@ const NewFestivalForm = () => {
           </div>
           <Select
             options={venueOptions}
+            isLoading={venues.isLoading}
             onChange={setVenue}
             className="w-full text-sm"
             styles={{

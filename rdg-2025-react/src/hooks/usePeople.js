@@ -84,5 +84,11 @@ export const usePeople = () => {
     },
   });
 
-  return { people, createPerson, updatePerson, updatePersonWithImage, deletePerson };
+  return {
+    people,
+    createPerson,
+    updatePerson,
+    updatePersonWithImage,
+    deletePerson,
+  };
 };

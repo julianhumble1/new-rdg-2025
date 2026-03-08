@@ -23,7 +23,15 @@ export const useVenues = () => {
 
   const updateVenue = useMutation({
     mutationFn: ({ venueId, name, address, town, postcode, notes, url }) =>
-      VenueService.updateVenue(venueId, name, address, town, postcode, notes, url),
+      VenueService.updateVenue(
+        venueId,
+        name,
+        address,
+        town,
+        postcode,
+        notes,
+        url,
+      ),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["venues"] });
     },

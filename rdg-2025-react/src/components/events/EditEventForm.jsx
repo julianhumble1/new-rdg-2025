@@ -1,12 +1,16 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import FetchValueOptionsHelper from "../../utils/FetchValueOptionsHelper.js";
 import { Label, Textarea, TextInput } from "flowbite-react";
 import Select from "react-select";
 import DatePicker from "react-datepicker";
 import EventService from "../../services/EventService.js";
+import { useVenues } from "../../hooks/useVenues.js";
 
 const EditEventForm = ({ eventData, handleEdit, setEditMode }) => {
-  const [venueOptions, setVenueOptions] = useState([]);
+  const { venues } = useVenues();
+  const venueOptions = venues.data
+    ? FetchValueOptionsHelper.formatVenueOptions(venues.data)
+    : [];
 
   const [name, setName] = useState(eventData?.name || "");
   const [description, setDescription] = useState(
@@ -24,17 +28,6 @@ const EditEventForm = ({ eventData, handleEdit, setEditMode }) => {
   const [descriptionLength, setDescriptionLength] = useState(
     eventData?.description ? eventData.description.length : 0,
   );
-
-  useEffect(() => {
-    const getVenues = async () => {
-      try {
-        setVenueOptions(await FetchValueOptionsHelper.fetchVenueOptions());
-      } catch (e) {
-        return;
-      }
-    };
-    getVenues();
-  }, []);
 
   return (
     <form
@@ -70,6 +63,7 @@ const EditEventForm = ({ eventData, handleEdit, setEditMode }) => {
         </div>
         <Select
           options={venueOptions}
+          isLoading={venues.isLoading}
           onChange={setVenue}
           className="w-full text-sm"
           styles={{

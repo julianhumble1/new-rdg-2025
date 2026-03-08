@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import EventService from "../../services/EventService.js";
 import ContentCard from "../common/ContentCard.jsx";
@@ -7,10 +7,15 @@ import DatePicker from "react-datepicker";
 import FetchValueOptionsHelper from "../../utils/FetchValueOptionsHelper.js";
 import Select from "react-select";
 import { toast } from "react-toastify";
+import { useVenues } from "../../hooks/useVenues.js";
 
 const NewEventForm = () => {
   const navigate = useNavigate();
-  const [venueOptions, setVenueOptions] = useState([]);
+
+  const { venues } = useVenues();
+  const venueOptions = venues.data
+    ? FetchValueOptionsHelper.formatVenueOptions(venues.data)
+    : [];
 
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -32,13 +37,6 @@ const NewEventForm = () => {
       toast.error(e.message);
     }
   };
-
-  useEffect(() => {
-    const populateVenues = async () => {
-      setVenueOptions(await FetchValueOptionsHelper.fetchVenueOptions());
-    };
-    populateVenues();
-  }, []);
 
   return (
     <ContentCard>
@@ -75,6 +73,7 @@ const NewEventForm = () => {
           </div>
           <Select
             options={venueOptions}
+            isLoading={venues.isLoading}
             onChange={setVenue}
             value={venue}
             className="w-full text-sm"

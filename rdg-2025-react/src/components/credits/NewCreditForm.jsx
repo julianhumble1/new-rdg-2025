@@ -1,45 +1,38 @@
-import { useEffect, useState } from "react";
-
-import SuccessMessage from "../modals/SuccessMessage.jsx";
-import ErrorMessage from "../modals/ErrorMessage.jsx";
+import { useState } from "react";
 import Select from "react-select";
 import { Label, Textarea, TextInput } from "flowbite-react";
 import FetchValueOptionsHelper from "../../utils/FetchValueOptionsHelper.js";
 import { Link, useNavigate } from "react-router-dom";
 import CreditService from "../../services/CreditService.js";
 import ContentCard from "../common/ContentCard.jsx";
-import { toast } from "react-toastify";
+import { usePeople } from "../../hooks/usePeople.js";
+import { useProductions } from "../../hooks/useProductions.js";
 
 const NewCreditForm = () => {
   const navigate = useNavigate();
+
+  const { people } = usePeople();
+  const { productions } = useProductions();
+
+  const peopleOptions = people.data
+    ? FetchValueOptionsHelper.formatPersonOptions(people.data)
+    : [];
+
+  const productionOptions = productions.data
+    ? FetchValueOptionsHelper.formatProductionOptions(productions.data)
+    : [];
 
   const typeOptions = [
     { value: "ACTOR", label: "Acting" },
     { value: "MUSICIAN", label: "Musician" },
     { value: "PRODUCER", label: "Producing" },
   ];
-  const [productionOptions, setProductionOptions] = useState([]);
-  const [personOptions, setPersonOptions] = useState([]);
 
   const [name, setName] = useState("");
   const [type, setType] = useState(typeOptions[0]);
   const [production, setProduction] = useState(null);
   const [person, setPerson] = useState(null);
   const [summary, setSummary] = useState("");
-
-  useEffect(() => {
-    const setOptions = async () => {
-      try {
-        setProductionOptions(
-          await FetchValueOptionsHelper.fetchProductionOptions(),
-        );
-        setPersonOptions(await FetchValueOptionsHelper.fetchPersonOptions());
-      } catch {
-        return;
-      }
-    };
-    setOptions();
-  }, []);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -100,6 +93,7 @@ const NewCreditForm = () => {
           <Select
             options={productionOptions}
             value={production}
+            isLoading={productions.isLoading}
             required
             onChange={(selectedOption) => {
               setProduction(selectedOption);
@@ -119,8 +113,9 @@ const NewCreditForm = () => {
             <Label value="Person" />
           </div>
           <Select
-            options={personOptions}
+            options={peopleOptions}
             value={person}
+            isLoading={people.isLoading}
             isClearable
             onChange={(selectedOption) => {
               setPerson(selectedOption);

@@ -14,7 +14,14 @@ export const useCredits = () => {
 
   const updateCredit = useMutation({
     mutationFn: ({ creditId, name, type, productionId, personId, summary }) =>
-      CreditService.updateCredit(creditId, name, type, productionId, personId, summary),
+      CreditService.updateCredit(
+        creditId,
+        name,
+        type,
+        productionId,
+        personId,
+        summary,
+      ),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["credits"] });
     },

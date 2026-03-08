@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Select from "react-select";
 import { Label, TextInput } from "flowbite-react";
 import FetchValueOptionsHelper from "../../utils/FetchValueOptionsHelper.js";
@@ -6,36 +6,32 @@ import { Link, useNavigate } from "react-router-dom";
 import AwardService from "../../services/AwardService.js";
 import ContentCard from "../common/ContentCard.jsx";
 import { usePeople } from "../../hooks/usePeople.js";
+import { useProductions } from "../../hooks/useProductions.js";
+import { useFestivals } from "../../hooks/useFestivals.js";
 
 const NewAwardForm = () => {
   const navigate = useNavigate();
 
-  const { people } = usePeople()
-  const peopleOptions = people.isLoading ? [] : FetchValueOptionsHelper.formatPersonOptions(people.data)
+  const { people } = usePeople();
+  const { productions } = useProductions();
+  const { festivals } = useFestivals();
 
-  const [productionOptions, setProductionOptions] = useState([]);
-  const [personOptions, setPersonOptions] = useState([]);
-  const [festivalOptions, setFestivalOptions] = useState([]);
+  const peopleOptions = people.data
+    ? FetchValueOptionsHelper.formatPersonOptions(people.data)
+    : [];
+
+  const productionOptions = productions.data
+    ? FetchValueOptionsHelper.formatProductionOptions(productions.data)
+    : [];
+
+  const festivalOptions = festivals.data
+    ? FetchValueOptionsHelper.formatFestivalOptions(festivals.data)
+    : [];
 
   const [name, setName] = useState("");
   const [production, setProduction] = useState(null);
   const [person, setPerson] = useState(null);
   const [festival, setFestival] = useState(null);
-
-  useEffect(() => {
-    const setOptions = async () => {
-      setProductionOptions(
-        await FetchValueOptionsHelper.fetchProductionOptions(),
-      );
-      setPersonOptions(await FetchValueOptionsHelper.fetchPersonOptions());
-      setFestivalOptions(await FetchValueOptionsHelper.fetchFestivalOptions());
-    };
-    try {
-      setOptions();
-    } catch (e) {
-      return;
-    }
-  }, []);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -47,7 +43,6 @@ const NewAwardForm = () => {
         person ? person.value : null,
         festival ? festival.value : null,
       );
-      // Navigate back to the appropriate page based on the award's associations
       if (response.data.award.production) {
         navigate(`/archive/productions/${response.data.award.production.id}`);
       } else if (response.data.award.person) {
@@ -64,11 +59,6 @@ const NewAwardForm = () => {
 
   return (
     <ContentCard>
-      {people.isLoading ? (
-        <div>Loading</div>
-      ) : (
-        <div>{people.data[0]?.firstName}</div>
-      )}
       <form className="flex flex-col gap-2 max-w-md" onSubmit={handleSubmit}>
         <div>
           <div className="mb-2 block italic">
@@ -88,6 +78,7 @@ const NewAwardForm = () => {
           <Select
             options={peopleOptions}
             value={person}
+            isLoading={people.isLoading}
             onChange={setPerson}
             isClearable
             className="w-full text-sm"
@@ -107,6 +98,7 @@ const NewAwardForm = () => {
           <Select
             options={productionOptions}
             value={production}
+            isLoading={productions.isLoading}
             onChange={setProduction}
             required
             className="w-full text-sm"
@@ -126,6 +118,7 @@ const NewAwardForm = () => {
           <Select
             options={festivalOptions}
             value={festival}
+            isLoading={festivals.isLoading}
             required
             onChange={setFestival}
             className="w-full text-sm"

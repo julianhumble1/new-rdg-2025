@@ -1,12 +1,17 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import FetchValueOptionsHelper from "../../utils/FetchValueOptionsHelper.js";
 import MonthDateUtils from "../../utils/MonthDateUtils.js";
 import { Label, Textarea, TextInput } from "flowbite-react";
 import Select from "react-select";
+import { useVenues } from "../../hooks/useVenues.js";
 
 const EditFestivalForm = ({ festivalData, handleEdit, setEditMode }) => {
-  const [venueOptions, setVenueOptions] = useState([]);
-  const [yearOptions, setYearOptions] = useState([]);
+  const { venues } = useVenues();
+  const venueOptions = venues.data
+    ? FetchValueOptionsHelper.formatVenueOptions(venues.data)
+    : [];
+
+  const yearOptions = MonthDateUtils.getYearsArray;
 
   const [name, setName] = useState(festivalData.name);
   const [venue, setVenue] = useState(
@@ -33,18 +38,6 @@ const EditFestivalForm = ({ festivalData, handleEdit, setEditMode }) => {
   const [descriptionLength, setDescriptionLength] = useState(
     festivalData.description ? festivalData.description.length : 0,
   );
-
-  useEffect(() => {
-    const getVenues = async () => {
-      try {
-        setVenueOptions(await FetchValueOptionsHelper.fetchVenueOptions());
-      } catch (e) {
-        return;
-      }
-    };
-    getVenues();
-    setYearOptions(MonthDateUtils.getYearsArray);
-  }, []);
 
   return (
     <form
@@ -79,6 +72,7 @@ const EditFestivalForm = ({ festivalData, handleEdit, setEditMode }) => {
         </div>
         <Select
           options={venueOptions}
+          isLoading={venues.isLoading}
           onChange={setVenue}
           className="w-full text-sm"
           styles={{

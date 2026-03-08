@@ -2,12 +2,10 @@ import TableLink from "../../TableLink.jsx";
 import Cookies from "js-cookie";
 import { CreditsActionCell } from "./CreditsActionCell.jsx";
 
-// TODO: make this a method that if they are admin adds the action buttons
-
 export const getCreditsColumns = () => {
   const role = Cookies.get("role");
 
-  if (role === "ROLE_ADMIN") {
+  if (role === "ROLE_ADMIN" || role === "ROLE_SUPERADMIN") {
     return creditsColumns.concat(creditsActionButtons);
   } else {
     return creditsColumns;

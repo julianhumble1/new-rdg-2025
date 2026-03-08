@@ -14,7 +14,13 @@ export const useAwards = () => {
 
   const updateAward = useMutation({
     mutationFn: ({ awardId, name, productionId, personId, festivalId }) =>
-      AwardService.updateAward(awardId, name, productionId, personId, festivalId),
+      AwardService.updateAward(
+        awardId,
+        name,
+        productionId,
+        personId,
+        festivalId,
+      ),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["awards"] });
     },
