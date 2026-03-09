@@ -58,7 +58,7 @@ const NewProductionForm = () => {
     }
   };
 
-    const dataLoading = venues.isLoading;
+  const dataLoading = venues.isLoading;
 
   if (dataLoading) return <CustomSpinner />;
 

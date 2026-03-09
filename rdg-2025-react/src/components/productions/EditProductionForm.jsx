@@ -47,7 +47,7 @@ const EditProductionForm = ({ productionData, handleEdit, setEditMode }) => {
     productionData.description ? productionData.description.length : 0,
   );
 
-    const dataLoading = venues.isLoading || !productionData
+  const dataLoading = venues.isLoading || !productionData;
 
   if (dataLoading) return <CustomSpinner />;
 
