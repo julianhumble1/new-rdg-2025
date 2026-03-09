@@ -12,6 +12,7 @@ import { CurrencyPoundIcon } from "@heroicons/react/16/solid";
 import { useProductions } from "../../hooks/useProductions.js";
 import { useVenues } from "../../hooks/useVenues.js";
 import { useFestivals } from "../../hooks/useFestivals.js";
+import CustomSpinner from "../common/CustomSpinner.jsx";
 
 const EditPerformanceForm = () => {
   const performanceId = useParams().id;
@@ -103,6 +104,11 @@ const EditPerformanceForm = () => {
       setErrorMessage(e.message);
     }
   };
+
+  const dataLoading =
+    productions.isLoading || festivals.isLoading || venues.isLoading;
+
+  if (dataLoading) return <CustomSpinner />;
 
   return (
     <div>

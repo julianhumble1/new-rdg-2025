@@ -14,11 +14,14 @@ import CreditService from "../../services/CreditService.js";
 import AwardService from "../../services/AwardService.js";
 import { Cloudinary } from "@cloudinary/url-gen/index";
 import ContentCard from "../common/ContentCard.jsx";
+import { useProductions } from "../../hooks/useProductions.js";
 
 const ProductionPage = () => {
   const productionId = useParams().id;
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+
+  const { deleteProduction, updateProduction } = useProductions();
 
   const [image, setImage] = useState(null);
 
@@ -82,7 +85,7 @@ const ProductionPage = () => {
   const handleConfirmDelete = async (item) => {
     try {
       if (item.sundowners != null) {
-        await ProductionService.deleteProduction(item.id);
+        await deleteProduction.mutateAsync({ productionId: item.id });
         setShowConfirmDelete(false);
         navigate("/productions");
       } else if (item.time != null) {
@@ -134,19 +137,19 @@ const ProductionPage = () => {
   ) => {
     event.preventDefault();
     try {
-      await ProductionService.updateProduction(
+      await updateProduction.mutateAsync({
         productionId,
         name,
         venueId,
         author,
         description,
-        auditionDate
+        auditionDate: auditionDate
           ? format(auditionDate, "yyyy-MM-dd'T'HH:mm:ss.SSSSSSS")
           : "",
         sundowners,
         notConfirmed,
         flyerFile,
-      );
+      });
       setSuccessMessage("Successfully Edited!");
       setErrorMessage("");
       fetchProductionData();

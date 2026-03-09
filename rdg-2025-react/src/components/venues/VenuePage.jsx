@@ -5,7 +5,6 @@ import {
   useNavigate,
   Link,
 } from "react-router-dom";
-import ProductionService from "../../services/ProductionService.js";
 import VenueService from "../../services/VenueService.js";
 import FestivalsTable from "../festivals/FestivalsTable.jsx";
 import VenueHighlight from "./VenueHighlight.jsx";
@@ -16,14 +15,20 @@ import ErrorMessage from "../modals/ErrorMessage.jsx";
 import ProductionsTable from "../productions/ProductionsTable.jsx";
 import { Tabs } from "flowbite-react";
 import { FilmIcon, ScaleIcon } from "@heroicons/react/16/solid";
-import FestivalService from "../../services/FestivalService.js";
 import AltFestivalsTable from "../festivals/FestivalsTable.jsx";
 import ContentCard from "../common/ContentCard.jsx";
+import { useVenues } from "../../hooks/useVenues.js";
+import { useProductions } from "../../hooks/useProductions.js";
+import { useFestivals } from "../../hooks/useFestivals.js";
 
 const VenuePage = () => {
   const venueId = useParams().id;
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+
+  const { deleteVenue, updateVenue } = useVenues();
+  const { deleteProduction } = useProductions();
+  const { deleteFestival } = useFestivals();
 
   const [venueData, setVenueData] = useState(null);
   const [productions, setProductions] = useState([]);
@@ -62,15 +67,15 @@ const VenuePage = () => {
       // check whether item to delete is a production, festival or venue
       if (item.postcode == null && item.year == null) {
         // Production
-        await ProductionService.deleteProduction(item.id);
+        await deleteProduction.mutateAsync({ productionId: item.id });
         fetchVenueData();
       } else if (item.postcode == null) {
         // Festival
-        await FestivalService.deleteFestivalById(item.id);
+        await deleteFestival.mutateAsync({ festivalId: item.id });
         fetchVenueData();
       } else {
         // Venue
-        await VenueService.deleteVenue(item.id);
+        await deleteVenue.mutateAsync({ venueId: item.id });
         navigate("/venues");
       }
       setShowConfirmDelete(false);
@@ -92,15 +97,15 @@ const VenuePage = () => {
   ) => {
     event.preventDefault();
     try {
-      const response = await VenueService.updateVenue(
-        id,
+      await updateVenue.mutateAsync({
+        venueId: id,
         name,
         address,
         town,
         postcode,
         notes,
         url,
-      );
+      });
       setSuccessMessage("Successfully edited!");
       setErrorMessage("");
       fetchVenueData();

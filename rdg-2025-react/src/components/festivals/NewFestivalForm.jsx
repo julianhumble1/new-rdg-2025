@@ -1,5 +1,4 @@
 import { useState } from "react";
-import FestivalService from "../../services/FestivalService.js";
 import FetchValueOptionsHelper from "../../utils/FetchValueOptionsHelper.js";
 import MonthDateUtils from "../../utils/MonthDateUtils.js";
 import SuccessMessage from "../modals/SuccessMessage.jsx";
@@ -9,6 +8,8 @@ import Select from "react-select";
 import { Link, useNavigate } from "react-router-dom";
 import ContentCard from "../common/ContentCard.jsx";
 import { useVenues } from "../../hooks/useVenues.js";
+import { useFestivals } from "../../hooks/useFestivals.js";
+import CustomSpinner from "../common/CustomSpinner.jsx";
 
 const NewFestivalForm = () => {
   const navigate = useNavigate();
@@ -16,11 +17,12 @@ const NewFestivalForm = () => {
   const currentYear = new Date().getFullYear();
 
   const { venues } = useVenues();
+  const { createFestival } = useFestivals();
   const venueOptions = venues.data
     ? FetchValueOptionsHelper.formatVenueOptions(venues.data)
     : [];
 
-  const yearOptions = MonthDateUtils.getYearsArray;
+  const yearOptions = MonthDateUtils.getYearsArray();
 
   const [name, setName] = useState("");
   const [venue, setVenue] = useState({ label: "None", value: 0 });
@@ -36,19 +38,23 @@ const NewFestivalForm = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await FestivalService.createNewFestival(
+      const response = await createFestival.mutateAsync({
         name,
-        venue.value,
-        year.value,
-        month.value,
+        venueId: venue?.value,
+        year: year.value,
+        month: month.value,
         description,
-      );
+      });
       navigate(`/archive/festivals/${response.data.festival.id}`);
     } catch (e) {
       setSuccessMessage("");
       setErrorMessage(e.message);
     }
   };
+
+  const dataLoading = venues.isLoading;
+
+  if (dataLoading) return <CustomSpinner />;
 
   return (
     <ContentCard>

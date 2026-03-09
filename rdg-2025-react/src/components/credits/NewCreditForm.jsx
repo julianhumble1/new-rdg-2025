@@ -7,6 +7,7 @@ import CreditService from "../../services/CreditService.js";
 import ContentCard from "../common/ContentCard.jsx";
 import { usePeople } from "../../hooks/usePeople.js";
 import { useProductions } from "../../hooks/useProductions.js";
+import CustomSpinner from "../common/CustomSpinner.jsx";
 
 const NewCreditForm = () => {
   const navigate = useNavigate();
@@ -49,6 +50,10 @@ const NewCreditForm = () => {
       return;
     }
   };
+
+  const dataLoading = people.isLoading || productions.isLoading;
+
+  if (dataLoading) return <CustomSpinner />;
 
   return (
     <ContentCard>

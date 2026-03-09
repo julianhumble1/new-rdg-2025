@@ -8,6 +8,7 @@ import ContentCard from "../common/ContentCard.jsx";
 import { usePeople } from "../../hooks/usePeople.js";
 import { useProductions } from "../../hooks/useProductions.js";
 import { useFestivals } from "../../hooks/useFestivals.js";
+import CustomSpinner from "../common/CustomSpinner.jsx";
 
 const NewAwardForm = () => {
   const navigate = useNavigate();
@@ -56,6 +57,11 @@ const NewAwardForm = () => {
       return;
     }
   };
+
+  const dataLoading =
+    people.isLoading || productions.isLoading || festivals.isLoading;
+
+  if (dataLoading) return <CustomSpinner />;
 
   return (
     <ContentCard>

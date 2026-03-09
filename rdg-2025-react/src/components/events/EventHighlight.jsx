@@ -6,6 +6,7 @@ import EditEventForm from "./EditEventForm.jsx";
 import EventService from "../../services/EventService.js";
 import ConfirmDeleteModal from "../modals/ConfirmDeleteModal.jsx";
 import { useNavigate } from "react-router-dom";
+import { useEvents } from "../../hooks/useEvents.js";
 
 const EventHighlight = ({ eventData }) => {
   const [editMode, setEditMode] = useState(false);
@@ -18,9 +19,11 @@ const EventHighlight = ({ eventData }) => {
     setItemToDelete(item);
   };
 
+  const { deleteEvent } = useEvents();
+
   const handleConfirmDelete = async (item) => {
     try {
-      await EventService.deleteEvent(item.id);
+      await deleteEvent.mutateAsync({ eventId: item.id });
       setShowConfirmDelete(false);
       navigate("/events");
     } catch (e) {

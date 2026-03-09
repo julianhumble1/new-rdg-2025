@@ -6,6 +6,7 @@ import FetchValueOptionsHelper from "../../utils/FetchValueOptionsHelper.js";
 import ErrorMessage from "../modals/ErrorMessage.jsx";
 import ConfirmCancelButtons from "../common/ConfirmCancelButtons.jsx";
 import { useVenues } from "../../hooks/useVenues.js";
+import CustomSpinner from "../common/CustomSpinner.jsx";
 
 const EditProductionForm = ({ productionData, handleEdit, setEditMode }) => {
   const { venues } = useVenues();
@@ -45,6 +46,10 @@ const EditProductionForm = ({ productionData, handleEdit, setEditMode }) => {
   const [descriptionLength, setDescriptionLength] = useState(
     productionData.description ? productionData.description.length : 0,
   );
+
+    const dataLoading = venues.isLoading || !productionData
+
+  if (dataLoading) return <CustomSpinner />;
 
   return (
     <div>

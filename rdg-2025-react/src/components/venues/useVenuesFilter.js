@@ -1,23 +1,18 @@
-import { useCallback } from "react";
-import VenueService from "../../services/VenueService.js";
 import { useTableFilters } from "../common/Table/useTableFilters.js";
 import { venueFilters } from "../common/Table/filters/venues.filters.js";
+import { useVenues } from "../../hooks/useVenues.js";
 
 export const useVenuesFilter = () => {
-  const fetcher = useCallback(
-    async () =>
-      VenueService.getAllVenues().then((res) => res.data.venues ?? []),
-    [],
-  );
+  const { venues } = useVenues();
 
-  const { filteredItems, filtersForUI, loading } = useTableFilters({
-    fetcher,
+  const { filteredItems, filtersForUI } = useTableFilters({
+    items: venues.data,
     filterDefs: venueFilters,
   });
 
   return {
     filteredVenues: filteredItems,
     filtersForUI,
-    loading,
+    loading: venues.isLoading,
   };
 };

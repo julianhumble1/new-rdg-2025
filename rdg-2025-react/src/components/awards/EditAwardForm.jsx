@@ -7,6 +7,7 @@ import Select from "react-select";
 import { usePeople } from "../../hooks/usePeople.js";
 import { useProductions } from "../../hooks/useProductions.js";
 import { useFestivals } from "../../hooks/useFestivals.js";
+import CustomSpinner from "../common/CustomSpinner.jsx";
 
 const EditAwardForm = () => {
   const awardId = useParams().id;
@@ -93,6 +94,11 @@ const EditAwardForm = () => {
       return;
     }
   };
+
+  const dataLoading =
+    people.isLoading || productions.isLoading || festivals.isLoading;
+
+  if (dataLoading) return <CustomSpinner />;
 
   return (
     <div>

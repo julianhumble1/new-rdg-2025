@@ -1,29 +1,19 @@
-import { useCallback, useState } from "react";
-import PersonService from "../../services/PersonService.js";
 import { peopleFilters } from "../common/Table/filters/people.filters.js";
 import { useTableFilters } from "../common/Table/useTableFilters.js";
+import { usePeople } from "../../hooks/usePeople.js";
 
 export const usePeopleFilter = () => {
-  const [responseType, setResponseType] = useState("PUBLIC");
+  const { people, responseType } = usePeople();
 
-  const fetcher = useCallback(
-    async () =>
-      PersonService.getAllPeople().then((res) => {
-        setResponseType(res.data.responseType);
-        return res.data.people ?? [];
-      }),
-    [],
-  );
-
-  const { filteredItems, filtersForUI, loading } = useTableFilters({
-    fetcher,
+  const { filteredItems, filtersForUI } = useTableFilters({
+    items: people.data,
     filterDefs: peopleFilters,
   });
 
   return {
     filteredPeople: filteredItems,
     filtersForUI,
-    loading,
+    loading: people.isLoading,
     responseType,
   };
 };

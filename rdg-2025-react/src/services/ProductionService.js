@@ -38,6 +38,7 @@ export default class ProductionService {
         },
       );
       toast.success(`Successfully created ${response.data.production.name}.`);
+
       return response;
     } catch (e) {
       toast.error(e.message);

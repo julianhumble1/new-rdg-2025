@@ -6,6 +6,7 @@ import Select from "react-select";
 import FetchValueOptionsHelper from "../../utils/FetchValueOptionsHelper.js";
 import { usePeople } from "../../hooks/usePeople.js";
 import { useProductions } from "../../hooks/useProductions.js";
+import CustomSpinner from "../common/CustomSpinner.jsx";
 
 const EditCreditForm = () => {
   const creditId = useParams().id;
@@ -82,6 +83,10 @@ const EditCreditForm = () => {
       return;
     }
   };
+
+  const dataLoading = people.isLoading || productions.isLoading;
+
+  if (dataLoading) return <CustomSpinner />;
 
   return (
     <div className="bg-sky-900 bg-opacity-35 lg:w-1/2 md:w-2/3 rounded p-4 m-2 flex flex-col gap-2 shadow-md">

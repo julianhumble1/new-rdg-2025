@@ -3,10 +3,11 @@ import FetchValueOptionsHelper from "../../utils/FetchValueOptionsHelper.js";
 import { Label, Textarea, TextInput } from "flowbite-react";
 import Select from "react-select";
 import DatePicker from "react-datepicker";
-import EventService from "../../services/EventService.js";
 import { useVenues } from "../../hooks/useVenues.js";
+import { useEvents } from "../../hooks/useEvents.js";
+import CustomSpinner from "../common/CustomSpinner.jsx";
 
-const EditEventForm = ({ eventData, handleEdit, setEditMode }) => {
+const EditEventForm = ({ eventData, setEditMode }) => {
   const { venues } = useVenues();
   const venueOptions = venues.data
     ? FetchValueOptionsHelper.formatVenueOptions(venues.data)
@@ -29,19 +30,25 @@ const EditEventForm = ({ eventData, handleEdit, setEditMode }) => {
     eventData?.description ? eventData.description.length : 0,
   );
 
+  const { updateEvent } = useEvents();
+
+  const isLoading = venues.isLoading || !eventData;
+
+  if (isLoading) return <CustomSpinner />;
+
   return (
     <form
       className="flex flex-col gap-2"
       onSubmit={async (event) => {
         event.preventDefault();
 
-        await EventService.updateEvent(
-          eventData.id,
+        await updateEvent.mutateAsync({
+          eventId: eventData.id,
           name,
           description,
           dateTime,
-          venue.value,
-        );
+          venue: venue?.value,
+        });
         setEditMode(false);
       }}
     >

@@ -4,6 +4,7 @@ import MonthDateUtils from "../../utils/MonthDateUtils.js";
 import { Label, Textarea, TextInput } from "flowbite-react";
 import Select from "react-select";
 import { useVenues } from "../../hooks/useVenues.js";
+import CustomSpinner from "../common/CustomSpinner.jsx";
 
 const EditFestivalForm = ({ festivalData, handleEdit, setEditMode }) => {
   const { venues } = useVenues();
@@ -11,7 +12,7 @@ const EditFestivalForm = ({ festivalData, handleEdit, setEditMode }) => {
     ? FetchValueOptionsHelper.formatVenueOptions(venues.data)
     : [];
 
-  const yearOptions = MonthDateUtils.getYearsArray;
+  const yearOptions = MonthDateUtils.getYearsArray();
 
   const [name, setName] = useState(festivalData.name);
   const [venue, setVenue] = useState(
@@ -38,6 +39,10 @@ const EditFestivalForm = ({ festivalData, handleEdit, setEditMode }) => {
   const [descriptionLength, setDescriptionLength] = useState(
     festivalData.description ? festivalData.description.length : 0,
   );
+
+  const dataLoading = venues.isLoading || !festivalData;
+
+  if (dataLoading) return <CustomSpinner />;
 
   return (
     <form

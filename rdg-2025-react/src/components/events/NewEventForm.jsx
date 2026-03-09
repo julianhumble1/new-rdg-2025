@@ -8,6 +8,8 @@ import FetchValueOptionsHelper from "../../utils/FetchValueOptionsHelper.js";
 import Select from "react-select";
 import { toast } from "react-toastify";
 import { useVenues } from "../../hooks/useVenues.js";
+import { useEvents } from "../../hooks/useEvents.js";
+import CustomSpinner from "../common/CustomSpinner.jsx";
 
 const NewEventForm = () => {
   const navigate = useNavigate();
@@ -22,21 +24,27 @@ const NewEventForm = () => {
   const [dateTime, setDateTime] = useState(null);
   const [venue, setVenue] = useState({ value: null });
 
+  const { createEvent } = useEvents();
+
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     try {
-      const response = await EventService.addNewEvent(
+      const response = await createEvent.mutateAsync({
         name,
         description,
         dateTime,
-        venue.value,
-      );
+        venue: venue.value,
+      });
       navigate(`/archive/events/${response.data.event.id}`);
     } catch (e) {
       toast.error(e.message);
     }
   };
+
+  const dataLoading = venues.isLoading;
+
+  if (dataLoading) return <CustomSpinner />;
 
   return (
     <ContentCard>

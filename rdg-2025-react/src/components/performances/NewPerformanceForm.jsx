@@ -10,6 +10,7 @@ import ContentCard from "../common/ContentCard.jsx";
 import { useProductions } from "../../hooks/useProductions.js";
 import { useVenues } from "../../hooks/useVenues.js";
 import { useFestivals } from "../../hooks/useFestivals.js";
+import CustomSpinner from "../common/CustomSpinner.jsx";
 
 const NewPerformanceForm = () => {
   const navigate = useNavigate();
@@ -62,6 +63,11 @@ const NewPerformanceForm = () => {
       setFailMessage(e.message);
     }
   };
+
+  const dataLoading =
+    productions.isLoading || festivals.isLoading || venues.isLoading;
+
+  if (dataLoading) return <CustomSpinner />;
 
   return (
     <ContentCard>

@@ -1,13 +1,14 @@
 import { useState } from "react";
-import PersonService from "../../services/PersonService.js";
 import { Label, Textarea, TextInput } from "flowbite-react";
 import { Link, useNavigate } from "react-router-dom";
 import ErrorMessage from "../modals/ErrorMessage.jsx";
 import SuccessMessage from "../modals/SuccessMessage.jsx";
 import ContentCard from "../common/ContentCard.jsx";
+import { usePeople } from "../../hooks/usePeople.js";
 
 const NewPersonForm = () => {
   const navigate = useNavigate();
+  const { createPerson } = usePeople();
 
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -24,7 +25,7 @@ const NewPersonForm = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await PersonService.addNewPerson(
+      const response = await createPerson.mutateAsync({
         firstName,
         lastName,
         summary,
@@ -33,7 +34,7 @@ const NewPersonForm = () => {
         addressStreet,
         addressTown,
         addressPostcode,
-      );
+      });
       navigate(`/archive/people/${response.data.person.id}`);
     } catch (e) {
       setErrorMessage(e.message);

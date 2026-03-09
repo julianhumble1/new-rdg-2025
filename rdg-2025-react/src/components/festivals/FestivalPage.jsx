@@ -11,11 +11,14 @@ import PerformanceService from "../../services/PerformanceService.js";
 import AwardService from "../../services/AwardService.js";
 import AwardsTabs from "../awards/AwardsTabs.jsx";
 import ContentCard from "../common/ContentCard.jsx";
+import { useFestivals } from "../../hooks/useFestivals.js";
 
 const FestivalPage = () => {
   const festivalId = useParams().id;
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+
+  const { deleteFestival, updateFestival } = useFestivals();
 
   const [festivalData, setFestivalData] = useState(null);
 
@@ -53,7 +56,7 @@ const FestivalPage = () => {
   const handleConfirmDelete = async (item) => {
     try {
       if (item.year != null) {
-        await FestivalService.deleteFestivalById(item.id);
+        await deleteFestival.mutateAsync({ festivalId: item.id });
         navigate("/festivals");
       } else if (
         item.name &&
@@ -89,14 +92,14 @@ const FestivalPage = () => {
   ) => {
     event.preventDefault();
     try {
-      const response = await FestivalService.updateFestival(
+      await updateFestival.mutateAsync({
         festivalId,
         name,
         venueId,
         year,
         month,
         description,
-      );
+      });
       setEditMode(false);
       setSuccessMessage("Successfully edited");
       getFestivalData();

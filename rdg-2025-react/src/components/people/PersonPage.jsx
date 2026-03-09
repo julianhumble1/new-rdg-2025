@@ -13,6 +13,7 @@ import { Cloudinary } from "@cloudinary/url-gen/index";
 import DetailedPersonHighlight from "./DetailedPersonHighlight.jsx";
 import ContentCard from "../common/ContentCard.jsx";
 import { toast } from "react-toastify";
+import { usePeople } from "../../hooks/usePeople.js";
 
 const PersonPage = () => {
   const [image, setImage] = useState(null);
@@ -20,6 +21,8 @@ const PersonPage = () => {
   const personId = useParams().id;
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+
+  const { updatePerson, deletePerson } = usePeople();
 
   const [personData, setPersonData] = useState(null);
 
@@ -93,7 +96,7 @@ const PersonPage = () => {
   ) => {
     event.preventDefault();
     try {
-      await PersonService.updatePerson(
+      await updatePerson.mutateAsync({
         personId,
         firstName,
         lastName,
@@ -104,7 +107,7 @@ const PersonPage = () => {
         addressTown,
         addressPostcode,
         imageId,
-      );
+      });
       setSuccessMessage("Successfully edited!");
       setErrorMessage("");
       setEditMode(false);
@@ -117,7 +120,7 @@ const PersonPage = () => {
   const handleConfirmDelete = async () => {
     if (itemToDelete.firstName != null) {
       try {
-        const response = await PersonService.deletePersonById(personId);
+        await deletePerson.mutateAsync({ personId });
         navigate("/people");
       } catch (e) {
         setErrorMessage(e.message);

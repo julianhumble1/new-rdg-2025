@@ -53,6 +53,8 @@ import AllUsers from "./components/users/AllUsers.jsx";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import ResetPassword from "./components/ResetPassword.jsx";
 
+const queryClient = new QueryClient();
+
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
 
@@ -60,8 +62,6 @@ function App() {
     const token = Cookies.get("token");
     if (token) setLoggedIn(true);
   }, []);
-
-  const queryClient = new QueryClient();
 
   return (
     <>
