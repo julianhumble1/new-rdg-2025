@@ -3,7 +3,6 @@ import HighlightListItem from "../common/HighlightListItem.jsx";
 import HighlightTemplate from "../common/HighlightTemplate.jsx";
 import { useState } from "react";
 import EditEventForm from "./EditEventForm.jsx";
-import EventService from "../../services/EventService.js";
 import ConfirmDeleteModal from "../modals/ConfirmDeleteModal.jsx";
 import { useNavigate } from "react-router-dom";
 import { useEvents } from "../../hooks/useEvents.js";

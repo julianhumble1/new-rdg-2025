@@ -1,5 +1,3 @@
-import { useCallback } from "react";
-import FestivalService from "../../services/FestivalService.js";
 import { useTableFilters } from "../common/Table/useTableFilters.js";
 import { festivalsFilters } from "../common/Table/filters/festivals.filters.js";
 import { useFestivals } from "../../hooks/useFestivals.js";

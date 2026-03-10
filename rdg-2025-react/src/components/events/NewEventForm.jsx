@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import EventService from "../../services/EventService.js";
 import ContentCard from "../common/ContentCard.jsx";
 import { Label, Textarea, TextInput } from "flowbite-react";
 import DatePicker from "react-datepicker";
