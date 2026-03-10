@@ -126,5 +126,5 @@ export default class UserService {
       toast.error(error.message);
       throw new Error(error);
     }
-  }
+  };
 }

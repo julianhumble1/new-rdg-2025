@@ -29,7 +29,9 @@ const PasswordRevealDialog = ({
       await UserService.createUser(name, email, role.value, generatedPassword);
       setStatus("success");
     } catch (err) {
-      setErrorMessage(err?.message || "Something went wrong. Please try again.");
+      setErrorMessage(
+        err?.message || "Something went wrong. Please try again.",
+      );
       setStatus("error");
     }
   };

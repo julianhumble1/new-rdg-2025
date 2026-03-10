@@ -23,7 +23,7 @@ const AltLogin = ({ setLoggedIn }) => {
       Cookies.set("role", mainRole, { expires: 3 });
       setLoggedIn(true);
       if (responseData.passwordResetRequired === true) {
-        navigate("/archive/password-reset")
+        navigate("/archive/password-reset");
       } else {
         navigate("/archive/dashboard");
       }

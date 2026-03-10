@@ -5,7 +5,7 @@ import TableLink from "../../TableLink.jsx";
 export const getAwardsColumns = () => {
   const role = Cookies.get("role");
 
-  if (role === "ROLE_ADMIN") {
+  if (role === "ROLE_ADMIN" || role === "ROLE_SUPERADMIN") {
     return awardsColumns.concat(awardsActionButtons);
   } else {
     return awardsColumns;

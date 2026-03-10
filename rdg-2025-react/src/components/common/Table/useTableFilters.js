@@ -2,40 +2,20 @@ import { useEffect, useMemo, useState } from "react";
 
 /**
  * Generic table filtering hook.
- * - fetcher: async () => items[]
+ * - items: items []
  * - filterDefs: [{ key, placeholder, accessor: (item) => string }]
  */
 
 const debounceMs = 250;
 
-export const useTableFilters = ({ fetcher, filterDefs }) => {
+export const useTableFilters = ({ items = [], filterDefs }) => {
   const initialFilters = Object.fromEntries(
     filterDefs.map((fd) => [fd.key, ""]),
   );
 
-  const [items, setItems] = useState([]);
+  // const [items, setItems] = useState([]);
   const [filters, setFilters] = useState(initialFilters);
   const [debouncedFilters, setDebouncedFilters] = useState(initialFilters);
-
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    let mounted = true;
-    const load = async () => {
-      try {
-        const fetchedItems = await fetcher();
-        if (mounted) setItems(fetchedItems);
-      } catch (err) {
-        if (mounted) setItems([]);
-      } finally {
-        setLoading(false);
-      }
-    };
-    load();
-    return () => {
-      mounted = false;
-    };
-  }, [fetcher]);
 
   useEffect(() => {
     const t = setTimeout(() => setDebouncedFilters(filters), debounceMs);
@@ -66,11 +46,9 @@ export const useTableFilters = ({ fetcher, filterDefs }) => {
 
   return {
     items,
-    setItems,
     filteredItems,
     filters,
     setFilter,
     filtersForUI,
-    loading,
   };
 };

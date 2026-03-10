@@ -1,11 +1,12 @@
 import { useState } from "react";
-import VenueService from "../../services/VenueService.js";
 import { Link, useNavigate } from "react-router-dom";
 import { Label, TextInput, Textarea } from "flowbite-react";
 import ContentCard from "../common/ContentCard.jsx";
+import { useVenues } from "../../hooks/useVenues.js";
 
 const NewVenueForm = () => {
   const navigate = useNavigate();
+  const { createVenue } = useVenues();
 
   const [name, setName] = useState("");
   const [address, setAddress] = useState("");
@@ -17,14 +18,14 @@ const NewVenueForm = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await VenueService.createNewVenue(
+      const response = await createVenue.mutateAsync({
         name,
         address,
         town,
         postcode,
         notes,
         url,
-      );
+      });
       navigate(`/archive/venues/${response.data.venue.id}`);
     } catch (e) {
       return;
@@ -33,12 +34,7 @@ const NewVenueForm = () => {
 
   return (
     <ContentCard>
-      <form
-        className="flex flex-col gap-2 max-w-md"
-        onSubmit={(event) =>
-          handleSubmit(event, name, address, town, postcode, notes, url)
-        }
-      >
+      <form className="flex flex-col gap-2 max-w-md" onSubmit={handleSubmit}>
         <div>
           <div className="mb-2 block">
             <Label value="Venue Name (required)" />

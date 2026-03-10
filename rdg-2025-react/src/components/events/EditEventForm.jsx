@@ -1,12 +1,17 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import FetchValueOptionsHelper from "../../utils/FetchValueOptionsHelper.js";
 import { Label, Textarea, TextInput } from "flowbite-react";
 import Select from "react-select";
 import DatePicker from "react-datepicker";
-import EventService from "../../services/EventService.js";
+import { useVenues } from "../../hooks/useVenues.js";
+import { useEvents } from "../../hooks/useEvents.js";
+import CustomSpinner from "../common/CustomSpinner.jsx";
 
-const EditEventForm = ({ eventData, handleEdit, setEditMode }) => {
-  const [venueOptions, setVenueOptions] = useState([]);
+const EditEventForm = ({ eventData, setEditMode }) => {
+  const { venues } = useVenues();
+  const venueOptions = venues.data
+    ? FetchValueOptionsHelper.formatVenueOptions(venues.data)
+    : [];
 
   const [name, setName] = useState(eventData?.name || "");
   const [description, setDescription] = useState(
@@ -25,16 +30,11 @@ const EditEventForm = ({ eventData, handleEdit, setEditMode }) => {
     eventData?.description ? eventData.description.length : 0,
   );
 
-  useEffect(() => {
-    const getVenues = async () => {
-      try {
-        setVenueOptions(await FetchValueOptionsHelper.fetchVenueOptions());
-      } catch (e) {
-        return;
-      }
-    };
-    getVenues();
-  }, []);
+  const { updateEvent } = useEvents();
+
+  const isLoading = venues.isLoading || !eventData;
+
+  if (isLoading) return <CustomSpinner />;
 
   return (
     <form
@@ -42,13 +42,13 @@ const EditEventForm = ({ eventData, handleEdit, setEditMode }) => {
       onSubmit={async (event) => {
         event.preventDefault();
 
-        await EventService.updateEvent(
-          eventData.id,
+        await updateEvent.mutateAsync({
+          eventId: eventData.id,
           name,
           description,
           dateTime,
-          venue.value,
-        );
+          venue: venue?.value,
+        });
         setEditMode(false);
       }}
     >
@@ -70,6 +70,7 @@ const EditEventForm = ({ eventData, handleEdit, setEditMode }) => {
         </div>
         <Select
           options={venueOptions}
+          isLoading={venues.isLoading}
           onChange={setVenue}
           className="w-full text-sm"
           styles={{

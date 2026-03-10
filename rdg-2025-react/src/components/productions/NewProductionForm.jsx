@@ -1,6 +1,5 @@
 import { format } from "date-fns";
-import { useState, useEffect } from "react";
-import ProductionService from "../../services/ProductionService.js";
+import { useState } from "react";
 import FetchValueOptionsHelper from "../../utils/FetchValueOptionsHelper.js";
 import { Label, Textarea, TextInput, Checkbox } from "flowbite-react";
 import Select from "react-select";
@@ -10,9 +9,18 @@ import { Link, useNavigate } from "react-router-dom";
 import SuccessMessage from "../modals/SuccessMessage.jsx";
 import ErrorMessage from "../modals/ErrorMessage.jsx";
 import ContentCard from "../common/ContentCard.jsx";
+import { useVenues } from "../../hooks/useVenues.js";
+import { useProductions } from "../../hooks/useProductions.js";
+import CustomSpinner from "../common/CustomSpinner.jsx";
 
 const NewProductionForm = () => {
   const navigate = useNavigate();
+
+  const { venues } = useVenues();
+  const { createProduction } = useProductions();
+  const venueOptions = venues.data
+    ? FetchValueOptionsHelper.formatVenueOptions(venues.data)
+    : [];
 
   const [name, setName] = useState("");
   const [venue, setVenue] = useState({ label: "None", value: 0 });
@@ -26,42 +34,33 @@ const NewProductionForm = () => {
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
-  const [venueOptions, setVenueOptions] = useState([]);
-
   const [descriptionLength, setDescriptionLength] = useState(0);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     try {
-      const response = await ProductionService.createNewProduction(
+      const response = await createProduction.mutateAsync({
         name,
-        venue.value,
+        venueId: venue?.value,
         author,
         description,
-        auditionDate
+        auditionDate: auditionDate
           ? format(auditionDate, "yyyy-MM-dd'T'HH:mm:ss.SSSSSSS")
           : "",
         sundowners,
         notConfirmed,
         flyerFile,
-      );
+      });
       navigate(`/archive/productions/${response.data.production.id}`);
     } catch (e) {
       return;
     }
   };
 
-  useEffect(() => {
-    const getVenueOptions = async () => {
-      try {
-        setVenueOptions(await FetchValueOptionsHelper.fetchVenueOptions());
-      } catch (e) {
-        setErrorMessage(e.message);
-      }
-    };
-    getVenueOptions();
-  }, []);
+  const dataLoading = venues.isLoading;
+
+  if (dataLoading) return <CustomSpinner />;
 
   return (
     <ContentCard>
@@ -85,6 +84,7 @@ const NewProductionForm = () => {
           </div>
           <Select
             options={venueOptions}
+            isLoading={venues.isLoading}
             onChange={setVenue}
             className="w-full text-sm"
             isClearable

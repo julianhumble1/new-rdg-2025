@@ -1,41 +1,38 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import AwardService from "../../services/AwardService.js";
-import SuccessMessage from "../modals/SuccessMessage.jsx";
-import ErrorMessage from "../modals/ErrorMessage.jsx";
 import FetchValueOptionsHelper from "../../utils/FetchValueOptionsHelper.js";
 import { Label, TextInput } from "flowbite-react";
 import Select from "react-select";
+import { usePeople } from "../../hooks/usePeople.js";
+import { useProductions } from "../../hooks/useProductions.js";
+import { useFestivals } from "../../hooks/useFestivals.js";
+import CustomSpinner from "../common/CustomSpinner.jsx";
 
 const EditAwardForm = () => {
   const awardId = useParams().id;
   const navigate = useNavigate();
 
+  const { people } = usePeople();
+  const { productions } = useProductions();
+  const { festivals } = useFestivals();
+
+  const peopleOptions = people.data
+    ? FetchValueOptionsHelper.formatPersonOptions(people.data)
+    : [];
+
+  const productionOptions = productions.data
+    ? FetchValueOptionsHelper.formatProductionOptions(productions.data)
+    : [];
+
+  const festivalOptions = festivals.data
+    ? FetchValueOptionsHelper.formatFestivalOptions(festivals.data)
+    : [];
+
   const [name, setName] = useState("");
   const [production, setProduction] = useState(null);
   const [person, setPerson] = useState(null);
   const [festival, setFestival] = useState(null);
-
-  const [productionOptions, setProductionOptions] = useState([]);
-  const [personOptions, setPersonOptions] = useState([]);
-  const [festivalOptions, setFestivalOptions] = useState([]);
-
-  useEffect(() => {
-    const setOptions = async () => {
-      try {
-        setProductionOptions(
-          await FetchValueOptionsHelper.fetchProductionOptions(),
-        );
-        setPersonOptions(await FetchValueOptionsHelper.fetchPersonOptions());
-        setFestivalOptions(
-          await FetchValueOptionsHelper.fetchFestivalOptions(),
-        );
-      } catch (e) {
-        return;
-      }
-    };
-    setOptions();
-  }, []);
 
   useEffect(() => {
     const getAwardById = async () => {
@@ -84,7 +81,6 @@ const EditAwardForm = () => {
         person ? person.value : null,
         festival ? festival.value : null,
       );
-      // Navigate back to the appropriate page based on the award's associations
       if (response.data.award.production) {
         navigate(`/archive/productions/${response.data.award.production.id}`);
       } else if (response.data.award.person) {
@@ -98,6 +94,11 @@ const EditAwardForm = () => {
       return;
     }
   };
+
+  const dataLoading =
+    people.isLoading || productions.isLoading || festivals.isLoading;
+
+  if (dataLoading) return <CustomSpinner />;
 
   return (
     <div>
@@ -119,8 +120,9 @@ const EditAwardForm = () => {
               <Label value="Person" />
             </div>
             <Select
-              options={personOptions}
+              options={peopleOptions}
               value={person}
+              isLoading={people.isLoading}
               onChange={setPerson}
               isClearable
               className="w-full text-sm"
@@ -140,6 +142,7 @@ const EditAwardForm = () => {
             <Select
               options={productionOptions}
               value={production}
+              isLoading={productions.isLoading}
               onChange={setProduction}
               required
               className="w-full text-sm"
@@ -159,6 +162,7 @@ const EditAwardForm = () => {
             <Select
               options={festivalOptions}
               value={festival}
+              isLoading={festivals.isLoading}
               onChange={setFestival}
               isClearable
               className="w-full text-sm"

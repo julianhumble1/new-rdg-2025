@@ -1,13 +1,18 @@
 import { Checkbox, Label, Textarea, TextInput } from "flowbite-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import DatePicker from "react-datepicker";
 import Select from "react-select";
 import FetchValueOptionsHelper from "../../utils/FetchValueOptionsHelper.js";
 import ErrorMessage from "../modals/ErrorMessage.jsx";
 import ConfirmCancelButtons from "../common/ConfirmCancelButtons.jsx";
+import { useVenues } from "../../hooks/useVenues.js";
+import CustomSpinner from "../common/CustomSpinner.jsx";
 
 const EditProductionForm = ({ productionData, handleEdit, setEditMode }) => {
-  const [venueOptions, setVenueOptions] = useState([]);
+  const { venues } = useVenues();
+  const venueOptions = venues.data
+    ? FetchValueOptionsHelper.formatVenueOptions(venues.data)
+    : [];
 
   const [name, setName] = useState(productionData.name);
   const [venue, setVenue] = useState(
@@ -42,16 +47,9 @@ const EditProductionForm = ({ productionData, handleEdit, setEditMode }) => {
     productionData.description ? productionData.description.length : 0,
   );
 
-  useEffect(() => {
-    const getVenues = async () => {
-      try {
-        setVenueOptions(await FetchValueOptionsHelper.fetchVenueOptions());
-      } catch (e) {
-        setErrorMessage(e.message);
-      }
-    };
-    getVenues();
-  }, []);
+  const dataLoading = venues.isLoading || !productionData;
+
+  if (dataLoading) return <CustomSpinner />;
 
   return (
     <div>
@@ -90,6 +88,7 @@ const EditProductionForm = ({ productionData, handleEdit, setEditMode }) => {
           </div>
           <Select
             options={venueOptions}
+            isLoading={venues.isLoading}
             onChange={setVenue}
             className="w-full text-sm"
             styles={{
