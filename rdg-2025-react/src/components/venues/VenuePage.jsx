@@ -1,15 +1,8 @@
 import { useState, useCallback, useEffect } from "react";
-import {
-  useParams,
-  useSearchParams,
-  useNavigate,
-  Link,
-} from "react-router-dom";
+import { useParams, useSearchParams, useNavigate } from "react-router-dom";
 import VenueService from "../../services/VenueService.js";
-import FestivalsTable from "../festivals/FestivalsTable.jsx";
 import VenueHighlight from "./VenueHighlight.jsx";
 import EditVenueForm from "./EditVenueForm.jsx";
-import ConfirmDeleteModal from "../modals/ConfirmDeleteModal.jsx";
 import SuccessMessage from "../modals/SuccessMessage.jsx";
 import ErrorMessage from "../modals/ErrorMessage.jsx";
 import ProductionsTable from "../productions/ProductionsTable.jsx";
@@ -18,163 +11,103 @@ import { FilmIcon, ScaleIcon } from "@heroicons/react/16/solid";
 import AltFestivalsTable from "../festivals/FestivalsTable.jsx";
 import ContentCard from "../common/ContentCard.jsx";
 import { useVenues } from "../../hooks/useVenues.js";
-import { useProductions } from "../../hooks/useProductions.js";
 import { useFestivals } from "../../hooks/useFestivals.js";
 
 const VenuePage = () => {
-  const venueId = useParams().id;
-  const [searchParams] = useSearchParams();
-  const navigate = useNavigate();
+    const venueId = useParams().id;
+    const [searchParams] = useSearchParams();
+    const navigate = useNavigate();
 
-  const { deleteVenue, updateVenue } = useVenues();
-  const { deleteProduction } = useProductions();
-  const { deleteFestival } = useFestivals();
+    const { deleteVenue, updateVenue } = useVenues();
+    const { deleteFestival } = useFestivals();
 
-  const [venueData, setVenueData] = useState(null);
-  const [productions, setProductions] = useState([]);
-  const [festivals, setFestivals] = useState([]);
+    const [venueData, setVenueData] = useState(null);
+    const [productions, setProductions] = useState([]);
+    const [festivals, setFestivals] = useState([]);
 
-  const [editMode, setEditMode] = useState(searchParams.get("edit"));
+    const [editMode, setEditMode] = useState(searchParams.get("edit"));
+    const [successMessage, setSuccessMessage] = useState("");
+    const [errorMessage, setErrorMessage] = useState("");
 
-  const [showConfirmDelete, setShowConfirmDelete] = useState(false);
-  const [itemToDelete, setItemToDelete] = useState(null);
+    const fetchVenueData = useCallback(async () => {
+        try {
+            const response = await VenueService.getVenueById(venueId);
+            setVenueData(response.data.venue);
+            setProductions(response.data.productions);
+            setFestivals(response.data.festivals);
+        } catch (e) {
+            setErrorMessage(e.message);
+        }
+    }, [venueId]);
 
-  const [successMessage, setSuccessMessage] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
-
-  const fetchVenueData = useCallback(async () => {
-    try {
-      const response = await VenueService.getVenueById(venueId);
-      setVenueData(response.data.venue);
-      setProductions(response.data.productions);
-      setFestivals(response.data.festivals);
-    } catch (e) {
-      setErrorMessage(e.message);
-    }
-  }, [venueId]);
-
-  useEffect(() => {
-    fetchVenueData();
-  }, [fetchVenueData]);
-
-  const handleDelete = (item) => {
-    setItemToDelete(item);
-    setShowConfirmDelete(true);
-  };
-
-  const handleConfirmDelete = async (item) => {
-    try {
-      // check whether item to delete is a production, festival or venue
-      if (item.postcode == null && item.year == null) {
-        // Production
-        await deleteProduction.mutateAsync({ productionId: item.id });
+    useEffect(() => {
         fetchVenueData();
-      } else if (item.postcode == null) {
-        // Festival
-        await deleteFestival.mutateAsync({ festivalId: item.id });
-        fetchVenueData();
-      } else {
-        // Venue
-        await deleteVenue.mutateAsync({ venueId: item.id });
+    }, [fetchVenueData]);
+
+    const handleDeleteVenue = async () => {
+        await deleteVenue.mutateAsync({ venueId });
         navigate("/venues");
-      }
-      setShowConfirmDelete(false);
-      setSuccessMessage(`Successfully deleted '${item.name}'`);
-    } catch (e) {
-      setErrorMessage(e.message);
-    }
-  };
+    };
 
-  const handleEditVenue = async (
-    event,
-    id,
-    name,
-    address,
-    town,
-    postcode,
-    notes,
-    url,
-  ) => {
-    event.preventDefault();
-    try {
-      await updateVenue.mutateAsync({
-        venueId: id,
-        name,
-        address,
-        town,
-        postcode,
-        notes,
-        url,
-      });
-      setSuccessMessage("Successfully edited!");
-      setErrorMessage("");
-      fetchVenueData();
-      setEditMode(false);
-    } catch (e) {
-      setSuccessMessage("");
-      setErrorMessage(e.message);
-    }
-  };
+    const handleDeleteFestival = async (festival) => {
+        await deleteFestival.mutateAsync({ festivalId: festival.id });
+        fetchVenueData();
+    };
 
-  return (
-    <div>
-      {showConfirmDelete && (
-        <ConfirmDeleteModal
-          setShowConfirmDelete={setShowConfirmDelete}
-          itemToDelete={itemToDelete}
-          handleConfirmDelete={handleConfirmDelete}
-        />
-      )}
-      <SuccessMessage message={successMessage} />
-      <ErrorMessage message={errorMessage} />
+    const handleEditVenue = async (event, id, name, address, town, postcode, notes, url) => {
+        event.preventDefault();
+        try {
+            await updateVenue.mutateAsync({ venueId: id, name, address, town, postcode, notes, url });
+            setSuccessMessage("Successfully edited!");
+            setErrorMessage("");
+            fetchVenueData();
+            setEditMode(false);
+        } catch (e) {
+            setSuccessMessage("");
+            setErrorMessage(e.message);
+        }
+    };
 
-      <ContentCard>
-        {venueData &&
-          (editMode ? (
-            <EditVenueForm
-              venueData={venueData}
-              handleEdit={handleEditVenue}
-              setEditMode={setEditMode}
-            />
-          ) : (
-            <VenueHighlight
-              venueData={venueData}
-              setEditMode={setEditMode}
-              handleDelete={handleDelete}
-            />
-          ))}
-      </ContentCard>
-      <Tabs variant="underline" className="m-3">
-        <Tabs.Item active title="Productions" icon={ScaleIcon}>
-          {productions.length > 0 ? (
-            <div className="m-2 overflow-auto">
-              <ProductionsTable productions={productions} />
-            </div>
-          ) : (
-            <div className="text-md font-bold ml-3">
-              No productions at this venue
-            </div>
-          )}
-        </Tabs.Item>
-        <Tabs.Item title="Festivals" icon={FilmIcon}>
-          {festivals.length > 0 ? (
-            <div className="m-2 overflow-auto">
-              <AltFestivalsTable
-                festivals={festivals}
-                handleDelete={handleDelete}
-                nameSearch={""}
-                venueSearch={""}
-              />
-            </div>
-          ) : (
-            <div className="text-md font-bold ml-3">
-              No festivals at this venue
-            </div>
-          )}
-        </Tabs.Item>
-      </Tabs>
-    </div>
-  );
+    return (
+        <div>
+            <SuccessMessage message={successMessage} />
+            <ErrorMessage message={errorMessage} />
+
+            <ContentCard>
+                {venueData &&
+                    (editMode ? (
+                        <EditVenueForm venueData={venueData} handleEdit={handleEditVenue} setEditMode={setEditMode} />
+                    ) : (
+                        <VenueHighlight venueData={venueData} setEditMode={setEditMode} handleDelete={handleDeleteVenue} />
+                    ))}
+            </ContentCard>
+            <Tabs variant="underline" className="m-3">
+                <Tabs.Item active title="Productions" icon={ScaleIcon}>
+                    {productions.length > 0 ? (
+                        <div className="m-2 overflow-auto">
+                            <ProductionsTable productions={productions} />
+                        </div>
+                    ) : (
+                        <div className="text-md font-bold ml-3">No productions at this venue</div>
+                    )}
+                </Tabs.Item>
+                <Tabs.Item title="Festivals" icon={FilmIcon}>
+                    {festivals.length > 0 ? (
+                        <div className="m-2 overflow-auto">
+                            <AltFestivalsTable
+                                festivals={festivals}
+                                handleDelete={handleDeleteFestival}
+                                nameSearch={""}
+                                venueSearch={""}
+                            />
+                        </div>
+                    ) : (
+                        <div className="text-md font-bold ml-3">No festivals at this venue</div>
+                    )}
+                </Tabs.Item>
+            </Tabs>
+        </div>
+    );
 };
 
 export default VenuePage;
