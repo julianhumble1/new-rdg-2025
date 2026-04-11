@@ -28,7 +28,6 @@ const EditPersonForm = ({ setEditMode, handleEditPerson, personData }) => {
           addressStreet,
           addressTown,
           addressPostcode,
-          personData.imageId,
         )
       }
     >
