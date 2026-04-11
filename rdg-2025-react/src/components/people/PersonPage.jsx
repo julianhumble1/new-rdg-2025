@@ -5,98 +5,71 @@ import SuccessMessage from "../modals/SuccessMessage.jsx";
 import ErrorMessage from "../modals/ErrorMessage.jsx";
 import PublicPersonHighlight from "./PublicPersonHighlight.jsx";
 import EditPersonForm from "./EditPersonForm.jsx";
-import ConfirmDeleteModal from "../modals/ConfirmDeleteModal.jsx";
 import CreditsTabs from "../credits/CreditsTabs.jsx";
-import CreditService from "../../services/CreditService.js";
-import AwardService from "../../services/AwardService.js";
 import { Cloudinary } from "@cloudinary/url-gen/index";
 import DetailedPersonHighlight from "./DetailedPersonHighlight.jsx";
 import ContentCard from "../common/ContentCard.jsx";
-import { toast } from "react-toastify";
 import { usePeople } from "../../hooks/usePeople.js";
 
 const PersonPage = () => {
-  const [image, setImage] = useState(null);
+    const [image, setImage] = useState(null);
 
-  const personId = useParams().id;
-  const [searchParams] = useSearchParams();
-  const navigate = useNavigate();
+    const personId = useParams().id;
+    const [searchParams] = useSearchParams();
+    const navigate = useNavigate();
 
-  const { updatePerson, deletePerson } = usePeople();
+    const { updatePerson, deletePerson } = usePeople();
 
-  const [personData, setPersonData] = useState(null);
+    const [personData, setPersonData] = useState(null);
+    const [actingCredits, setActingCredits] = useState([]);
+    const [musicianCredits, setMusicianCredits] = useState([]);
+    const [producerCredits, setProducerCredits] = useState([]);
+    const [awards, setAwards] = useState([]);
 
-  const [actingCredits, setActingCredits] = useState([]);
-  const [musicianCredits, setMusicianCredits] = useState([]);
-  const [producerCredits, setProducerCredits] = useState([]);
-  const [awards, setAwards] = useState([]);
+    const [editMode, setEditMode] = useState(searchParams.get("edit"));
+    const [successMessage, setSuccessMessage] = useState("");
+    const [errorMessage, setErrorMessage] = useState("");
+    const [viewType, setViewType] = useState("");
 
-  const [editMode, setEditMode] = useState(searchParams.get("edit"));
+    const fetchPersonData = useCallback(async () => {
+        const fetchPersonImage = async (imageId) => {
+            const cld = new Cloudinary({ cloud: { cloudName: "dbher59sh" } });
+            let img = cld.image("xrvbvweujcdqsjuuabys").format("auto").quality("auto");
+            if (imageId !== "0") {
+                try {
+                    img = cld.image(imageId).format("auto").quality("auto");
+                } catch (e) {
+                    setErrorMessage(e.message);
+                }
+            }
+            setImage(img);
+        };
 
-  const [successMessage, setSuccessMessage] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
-
-  const [viewType, setViewType] = useState("");
-
-  const [itemToDelete, setItemToDelete] = useState("");
-  const [showConfirmDelete, setShowConfirmDelete] = useState("");
-
-  const handleDelete = (item) => {
-    setItemToDelete(item);
-    setShowConfirmDelete(true);
-  };
-
-  const fetchPersonData = useCallback(async () => {
-    const fetchPersonImage = async (imageId) => {
-      const cld = new Cloudinary({ cloud: { cloudName: "dbher59sh" } });
-      let img = cld
-        .image("xrvbvweujcdqsjuuabys")
-        .format("auto")
-        .quality("auto");
-      if (imageId !== "0") {
         try {
-          img = cld.image(imageId).format("auto").quality("auto");
+            const response = await PersonService.getPersonById(personId);
+            setViewType(response.data.responseType);
+            setPersonData(response.data.person);
+            setActingCredits(response.data.actingCredits);
+            setMusicianCredits(response.data.musicianCredits);
+            setProducerCredits(response.data.producerCredits);
+            setAwards(response.data.awards || []);
+            fetchPersonImage(response.data.person.imageId);
         } catch (e) {
-          setErrorMessage(e.message);
+            setErrorMessage(e.message);
         }
-      }
-      setImage(img);
+    }, [personId]);
+
+    useEffect(() => {
+        fetchPersonData();
+    }, [personId, fetchPersonData]);
+
+    const handleDeletePerson = async () => {
+        await deletePerson.mutateAsync({ personId });
+        navigate("/people");
     };
 
-    try {
-      const response = await PersonService.getPersonById(personId);
-      setViewType(response.data.responseType);
-      setPersonData(response.data.person);
-      setActingCredits(response.data.actingCredits);
-      setMusicianCredits(response.data.musicianCredits);
-      setProducerCredits(response.data.producerCredits);
-      setAwards(response.data.awards || []);
-      fetchPersonImage(response.data.person.imageId);
-    } catch (e) {
-      setErrorMessage(e.message);
-    }
-  }, [personId]);
-
-  useEffect(() => {
-    fetchPersonData();
-  }, [personId, fetchPersonData]);
-
-  const handleEditPerson = async (
-    event,
-    personId,
-    firstName,
-    lastName,
-    summary,
-    homePhone,
-    mobilePhone,
-    addressStreet,
-    addressTown,
-    addressPostcode,
-    imageId,
-  ) => {
-    event.preventDefault();
-    try {
-      await updatePerson.mutateAsync({
+    const handleEditPerson = async (
+        event,
         personId,
         firstName,
         lastName,
@@ -107,91 +80,65 @@ const PersonPage = () => {
         addressTown,
         addressPostcode,
         imageId,
-      });
-      setSuccessMessage("Successfully edited!");
-      setErrorMessage("");
-      setEditMode(false);
-      fetchPersonData();
-    } catch (e) {
-      setErrorMessage(e.message);
-    }
-  };
+    ) => {
+        event.preventDefault();
+        try {
+            await updatePerson.mutateAsync({
+                personId,
+                firstName,
+                lastName,
+                summary,
+                homePhone,
+                mobilePhone,
+                addressStreet,
+                addressTown,
+                addressPostcode,
+                imageId,
+            });
+            setSuccessMessage("Successfully edited!");
+            setErrorMessage("");
+            setEditMode(false);
+            fetchPersonData();
+        } catch (e) {
+            setErrorMessage(e.message);
+        }
+    };
 
-  const handleConfirmDelete = async () => {
-    if (itemToDelete.firstName != null) {
-      try {
-        await deletePerson.mutateAsync({ personId });
-        navigate("/people");
-      } catch (e) {
-        setErrorMessage(e.message);
-      }
-    } else if (itemToDelete.type != null) {
-      try {
-        const response = await CreditService.deleteCreditById(itemToDelete.id);
-        fetchPersonData();
-        setSuccessMessage(`Successfully deleted credit.`);
-        setShowConfirmDelete(false);
-      } catch (e) {
-        setErrorMessage(e.message);
-      }
-    } else if (
-      itemToDelete.name &&
-      (itemToDelete.production || itemToDelete.person || itemToDelete.festival)
-    ) {
-      // This is an award
-      try {
-        await AwardService.deleteAward(itemToDelete.id);
-        fetchPersonData();
-        setSuccessMessage("Successfully deleted award");
-        setShowConfirmDelete(false);
-      } catch (e) {
-        setErrorMessage(e.message);
-      }
-    }
-  };
-
-  return (
-    <div>
-      <SuccessMessage message={successMessage} />
-      <ErrorMessage message={errorMessage} />
-      {showConfirmDelete && (
-        <ConfirmDeleteModal
-          setShowConfirmDelete={setShowConfirmDelete}
-          itemToDelete={itemToDelete}
-          handleConfirmDelete={handleConfirmDelete}
-        />
-      )}
-      <ContentCard>
-        {viewType === "PUBLIC" && (
-          <PublicPersonHighlight personData={personData} image={image} />
-        )}
-        {viewType === "DETAILED" &&
-          (editMode ? (
-            <EditPersonForm
-              setEditMode={setEditMode}
-              handleEditPerson={handleEditPerson}
-              personData={personData}
+    return (
+        <div>
+            <SuccessMessage message={successMessage} />
+            <ErrorMessage message={errorMessage} />
+            <ContentCard>
+                {viewType === "PUBLIC" && (
+                    <PublicPersonHighlight personData={personData} image={image} />
+                )}
+                {viewType === "DETAILED" &&
+                    (editMode ? (
+                        <EditPersonForm
+                            setEditMode={setEditMode}
+                            handleEditPerson={handleEditPerson}
+                            personData={personData}
+                        />
+                    ) : (
+                        <DetailedPersonHighlight
+                            personData={personData}
+                            setEditMode={setEditMode}
+                            handleDelete={handleDeletePerson}
+                            image={image}
+                            fetchPersonData={fetchPersonData}
+                        />
+                    ))}
+            </ContentCard>
+            <CreditsTabs
+                actingCredits={actingCredits}
+                musicianCredits={musicianCredits}
+                producerCredits={producerCredits}
+                awards={awards}
+                creditsParent={"person"}
+                handleDelete={fetchPersonData}
             />
-          ) : (
-            <DetailedPersonHighlight
-              personData={personData}
-              setEditMode={setEditMode}
-              handleDelete={handleDelete}
-              image={image}
-              fetchPersonData={fetchPersonData}
-            />
-          ))}
-      </ContentCard>
-      <CreditsTabs
-        actingCredits={actingCredits}
-        musicianCredits={musicianCredits}
-        producerCredits={producerCredits}
-        awards={awards}
-        creditsParent={"person"}
-        handleDelete={handleDelete}
-      />
-    </div>
-  );
+        </div>
+    );
 };
 
 export default PersonPage;

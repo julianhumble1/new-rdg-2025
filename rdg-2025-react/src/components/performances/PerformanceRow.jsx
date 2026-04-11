@@ -61,7 +61,6 @@ const PerformanceRow = ({ performanceData, handleDelete }) => {
           <EditDeleteButtons
             handleEdit={handleEdit}
             handleDelete={() => handleDelete(performanceData)}
-            itemToDelete={performanceData}
           />
         </div>
       </div>

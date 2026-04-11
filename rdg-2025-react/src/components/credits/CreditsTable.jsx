@@ -2,9 +2,9 @@ import { getCreditsColumns } from "../common/Table/columns/credits/credits.colum
 import Table from "../common/Table/Table.jsx";
 
 const CreditsTable = ({ credits, handleDelete }) => {
-  if (credits.length > 0) {
-    return <Table data={credits} columns={getCreditsColumns()} />;
-  }
+    if (credits.length > 0) {
+        return <Table data={credits} columns={getCreditsColumns(handleDelete)} />;
+    }
 };
 
 export default CreditsTable;
