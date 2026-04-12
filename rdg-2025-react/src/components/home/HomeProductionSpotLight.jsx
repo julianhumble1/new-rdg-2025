@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import ProductionService from "../../services/ProductionService.js";
+import CloudinaryService from "../../services/CloudinaryService.js";
 import DateHelper from "../../utils/DateHelper.js";
 import { Link } from "react-router-dom";
 
-const HomeProductionSpotLight = ({ production, image }) => {
+const HomeProductionSpotLight = ({ production }) => {
   const [performanceStatement, setPerformanceStatement] = useState("");
-
   const [performances, setPerformances] = useState([]);
+  const [flyerUrl, setFlyerUrl] = useState(null);
 
   useEffect(() => {
     const getPerformanceStatement = async () => {
@@ -20,15 +21,23 @@ const HomeProductionSpotLight = ({ production, image }) => {
     getPerformanceStatement();
   }, [production.id]);
 
+  useEffect(() => {
+    CloudinaryService.getUrl(production.id, "flyers")
+      .then((response) => setFlyerUrl(response.data.url))
+      .catch(() => {});
+  }, [production.id]);
+
   // if (performances.length === 0) return null;
 
   return (
     <div className="flex w-full bg-gray-100  rounded-xl shadow-md hover:shadow-xl transition sm:h-44 max-h-44 relative flex-1">
-      <img
-        className="  rounded-l-xl sm:w-auto sm:h-full w-1/2 max-h-44"
-        src={image}
-        alt="image 1"
-      />
+      <div className="w-32 shrink-0 rounded-l-xl overflow-hidden">
+        <img
+          className={`w-full h-full ${flyerUrl ? "object-cover" : "object-contain"}`}
+          src={flyerUrl ?? "/images/new_logo_transparent.png"}
+          alt={production.name}
+        />
+      </div>
       <div className="flex flex-col gap-1 p-3 w-1/2 md:w-auto ">
         <div className="flex">
           <Link

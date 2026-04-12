@@ -1,5 +1,6 @@
-import { Checkbox, Label, Textarea, TextInput } from "flowbite-react";
-import { useState } from "react";
+import { Checkbox, Label, Textarea, TextInput, FileInput } from "flowbite-react";
+import CloudinaryService from "../../services/CloudinaryService.js";
+import { useState, useEffect } from "react";
 import DatePicker from "react-datepicker";
 import Select from "react-select";
 import FetchValueOptionsHelper from "../../utils/FetchValueOptionsHelper.js";
@@ -40,12 +41,29 @@ const EditProductionForm = ({ productionData, handleEdit, setEditMode }) => {
   const [flyerFile, setFlyerFile] = useState(
     productionData.flyerFile ? productionData.flyerFile : "",
   );
+  const [flyerImage, setFlyerImage] = useState(null);
+  const [flyerPreviewUrl, setFlyerPreviewUrl] = useState(null);
+  const [existingFlyerUrl, setExistingFlyerUrl] = useState(null);
+
+  useEffect(() => {
+    CloudinaryService.getUrl(productionData.id, "flyers")
+      .then((response) => setExistingFlyerUrl(response.data.url))
+      .catch(() => {});
+  }, [productionData.id]);
 
   const [errorMessage, setErrorMessage] = useState("");
 
   const [descriptionLength, setDescriptionLength] = useState(
     productionData.description ? productionData.description.length : 0,
   );
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    await handleEdit(event, productionData.id, name, venue ? venue.value : null, author, description, auditionDate, sundowners, notConfirmed, flyerFile);
+    if (flyerImage) {
+      await CloudinaryService.uploadImage(flyerImage, productionData.id, "flyers");
+    }
+  };
 
   const dataLoading = venues.isLoading || !productionData;
 
@@ -54,23 +72,7 @@ const EditProductionForm = ({ productionData, handleEdit, setEditMode }) => {
   return (
     <div>
       <ErrorMessage message={errorMessage} />
-      <form
-        className="flex flex-col gap-2 max-w-md"
-        onSubmit={(event) =>
-          handleEdit(
-            event,
-            productionData.id,
-            name,
-            venue ? venue.value : null,
-            author,
-            description,
-            auditionDate,
-            sundowners,
-            notConfirmed,
-            flyerFile,
-          )
-        }
-      >
+      <form className="flex flex-col gap-2 max-w-md" onSubmit={handleSubmit}>
         <div>
           <div className="mb-2 block italic">
             <Label value="Production Name (required)" />
@@ -162,14 +164,28 @@ const EditProductionForm = ({ productionData, handleEdit, setEditMode }) => {
           </div>
         </div>
         <div>
-          {/* <div className="mb-2 block italic">
-            <Label value="Flyer File" />
+          <div className="mb-2 block italic">
+            <Label value="Flyer" />
           </div>
-          <TextInput
-            placeholder="oliver-flyer.pdf"
-            value={flyerFile}
-            onChange={(e) => setFlyerFile(e.target.value)}
-          /> */}
+          {flyerPreviewUrl || existingFlyerUrl ? (
+            <img
+              src={flyerPreviewUrl ?? existingFlyerUrl}
+              alt="Flyer preview"
+              className="max-h-48 rounded border border-gray-300 mb-2"
+            />
+          ) : (
+            <div className="flex items-center justify-center h-32 border-2 border-dashed border-gray-300 rounded text-gray-400 text-sm mb-2">
+              No flyer uploaded
+            </div>
+          )}
+          <FileInput
+            sizing="sm"
+            onChange={(e) => {
+              const file = e.target.files[0] ?? null;
+              setFlyerImage(file);
+              setFlyerPreviewUrl(file ? URL.createObjectURL(file) : null);
+            }}
+          />
         </div>
         <ConfirmCancelButtons handleCancel={() => setEditMode(false)} />
       </form>
