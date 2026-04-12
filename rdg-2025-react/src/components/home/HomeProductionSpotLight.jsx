@@ -30,8 +30,8 @@ const HomeProductionSpotLight = ({ production }) => {
   // if (performances.length === 0) return null;
 
   return (
-    <div className="flex w-full bg-gray-100  rounded-xl shadow-md hover:shadow-xl transition sm:h-44 max-h-44 relative flex-1">
-      <div className="w-32 shrink-0 rounded-l-xl overflow-hidden">
+    <div className="flex w-full bg-gray-100  rounded-xl shadow-md hover:shadow-xl transition sm:h-56 max-h-56 relative flex-1">
+      <div className="w-40 shrink-0 rounded-l-xl overflow-hidden">
         <img
           className={`w-full h-full ${flyerUrl ? "object-cover" : "object-contain"}`}
           src={flyerUrl ?? "/images/new_logo_transparent.png"}
