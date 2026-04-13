@@ -1,7 +1,7 @@
 import HighlightTemplate from "../common/HighlightTemplate.jsx";
 import HighlightListItem from "../common/HighlightListItem.jsx";
 
-const PublicPersonHighlight = ({ personData, image }) => {
+const PublicPersonHighlight = ({ personData }) => {
   if (!personData) return null;
 
   const fullName = personData.firstName + " " + personData.lastName;

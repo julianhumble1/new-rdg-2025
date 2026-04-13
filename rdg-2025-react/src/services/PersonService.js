@@ -106,7 +106,6 @@ export default class PersonService {
     addressStreet,
     addressTown,
     addressPostcode,
-    imageId,
   ) => {
     const token = Cookies.get("token");
 
@@ -122,7 +121,6 @@ export default class PersonService {
           addressStreet: addressStreet.trim(),
           addressTown: addressTown.trim(),
           addressPostcode: addressPostcode.trim(),
-          imageId: imageId,
         },
         {
           headers: {
@@ -137,45 +135,6 @@ export default class PersonService {
     } catch (e) {
       toast.error(e.message);
       throw new Error(e.message, e);
-    }
-  };
-
-  static updatePersonWithImage = async (personData, imageId) => {
-    const token = Cookies.get("token");
-
-    try {
-      const response = await axios.patch(
-        `${baseUrl}/people/${personData.id}`,
-        {
-          firstName: personData.firstName.trim(),
-          lastName: personData.lastName.trim(),
-          summary: personData.summary.trim(),
-          homePhone: personData.homePhone.trim(),
-          mobilePhone: personData.mobilePhone.trim(),
-          addressStreet: personData.addressStreet.trim(),
-          addressTown: personData.addressTown.trim(),
-          addressPostcode: personData.addressPostcode.trim(),
-          imageId: imageId,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      );
-      return response;
-    } catch (e) {
-      if (e.response.status === 500) {
-        throw new Error("Internal server error");
-      } else if (e.response.status === 409) {
-        throw new Error("Person with this name already exists.");
-      } else if (e.response.status === 404) {
-        throw new Error("No Person with this id.");
-      } else if (e.response.status === 400) {
-        throw new Error("Bad Request: Details not in expected format.");
-      } else if (e.response.status === 401 || e.response.status === 403) {
-        throw new Error("Failed to authenticate as administrator.");
-      }
     }
   };
 }
