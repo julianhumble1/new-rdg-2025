@@ -4,9 +4,8 @@ import DateHelper from "../../utils/DateHelper.js";
 import { Link } from "react-router-dom";
 import CloudinaryImage from "../common/CloudinaryImage.jsx";
 
-const HomeProductionSpotLight = ({ production, image }) => {
+const HomeProductionSpotLight = ({ production }) => {
   const [performanceStatement, setPerformanceStatement] = useState("");
-
   const [performances, setPerformances] = useState([]);
 
   useEffect(() => {
