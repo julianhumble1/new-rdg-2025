@@ -23,6 +23,7 @@ const publicPeopleColumns = [
         text={`${row?.firstName} ${row?.lastName}`}
       />
     ),
+    sortable: true
   },
   {
     name: "Summary",

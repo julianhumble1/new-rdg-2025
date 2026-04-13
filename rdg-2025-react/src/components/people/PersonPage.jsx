@@ -6,14 +6,11 @@ import ErrorMessage from "../modals/ErrorMessage.jsx";
 import PublicPersonHighlight from "./PublicPersonHighlight.jsx";
 import EditPersonForm from "./EditPersonForm.jsx";
 import CreditsTabs from "../credits/CreditsTabs.jsx";
-import { Cloudinary } from "@cloudinary/url-gen/index";
 import DetailedPersonHighlight from "./DetailedPersonHighlight.jsx";
 import ContentCard from "../common/ContentCard.jsx";
 import { usePeople } from "../../hooks/usePeople.js";
 
 const PersonPage = () => {
-    const [image, setImage] = useState(null);
-
     const personId = useParams().id;
     const [searchParams] = useSearchParams();
     const navigate = useNavigate();
@@ -32,19 +29,6 @@ const PersonPage = () => {
     const [viewType, setViewType] = useState("");
 
     const fetchPersonData = useCallback(async () => {
-        const fetchPersonImage = async (imageId) => {
-            const cld = new Cloudinary({ cloud: { cloudName: "dbher59sh" } });
-            let img = cld.image("xrvbvweujcdqsjuuabys").format("auto").quality("auto");
-            if (imageId !== "0") {
-                try {
-                    img = cld.image(imageId).format("auto").quality("auto");
-                } catch (e) {
-                    setErrorMessage(e.message);
-                }
-            }
-            setImage(img);
-        };
-
         try {
             const response = await PersonService.getPersonById(personId);
             setViewType(response.data.responseType);
@@ -53,7 +37,6 @@ const PersonPage = () => {
             setMusicianCredits(response.data.musicianCredits);
             setProducerCredits(response.data.producerCredits);
             setAwards(response.data.awards || []);
-            fetchPersonImage(response.data.person.imageId);
         } catch (e) {
             setErrorMessage(e.message);
         }
@@ -79,7 +62,6 @@ const PersonPage = () => {
         addressStreet,
         addressTown,
         addressPostcode,
-        imageId,
     ) => {
         event.preventDefault();
         try {
@@ -93,7 +75,6 @@ const PersonPage = () => {
                 addressStreet,
                 addressTown,
                 addressPostcode,
-                imageId,
             });
             setSuccessMessage("Successfully edited!");
             setErrorMessage("");
@@ -110,7 +91,7 @@ const PersonPage = () => {
             <ErrorMessage message={errorMessage} />
             <ContentCard>
                 {viewType === "PUBLIC" && (
-                    <PublicPersonHighlight personData={personData} image={image} />
+                    <PublicPersonHighlight personData={personData} />
                 )}
                 {viewType === "DETAILED" &&
                     (editMode ? (
@@ -124,8 +105,6 @@ const PersonPage = () => {
                             personData={personData}
                             setEditMode={setEditMode}
                             handleDelete={handleDeletePerson}
-                            image={image}
-                            fetchPersonData={fetchPersonData}
                         />
                     ))}
             </ContentCard>
