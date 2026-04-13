@@ -4,11 +4,18 @@ import DateHelper from "../../utils/DateHelper.js";
 import { Link } from "react-router-dom";
 import CloudinaryImage from "../common/CloudinaryImage.jsx";
 
-const HomeProductionSpotLight = ({ production }) => {
+const HomeProductionSpotLight = ({ production, performances: performancesProp }) => {
   const [performanceStatement, setPerformanceStatement] = useState("");
-  const [performances, setPerformances] = useState([]);
+  const [performances, setPerformances] = useState(performancesProp ?? []);
 
   useEffect(() => {
+    if (performancesProp) {
+      setPerformances(performancesProp);
+      if (performancesProp.length > 0) {
+        setPerformanceStatement(DateHelper.createPerformanceStatement(performancesProp));
+      }
+      return;
+    }
     const getPerformanceStatement = async () => {
       const response = await ProductionService.getProductionById(production.id);
       setPerformances(response.data.performances);
@@ -18,7 +25,7 @@ const HomeProductionSpotLight = ({ production }) => {
     };
 
     getPerformanceStatement();
-  }, [production.id]);
+  }, [production.id, performancesProp]);
 
   // if (performances.length === 0) return null;
 
