@@ -27,48 +27,44 @@ const ProductionHighlight = ({ productionData, setEditMode, handleDelete }) => {
       updatedAt={productionData.updatedAt}
       sundowners={productionData.sundowners}
     >
-      <div className="flex gap-4">
-        <div className="flex flex-col gap-2 flex-1">
-          <HighlightListItem
-            label="Venue"
-            value={productionData?.venue?.name}
-            link={`/archive/venues/${productionData?.venue?.id}`}
-          />
-
-          <HighlightListItem label="Author" value={productionData.author} />
-
-          <HighlightListItem
-            label="Description"
-            value={productionData.description}
-          />
-
-          {productionData?.auditionDate && (
-            <HighlightListItem
-              label="Audition Date"
-              value={format(
-                new Date(productionData.auditionDate),
-                "MMMM d, yyyy, h:mm a",
-              )}
-            />
-          )}
-          {productionData.notConfirmed && (
-            <Badge color="warning" className="w-fit">
-              Not Yet Confirmed
-            </Badge>
-          )}
-          {productionData?.sundowners && (
-            <div className="px-2 rounded-full italic md:hidden bg-gradient-to-r from-rdg-red to-black font-bold text-white text-center w-fit">
-              SUNDOWNERS
-            </div>
-          )}
-        </div>
+      <div>
         {flyerUrl && (
-          <div className="w-28 h-[158px] shrink-0">
-            <img
-              src={flyerUrl}
-              alt="Production flyer"
-              className="w-full h-full object-cover rounded"
-            />
+          <img
+            src={flyerUrl}
+            alt="Production flyer"
+            className="float-right ml-4 mb-2 h-40 w-60 object-cover rounded"
+          />
+        )}
+        <HighlightListItem
+          label="Venue"
+          value={productionData?.venue?.name}
+          link={`/archive/venues/${productionData?.venue?.id}`}
+        />
+
+        <HighlightListItem label="Author" value={productionData.author} />
+
+        <HighlightListItem
+          label="Description"
+          value={productionData.description}
+        />
+
+        {productionData?.auditionDate && (
+          <HighlightListItem
+            label="Audition Date"
+            value={format(
+              new Date(productionData.auditionDate),
+              "MMMM d, yyyy, h:mm a",
+            )}
+          />
+        )}
+        {productionData.notConfirmed && (
+          <Badge color="warning" className="w-fit">
+            Not Yet Confirmed
+          </Badge>
+        )}
+        {productionData?.sundowners && (
+          <div className="px-2 rounded-full italic md:hidden bg-gradient-to-r from-rdg-red to-black font-bold text-white text-center w-fit">
+            SUNDOWNERS
           </div>
         )}
       </div>
