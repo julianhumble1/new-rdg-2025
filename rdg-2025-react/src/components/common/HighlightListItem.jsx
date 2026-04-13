@@ -4,7 +4,7 @@ const HighlightListItem = ({ label, value, link, linkType }) => {
   if (!value) return null;
 
   return (
-    <div className="flex flex-col">
+    <div>
       <div className="font-bold italic">{label}</div>
 
       {link ? (
@@ -22,7 +22,7 @@ const HighlightListItem = ({ label, value, link, linkType }) => {
           </Link>
         )
       ) : (
-        <div>{value}</div>
+        <div className="text-wrap">{value}</div>
       )}
     </div>
   );
