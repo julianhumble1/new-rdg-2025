@@ -1,8 +1,17 @@
+import PersonImageWithUploadBox from "../photo_components/PersonImageWithUploadBox.jsx";
 import ContactDetailsBox from "./ContactDetailsBox.jsx";
+import Card from "../common/Card.jsx";
 import HighlightTemplate from "../common/HighlightTemplate.jsx";
 import HighlightListItem from "../common/HighlightListItem.jsx";
+import { toast } from "react-toastify";
 
-const DetailedPersonHighlight = ({ personData, setEditMode, handleDelete }) => {
+const DetailedPersonHighlight = ({
+  personData,
+  setEditMode,
+  handleDelete,
+  image,
+  fetchPersonData,
+}) => {
   if (!personData) return null;
 
   const fullName = personData.firstName + " " + personData.lastName;
@@ -16,7 +25,14 @@ const DetailedPersonHighlight = ({ personData, setEditMode, handleDelete }) => {
       createdAt={personData.createdAt}
       updatedAt={[personData.updatedAt]}
     >
-      <ContactDetailsBox personData={personData} />
+      <div className="flex justify-center">
+        <PersonImageWithUploadBox
+          image={image}
+          personData={personData}
+          fetchPersonData={fetchPersonData}
+        />
+        <ContactDetailsBox personData={personData} />
+      </div>
       <HighlightListItem value={personData.summary} />
     </HighlightTemplate>
   );

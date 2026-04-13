@@ -1,8 +1,7 @@
 import { format } from "date-fns";
 import { useState } from "react";
 import FetchValueOptionsHelper from "../../utils/FetchValueOptionsHelper.js";
-import { Label, Textarea, TextInput, Checkbox, FileInput } from "flowbite-react";
-import CloudinaryService from "../../services/CloudinaryService.js";
+import { Label, Textarea, TextInput, Checkbox } from "flowbite-react";
 import Select from "react-select";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -31,8 +30,6 @@ const NewProductionForm = () => {
   const [sundowners, setSundowners] = useState(false);
   const [notConfirmed, setNotConfirmed] = useState(false);
   const [flyerFile, setFlyerFile] = useState("");
-  const [flyerImage, setFlyerImage] = useState(null);
-  const [flyerPreviewUrl, setFlyerPreviewUrl] = useState(null);
 
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
@@ -55,9 +52,6 @@ const NewProductionForm = () => {
         notConfirmed,
         flyerFile,
       });
-      if (flyerImage) {
-        await CloudinaryService.uploadImage(flyerImage, response.data.production.id, "flyers");
-      }
       navigate(`/archive/productions/${response.data.production.id}`);
     } catch (e) {
       return;
@@ -161,24 +155,14 @@ const NewProductionForm = () => {
           </div>
         </div>
         <div>
-          <div className="mb-2 block italic">
-            <Label value="Flyer" />
+          {/* <div className="mb-2 block italic">
+            <Label value="Flyer File" />
           </div>
-          {flyerPreviewUrl ? (
-            <img src={flyerPreviewUrl} alt="Flyer preview" className="max-h-48 rounded border border-gray-300 mb-2" />
-          ) : (
-            <div className="flex items-center justify-center h-32 border-2 border-dashed border-gray-300 rounded text-gray-400 text-sm mb-2">
-              No flyer selected
-            </div>
-          )}
-          <FileInput
-            sizing="sm"
-            onChange={(e) => {
-              const file = e.target.files[0] ?? null;
-              setFlyerImage(file);
-              setFlyerPreviewUrl(file ? URL.createObjectURL(file) : null);
-            }}
-          />
+          <TextInput
+            placeholder="oliver-flyer.pdf"
+            value={flyerFile}
+            onChange={(e) => setFlyerFile(e.target.value)}
+          /> */}
         </div>
         <div className="grid grid-cols-2 justify-end px-2">
           <Link

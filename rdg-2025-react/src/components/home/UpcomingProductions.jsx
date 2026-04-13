@@ -16,6 +16,12 @@ const UpcomingProductions = () => {
     getProductions();
   }, []);
 
+  const pictureLinks = [
+    // "/images/productions/batb.jpeg",
+    // "/images/productions/rock-paper-scissors.jpeg",
+    "/images/productions/pinter.jpeg",
+  ];
+
   return (
     <>
       <div className="text-rdg-red font-bold text-lg ">
@@ -23,11 +29,12 @@ const UpcomingProductions = () => {
       </div>
       {productions.length > 0 ? (
         productions
-          .slice(0, 3)
-          .map((production) => (
+          .slice(0, 1)
+          .map((production, idx) => (
             <HomeProductionSpotLight
               production={production}
               key={production.id}
+              image={pictureLinks[idx]}
             />
           ))
       ) : (
