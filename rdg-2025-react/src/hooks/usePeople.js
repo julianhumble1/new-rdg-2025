@@ -54,6 +54,7 @@ export const usePeople = () => {
       addressStreet,
       addressTown,
       addressPostcode,
+      imageId,
     }) =>
       PersonService.updatePerson(
         personId,
@@ -65,7 +66,16 @@ export const usePeople = () => {
         addressStreet,
         addressTown,
         addressPostcode,
+        imageId,
       ),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["people"] });
+    },
+  });
+
+  const updatePersonWithImage = useMutation({
+    mutationFn: ({ personData, imageId }) =>
+      PersonService.updatePersonWithImage(personData, imageId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["people"] });
     },
@@ -83,6 +93,7 @@ export const usePeople = () => {
     responseType,
     createPerson,
     updatePerson,
+    updatePersonWithImage,
     deletePerson,
   };
 };
