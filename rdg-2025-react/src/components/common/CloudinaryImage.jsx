@@ -3,7 +3,7 @@ import NotFound from "./NotFound.jsx";
 import CloudinaryService from "../../services/CloudinaryService.js";
 import CustomSpinner from "./CustomSpinner.jsx";
 
-const CloudinaryImage = ({ idNumber, folder, newUploadedUrl }) => {
+const CloudinaryImage = ({ idNumber, folder, newUploadedUrl, fallbackSrc }) => {
   const [url, setUrl] = useState("");
   const [exists, setExists] = useState(true);
   const [loading, setLoading] = useState(true);
@@ -27,13 +27,17 @@ const CloudinaryImage = ({ idNumber, folder, newUploadedUrl }) => {
       }
     };
     getUrl();
-  });
+  }, [newUploadedUrl, folder, idNumber]);
 
   return (
     <div className="w-full h-full">
       {!loading ? (
         exists ? (
-          <img src={url} className="w-full h-full object-cover object-center" />
+          <img src={url} className="w-full h-full object-contain object-center" />
+        ) : fallbackSrc ? (
+          <div className="w-full h-full flex items-center justify-center bg-gray-100">
+            <img src={fallbackSrc} className="max-h-full max-w-full" />
+          </div>
         ) : (
           <NotFound />
         )

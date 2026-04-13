@@ -3,7 +3,7 @@ import Cookies from "js-cookie";
 import { toast } from "react-toastify";
 import { getBaseUrl } from "./baseUrl.js";
 
-const baseFolder = import.meta.env.VITE_CLOUDINARY_BASE_FOLDER;
+const baseFolder = import.meta.env.VITE_CLOUDINARY_BASE_FOLDER ?? "dev";
 
 const baseUrl = getBaseUrl();
 
@@ -37,7 +37,6 @@ export default class CloudinaryService {
       formData.append("upload_preset", preset);
       formData.append("asset_folder", `${baseFolder}/${preset}`);
       formData.append("public_id", publicId);
-      formData.append("eager", ["c_fill,w_1600,h_900,g_auto/f_auto/q_auto"]);
 
       formData.append("signature", signature);
       formData.append("api_key", apiKey);
@@ -73,7 +72,7 @@ export default class CloudinaryService {
   };
 
   static getUrl = async (idNumber, preset) => {
-    const publicId = `${baseFolder}_${preset}_${idNumber}`;
+    const publicId = `${baseFolder}/${preset}/${baseFolder}_${preset}_${idNumber}`;
     const response = await axios.get(`${baseUrl}/cloudinary/url`, {
       params: {
         publicId,
