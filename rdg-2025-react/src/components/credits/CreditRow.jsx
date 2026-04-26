@@ -9,7 +9,7 @@ const CreditRow = ({ credit, handleDelete }) => {
     <Table.Row>
       <Table.Cell>
         <div className="flex flex-col">
-          <div className="font-bold">{credit.name}</div>
+          <div className="font-bold">{credit?.name}</div>
           <div>{credit.summary}</div>
         </div>
       </Table.Cell>
@@ -25,7 +25,7 @@ const CreditRow = ({ credit, handleDelete }) => {
           to={`/productions/${credit.production.id}`}
           className="hover:underline"
         >
-          {credit.production.name}
+          {credit.production?.name}
         </Link>
       </Table.Cell>
       {role === "ROLE_ADMIN" && (
