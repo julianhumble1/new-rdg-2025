@@ -20,14 +20,14 @@ const CreditsTabs = ({
   return creditsParent === "person" ? (
     <Tabs variant="underline" className="m-3 mb-0">
       {actingCredits.length > 0 && (
-        <Tabs.Item active title="Acting" icon={ScaleIcon}>
+        <Tabs.Item active title={`Acting (${actingCredits.length})`} icon={ScaleIcon}>
           <div className="m-2 overflow-auto">
             <CreditsTable credits={actingCredits} handleDelete={handleDelete} />
           </div>
         </Tabs.Item>
       )}
       {musicianCredits.length > 0 && (
-        <Tabs.Item active title="Musician" icon={MusicalNoteIcon}>
+        <Tabs.Item active title={`Musician (${musicianCredits.length})` } icon={MusicalNoteIcon}>
           <div className="m-2 overflow-auto">
             <CreditsTable
               credits={musicianCredits}
@@ -37,7 +37,7 @@ const CreditsTabs = ({
         </Tabs.Item>
       )}
       {producerCredits.length > 0 && (
-        <Tabs.Item active title="Producer" icon={FilmIcon}>
+        <Tabs.Item active title={`Producer (${producerCredits.length})`} icon={FilmIcon}>
           <div className="m-2 overflow-auto">
             <CreditsTable
               credits={producerCredits}
