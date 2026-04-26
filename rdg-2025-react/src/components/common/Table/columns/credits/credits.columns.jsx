@@ -20,7 +20,7 @@ export const getCreditsColumns = (onAfterDelete) => {
 export const creditsColumns = [
     {
         name: "Credit",
-        selector: (row) => row.name,
+        selector: (row) => row?.name,
         cell: (row) => (
             <ul>
                 <li className="line-clamp-3">{row?.name}</li>
