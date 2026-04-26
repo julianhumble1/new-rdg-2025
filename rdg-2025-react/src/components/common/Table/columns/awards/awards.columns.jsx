@@ -20,25 +20,25 @@ export const getAwardsColumns = (onAfterDelete) => {
 export const awardsColumns = [
     {
         name: "Award",
-        selector: (row) => row.name,
+        selector: (row) => row?.name,
     },
     {
         name: "Production",
-        selector: (row) => row.production,
+        selector: (row) => row?.production,
         cell: (row) => (
             <TableLink
                 link={`/productions/${row?.production?.id}`}
-                text={row.production.name}
+                text={row.production?.name}
             />
         ),
     },
     {
         name: "Festival",
-        selector: (row) => row.festival,
+        selector: (row) => row?.festival,
         cell: (row) => (
             <TableLink
                 link={`/festivals/${row?.festival?.id}`}
-                text={row.festival.name}
+                text={row.festival?.name}
             />
         ),
     },
