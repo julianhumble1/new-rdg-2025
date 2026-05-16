@@ -9,12 +9,19 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.BatchSize;
 import org.hibernate.type.NumericBooleanConverter;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+@NamedEntityGraph(
+    name = "Production.withAssociations",
+    attributeNodes = {
+        @NamedAttributeNode("venue")
+    }
+)
 @Entity
 @Table(name="productions")
 @Getter @Setter @NoArgsConstructor @ToString(exclude = "credits")
@@ -56,10 +63,12 @@ public class Production {
 
     @OneToMany(mappedBy = "production", cascade = CascadeType.ALL)
     @JsonBackReference
+    @BatchSize(size = 50)
     private List<Performance> performances = new ArrayList<>();
 
     @OneToMany(mappedBy = "production", cascade = CascadeType.REMOVE)
     @JsonBackReference
+    @BatchSize(size = 50)
     private List<Credit> credits = new ArrayList<>();
 
     @OneToMany(mappedBy = "production")
@@ -68,6 +77,7 @@ public class Production {
 
     @OneToMany(mappedBy = "production", cascade = CascadeType.PERSIST)
     @JsonBackReference
+    @BatchSize(size = 50)
     private List<Award> awards = new ArrayList<>();
 
     public Production(String name, Venue venue, String author, String description, LocalDateTime auditionDate, boolean sundowners, boolean notConfirmed, String flyerFile) {
