@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import FestivalService from "../services/FestivalService.js";
 
-export const useFestivals = () => {
+export const useFestivals = ({ fetchList = true } = {}) => {
   const queryClient = useQueryClient();
 
   const festivals = useQuery({
@@ -11,6 +11,7 @@ export const useFestivals = () => {
       return response.data.festivals;
     },
     staleTime: 10 * 60 * 1000,
+    enabled: fetchList,
   });
 
   const createFestival = useMutation({

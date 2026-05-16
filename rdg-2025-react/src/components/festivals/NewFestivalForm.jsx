@@ -17,7 +17,7 @@ const NewFestivalForm = () => {
   const currentYear = new Date().getFullYear();
 
   const { venues } = useVenues();
-  const { createFestival } = useFestivals();
+  const { createFestival } = useFestivals({ fetchList: false });
   const venueOptions = venues.data
     ? FetchValueOptionsHelper.formatVenueOptions(venues.data)
     : [];

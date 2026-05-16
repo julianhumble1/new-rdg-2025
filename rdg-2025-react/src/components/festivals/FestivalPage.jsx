@@ -16,7 +16,7 @@ const FestivalPage = () => {
     const [searchParams] = useSearchParams();
     const navigate = useNavigate();
 
-    const { deleteFestival, updateFestival } = useFestivals();
+    const { deleteFestival, updateFestival } = useFestivals({ fetchList: false });
     const { deletePerformance } = usePerformances();
 
     const [festivalData, setFestivalData] = useState(null);
