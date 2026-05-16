@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import VenueService from "../services/VenueService.js";
 
-export const useVenues = () => {
+export const useVenues = ({ fetchList = true } = {}) => {
   const queryClient = useQueryClient();
 
   const venues = useQuery({
@@ -11,6 +11,7 @@ export const useVenues = () => {
       return response.data.venues;
     },
     staleTime: 10 * 60 * 1000,
+    enabled: fetchList,
   });
 
   const createVenue = useMutation({

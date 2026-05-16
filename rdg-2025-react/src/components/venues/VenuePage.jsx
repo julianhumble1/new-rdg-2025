@@ -18,8 +18,8 @@ const VenuePage = () => {
     const [searchParams] = useSearchParams();
     const navigate = useNavigate();
 
-    const { deleteVenue, updateVenue } = useVenues();
-    const { deleteFestival } = useFestivals();
+    const { deleteVenue, updateVenue } = useVenues({ fetchList: false });
+    const { deleteFestival } = useFestivals({ fetchList: false });
 
     const [venueData, setVenueData] = useState(null);
     const [productions, setProductions] = useState([]);

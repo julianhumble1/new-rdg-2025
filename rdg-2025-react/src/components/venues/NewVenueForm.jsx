@@ -6,7 +6,7 @@ import { useVenues } from "../../hooks/useVenues.js";
 
 const NewVenueForm = () => {
   const navigate = useNavigate();
-  const { createVenue } = useVenues();
+  const { createVenue } = useVenues({ fetchList: false });
 
   const [name, setName] = useState("");
   const [address, setAddress] = useState("");
