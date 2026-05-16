@@ -12,13 +12,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@NamedEntityGraph(
-    name = "Venue.withAssociations",
-    attributeNodes = {
-        @NamedAttributeNode("productions"),
-        @NamedAttributeNode("festivals")
-    }
-)
 @Entity
 @Table(name="venues")
 @Getter @Setter @NoArgsConstructor @ToString(exclude = "productions")
