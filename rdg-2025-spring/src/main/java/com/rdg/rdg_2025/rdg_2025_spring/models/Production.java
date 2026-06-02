@@ -23,7 +23,10 @@ import java.util.List;
         }
 )
 @Entity
-@Table(name="productions")
+@Table(name = "productions", indexes = {
+        @Index(name = "idx_prod_name",     columnList = "name"),
+        @Index(name = "idx_prod_venue_id", columnList = "venue_id")
+})
 @Getter @Setter @NoArgsConstructor @ToString(exclude = "credits")
 public class Production {
 

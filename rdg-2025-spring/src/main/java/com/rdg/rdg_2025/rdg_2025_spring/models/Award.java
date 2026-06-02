@@ -8,7 +8,11 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name="awards")
+@Table(name = "awards", indexes = {
+        @Index(name = "idx_award_production_id", columnList = "production_id"),
+        @Index(name = "idx_award_person_id",     columnList = "person_id"),
+        @Index(name = "idx_award_festival_id",   columnList = "festival_id")
+})
 @Getter @Setter @NoArgsConstructor
 public class Award {
 
