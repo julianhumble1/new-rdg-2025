@@ -9,10 +9,10 @@ import java.util.List;
 @Getter @Setter
 public class ProductionsResponse {
 
-    private List<ProductionResponse> productions;
+    private List<Production> productions;
 
     public ProductionsResponse(List<Production> productions) {
-        this.productions = productions.stream().map(ProductionResponse::new).toList();
+        this.productions = productions;
     }
 
 
