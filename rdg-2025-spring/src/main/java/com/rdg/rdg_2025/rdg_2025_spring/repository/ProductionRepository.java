@@ -25,7 +25,8 @@ public interface ProductionRepository extends JpaRepository<Production, Integer>
     int countByNameStartingWith(@Param("prefix") String prefix);
 
 
-    @Query("SELECT DISTINCT p FROM Production p JOIN p.performances perf LEFT JOIN FETCH p.venue WHERE perf.time > :currentTime")
+    @Query("SELECT DISTINCT p FROM Production p LEFT JOIN FETCH p.venue LEFT JOIN FETCH p.performances " +
+            "WHERE EXISTS (SELECT perf FROM Performance perf WHERE perf.production = p AND perf.time > :currentTime)")
     List<Production> findAllProductionsWithFuturePerformances(@Param("currentTime") LocalDateTime currentTime);
 
 }
