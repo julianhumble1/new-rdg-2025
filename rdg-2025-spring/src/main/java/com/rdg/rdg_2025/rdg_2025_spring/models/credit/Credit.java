@@ -12,7 +12,10 @@ import lombok.ToString;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name="credits")
+@Table(name = "credits", indexes = {
+        @Index(name = "idx_credit_production_id", columnList = "production_id"),
+        @Index(name = "idx_credit_person_id",     columnList = "person_id")
+})
 @Getter @Setter @NoArgsConstructor @ToString
 public class Credit {
 

@@ -9,7 +9,9 @@ import lombok.Setter;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name="events")
+@Table(name = "events", indexes = {
+        @Index(name = "idx_event_venue_id", columnList = "venue_id")
+})
 @Getter @Setter @NoArgsConstructor
 public class Event {
 
