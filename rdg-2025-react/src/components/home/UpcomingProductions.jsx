@@ -15,13 +15,9 @@ const UpcomingProductions = () => {
     const getProductions = async () => {
       const response = await ProductionService.getFutureProductions();
       if (response.status === 200) {
-        const basicProductions = response.data.productions;
-        const detailed = await Promise.all(
-          basicProductions.map((p) => ProductionService.getProductionById(p.id)),
-        );
-        const withPerformances = detailed.map((r) => ({
-          ...r.data.production,
-          performances: r.data.performances ?? [],
+        const withPerformances = response.data.productions.map((p) => ({
+          ...p.production,
+          performances: p.performances ?? [],
         }));
         withPerformances.sort(
           (a, b) => getEarliestPerformanceTime(a.performances) - getEarliestPerformanceTime(b.performances),

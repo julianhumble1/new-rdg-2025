@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -118,7 +119,8 @@ public class ProductionController {
     public ResponseEntity<?> getProductionsWithFuturePerformances() {
         try {
             List<Production> productions = productionService.getProductionsWithFuturePerformances();
-            return ResponseEntity.ok().body(new ProductionsResponse(productions));
+            List<ProductionResponse> productionResponses = productions.stream().map(ProductionResponse::new).toList();
+            return ResponseEntity.ok().body(Map.of("productions", productionResponses));
         } catch (DatabaseException ex) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
         }
