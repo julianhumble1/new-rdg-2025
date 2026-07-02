@@ -22,7 +22,7 @@ const HighlightListItem = ({ label, value, link, linkType }) => {
           </Link>
         )
       ) : (
-        <div className="text-wrap">{value}</div>
+        <div className="text-wrap whitespace-pre-wrap">{value}</div>
       )}
     </div>
   );
