@@ -1,6 +1,8 @@
+import EditableTextWrapper from "../../components/common/EditableTextWrapper.jsx"
+
 const AboutContent = () => {
   return (
-    <>
+    <EditableTextWrapper contentKey="about-1">
       <div>
         Runnymede Drama Group (charity no. 292974) is run by volunteer committee
         members, elected each year at our AGM, and powered by a membership with
@@ -25,7 +27,7 @@ const AboutContent = () => {
       >
         Join us
       </a>
-    </>
+    </EditableTextWrapper>
   );
 };
 

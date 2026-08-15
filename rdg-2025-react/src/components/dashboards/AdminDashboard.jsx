@@ -61,19 +61,6 @@ const AdminDashboard = () => {
           showSeeAll={false}
           icon={<TrophyIcon />}
         />
-        {/* <AdminDashboardCard
-          name="Images"
-          showSeeAll={false}
-          showAddNew={false}
-          basePath="home/images"
-          icon={<PhotoIcon />}
-          customButton={
-            <Button onClick={() => navigate("/home/images")}>
-              Update Home Images
-              <ArrowRightIcon className="w-4 h-4 inline ml-2" />
-            </Button>
-          }
-        /> */}
         <AdminDashboardCard
           name="Events"
           showSeeAll

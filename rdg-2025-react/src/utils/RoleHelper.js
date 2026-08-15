@@ -1,4 +1,6 @@
 export default class RoleHelper {
+  static isAdmin = (role) => Boolean(role) && role.includes("ADMIN");
+
   static determineMainRole = (roles) => {
     if (roles.includes("ROLE_SUPERADMIN")) {
       return "ROLE_SUPERADMIN";

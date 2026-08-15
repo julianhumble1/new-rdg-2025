@@ -18,7 +18,7 @@ const AdminDashboardCard = ({
         <div className="text-sky-900 w-16 h-16 mx-auto group-hover:scale-110">
           {icon}
         </div>
-        <div className="mx-auto font-bold text-sm">{name}</div>
+        <div className="mx-auto font-bold text-sm text-center">{name}</div>
       </div>
       <div className="w-full flex flex-col gap-2 justify-center">
         {showAddNew && (
