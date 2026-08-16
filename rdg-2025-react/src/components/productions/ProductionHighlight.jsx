@@ -5,6 +5,9 @@ import HighlightListItem from "../common/HighlightListItem.jsx";
 import HighlightTemplate from "../common/HighlightTemplate.jsx";
 import CloudinaryService from "../../services/CloudinaryService.js";
 
+const hasTime = (date) =>
+  date.getHours() !== 0 || date.getMinutes() !== 0 || date.getSeconds() !== 0;
+
 const ProductionHighlight = ({ productionData, setEditMode, handleDelete }) => {
   const [flyerUrl, setFlyerUrl] = useState(null);
 
@@ -53,7 +56,9 @@ const ProductionHighlight = ({ productionData, setEditMode, handleDelete }) => {
             label="Audition Date"
             value={format(
               new Date(productionData.auditionDate),
-              "MMMM d, yyyy, h:mm a",
+              hasTime(new Date(productionData.auditionDate))
+                ? "MMMM d, yyyy, h:mm a"
+                : "MMMM d, yyyy",
             )}
           />
         )}

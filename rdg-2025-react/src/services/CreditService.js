@@ -9,6 +9,8 @@ export default class CreditService {
   static addNewCredit = async (name, type, productionId, personId, summary) => {
     const token = Cookies.get("token");
 
+    console.log("preson id:", personId)
+
     try {
       const response = await axios.post(
         `${baseUrl}/credits`,
