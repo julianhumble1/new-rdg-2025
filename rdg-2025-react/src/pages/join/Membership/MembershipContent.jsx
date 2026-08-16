@@ -5,7 +5,7 @@ const MembershipContent = () => {
         <div className="font-bold text-rdg-red">Fees</div>
         <ul className="list-disc ml-4">
           <li>
-            <strong>Full membership:</strong> £35 per year
+            <strong>Full membership:</strong> £40 per year
           </li>
           <li>
             <strong>Students, retired and unwaged:</strong> 50% discount
