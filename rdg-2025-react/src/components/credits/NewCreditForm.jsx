@@ -37,7 +37,6 @@ const NewCreditForm = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log(person)
     try {
       const response = await CreditService.addNewCredit(
         name,
@@ -48,7 +47,6 @@ const NewCreditForm = () => {
       );
       navigate(`/archive/productions/${response.data.credit.production.id}`);
     } catch (e) {
-      console.log("error", e)
       return;
     }
   };
