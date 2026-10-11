@@ -1,4 +1,3 @@
-import Socials from "../modals/Socials.jsx";
 import UpcomingProductions from "./UpcomingProductions.jsx";
 
 const HomeContent = () => {
@@ -22,10 +21,6 @@ const HomeContent = () => {
       </div>
       {/* <UpcomingProduction /> */}
       <UpcomingProductions />
-      <div className="hidden md:inline">
-        {/* <div className="text-center">Find us on socials:</div> */}
-        <Socials />
-      </div>
     </>
   );
 };

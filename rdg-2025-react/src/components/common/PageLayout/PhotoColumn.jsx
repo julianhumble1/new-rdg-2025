@@ -20,11 +20,6 @@ const PhotoColumn = ({ imgSrc }) => {
           loaded ? "opacity-100" : "opacity-0"
         }`}
       />
-
-      <div className="md:hidden">
-        <div className="flex justify-center">Find us on socials:</div>
-        <Socials />
-      </div>
     </div>
   );
 };
