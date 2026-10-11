@@ -52,6 +52,7 @@ import NewUserForm from "./components/users/NewUserForm.jsx";
 import AllUsers from "./components/users/AllUsers.jsx";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import ResetPassword from "./components/ResetPassword.jsx";
+import Footer from "./components/footer/Footer.jsx";
 
 const queryClient = new QueryClient();
 
@@ -164,6 +165,7 @@ function App() {
 
               <Route path="/contact" element={<Contact />} />
             </Routes>
+            <Footer />
           </div>
         </QueryClientProvider>
       </Router>

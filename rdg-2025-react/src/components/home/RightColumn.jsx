@@ -1,5 +1,3 @@
-import Socials from "../modals/Socials.jsx";
-
 const RightColumn = () => {
   return (
     <div className="flex-1 flex flex-col p-6 gap-3">
@@ -19,10 +17,6 @@ const RightColumn = () => {
         least five productions each year at venues including The Riverhouse Barn
         and Cecil Hepworth Playhouse in Walton, and the Rhoda McGaw Theatre in
         Woking.
-      </div>
-      <div className="hidden md:inline">
-        <div className="text-center">Find us on socials:</div>
-        <Socials />
       </div>
     </div>
   );
