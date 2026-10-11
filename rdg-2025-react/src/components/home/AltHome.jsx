@@ -4,13 +4,16 @@ import InstaFeed from "./InstaFeed.jsx";
 
 const AltHome = () => {
   return (
-    <StandardPageLayout
-      imgSrc="/images/scribble/1.webp"
-      title="We are RDG"
-      content={HomeContent}
-      extraComponent={<InstaFeed />}
-      extraComponentSide="left"
-    />
+    <>
+      <StandardPageLayout
+        imgSrc="/images/scribble/1.webp"
+        title="We are RDG"
+        content={HomeContent}
+        // extraComponent={<InstaFeed />}
+        // extraComponentSide="left"
+      />
+      <InstaFeed />
+    </>
   );
 };
 
