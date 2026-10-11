@@ -5,7 +5,7 @@ const instagramUrl = "https://www.instagram.com/runnymededramagroup/";
 
 const InstaFeed = () => {
   return (
-    <div className="flex-1 flex flex-col justify-start min-w-0 px-24 py-6 bg-slate-100 rounded-t-md">
+    <div className="flex-1 flex flex-col justify-start min-w-0 px-4 md:px-12 lg:px-2 py-6 bg-slate-100 rounded-t-md">
       <div className="text-center mb-6 ">
         <a
           href={instagramUrl}
