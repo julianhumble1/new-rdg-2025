@@ -22,9 +22,6 @@ const MembershipContent = () => {
               <li>£10 for a one-act festival play</li>
             </ul>
           </li>
-          <li>
-            <strong>Social membership:</strong> £5 per year
-          </li>
         </ul>
       </div>
       <div>
