@@ -1,13 +1,13 @@
 import { Checkbox, Label, Textarea, TextInput, FileInput } from "flowbite-react";
 import CloudinaryService from "../../services/CloudinaryService.js";
 import { useState, useEffect } from "react";
-import DatePicker from "react-datepicker";
 import Select from "react-select";
 import FetchValueOptionsHelper from "../../utils/FetchValueOptionsHelper.js";
 import ErrorMessage from "../modals/ErrorMessage.jsx";
 import ConfirmCancelButtons from "../common/ConfirmCancelButtons.jsx";
 import { useVenues } from "../../hooks/useVenues.js";
 import CustomSpinner from "../common/CustomSpinner.jsx";
+import OptionalDateTimePicker from "../common/OptionalDateTimePicker.jsx";
 
 const EditProductionForm = ({ productionData, handleEdit, setEditMode }) => {
   const { venues } = useVenues();
@@ -28,9 +28,7 @@ const EditProductionForm = ({ productionData, handleEdit, setEditMode }) => {
     productionData.description ? productionData.description : "",
   );
   const [auditionDate, setAuditionDate] = useState(
-    productionData.auditionDate
-      ? new Date(productionData.auditionDate)
-      : new Date(),
+    productionData.auditionDate ? new Date(productionData.auditionDate) : null,
   );
   const [sundowners, setSundowners] = useState(
     productionData.sundowners ? productionData.sundowners : false,
@@ -130,16 +128,10 @@ const EditProductionForm = ({ productionData, handleEdit, setEditMode }) => {
         </div>
         <div className="grid grid-cols-2">
           <div>
-            <div className="italic">
-              <Label value="Audition Date" />
-            </div>
-            <DatePicker
-              className="border border-gray-300 rounded p-2 text-sm"
-              selected={auditionDate}
-              onChange={(date) => setAuditionDate(date)}
-              dateFormat="dd/MM/yyyy"
-              isClearable
-              showIcon
+            <OptionalDateTimePicker
+              label="Audition Date"
+              value={auditionDate}
+              onChange={setAuditionDate}
             />
           </div>
           <div className="flex flex-col justify-center gap-2">

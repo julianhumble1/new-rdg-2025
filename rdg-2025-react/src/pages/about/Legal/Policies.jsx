@@ -1,6 +1,6 @@
 const Policies = () => {
   const policyFiles = [
-    "Child Protection & Safeguarding Policy January 2026.pdf",
+    "Child Protection & Safeguarding Policy September 2026.pdf",
     "Data Privacy Notice January 2026.pdf",
     "Data Privacy Policy January 2026.pdf",
   ];

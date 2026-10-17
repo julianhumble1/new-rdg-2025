@@ -5,7 +5,7 @@ const MembershipContent = () => {
         <div className="font-bold text-rdg-red">Fees</div>
         <ul className="list-disc ml-4">
           <li>
-            <strong>Full membership:</strong> £35 per year
+            <strong>Full membership:</strong> £40 per year
           </li>
           <li>
             <strong>Students, retired and unwaged:</strong> 50% discount
@@ -21,9 +21,6 @@ const MembershipContent = () => {
               <li>£20 for a musical</li>
               <li>£10 for a one-act festival play</li>
             </ul>
-          </li>
-          <li>
-            <strong>Social membership:</strong> £5 per year
           </li>
         </ul>
       </div>

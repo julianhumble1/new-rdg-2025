@@ -42,7 +42,7 @@ const NewCreditForm = () => {
         name,
         type.value,
         production.value,
-        person.value,
+        person?.value,
         summary,
       );
       navigate(`/archive/productions/${response.data.credit.production.id}`);
