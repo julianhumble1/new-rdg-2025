@@ -2,7 +2,7 @@ import Socials from "../modals/Socials.jsx";
 
 const Footer = () => {
   return (
-    <footer className="w-full bg-slate-50 py-6 px-4 mt-8">
+    <footer className="w-full py-6 px-4 bg-blue-50">
       <div className="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-sm">
         <div className="flex flex-col items-center sm:items-start gap-1">
           <div className="flex gap-2">
