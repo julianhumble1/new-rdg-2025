@@ -33,7 +33,10 @@ const CloudinaryImage = ({ idNumber, folder, newUploadedUrl, fallbackSrc }) => {
     <div className="w-full h-full">
       {!loading ? (
         exists ? (
-          <img src={url} className="w-full h-full object-contain object-center" />
+          <img
+            src={url}
+            className="w-full h-full object-contain object-center"
+          />
         ) : fallbackSrc ? (
           <div className="w-full h-full flex items-center justify-center bg-gray-100">
             <img src={fallbackSrc} className="max-h-full max-w-full" />

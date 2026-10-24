@@ -57,7 +57,7 @@ Tailwind CSS + Flowbite React components. Brand colours defined in `tailwind.con
 
 Primary font: Merriweather (serif), loaded from Google Fonts in `index.html`.
 
-Prettier config: 4-space tabs, 120-char line width.
+Prettier config: 2-space indent, 80-char line width, trailing commas, LF line endings (see `.prettierrc.json`).
 
 ### Layout components
 

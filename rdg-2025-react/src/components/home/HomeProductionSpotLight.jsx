@@ -4,7 +4,10 @@ import DateHelper from "../../utils/DateHelper.js";
 import { Link } from "react-router-dom";
 import CloudinaryImage from "../common/CloudinaryImage.jsx";
 
-const HomeProductionSpotLight = ({ production, performances: performancesProp }) => {
+const HomeProductionSpotLight = ({
+  production,
+  performances: performancesProp,
+}) => {
   const [performanceStatement, setPerformanceStatement] = useState("");
   const [performances, setPerformances] = useState(performancesProp ?? []);
 
@@ -12,7 +15,9 @@ const HomeProductionSpotLight = ({ production, performances: performancesProp })
     if (performancesProp) {
       setPerformances(performancesProp);
       if (performancesProp.length > 0) {
-        setPerformanceStatement(DateHelper.createPerformanceStatement(performancesProp));
+        setPerformanceStatement(
+          DateHelper.createPerformanceStatement(performancesProp),
+        );
       }
       return;
     }
@@ -32,7 +37,11 @@ const HomeProductionSpotLight = ({ production, performances: performancesProp })
   return (
     <div className="flex w-full bg-gray-100  rounded-xl shadow-md hover:shadow-xl transition sm:h-56 max-h-56 relative flex-1">
       <div className="h-40 w-60 shrink-0 rounded-l-xl overflow-hidden">
-        <CloudinaryImage idNumber={production.id} folder="flyers" fallbackSrc="/images/new_logo_transparent.png" />
+        <CloudinaryImage
+          idNumber={production.id}
+          folder="flyers"
+          fallbackSrc="/images/new_logo_transparent.png"
+        />
       </div>
       <div className="flex flex-col gap-1 p-3 w-1/2 md:w-auto ">
         <div className="flex">
