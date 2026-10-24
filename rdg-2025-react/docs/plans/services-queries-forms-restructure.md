@@ -476,7 +476,8 @@ Vitest and Testing Library are already installed but there are no tests. The new
   - Trimming and empty-to-null rules hold.
 - **Service wire format.** `toWire` turns dates into the backend format and handles `null`.
 - **Invalidation (for the wizard and other complex mutations).** Spy on `queryClient.invalidateQueries` and assert the keys.
-- **Field components.** A few render tests: shows an error, shows the required marker, the counter updates.
+
+[//]: # (- **Field components.** A few render tests: shows an error, shows the required marker, the counter updates.)
 
 Don't aim for coverage numbers. Test the rules and the mappings, because that's where the bugs in §2 came from.
 
