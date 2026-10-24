@@ -1,7 +1,13 @@
 import { format } from "date-fns";
 import { useState } from "react";
 import FetchValueOptionsHelper from "../../utils/FetchValueOptionsHelper.js";
-import { Label, Textarea, TextInput, Checkbox, FileInput } from "flowbite-react";
+import {
+  Label,
+  Textarea,
+  TextInput,
+  Checkbox,
+  FileInput,
+} from "flowbite-react";
 import CloudinaryService from "../../services/CloudinaryService.js";
 import Select from "react-select";
 import "react-datepicker/dist/react-datepicker.css";
@@ -56,7 +62,11 @@ const NewProductionForm = () => {
         flyerFile,
       });
       if (flyerImage) {
-        await CloudinaryService.uploadImage(flyerImage, response.data.production.id, "flyers");
+        await CloudinaryService.uploadImage(
+          flyerImage,
+          response.data.production.id,
+          "flyers",
+        );
       }
       navigate(`/archive/productions/${response.data.production.id}`);
     } catch (e) {
@@ -159,7 +169,11 @@ const NewProductionForm = () => {
             <Label value="Flyer" />
           </div>
           {flyerPreviewUrl ? (
-            <img src={flyerPreviewUrl} alt="Flyer preview" className="max-h-48 rounded border border-gray-300 mb-2" />
+            <img
+              src={flyerPreviewUrl}
+              alt="Flyer preview"
+              className="max-h-48 rounded border border-gray-300 mb-2"
+            />
           ) : (
             <div className="flex items-center justify-center h-32 border-2 border-dashed border-gray-300 rounded text-gray-400 text-sm mb-2">
               No flyer selected

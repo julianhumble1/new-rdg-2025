@@ -1,4 +1,10 @@
-import { Checkbox, Label, Textarea, TextInput, FileInput } from "flowbite-react";
+import {
+  Checkbox,
+  Label,
+  Textarea,
+  TextInput,
+  FileInput,
+} from "flowbite-react";
 import CloudinaryService from "../../services/CloudinaryService.js";
 import { useState, useEffect } from "react";
 import Select from "react-select";
@@ -57,9 +63,24 @@ const EditProductionForm = ({ productionData, handleEdit, setEditMode }) => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    await handleEdit(event, productionData.id, name, venue ? venue.value : null, author, description, auditionDate, sundowners, notConfirmed, flyerFile);
+    await handleEdit(
+      event,
+      productionData.id,
+      name,
+      venue ? venue.value : null,
+      author,
+      description,
+      auditionDate,
+      sundowners,
+      notConfirmed,
+      flyerFile,
+    );
     if (flyerImage) {
-      await CloudinaryService.uploadImage(flyerImage, productionData.id, "flyers");
+      await CloudinaryService.uploadImage(
+        flyerImage,
+        productionData.id,
+        "flyers",
+      );
     }
   };
 

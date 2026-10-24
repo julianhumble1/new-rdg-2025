@@ -20,7 +20,9 @@ const UpcomingProductions = () => {
           performances: p.performances ?? [],
         }));
         withPerformances.sort(
-          (a, b) => getEarliestPerformanceTime(a.performances) - getEarliestPerformanceTime(b.performances),
+          (a, b) =>
+            getEarliestPerformanceTime(a.performances) -
+            getEarliestPerformanceTime(b.performances),
         );
         setProductions(withPerformances);
       }
