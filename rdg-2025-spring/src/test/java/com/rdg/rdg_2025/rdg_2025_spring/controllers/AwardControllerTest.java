@@ -108,8 +108,7 @@ public class AwardControllerTest {
         mockMvc.perform(post("/awards")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(req)))
-                .andExpect(status().isInternalServerError())
-                .andExpect(content().string("db error"));
+                .andExpect(status().isInternalServerError());
     }
 
     @Test

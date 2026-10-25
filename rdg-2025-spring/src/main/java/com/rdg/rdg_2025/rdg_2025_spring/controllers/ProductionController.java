@@ -1,18 +1,15 @@
 package com.rdg.rdg_2025.rdg_2025_spring.controllers;
 
-import com.rdg.rdg_2025.rdg_2025_spring.exception.DatabaseException;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Production;
 import com.rdg.rdg_2025.rdg_2025_spring.payload.request.production.ProductionRequest;
 import com.rdg.rdg_2025.rdg_2025_spring.payload.response.production.ProductionResponse;
 import com.rdg.rdg_2025.rdg_2025_spring.payload.response.production.ProductionsResponse;
 import com.rdg.rdg_2025.rdg_2025_spring.services.ProductionService;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;

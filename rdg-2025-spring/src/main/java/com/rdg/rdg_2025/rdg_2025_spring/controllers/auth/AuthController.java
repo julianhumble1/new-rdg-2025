@@ -12,10 +12,10 @@ import com.rdg.rdg_2025.rdg_2025_spring.repository.RoleRepository;
 import com.rdg.rdg_2025.rdg_2025_spring.repository.UserRepository;
 import com.rdg.rdg_2025.rdg_2025_spring.security.jwt.JwtUtils;
 import com.rdg.rdg_2025.rdg_2025_spring.security.services.UserDetailsImpl;
+import com.rdg.rdg_2025.rdg_2025_spring.services.UserService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -48,6 +48,9 @@ public class AuthController {
 
     @Autowired
     PasswordEncoder encoder;
+
+    @Autowired
+    UserService userService;
 
     @Autowired
     JwtUtils jwtUtils;
@@ -146,39 +149,14 @@ public class AuthController {
     @PatchMapping("/{userId}/reset-password")
     @PreAuthorize("hasRole('SUPERADMIN')")
     public ResponseEntity<?> updatePassword(@Valid @RequestBody UpdatePasswordRequest updatePasswordRequest, @PathVariable int userId) {
-
-        try {
-            User user = userRepository.findById((long) userId).orElseThrow(() -> new EntityNotFoundException(
-                    "No user with this id"
-            ));
-            String encodedPassword = encoder.encode(updatePasswordRequest.getNewPassword());
-            user.setPassword(encodedPassword);
-            user.setPasswordResetRequired(true);
-            userRepository.save(user);
-            return ResponseEntity.ok("Updated password successfully.");
-        } catch (EntityNotFoundException ex) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
-        } catch (Exception ex) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
-        }
+        userService.resetUserPassword(userId, updatePasswordRequest.getNewPassword());
+        return ResponseEntity.ok("Updated password successfully.");
     }
 
     @PatchMapping("/me/reset-password")
     public ResponseEntity<?> updateOwnPassword(@AuthenticationPrincipal UserDetails userDetails, @Valid @RequestBody UpdatePasswordRequest newPasswordRequest) {
-        String username = userDetails.getUsername();
-        System.out.println(newPasswordRequest.getNewPassword());
-        try {
-            User user = userRepository.findByUsername(username).orElseThrow(() -> new EntityNotFoundException("No user with this id"));
-            String encodedPassword = encoder.encode(newPasswordRequest.getNewPassword());
-            user.setPassword(encodedPassword);
-            user.setPasswordResetRequired(false);
-            userRepository.save(user);
-            return ResponseEntity.ok("Updated password successfully.");
-        } catch (EntityNotFoundException ex) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
-        } catch (Exception ex) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
-        }
+        userService.updateOwnPassword(userDetails.getUsername(), newPasswordRequest.getNewPassword());
+        return ResponseEntity.ok("Updated password successfully.");
     }
 
 }

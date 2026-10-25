@@ -1,11 +1,9 @@
 package com.rdg.rdg_2025.rdg_2025_spring.controllers;
 
-import com.rdg.rdg_2025.rdg_2025_spring.exception.DatabaseException;
 import com.rdg.rdg_2025.rdg_2025_spring.models.Performance;
 import com.rdg.rdg_2025.rdg_2025_spring.payload.request.performance.PerformanceRequest;
 import com.rdg.rdg_2025.rdg_2025_spring.payload.response.performance.PerformanceResponse;
 import com.rdg.rdg_2025.rdg_2025_spring.services.PerformanceService;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,57 +24,31 @@ public class PerformanceController {
     @PostMapping()
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> addNewPerformance(@Valid @RequestBody PerformanceRequest newPerformanceRequest) {
-        try {
-            Performance newPerformance = performanceService.addNewPerformance(newPerformanceRequest);
-            URI location = URI.create("/performances" + newPerformance.getId());
-            return ResponseEntity.created(location).body(new PerformanceResponse(newPerformance));
-        } catch (DatabaseException ex) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
-        } catch (EntityNotFoundException ex) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
-        }
+        Performance newPerformance = performanceService.addNewPerformance(newPerformanceRequest);
+        URI location = URI.create("/performances" + newPerformance.getId());
+        return ResponseEntity.created(location).body(new PerformanceResponse(newPerformance));
     }
 
     @DeleteMapping("/{performanceId}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> deletePerformanceById(@PathVariable int performanceId) {
-        try {
-            performanceService.deletePerformanceById(performanceId);
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-        } catch (EntityNotFoundException ex) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No Performance with this id");
-        } catch (DatabaseException ex) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
-        }
+        performanceService.deletePerformanceById(performanceId);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @PatchMapping("/{performanceId}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> updatePerformance(
             @PathVariable int performanceId, @Valid @RequestBody PerformanceRequest performanceRequest) {
-
-        try {
-            Performance performance = performanceService.updatePerformance(performanceId, performanceRequest);
-            return ResponseEntity.ok().body(new PerformanceResponse(performance));
-        } catch (EntityNotFoundException ex) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
-        } catch (DatabaseException ex) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
-        }
+        Performance performance = performanceService.updatePerformance(performanceId, performanceRequest);
+        return ResponseEntity.ok().body(new PerformanceResponse(performance));
     }
 
     @GetMapping("/{performanceId}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> getPerformanceById(@PathVariable int performanceId) {
-
-        try {
-            Performance performance = performanceService.getPerformanceById(performanceId);
-            return ResponseEntity.ok(new PerformanceResponse(performance));
-        } catch (EntityNotFoundException ex) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
-        } catch (DatabaseException ex) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
-        }
+        Performance performance = performanceService.getPerformanceById(performanceId);
+        return ResponseEntity.ok(new PerformanceResponse(performance));
     }
 
 }
