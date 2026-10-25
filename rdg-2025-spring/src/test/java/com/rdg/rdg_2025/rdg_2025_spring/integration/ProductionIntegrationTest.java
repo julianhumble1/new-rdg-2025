@@ -10,11 +10,13 @@ import com.rdg.rdg_2025.rdg_2025_spring.models.credit.CreditType;
 import com.rdg.rdg_2025.rdg_2025_spring.repository.*;
 import com.rdg.rdg_2025.rdg_2025_spring.security.jwt.JwtUtils;
 import com.rdg.rdg_2025.rdg_2025_spring.utils.AuthTestUtils;
+import com.rdg.rdg_2025.rdg_2025_spring.utils.MySqlTestContainerConfig;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -38,6 +40,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @Transactional
 @ActiveProfiles("test")
+@Tag("integration")
+@Import(MySqlTestContainerConfig.class)
 public class ProductionIntegrationTest {
 
     @Autowired
@@ -1178,7 +1182,7 @@ public class ProductionIntegrationTest {
             // Arrange
             // Act & Assert
             mockMvc.perform(get("/productions/future"))
-                    .andExpect(jsonPath("$.productions[*].name", contains("Test Production")));
+                    .andExpect(jsonPath("$.productions[*].production.name", contains("Test Production")));
         }
 
         @Test
@@ -1189,7 +1193,7 @@ public class ProductionIntegrationTest {
             productionRepository.save(testProduction2);
             // Act & Assert
             mockMvc.perform(get("/productions/future"))
-                    .andExpect(jsonPath("$.productions[*].name", not(contains("Another Test Production"))));
+                    .andExpect(jsonPath("$.productions[*].production.name", not(contains("Another Test Production"))));
         }
 
         @Test
@@ -1197,7 +1201,7 @@ public class ProductionIntegrationTest {
             // Arrange
             // Act & Assert
             mockMvc.perform(get("/productions/future"))
-                    .andExpect(jsonPath("$.productions[*].name", not(contains("Another Test Production"))));
+                    .andExpect(jsonPath("$.productions[*].production.name", not(contains("Another Test Production"))));
         }
 
 
@@ -1212,8 +1216,8 @@ public class ProductionIntegrationTest {
             performanceRepository.save(testPerformance2);
             // Act & Assert
             mockMvc.perform(get("/productions/future"))
-                    .andExpect(jsonPath("$.productions[*].name", contains("Test Production")))
-                    .andExpect(jsonPath("$.productions[*].name", not(contains("Another Test Production"))));
+                    .andExpect(jsonPath("$.productions[*].production.name", contains("Test Production")))
+                    .andExpect(jsonPath("$.productions[*].production.name", not(contains("Another Test Production"))));
         }
 
 

@@ -5,8 +5,10 @@ import com.rdg.rdg_2025.rdg_2025_spring.models.auth.User;
 import com.rdg.rdg_2025.rdg_2025_spring.repository.*;
 import com.rdg.rdg_2025.rdg_2025_spring.security.jwt.JwtUtils;
 import com.rdg.rdg_2025.rdg_2025_spring.utils.AuthTestUtils;
+import com.rdg.rdg_2025.rdg_2025_spring.utils.MySqlTestContainerConfig;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.*;
+import org.springframework.context.annotation.Import;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -31,6 +33,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @Transactional
 @ActiveProfiles("test")
+@Tag("integration")
+@Import(MySqlTestContainerConfig.class)
 public class VenueIntegrationTest {
 
     @Autowired

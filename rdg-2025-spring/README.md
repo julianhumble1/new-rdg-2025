@@ -12,6 +12,7 @@
 **Productions**
 * POST ("/productions") - create new production
 * GET ("/productions") - get all productions
+* GET ("/productions/future") - get productions with at least one future performance (each item is nested as `{ production, performances, ... }`)
 * GET ("/productions/{id}) - get specific production
 * PATCH ("/productions/{id}) - update production
 * DELETE ("/productions/{id}) - delete production
