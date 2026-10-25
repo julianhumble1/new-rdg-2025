@@ -1182,7 +1182,7 @@ public class ProductionIntegrationTest {
             // Arrange
             // Act & Assert
             mockMvc.perform(get("/productions/future"))
-                    .andExpect(jsonPath("$.productions[*].name", contains("Test Production")));
+                    .andExpect(jsonPath("$.productions[*].production.name", contains("Test Production")));
         }
 
         @Test
@@ -1193,7 +1193,7 @@ public class ProductionIntegrationTest {
             productionRepository.save(testProduction2);
             // Act & Assert
             mockMvc.perform(get("/productions/future"))
-                    .andExpect(jsonPath("$.productions[*].name", not(contains("Another Test Production"))));
+                    .andExpect(jsonPath("$.productions[*].production.name", not(contains("Another Test Production"))));
         }
 
         @Test
@@ -1201,7 +1201,7 @@ public class ProductionIntegrationTest {
             // Arrange
             // Act & Assert
             mockMvc.perform(get("/productions/future"))
-                    .andExpect(jsonPath("$.productions[*].name", not(contains("Another Test Production"))));
+                    .andExpect(jsonPath("$.productions[*].production.name", not(contains("Another Test Production"))));
         }
 
 
@@ -1216,8 +1216,8 @@ public class ProductionIntegrationTest {
             performanceRepository.save(testPerformance2);
             // Act & Assert
             mockMvc.perform(get("/productions/future"))
-                    .andExpect(jsonPath("$.productions[*].name", contains("Test Production")))
-                    .andExpect(jsonPath("$.productions[*].name", not(contains("Another Test Production"))));
+                    .andExpect(jsonPath("$.productions[*].production.name", contains("Test Production")))
+                    .andExpect(jsonPath("$.productions[*].production.name", not(contains("Another Test Production"))));
         }
 
 

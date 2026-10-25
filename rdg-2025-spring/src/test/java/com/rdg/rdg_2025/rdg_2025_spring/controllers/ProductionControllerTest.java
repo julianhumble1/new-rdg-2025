@@ -816,7 +816,7 @@ public class ProductionControllerTest {
             when(productionService.getProductionsWithFuturePerformances()).thenReturn(productionList);
             // Act & Assert
             mockMvc.perform(get("/productions/future"))
-                    .andExpect(jsonPath("$.productions[0].name").value("Test Production"));
+                    .andExpect(jsonPath("$.productions[0].production.name").value("Test Production"));
         }
 
 
