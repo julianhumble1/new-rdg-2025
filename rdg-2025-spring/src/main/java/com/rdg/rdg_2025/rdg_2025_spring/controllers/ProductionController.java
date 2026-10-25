@@ -34,17 +34,9 @@ public class ProductionController {
     @PostMapping()
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> addNewProduction(@Valid @RequestBody ProductionRequest productionRequest) {
-        try {
-            Production production = productionService.addNewProduction(productionRequest);
-            URI location = URI.create("/productions/" + production.getId());
-            return ResponseEntity.created(location).body(new ProductionResponse(production));
-        } catch (DataIntegrityViolationException ex) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
-        } catch (DatabaseException ex) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
-        } catch (EntityNotFoundException ex) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
-        }
+        Production production = productionService.addNewProduction(productionRequest);
+        URI location = URI.create("/productions/" + production.getId());
+        return ResponseEntity.created(location).body(new ProductionResponse(production));
     }
 
     @GetMapping()
@@ -53,77 +45,39 @@ public class ProductionController {
         Logger log = LoggerFactory.getLogger(getClass());
 
         log.info("getAllProductions - request received");
+        List<Production> productions = productionService.getAllProductions();
+        long duration = System.currentTimeMillis() - start;
+        log.info("getAllProductions - returning {} productions in {} ms",
+                productions.size(), duration);
 
-        try {
-            List<Production> productions = productionService.getAllProductions();
-            long duration = System.currentTimeMillis() - start;
-            log.info("getAllProductions - returning {} productions in {} ms",
-                    productions.size(), duration);
-
-            return ResponseEntity.ok(new ProductionsResponse(productions));
-
-        } catch (DatabaseException ex) {
-            long duration = System.currentTimeMillis() - start;
-            log.error("getAllProductions - database error after {} ms: {}",
-                    duration, ex.getMessage(), ex);
-
-            return ResponseEntity
-                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(ex.getMessage());
-        }
+        return ResponseEntity.ok(new ProductionsResponse(productions));
     }
 
     @GetMapping("/{productionId}")
     public ResponseEntity<?> getProductionById(@PathVariable int productionId) {
-
-        try {
-            Production production = productionService.getProductionById(productionId);
-            return ResponseEntity.ok(new ProductionResponse(production));
-        } catch (EntityNotFoundException ex) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
-        } catch (DatabaseException ex) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
-        }
-
+        Production production = productionService.getProductionById(productionId);
+        return ResponseEntity.ok(new ProductionResponse(production));
     }
 
     @PatchMapping("/{productionId}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> updateProduction(@PathVariable int productionId, @Valid @RequestBody ProductionRequest updateProductionRequest) {
-        try {
-            Production updatedProduction = productionService.updateProduction(productionId, updateProductionRequest);
-            return ResponseEntity.ok(new ProductionResponse(updatedProduction));
-        } catch (EntityNotFoundException ex) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
-        } catch (DataIntegrityViolationException ex) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
-        } catch (DatabaseException ex) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
-        }
+        Production updatedProduction = productionService.updateProduction(productionId, updateProductionRequest);
+        return ResponseEntity.ok(new ProductionResponse(updatedProduction));
     }
 
     @DeleteMapping("/{productionId}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> deleteProductionById(@PathVariable int productionId) {
-        try {
-            productionService.deleteProductionById(productionId);
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-        } catch (EntityNotFoundException ex) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
-        } catch (DatabaseException ex) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
-        }
+        productionService.deleteProductionById(productionId);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @GetMapping("/future")
     public ResponseEntity<?> getProductionsWithFuturePerformances() {
-        try {
-            List<Production> productions = productionService.getProductionsWithFuturePerformances();
-            List<ProductionResponse> productionResponses = productions.stream().map(ProductionResponse::new).toList();
-            return ResponseEntity.ok().body(Map.of("productions", productionResponses));
-        } catch (DatabaseException ex) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
-        }
+        List<Production> productions = productionService.getProductionsWithFuturePerformances();
+        List<ProductionResponse> productionResponses = productions.stream().map(ProductionResponse::new).toList();
+        return ResponseEntity.ok().body(Map.of("productions", productionResponses));
     }
 
 }

@@ -262,7 +262,7 @@ public class ProductionIntegrationTest {
         }
 
         @Test
-        void testInvalidVenueIdResponds400BadRequest() throws Exception {
+        void testInvalidVenueIdResponds404NotFound() throws Exception {
             mockMvc.perform(post("/productions")
                             .contentType(MediaType.APPLICATION_JSON)
                             .header("Authorization", adminToken)
@@ -278,7 +278,7 @@ public class ProductionIntegrationTest {
                                             "\"flyerFile\": \"Test Flyer File\" " +
                                             "}"
                             ))
-                    .andExpect(status().isBadRequest()
+                    .andExpect(status().isNotFound()
                     );
         }
 

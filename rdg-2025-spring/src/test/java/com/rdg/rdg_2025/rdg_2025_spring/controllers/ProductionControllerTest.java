@@ -213,7 +213,7 @@ public class ProductionControllerTest {
 
         @Test
         @WithMockUser(roles="ADMIN")
-        void testInvalidVenueIdReturns400BadRequest() throws Exception{
+        void testInvalidVenueIdReturns404NotFound() throws Exception{
             // Arrange
             when(productionService.addNewProduction(any(ProductionRequest.class))).thenThrow(new EntityNotFoundException("Invalid Venue Id"));
 
@@ -232,7 +232,7 @@ public class ProductionControllerTest {
                                             "\"flyerFile\": \"Test Flyer File\" " +
                                             "}"
                             ))
-                    .andExpect(status().isBadRequest()
+                    .andExpect(status().isNotFound()
                     );
         }
 
