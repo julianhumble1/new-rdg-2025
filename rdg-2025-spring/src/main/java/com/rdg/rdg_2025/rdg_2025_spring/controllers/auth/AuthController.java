@@ -106,33 +106,31 @@ public class AuthController {
                 signUpRequest.getName());
 
 
-        Set<String> strRoles = signUpRequest.getRole();
         Set<Role> roles = new HashSet<>();
 
-        if (strRoles == null) {
-            Role userRole = roleRepository.findByName(ERole.ROLE_USER)
-                    .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-        } else {
-            strRoles.forEach(role -> {
-                switch (role) {
-                    case "superadmin":
-                        Role superAdminRole = roleRepository.findByName(ERole.ROLE_SUPERADMIN)
-                                .orElseThrow(() -> new RuntimeException("Error: Role is not found"));
-                        roles.add(superAdminRole);
+        for (String role : signUpRequest.getRole()) {
+            switch (role) {
+                case "superadmin":
+                    Role superAdminRole = roleRepository.findByName(ERole.ROLE_SUPERADMIN)
+                            .orElseThrow(() -> new RuntimeException("Error: Role is not found"));
+                    roles.add(superAdminRole);
 
-                    case "admin":
-                        Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
-                                .orElseThrow(() -> new RuntimeException("Error: Role is not found"));
-                        roles.add(adminRole);
+                case "admin":
+                    Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
+                            .orElseThrow(() -> new RuntimeException("Error: Role is not found"));
+                    roles.add(adminRole);
 
-                    default:
-                        Role userRole = roleRepository.findByName(ERole.ROLE_USER)
-                                .orElseThrow(() -> new RuntimeException("Error : Role is not found"));
-                        roles.add(userRole);
-                }
+                case "user":
+                    Role userRole = roleRepository.findByName(ERole.ROLE_USER)
+                            .orElseThrow(() -> new RuntimeException("Error : Role is not found"));
+                    roles.add(userRole);
+                    break;
 
-
-            });
+                default:
+                    return ResponseEntity
+                            .badRequest()
+                            .body(new MessageResponse("Error: Invalid role: " + role));
+            }
         }
 
         user.setRoles(roles);

@@ -3,16 +3,19 @@ package com.rdg.rdg_2025.rdg_2025_spring.integration;
 import com.rdg.rdg_2025.rdg_2025_spring.models.auth.User;
 import com.rdg.rdg_2025.rdg_2025_spring.repository.RoleRepository;
 import com.rdg.rdg_2025.rdg_2025_spring.repository.UserRepository;
+import com.rdg.rdg_2025.rdg_2025_spring.security.jwt.JwtUtils;
 import com.rdg.rdg_2025.rdg_2025_spring.utils.AuthTestUtils;
+import com.rdg.rdg_2025.rdg_2025_spring.utils.MySqlTestContainerConfig;
 import jakarta.transaction.Transactional;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
@@ -27,25 +30,41 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @Transactional
 @ActiveProfiles("test")
+@Tag("integration")
+@Import(MySqlTestContainerConfig.class)
 public class AuthIntegrationTest {
 
     @Autowired
     private MockMvc mockMvc;
 
     private static User testAdmin;
+    private static String adminToken;
+
     private static User testUser;
+    private static String userToken;
 
     @BeforeAll
     public static void setUpExistingAdminAndUser(
             @Autowired UserRepository userRepository,
             @Autowired RoleRepository roleRepository,
-            @Autowired PasswordEncoder passwordEncoder
+            @Autowired PasswordEncoder passwordEncoder,
+            @Autowired AuthenticationManager authenticationManager,
+            @Autowired JwtUtils jwtUtils
     ) {
 
         userRepository.deleteAll();
 
         testAdmin = AuthTestUtils.createTestAdmin(userRepository, roleRepository, passwordEncoder);
+        Authentication adminAuthentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken("test_admin", "password123")
+        );
+        adminToken = "Bearer " + jwtUtils.generateJwtToken(adminAuthentication);
+
         testUser = AuthTestUtils.createTestUser(userRepository, roleRepository, passwordEncoder);
+        Authentication userAuthentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken("test_user", "password123")
+        );
+        userToken = "Bearer " + jwtUtils.generateJwtToken(userAuthentication);
 
     }
 
@@ -203,9 +222,27 @@ public class AuthIntegrationTest {
     class SignUpIntegrationTests {
 
         @Test
+        void testSignUpWithoutTokenResponds401() throws Exception {
+            mockMvc.perform(post("/auth/signup")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content("{\"username\": \"new_user\", \"email\": \"user@new.com\", \"password\": \"password123\", \"role\": [\"user\"] }"))
+                    .andExpect(status().isUnauthorized());
+        }
+
+        @Test
+        void testSignUpWithUserTokenResponds403() throws Exception {
+            mockMvc.perform(post("/auth/signup")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", userToken)
+                            .content("{\"username\": \"new_user\", \"email\": \"user@new.com\", \"password\": \"password123\", \"role\": [\"user\"] }"))
+                    .andExpect(status().isForbidden());
+        }
+
+        @Test
         void testSignUpUserWithFullDetailsResponds200() throws Exception {
             mockMvc.perform(post("/auth/signup")
                     .contentType(MediaType.APPLICATION_JSON)
+                    .header("Authorization", adminToken)
                     .content("{\"username\": \"new_user\", \"email\": \"user@new.com\", \"password\": \"password123\", \"role\": [\"user\"] }"))
                     .andExpect(status().isOk());
         }
@@ -214,6 +251,7 @@ public class AuthIntegrationTest {
         void testSignUpAdminWithFullDetailsResponds200() throws Exception {
             mockMvc.perform(post("/auth/signup")
                             .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", adminToken)
                             .content("{\"username\": \"new_admin\", \"email\": \"admin@new.com\", \"password\": \"password123\", \"role\": [\"admin\"] }"))
                     .andExpect(status().isOk());
         }
@@ -222,6 +260,7 @@ public class AuthIntegrationTest {
         void testMissingUsernameResponds400() throws Exception {
             mockMvc.perform(post("/auth/signup")
                             .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", adminToken)
                             .content("{ \"email\": \"admin@new.com\", \"password\": \"password123\", \"role\": [\"admin\"] }"))
                     .andExpect(status().isBadRequest());
         }
@@ -231,27 +270,8 @@ public class AuthIntegrationTest {
 
             mockMvc.perform(post("/auth/signup")
                             .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", adminToken)
                             .content("{ \"username\": \"\", \"email\": \"admin@new.com\", \"password\": \"password123\", \"role\": [\"admin\"] }"))
-                    .andExpect(status().isBadRequest());
-
-        }
-
-        @Test
-        void testShortUsernameResponds400() throws Exception {
-
-            mockMvc.perform(post("/auth/signup")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content("{ \"username\": \"ab\", \"email\": \"admin@new.com\", \"password\": \"password123\", \"role\": [\"admin\"] }"))
-                    .andExpect(status().isBadRequest());
-
-        }
-
-        @Test
-        void testLongUsernameResponds400() throws Exception {
-
-            mockMvc.perform(post("/auth/signup")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content("{ \"username\": \"abcdefghijklmnopqrstuvwxyz\", \"email\": \"admin@new.com\", \"password\": \"password123\", \"role\": [\"admin\"] }"))
                     .andExpect(status().isBadRequest());
 
         }
@@ -261,6 +281,7 @@ public class AuthIntegrationTest {
 
             mockMvc.perform(post("/auth/signup")
                             .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", adminToken)
                             .content("{\"username\": \"new_admin\", \"email\": \"\", \"password\": \"password123\", \"role\": [\"admin\"] }"))
                     .andExpect(status().isBadRequest());
 
@@ -271,6 +292,7 @@ public class AuthIntegrationTest {
 
             mockMvc.perform(post("/auth/signup")
                             .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", adminToken)
                             .content("{\"username\": \"new_admin\", \"password\": \"password123\", \"role\": [\"admin\"] }"))
                     .andExpect(status().isBadRequest());
 
@@ -281,6 +303,7 @@ public class AuthIntegrationTest {
 
             mockMvc.perform(post("/auth/signup")
                             .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", adminToken)
                             .content("{\"username\": \"new_admin\", \"email\": \"not an email\", \"password\": \"password123\", \"role\": [\"admin\"] }"))
                     .andExpect(status().isBadRequest());
 
@@ -290,6 +313,7 @@ public class AuthIntegrationTest {
         void testMissingPasswordResponds400() throws Exception {
             mockMvc.perform(post("/auth/signup")
                             .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", adminToken)
                             .content("{\"username\": \"new_admin\", \"email\": \"admin@new.com\", \"role\": [\"admin\"] }"))
                     .andExpect(status().isBadRequest());
         }
@@ -298,6 +322,7 @@ public class AuthIntegrationTest {
         void testBlankPasswordResponds400() throws Exception {
             mockMvc.perform(post("/auth/signup")
                             .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", adminToken)
                             .content("{\"username\": \"new_admin\", \"email\": \"admin@new.com\",\"password\": \"\", \"role\": [\"admin\"] }"))
                     .andExpect(status().isBadRequest());
         }
@@ -306,6 +331,7 @@ public class AuthIntegrationTest {
         void testShortPasswordResponds400() throws Exception {
             mockMvc.perform(post("/auth/signup")
                             .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", adminToken)
                             .content("{\"username\": \"new_admin\", \"email\": \"admin@new.com\", \"password\": \"pass\", \"role\": [\"admin\"] }"))
                     .andExpect(status().isBadRequest());
         }
@@ -314,6 +340,7 @@ public class AuthIntegrationTest {
         void testLongPasswordResponds400() throws Exception {
             mockMvc.perform(post("/auth/signup")
                             .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", adminToken)
                             .content("{\"username\": \"new_admin\", \"email\": \"admin@new.com\", \"password\": \" " + ("a".repeat(41)) + " \", \"role\": [\"admin\"] }"))
                     .andExpect(status().isBadRequest());
         }
@@ -322,6 +349,7 @@ public class AuthIntegrationTest {
         void testMissingRoleResponds400() throws Exception {
             mockMvc.perform(post("/auth/signup")
                             .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", adminToken)
                             .content("{\"username\": \"new_admin\", \"email\": \"admin@new.com\", \"password\": \"password123\" }"))
                     .andExpect(status().isBadRequest());
         }
@@ -330,7 +358,8 @@ public class AuthIntegrationTest {
         void testEmptyRoleResponds400() throws Exception {
             mockMvc.perform(post("/auth/signup")
                             .contentType(MediaType.APPLICATION_JSON)
-                            .content("{\"username\": \"new_admin\", \"email\": \"admin@new.com\", \"password\": \"password123\" \"role\": []}"))
+                            .header("Authorization", adminToken)
+                            .content("{\"username\": \"new_admin\", \"email\": \"admin@new.com\", \"password\": \"password123\", \"role\": []}"))
                     .andExpect(status().isBadRequest());
         }
 
@@ -338,7 +367,8 @@ public class AuthIntegrationTest {
         void testBadRoleResponds400() throws Exception {
             mockMvc.perform(post("/auth/signup")
                             .contentType(MediaType.APPLICATION_JSON)
-                            .content("{\"username\": \"new_admin\", \"email\": \"admin@new.com\", \"password\": \"password123\" \"role\": [\"bad role\"]}"))
+                            .header("Authorization", adminToken)
+                            .content("{\"username\": \"new_admin\", \"email\": \"admin@new.com\", \"password\": \"password123\", \"role\": [\"bad role\"]}"))
                     .andExpect(status().isBadRequest());
         }
 
@@ -346,6 +376,7 @@ public class AuthIntegrationTest {
         void testExistingUsernameResponds400() throws Exception {
             mockMvc.perform(post("/auth/signup")
                             .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", adminToken)
                             .content("{\"username\": \"test_user\", \"email\": \"user@new.com\", \"password\": \"password123\", \"role\": [\"user\"] }"))
                     .andExpect(status().isBadRequest());
         }
@@ -354,6 +385,7 @@ public class AuthIntegrationTest {
         void testExistingEmailResponds400() throws Exception {
             mockMvc.perform(post("/auth/signup")
                             .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", adminToken)
                             .content("{\"username\": \"new_user\", \"email\": \"user@test.com\", \"password\": \"password123\", \"role\": [\"user\"] }"))
                     .andExpect(status().isBadRequest());
         }

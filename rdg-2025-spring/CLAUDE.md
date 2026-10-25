@@ -40,14 +40,16 @@ Controllers → Services → Repositories → JPA Entities
 
 **Domain model at a glance**: Venue → Productions, Festivals, Performances, Events; Production → Performances, Credits (via Person); Award system; all entities carry `createdAt`/`updatedAt` and a URL slug field.
 
-**Database**: MySQL in production; H2 in-memory for tests (`@ActiveProfiles("test")`). Secrets (`JWT_SECRET`, Cloudinary credentials) are injected via environment variables — never hardcoded.
+**Database**: MySQL in production. Integration tests run against a real MySQL 8.0 Testcontainers container (see Testing approach); `@ActiveProfiles("test")` supplies dummy JWT/Cloudinary values in `application-test.properties`. Secrets (`JWT_SECRET`, Cloudinary credentials) are injected via environment variables — never hardcoded.
 
 **Image storage**: Cloudinary, wrapped by `CloudinaryController` and a dedicated service.
 
 ## Testing approach
 
 - **Unit tests** (`controllers/`, `services/`): `@WebMvcTest` + `@MockitoBean`; test the layer in isolation via `MockMvc`
-- **Integration tests** (`integration/`): `@SpringBootTest` + `@AutoConfigureMockMvc` + `@Transactional`; hit the full Spring context against H2
+- **Integration tests** (`integration/`): `@SpringBootTest` + `@AutoConfigureMockMvc` + `@Transactional` + `@Tag("integration")` + `@Import(MySqlTestContainerConfig.class)`; hit the full Spring context against a MySQL 8.0 Testcontainers container (wired via `@ServiceConnection`). **Docker must be running** to execute them.
+- Test schema is created by Hibernate (`ddl-auto=create-drop`); `src/test/resources/data.sql` seeds the `roles` table (`ROLE_USER`, `ROLE_ADMIN`, `ROLE_SUPERADMIN`) and `application-test.properties` needs no datasource env vars
+- Unit tests don't need Docker; to run only them: `mvn test -DexcludedGroups=integration`
 - Helper utilities live in `utils/` (e.g. `AuthTestUtils` for obtaining JWT tokens in integration tests)
 - Use `@Nested` classes with `@DisplayName` to organise test cases — follow existing conventions when adding tests
 
